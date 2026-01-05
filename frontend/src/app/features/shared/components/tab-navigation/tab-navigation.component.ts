@@ -1,14 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-export interface Tab {
-    id: string;
-    label: string;
-    subLabel: string;
-    icon: 'kick' | 'carry';
-    isActive: boolean;
-    isDisabled: boolean;
-}
+import { Tab } from '../../../buyer/home/models/tab.model';
 
 @Component({
     selector: 'app-tab-navigation',

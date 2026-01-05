@@ -1,11 +1,7 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-interface Project {
-  id: string;
-  name: string;
-  isSelected: boolean;
-}
+import { ProjectService } from '../../../buyer/home/services/project.service';
+import { Project } from '../../../buyer/home/models/project.model';
 
 @Component({
   selector: 'app-side-menu',
@@ -17,20 +13,12 @@ interface Project {
 export class SideMenuComponent {
   @Output() projectSelected = new EventEmitter<Project>();
 
-  projects: Project[] = [
-    { id: '1', name: 'SNSショート動画...', isSelected: true },
-    { id: '2', name: 'Z世代向けインフルエ...', isSelected: false },
-    { id: '3', name: 'ドーナツPRイベント...', isSelected: false },
-    { id: '4', name: 'ライブコマース運営...', isSelected: false },
-    { id: '5', name: 'ブランド体験型ポッ...', isSelected: false },
-    { id: '6', name: 'AIタレント・バーチ...', isSelected: false },
-  ];
+  projects = computed(() => this.projectService.projects());
+
+  constructor(private projectService: ProjectService) {}
 
   selectProject(project: Project) {
-    this.projects = this.projects.map(p => ({
-      ...p,
-      isSelected: p.id === project.id
-    }));
+    this.projectService.selectProject(project.id);
     this.projectSelected.emit(project);
   }
 }

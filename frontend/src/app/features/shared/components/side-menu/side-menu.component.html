@@ -47,7 +47,7 @@
 
       <!-- Project List -->
       <div class="flex flex-col gap-[5px]">
-        @for (project of projects; track project.id) {
+        @for (project of projects(); track project.id) {
           <div 
             class="flex items-center gap-[3px] py-[5px] rounded cursor-pointer transition-colors group -mx-[10px] px-[10px]"
             [class.bg-primary-light]="project.isSelected"
