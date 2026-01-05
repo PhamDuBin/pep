@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HeaderComponent } from '../../../../../shared/components/header/header.component';
-import { SideMenuComponent } from '../../../../../shared/components/side-menu/side-menu.component';
-import { TabNavigationComponent, Tab } from '../../../../../shared/components/tab-navigation/tab-navigation.component';
+import { HeaderComponent } from '../../../../shared/components/header/header.component';
+import { SideMenuComponent } from '../../../../shared/components/side-menu/side-menu.component';
+import { TabNavigationComponent, Tab } from '../../../../shared/components/tab-navigation/tab-navigation.component';
 import { ModeSelectorComponent } from '../../components/mode-selector/mode-selector.component';
 import { ChatInputComponent } from '../../components/chat-input/chat-input.component';
 

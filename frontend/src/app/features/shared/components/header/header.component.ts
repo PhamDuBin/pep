@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
     <header class="fixed top-0 left-0 right-0 h-[89px] bg-white border-b border-border-light flex items-center justify-center z-50"
             style="box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.05);">
       <!-- PEP Logo SVG -->
-      <img src="Clip path group.svg" alt="PEP" class="h-[50px]" />
+      <img src="assets/icons/LOGO_PEP.svg" alt="PEP" class="h-[50px]" />
     </header>
   `,
     styles: [`
