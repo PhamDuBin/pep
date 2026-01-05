@@ -5,9 +5,9 @@ import { RouterOutlet } from '@angular/router';
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet],
-  template: `<router-outlet></router-outlet>`,
-  styles: []
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.scss'
 })
 export class App {
-  title = 'PEP - Project Engineering Platform';
+  title = 'PEP - Project Execution Plan';
 }
