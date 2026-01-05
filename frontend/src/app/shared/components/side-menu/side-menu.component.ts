@@ -17,7 +17,7 @@ interface Project {
       <!-- Top Section (Frame 14) -->
       <div class="flex flex-col items-start gap-[25px] w-[177px] h-[434px] self-stretch">
         <!-- Menu Toggle -->
-        <div class="px-[10px]">
+        <div>
           <button class="hover:opacity-70 transition-opacity">
             <svg width="20" height="13" viewBox="0 0 20 13" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M0 0.5H20M0 6.5H20M0 12.5H20" stroke="#333333" stroke-width="1.5"/>
@@ -26,8 +26,8 @@ interface Project {
         </div>
 
         <!-- New Project Button -->
-        <div class="flex flex-col gap-[3px]">
-          <button class="flex flex-row items-center px-[10px] py-[3px] gap-[7px] w-[177px] h-[26px] rounded cursor-pointer hover:bg-primary-light transition-colors">
+        <div class="flex flex-col gap-[3px] w-full">
+          <button class="flex flex-row items-center py-[3px] gap-[7px] w-full h-[26px] rounded cursor-pointer hover:bg-[#F0F0F0] active:bg-[#F0F0F0] transition-colors">
             <div class="w-5 h-5 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
               <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M5 1V9M1 5H9" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
@@ -42,10 +42,10 @@ interface Project {
 
         <!-- RFP Section -->
         <div class="flex flex-col gap-[3px]">
-          <div class="px-[10px]">
+          <div>
             <span class="text-[14px] text-text-gray">RFP</span>
           </div>
-          <div class="flex items-center gap-[7px] px-[10px] py-[7px] cursor-pointer hover:bg-gray-50 rounded transition-colors">
+          <div class="flex items-center gap-[7px] py-[7px] cursor-pointer hover:bg-gray-50 rounded transition-colors -mx-[10px] px-[10px]">
             <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M1 8.09091H21M19.2143 19H2.78571C2.31211 19 1.85791 18.8084 1.52302 18.4675C1.18814 18.1265 1 17.664 1 17.1818V4.81818C1 4.33597 1.18814 3.87351 1.52302 3.53253C1.85791 3.19156 2.31211 3 2.78571 3H6.17366C6.52624 3.00001 6.87094 3.10629 7.16429 3.30545L8.40714 4.14909C8.70049 4.34825 9.04518 4.45454 9.39777 4.45455H19.2143C19.6879 4.45455 20.1421 4.6461 20.477 4.98708C20.8119 5.32805 21 5.79052 21 6.27273V17.1818C21 17.664 20.8119 18.1265 20.477 18.4675C20.1421 18.8084 19.6879 19 19.2143 19Z" stroke="#333333" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -55,12 +55,12 @@ interface Project {
 
         <!-- PROJECT Section -->
         <div class="flex flex-col gap-[5px]">
-          <div class="px-[10px]">
+          <div>
             <span class="text-[14px] text-text-gray">PROJECT</span>
           </div>
           
           <!-- Search -->
-          <div class="flex items-center gap-[7px] px-[10px] py-[7px] cursor-pointer hover:bg-gray-50 rounded transition-colors">
+          <div class="flex items-center gap-[7px] py-[7px] cursor-pointer hover:bg-gray-50 rounded transition-colors -mx-[10px] px-[10px]">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="9" cy="9" r="6" stroke="#333333" stroke-width="1.5"/>
               <path d="M13.5 13.5L18 18" stroke="#333333" stroke-width="1.5" stroke-linecap="round"/>
@@ -72,7 +72,7 @@ interface Project {
           <div class="flex flex-col gap-[5px]">
             @for (project of projects; track project.id) {
               <div 
-                class="flex items-center gap-[3px] px-[10px] py-[5px] rounded cursor-pointer transition-colors group"
+                class="flex items-center gap-[3px] py-[5px] rounded cursor-pointer transition-colors group -mx-[10px] px-[10px]"
                 [class.bg-primary-light]="project.isSelected"
                 [class.hover:bg-gray-50]="!project.isSelected"
                 (click)="selectProject(project)"
@@ -83,7 +83,7 @@ interface Project {
                     stroke-linecap="round"/>
                 </svg>
                 <span 
-                  class="text-[14px] flex-1 truncate"
+                  class="text-[14px] flex-1 truncate font-normal"
                   [class.text-primary]="project.isSelected"
                   [class.text-text-dark]="!project.isSelected"
                 >{{ project.name }}</span>
@@ -103,7 +103,7 @@ interface Project {
       <!-- Bottom Section (Frame 15) -->
       <div class="flex flex-col justify-center items-start gap-[5px] w-[177px] h-[77px] self-stretch">
         <!-- User List -->
-        <div class="flex items-center gap-[7px] px-[10px] py-[7px] cursor-pointer hover:bg-gray-50 rounded transition-colors">
+        <div class="flex items-center gap-[7px] py-[7px] cursor-pointer hover:bg-gray-50 rounded transition-colors -mx-[10px] px-[10px]">
           <svg width="29" height="16" viewBox="0 0 29 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="8" cy="5" r="4" stroke="#333333" stroke-width="1"/>
             <path d="M1 15C1 12 4 10 8 10C12 10 15 12 15 15" stroke="#333333" stroke-width="1"/>
@@ -114,7 +114,7 @@ interface Project {
         </div>
 
         <!-- User Profile -->
-        <div class="flex items-center gap-[7px] px-[10px] py-[5px]">
+        <div class="flex items-center gap-[7px] py-[5px] cursor-pointer hover:bg-gray-50 rounded transition-colors -mx-[10px] px-[10px]">
           <div class="w-[30px] h-[30px] bg-avatar-bg rounded-full flex items-center justify-center">
             <span class="text-[13px] text-white">TY</span>
           </div>

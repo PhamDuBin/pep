@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
   template: `
     <div class="flex items-center gap-[10px] w-full max-w-[800px]">
       <!-- Input Container -->
-      <div class="flex items-center flex-1 gap-[10px] px-[15px] py-[10px] bg-white border border-border-gray rounded-full shadow-input">
+      <div class="flex items-center flex-1 gap-[10px] pl-[15px] pr-[10px] py-[10px] h-[45px] bg-white border border-border-gray rounded-full shadow-input hover:bg-[#F4FAFB] hover:border-avatar-bg focus-within:bg-[#F4FAFB] focus-within:border-avatar-bg transition-colors">
         <input
           type="text"
           [(ngModel)]="message"
