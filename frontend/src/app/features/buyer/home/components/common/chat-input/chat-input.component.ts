@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ChatService } from '../../../services/chat.service';
 
 @Component({
   selector: 'app-chat-input',
@@ -10,13 +9,13 @@ import { ChatService } from '../../../services/chat.service';
   styleUrl: './chat-input.component.scss'
 })
 export class ChatInputComponent {
-  message = '';
+  @Output() messageSent = new EventEmitter<string>();
 
-  constructor(private chatService: ChatService) {}
+  message = '';
 
   sendMessage() {
     if (this.message.trim()) {
-      this.chatService.sendMessage(this.message);
+      this.messageSent.emit(this.message.trim());
       this.message = '';
     }
   }

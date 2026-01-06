@@ -1,0 +1,54 @@
+:host {
+  display: contents;
+}
+
+.modal-content {
+  position: relative;
+}
+
+.animate-modal-in {
+  animation: modalIn 0.2s ease-out;
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// Custom radio button styling
+.radio {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #B9B9B9;
+  border-radius: 50%;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:checked {
+    border-color: #066A9E;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 10px;
+      height: 10px;
+      background-color: #066A9E;
+      border-radius: 50%;
+    }
+  }
+
+  &:hover {
+    border-color: #066A9E;
+  }
+}

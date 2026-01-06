@@ -1,0 +1,41 @@
+<div
+  class="message-container flex gap-3 w-full animate-slide-in"
+  [class.justify-end]="message.sender === 'user'"
+>
+  <!-- AI Avatar -->
+  @if (message.sender === 'ai') {
+    <div class="avatar w-[40px] h-[40px] rounded-full bg-primary flex items-center justify-center flex-shrink-0">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2Z" stroke="white" stroke-width="2"/>
+        <path d="M8 14C8 14 9.5 16 12 16C14.5 16 16 14 16 14" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="9" cy="9" r="1.5" fill="white"/>
+        <circle cx="15" cy="9" r="1.5" fill="white"/>
+      </svg>
+    </div>
+  }
+
+  <!-- Message Bubble -->
+  <div
+    class="message-bubble max-w-[70%] px-4 py-3 rounded-2xl"
+    [class.bg-chat-ai]="message.sender === 'ai'"
+    [class.bg-chat-user]="message.sender === 'user'"
+    [class.text-white]="message.sender === 'user'"
+    [class.rounded-bl-none]="message.sender === 'ai'"
+    [class.rounded-br-none]="message.sender === 'user'"
+  >
+    <span class="text-[14px] leading-relaxed whitespace-pre-wrap">{{ displayedContent }}</span>
+    @if (isTyping) {
+      <span class="typing-cursor">|</span>
+    }
+  </div>
+
+  <!-- User Avatar -->
+  @if (message.sender === 'user') {
+    <div class="avatar w-[40px] h-[40px] rounded-full bg-gray-300 flex items-center justify-center flex-shrink-0">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="8" r="4" stroke="#666" stroke-width="2"/>
+        <path d="M4 20C4 16.6863 6.68629 14 10 14H14C17.3137 14 20 16.6863 20 20" stroke="#666" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+  }
+</div>

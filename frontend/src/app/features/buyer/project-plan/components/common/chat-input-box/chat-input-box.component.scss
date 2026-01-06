@@ -1,0 +1,27 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.input-container {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+  &.input-focus {
+    border-color: var(--color-primary, #1B5E8A);
+    box-shadow: 0 2px 12px rgba(27, 94, 138, 0.15);
+  }
+}
+
+.send-button {
+  &:not(:disabled):hover {
+    box-shadow: 0 4px 12px rgba(27, 94, 138, 0.3);
+  }
+
+  &:not(:disabled):active {
+    transform: scale(0.95);
+  }
+}
+
+.mic-button:active {
+  transform: scale(0.9);
+}
