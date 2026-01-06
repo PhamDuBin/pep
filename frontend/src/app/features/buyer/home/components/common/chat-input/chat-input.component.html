@@ -1,0 +1,25 @@
+<div class="flex items-center gap-[10px] w-full max-w-[800px]">
+  <!-- Input Container -->
+  <div class="flex items-center flex-1 gap-[10px] pl-[15px] pr-[10px] py-[10px] h-[45px] bg-white border border-border-gray rounded-full shadow-input hover:bg-[#F4FAFB] hover:border-avatar-bg focus-within:bg-[#F4FAFB] focus-within:border-avatar-bg transition-colors">
+    <input
+      type="text"
+      [(ngModel)]="message"
+      placeholder="何でもお聞きください！"
+      class="flex-1 text-[13px] text-text-dark placeholder-text-gray outline-none border-none bg-transparent"
+      (keydown.enter)="sendMessage()"
+    />
+  </div>
+
+  <!-- Mic Button -->
+  <button class="w-[30px] h-[30px] flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors">
+    <img src="assets/icons/mic.svg" alt="Microphone" width="30" height="30" />
+  </button>
+
+  <!-- Send Button -->
+  <button 
+    class="hover:opacity-90 transition-opacity"
+    (click)="sendMessage()"
+  >
+    <img src="assets/icons/send.svg" alt="Send" width="40" height="40" />
+  </button>
+</div>
