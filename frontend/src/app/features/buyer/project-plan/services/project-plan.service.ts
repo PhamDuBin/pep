@@ -6,21 +6,21 @@ import {
   Vendor,
   ProjectPlanStatus,
   DownloadFormat,
-  SendRfpResponse
+  SendRfpResponse,
 } from '../models/project-plan.model';
 import {
   MOCK_PDF_PAGES,
   MOCK_VENDORS,
   PROJECT_PLAN_AI_RESPONSE,
   PROJECT_PLAN_COST_RESPONSE,
-  INITIAL_AI_MESSAGE
+  INITIAL_AI_MESSAGE,
 } from '../constants/project-plan.constant';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProjectPlanService {
-  private messagesSignal = signal<ChatMessage[]>([INITIAL_AI_MESSAGE]);
+  private messagesSignal = signal<ChatMessage[]>([]);
   private pdfPagesSignal = signal<PdfPage[]>([]);
   private planStatusSignal = signal<ProjectPlanStatus>('generating');
   private isLoadingSignal = signal<boolean>(false);
@@ -54,35 +54,31 @@ export class ProjectPlanService {
       content,
       timestamp: new Date(),
       sender: 'user',
-      isNew: true
+      isNew: true,
     };
 
     // Mark all existing messages as not new
-    this.messagesSignal.update(messages =>
-      messages.map(m => ({ ...m, isNew: false }))
-    );
+    this.messagesSignal.update((messages) => messages.map((m) => ({ ...m, isNew: false })));
 
     // Add user message
-    this.messagesSignal.update(messages => [...messages, userMessage]);
+    this.messagesSignal.update((messages) => [...messages, userMessage]);
     this.isLoadingSignal.set(true);
 
-    return new Observable(observer => {
+    return new Observable((observer) => {
       // Simulate AI generating response
       setTimeout(() => {
         // Mark user message as not new
-        this.messagesSignal.update(messages =>
-          messages.map(m => ({ ...m, isNew: false }))
-        );
+        this.messagesSignal.update((messages) => messages.map((m) => ({ ...m, isNew: false })));
 
         const aiMessage: ChatMessage = {
           id: (Date.now() + 1).toString(),
           content: PROJECT_PLAN_AI_RESPONSE + '\n\n' + PROJECT_PLAN_COST_RESPONSE,
           timestamp: new Date(),
           sender: 'ai',
-          isNew: true
+          isNew: true,
         };
 
-        this.messagesSignal.update(messages => [...messages, aiMessage]);
+        this.messagesSignal.update((messages) => [...messages, aiMessage]);
         this.isLoadingSignal.set(false);
 
         // Show PDF preview after AI response
@@ -155,7 +151,7 @@ export class ProjectPlanService {
    * Send RFP to selected vendors (step 3)
    */
   sendRfpToVendors(selectedVendors: Vendor[]): Observable<SendRfpResponse> {
-    return new Observable(observer => {
+    return new Observable((observer) => {
       setTimeout(() => {
         this.sentVendorsSignal.set(selectedVendors);
         this.showVendorSelectionModalSignal.set(false);
@@ -166,7 +162,7 @@ export class ProjectPlanService {
         observer.next({
           success: true,
           sentVendors: selectedVendors,
-          message: 'RFP sent successfully'
+          message: 'RFP sent successfully',
         });
         observer.complete();
       }, 500);
@@ -178,9 +174,9 @@ export class ProjectPlanService {
    * Confirm and send RFP to vendors (legacy - direct send)
    */
   confirmAndSendRfp(): Observable<SendRfpResponse> {
-    return new Observable(observer => {
+    return new Observable((observer) => {
       setTimeout(() => {
-        const sentVendors = MOCK_VENDORS.filter(v => v.isSelected);
+        const sentVendors = MOCK_VENDORS.filter((v) => v.isSelected);
         this.sentVendorsSignal.set(sentVendors);
         this.showPdfPreviewSignal.set(false);
         this.showRfpSentModalSignal.set(true);
@@ -189,7 +185,7 @@ export class ProjectPlanService {
         observer.next({
           success: true,
           sentVendors,
-          message: 'RFP sent successfully'
+          message: 'RFP sent successfully',
         });
         observer.complete();
       }, 500);
@@ -215,7 +211,7 @@ export class ProjectPlanService {
    * Reset state for new project plan
    */
   resetState(): void {
-    this.messagesSignal.set([INITIAL_AI_MESSAGE]);
+    this.messagesSignal.set([]);
     this.pdfPagesSignal.set([]);
     this.planStatusSignal.set('generating');
     this.isLoadingSignal.set(false);
