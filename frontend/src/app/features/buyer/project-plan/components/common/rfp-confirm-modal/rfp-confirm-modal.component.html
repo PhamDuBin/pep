@@ -1,0 +1,56 @@
+@if (isOpen) {
+<div
+  class="modal-backdrop fixed inset-0 bg-black/30 flex items-center justify-center z-50"
+  (click)="onBackdropClick($event)"
+>
+  <div
+    class="modal-content bg-white rounded-lg shadow-xl p-8 w-[700px] max-h-[80vh] overflow-y-auto animate-modal-in relative"
+  >
+    <!-- Close Button -->
+    <button
+      type="button"
+      class="absolute top-4 right-4 text-text-gray hover:text-text-dark transition-colors"
+      (click)="onClose()"
+    >
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 20 20"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M15 5L5 15M5 5L15 15"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+        />
+      </svg>
+    </button>
+
+    <!-- Title -->
+    <h2 class="text-[18px] text-primary text-center font-normal mb-6">送信するRFPを確認</h2>
+
+    <!-- PDF Preview Section -->
+    <div class="flex flex-col h-96 gap-4 mb-6 border border-border-gray rounded-lg overflow-auto">
+      <div class="w-full min-h-[300px] bg-gray-100 flex-shrink-0">
+        <img [src]="previewImages[0]" alt="PDF Preview" class="w-full h-full object-cover" />
+      </div>
+      <div class="w-full min-h-[300px] bg-gray-100 flex-shrink-0">
+        <img [src]="previewImages[1]" alt="PDF Preview" class="w-full h-full object-cover" />
+      </div>
+    </div>
+
+    <!-- Action Button -->
+    <div class="flex justify-center">
+      <button
+        type="button"
+        class="px-8 py-2.5 bg-primary text-white rounded-lg text-[14px] hover:opacity-90 transition-opacity"
+        (click)="onSelectVendors()"
+      >
+        ベンダーの選択へ
+      </button>
+    </div>
+  </div>
+</div>
+}

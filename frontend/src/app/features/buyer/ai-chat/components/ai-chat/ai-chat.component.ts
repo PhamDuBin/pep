@@ -1,0 +1,64 @@
+import { Component, computed, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { TabNavigationComponent } from '../../../../shared/components/tab-navigation/tab-navigation.component';
+import { ProjectPlanModeButtonComponent } from '../../../../shared/components/project-plan-mode-button/project-plan-mode-button.component';
+import {
+  SharedChatMessageListComponent,
+  SharedChatInputBoxComponent
+} from '../../../shared';
+import { AiChatService } from '../../services/ai-chat.service';
+import { Tab } from '../../../home/models/tab.model';
+import { AI_CHAT_TABS } from '../../constants/ai-chat-tabs.constant';
+
+@Component({
+  selector: 'app-ai-chat',
+  standalone: true,
+  imports: [
+    CommonModule,
+    TabNavigationComponent,
+    ProjectPlanModeButtonComponent,
+    SharedChatMessageListComponent,
+    SharedChatInputBoxComponent
+  ],
+  templateUrl: './ai-chat.component.html',
+  styleUrl: './ai-chat.component.scss'
+})
+export class AiChatComponent implements OnInit {
+  tabs: Tab[] = AI_CHAT_TABS;
+
+  messages = computed(() => this.aiChatService.messages());
+  isLoading = computed(() => this.aiChatService.isLoading());
+
+  constructor(private aiChatService: AiChatService, private router: Router) {}
+
+  ngOnInit(): void {
+    // Messages are already loaded with mock data from the service
+  }
+
+  onTabChange(tab: Tab): void {
+    this.tabs = this.tabs.map(t => ({
+      ...t,
+      isActive: t.id === tab.id
+    }));
+
+    if (tab.id === 'carry') {
+      this.router.navigate(['/buyer/carry']);
+    }
+  }
+
+  onMessageSent(message: string): void {
+    this.aiChatService.sendMessage(message).subscribe({
+      next: (response) => {
+        console.log('Message sent successfully:', response);
+      },
+      error: (error) => {
+        console.error('Error sending message:', error);
+      }
+    });
+  }
+
+  onMicrophoneClicked(): void {
+    console.log('Microphone clicked - voice input not implemented');
+  }
+}

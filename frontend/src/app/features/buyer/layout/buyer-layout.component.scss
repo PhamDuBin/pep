@@ -1,0 +1,19 @@
+.buyer-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #ffffff;
+}
+
+.main-content {
+  margin-top: 90px;
+  min-height: calc(100vh - 90px);
+
+  &.menu-expanded {
+    margin-left: 197px;
+  }
+
+  &.menu-collapsed {
+    margin-left: 50px;
+  }
+}

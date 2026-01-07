@@ -1,0 +1,97 @@
+<!-- Vendor chat panel matching Figma design exactly -->
+<div class="chat-container">
+  @if (conversation) {
+  <!-- Chat Header -->
+  <div class="chat-header">
+    <div class="header-left">
+      <p class="vendor-name">{{ conversation.vendorName }}</p>
+    </div>
+    <div class="header-right">
+      <!-- Member count badge -->
+      <div class="member-badge">
+        <span class="member-count">{{ conversation.memberCount }}</span>
+      </div>
+      <!-- Add person icon -->
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+      >
+        <path
+          d="M18.25 10.5H15.75C15.608 10.5 15.4893 10.452 15.394 10.356C15.2987 10.26 15.2507 10.141 15.25 9.99901C15.2493 9.85701 15.2973 9.73835 15.394 9.64301C15.4907 9.54768 15.6093 9.50001 15.75 9.50001H18.25V7.00001C18.25 6.85801 18.298 6.73935 18.394 6.64401C18.49 6.54868 18.609 6.50068 18.751 6.50001C18.893 6.49935 19.0117 6.54735 19.107 6.64401C19.2023 6.74068 19.25 6.85935 19.25 7.00001V9.50001H21.75C21.892 9.50001 22.0107 9.54801 22.106 9.64401C22.2013 9.74001 22.2493 9.85901 22.25 10.001C22.2507 10.143 22.2027 10.2617 22.106 10.357C22.0093 10.4523 21.8907 10.5 21.75 10.5H19.25V13C19.25 13.142 19.202 13.2607 19.106 13.356C19.01 13.4513 18.891 13.4993 18.749 13.5C18.607 13.5007 18.4883 13.4527 18.393 13.356C18.2977 13.2593 18.25 13.1407 18.25 13V10.5ZM9 11.385C8.17533 11.385 7.469 11.091 6.881 10.503C6.293 9.91501 5.99933 9.20901 6 8.38501C6.00067 7.56101 6.29433 6.85435 6.881 6.26501C7.46767 5.67568 8.174 5.38268 9 5.38601C9.826 5.38935 10.5323 5.68268 11.119 6.26601C11.7057 6.84935 11.9993 7.55601 12 8.38601C12.0007 9.21601 11.707 9.92201 11.119 10.504C10.531 11.086 9.82467 11.3797 9 11.385ZM2 17.577V16.969C2 16.5563 2.12 16.1703 2.36 15.811C2.60067 15.451 2.924 15.1717 3.33 14.973C4.274 14.5203 5.21867 14.181 6.164 13.955C7.10867 13.7283 8.054 13.615 9 13.615C9.946 13.615 10.8917 13.7283 11.837 13.955C12.7823 14.1817 13.7263 14.521 14.669 14.973C15.0757 15.1717 15.399 15.451 15.639 15.811C15.8797 16.1703 16 16.5563 16 16.969V17.577C16 17.8703 15.9003 18.117 15.701 18.317C15.5017 18.5157 15.255 18.615 14.961 18.615H3.04C2.746 18.615 2.49933 18.5153 2.3 18.316C2.10067 18.1167 2.00067 17.8703 2 17.577ZM3 17.616H15V16.969C15 16.7477 14.9283 16.5393 14.785 16.344C14.6423 16.1493 14.4447 15.9847 14.192 15.85C13.3693 15.4513 12.521 15.146 11.647 14.934C10.773 14.722 9.89067 14.616 9 14.616C8.10933 14.616 7.22733 14.722 6.354 14.934C5.48067 15.146 4.632 15.4513 3.808 15.85C3.55467 15.9847 3.357 16.1493 3.215 16.344C3.07167 16.5393 3 16.748 3 16.97V17.616ZM9 10.385C9.55 10.385 10.021 10.189 10.413 9.79701C10.805 9.40501 11.0007 8.93401 11 8.38401C10.9993 7.83401 10.8037 7.36335 10.413 6.97201C10.0223 6.58068 9.55133 6.38468 9 6.38401C8.44867 6.38335 7.978 6.57935 7.588 6.97201C7.198 7.36468 7.002 7.83535 7 8.38401C6.998 8.93268 7.194 9.40368 7.588 9.79701C7.982 10.1903 8.45267 10.386 9 10.384"
+          fill="#066A9E"
+        />
+      </svg>
+    </div>
+  </div>
+
+  <!-- Messages Area -->
+  <div #messagesContainer class="messages-area">
+    <div class="messages-content">
+      @for (message of conversation.messages; track trackByMessageId($index, message)) { @if
+      (message.sender === 'vendor') {
+      <!-- Vendor message (left side) -->
+      <div class="message-row vendor">
+        <!-- Avatar -->
+        <div class="avatar"></div>
+        <div class="message-content">
+          <p class="sender-name">{{ message.senderName }}</p>
+          <div class="message-bubble vendor">
+            <p class="message-text">{{ message.content }}</p>
+          </div>
+          <p class="message-time">{{ message.timestamp }}</p>
+        </div>
+      </div>
+      } @else {
+      <!-- Buyer message (right side) -->
+      <div class="message-row buyer">
+        <div class="message-content">
+          <div class="message-bubble buyer">
+            <p class="message-text">{{ message.content }}</p>
+          </div>
+          <p class="message-time">{{ message.timestamp }}</p>
+        </div>
+      </div>
+      } }
+    </div>
+  </div>
+
+  <!-- Chat Input -->
+  <div class="chat-input-wrapper">
+    <div class="chat-input-box">
+      <input
+        type="text"
+        class="message-input"
+        [placeholder]="inputPlaceholder"
+        [(ngModel)]="messageInput"
+        (keydown)="onKeyDown($event)"
+      />
+      <!-- Send icon -->
+      <button class="send-button" (click)="onSendMessage()" [disabled]="!messageInput.trim()">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M2.5 10L17.5 10M17.5 10L11.25 3.75M17.5 10L11.25 16.25"
+            stroke="#066A9E"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+  } @else {
+  <!-- Empty State -->
+  <div class="empty-state">
+    <p class="empty-message">{{ emptyMessage }}</p>
+  </div>
+  }
+</div>

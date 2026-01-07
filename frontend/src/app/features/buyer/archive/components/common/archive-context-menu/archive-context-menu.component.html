@@ -1,0 +1,15 @@
+<!-- Context Menu matching Figma F-02 design -->
+@if (isOpen) {
+  <div class="context-menu-backdrop" (click)="onBackdropClick()"></div>
+  <div class="context-menu">
+    @for (item of menuItems; track item.action) {
+      <button
+        class="menu-item"
+        type="button"
+        (click)="onItemClick(item.action, $event)"
+      >
+        {{ item.label }}
+      </button>
+    }
+  </div>
+}

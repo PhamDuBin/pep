@@ -1,0 +1,11 @@
+:host {
+  display: block;
+}
+
+// Improve scroll performance for chat message list
+:host ::ng-deep app-shared-chat-message-list {
+  .message-container {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+}

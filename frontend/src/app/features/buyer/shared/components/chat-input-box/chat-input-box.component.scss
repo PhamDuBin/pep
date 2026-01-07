@@ -1,0 +1,63 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+// Input container styles
+.input-container {
+  &:hover,
+  &:focus-within {
+    background-color: #F4FAFB;
+    border-color: #8EC5D0;
+  }
+
+  &.input-focus {
+    border-color: #066A9E;
+    box-shadow: 0 0 0 2px rgba(6, 106, 158, 0.1);
+  }
+}
+
+// Send button animation
+.send-button {
+  &:not(:disabled) {
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(6, 106, 158, 0.3);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+
+  .send-icon {
+    transition: transform 0.2s ease;
+  }
+
+  &:not(:disabled):hover .send-icon {
+    animation: sendPulse 0.3s ease;
+  }
+}
+
+// Mic button animation
+.mic-button {
+  &:hover {
+    background-color: #f3f4f6;
+  }
+
+  &:active {
+    transform: scale(0.9);
+  }
+}
+
+@keyframes sendPulse {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,74 @@
+:host {
+  display: block;
+}
+
+// Messages wrapper - allows content to stack naturally
+.messages-wrapper {
+  display: block;
+  width: 100%;
+}
+
+// Override chat-message-list height to auto (not 100%)
+.chat-list-auto-height {
+  height: auto !important;
+  display: block;
+}
+
+// PDF preview wrapper - positioned below messages
+.pdf-preview-wrapper {
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+
+// Custom scrollbar for the scroll container
+.scrollable-container {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  scroll-behavior: auto;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+  }
+}
+
+.mode-indicator {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.mode-badge {
+  animation: pulse 2s infinite;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}

@@ -1,0 +1,40 @@
+<!-- Vendor message list panel matching Figma design exactly -->
+<div class="message-list-container h-full">
+  <!-- Title -->
+  <p class="list-title">{{ listTitle }}</p>
+
+  <!-- Search Box -->
+  <div class="search-wrapper">
+    <div class="search-box">
+      <!-- Search Icon -->
+      <svg
+        class="search-icon"
+        width="20"
+        height="20"
+        viewBox="0 0 20 20"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle cx="9" cy="9" r="6" stroke="#8EC0D0" stroke-width="1.5" />
+        <path d="M13.5 13.5L17 17" stroke="#8EC0D0" stroke-width="1.5" stroke-linecap="round" />
+      </svg>
+      <input
+        type="text"
+        class="search-input"
+        [value]="searchQuery()"
+        (input)="onSearchChange($event)"
+      />
+    </div>
+  </div>
+
+  <!-- Vendor List -->
+  <div class="vendor-list">
+    @for (vendor of filteredVendors(); track trackByVendorId($index, vendor)) {
+    <app-vendor-message-item
+      [vendor]="vendor"
+      [isSelected]="selectedVendorId === vendor.id"
+      (selected)="onVendorSelect($event)"
+    ></app-vendor-message-item>
+    }
+  </div>
+</div>

@@ -1,0 +1,266 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+// Chat Header
+.chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 25px;
+  border-bottom: 1px solid #d9d9d9;
+  flex-shrink: 0;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.vendor-name {
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: normal;
+  color: #333333;
+  margin: 0;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+}
+
+.member-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: #066a9e;
+  border: 1px solid #066a9e;
+  border-radius: 1000px;
+}
+
+.member-count {
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 17px;
+  color: #ffffff;
+}
+
+.add-person-icon {
+  cursor: pointer;
+}
+
+// Messages Area
+.messages-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.messages-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+// Message Row
+.message-row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+
+  &.vendor {
+    justify-content: flex-start;
+  }
+
+  &.buyer {
+    justify-content: flex-end;
+  }
+}
+
+// Avatar
+.avatar {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #cccccc;
+  flex-shrink: 0;
+}
+
+// Message Content
+.message-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-width: 60%;
+  min-width: 200px;
+
+  .buyer & {
+    align-items: flex-end;
+  }
+}
+
+.sender-name {
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  line-height: 19px;
+  color: #333333;
+  margin: 0;
+}
+
+// Message Bubble
+.message-bubble {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+
+  &.vendor {
+    background: #ffffff;
+    border: 1px solid #8ec0d0;
+  }
+
+  &.buyer {
+    background: #e6f3f5;
+    border: 1px solid #8ec0d0;
+  }
+}
+
+.message-text {
+  flex: 1;
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: normal;
+  color: #333333;
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.message-time {
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 19px;
+  color: #808080;
+  margin: 0;
+}
+
+// Chat Input
+.chat-input-wrapper {
+  padding: 15px 25px 25px 25px;
+  flex-shrink: 0;
+}
+
+.chat-input-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 10px 10px 15px;
+  border: 1px solid #b9b9b9;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.message-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: normal;
+  color: #333333;
+
+  &::placeholder {
+    color: #808080;
+  }
+}
+
+.send-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// Empty State
+.empty-state {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  height: 100%;
+  width: 100%;
+}
+
+.empty-message {
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: normal;
+  color: #808080;
+  margin: 0;
+}
+
+// Custom scrollbar
+.messages-area::-webkit-scrollbar {
+  width: 6px;
+}
+
+.messages-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.messages-area::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+.messages-area::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}

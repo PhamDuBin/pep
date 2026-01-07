@@ -1,3 +1,23 @@
 :host {
   display: block;
 }
+
+.archive-menu-item {
+  &:hover:not(.active) {
+    background-color: #f9fafb; // gray-50
+  }
+
+  &.active {
+    background-color: #F0F0F0;
+  }
+}
+
+.user-profile-item {
+  &:hover:not(.active) {
+    background-color: #f9fafb; // gray-50
+  }
+
+  &.active {
+    background-color: #F0F0F0;
+  }
+}

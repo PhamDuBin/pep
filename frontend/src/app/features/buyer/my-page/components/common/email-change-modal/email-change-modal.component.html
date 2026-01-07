@@ -1,0 +1,94 @@
+<!-- Email Change Modal matching Figma G-02, G-03 design -->
+@if (isOpen) {
+<div class="modal-overlay" (click)="onBackdropClick($event)">
+  <div class="modal-content">
+    <!-- Close Button -->
+    <button class="btn-close" type="button" (click)="onClose()">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="40"
+        height="40"
+        viewBox="0 0 40 40"
+        fill="none"
+      >
+        <path
+          d="M10.5 29.5L20 20L29.5 10.5M10.5 10.5L20 20L29.5 29.5"
+          stroke="#f5f5f5"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
+
+    @if (modalType === 'email-change') {
+    <!-- Email Change Form -->
+    <div class="modal-body">
+      <h2 class="modal-title">メールアドレスを変更</h2>
+
+      <div class="modal-description">
+        <p>新しいメールアドレス入力してください。</p>
+        <p>メールアドレス再設定用URLを送信します。</p>
+      </div>
+
+      <div class="form-fields">
+        <!-- New Email -->
+        <div class="form-row">
+          <label class="form-label">新しいメールアドレス</label>
+          <input
+            type="email"
+            class="form-input"
+            placeholder="メールアドレス"
+            [value]="newEmail"
+            (input)="onNewEmailInput($event)"
+          />
+        </div>
+
+        <!-- Confirm Email -->
+        <div class="form-row">
+          <label class="form-label">新しいメールアドレス（確認）</label>
+          <input
+            type="email"
+            class="form-input"
+            placeholder="メールアドレス"
+            [value]="confirmEmail"
+            (input)="onConfirmEmailInput($event)"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button
+        class="btn-primary"
+        type="button"
+        [disabled]="isSaving"
+        (click)="onSendEmail()"
+      >
+        {{ isSaving ? '送信中...' : 'メールを送信' }}
+      </button>
+      <button class="btn-secondary" type="button" (click)="onClose()">
+        閉じる
+      </button>
+    </div>
+    } @else if (modalType === 'email-sent') {
+    <!-- Email Sent Confirmation -->
+    <div class="modal-body">
+      <h2 class="modal-title">メールアドレスを変更</h2>
+
+      <div class="modal-description centered">
+        <p>ご入力いただいたメールアドレスへ再設定用URLを送信しました。</p>
+        <p>メール内のURLをクリックすると、</p>
+        <p>メールアドレス変更が完了いたします。</p>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-secondary" type="button" (click)="onClose()">
+        閉じる
+      </button>
+    </div>
+    }
+  </div>
+</div>
+}
