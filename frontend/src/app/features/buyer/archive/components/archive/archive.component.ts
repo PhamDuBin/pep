@@ -5,6 +5,7 @@ import { ArchiveCardComponent } from '../common/archive-card/archive-card.compon
 import { ArchiveListItemComponent } from '../common/archive-list-item/archive-list-item.component';
 import { ArchiveFilterComponent } from '../common/archive-filter/archive-filter.component';
 import { ArchiveContextMenuComponent } from '../common/archive-context-menu/archive-context-menu.component';
+import { PaginationComponent } from '../../../../shared/components/pagination/pagination.component';
 import { ArchiveService } from '../../services/archive.service';
 import { ArchiveProject, SortOrder, ContextMenuAction } from '../../models/archive.model';
 
@@ -16,7 +17,8 @@ import { ArchiveProject, SortOrder, ContextMenuAction } from '../../models/archi
     ArchiveCardComponent,
     ArchiveListItemComponent,
     ArchiveFilterComponent,
-    ArchiveContextMenuComponent
+    ArchiveContextMenuComponent,
+    PaginationComponent
   ],
   templateUrl: './archive.component.html',
   styleUrl: './archive.component.scss'
@@ -99,11 +101,5 @@ export class ArchiveComponent implements OnInit, OnDestroy {
 
   isContextMenuOpen(projectId: string): boolean {
     return this.activeContextMenuId() === projectId;
-  }
-
-  // Helper for pagination
-  get pageNumbers(): number[] {
-    const total = this.totalPages();
-    return Array.from({ length: total }, (_, i) => i + 1);
   }
 }

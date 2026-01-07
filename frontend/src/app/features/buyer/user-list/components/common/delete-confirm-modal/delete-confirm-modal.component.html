@@ -1,0 +1,51 @@
+@if (isOpen) {
+<div class="modal-backdrop" (click)="onBackdropClick($event)">
+  <div class="modal-container">
+    <!-- Close button -->
+    <button class="close-btn" (click)="onClose()">
+      <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 12L28 28M28 12L12 28" stroke="#f5f5f5" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+
+    <div class="modal-content">
+      <!-- Modal Title -->
+      <h2 class="modal-title">メンバー削除</h2>
+
+      @if (modalType === 'confirm') {
+      <!-- Confirmation Mode -->
+      <div class="modal-body">
+        <div class="modal-text-container">
+          <p class="modal-text">選択したメンバーを削除します。</p>
+          <p class="modal-text">よろしいですか？</p>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button
+          class="btn-primary"
+          [disabled]="isSaving"
+          (click)="onConfirm()"
+        >
+          @if (isSaving) {
+          <span class="loading loading-spinner loading-sm"></span>
+          } @else {
+          削除
+          }
+        </button>
+        <button class="btn-secondary" (click)="onClose()">キャンセル</button>
+      </div>
+      } @else {
+      <!-- Completion Mode -->
+      <div class="modal-body">
+        <p class="modal-text">削除完了しました。</p>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-secondary" (click)="onClose()">閉じる</button>
+      </div>
+      }
+    </div>
+  </div>
+</div>
+}

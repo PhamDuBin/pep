@@ -1,0 +1,38 @@
+@if (totalPages >= 1) {
+<div class="pagination">
+  <!-- First Page Button -->
+  <button
+    class="page-btn"
+    [disabled]="currentPage === 1"
+    (click)="onFirstPage()"
+    type="button"
+    aria-label="First page"
+  >
+    «
+  </button>
+
+  <!-- Page Number Buttons -->
+  @for (page of pageNumbers; track page) {
+  <button
+    class="page-btn"
+    [class.active]="page === currentPage"
+    (click)="onPageChange(page)"
+    type="button"
+    [attr.aria-current]="page === currentPage ? 'page' : null"
+  >
+    {{ page }}
+  </button>
+  }
+
+  <!-- Last Page Button -->
+  <button
+    class="page-btn"
+    [disabled]="currentPage === totalPages"
+    (click)="onLastPage()"
+    type="button"
+    aria-label="Last page"
+  >
+    »
+  </button>
+</div>
+}

@@ -126,16 +126,23 @@
   >
     <!-- User List -->
     <div
-      class="flex items-center py-[7px] cursor-pointer hover:bg-gray-50 rounded transition-colors"
+      class="user-list-item flex items-center py-[7px] cursor-pointer rounded transition-colors"
+      [class.active]="isUserListActive()"
       [class.gap-[7px]]="!isCollapsed()"
       [class.-mx-[10px]]="!isCollapsed()"
       [class.px-[10px]]="!isCollapsed()"
       [class.w-full]="!isCollapsed()"
       [class.justify-center]="isCollapsed()"
       [class.px-[5px]]="isCollapsed()"
+      (click)="navigateToUserList()"
     >
       <img src="assets/icons/users.svg" alt="Users" width="29" height="16" class="flex-shrink-0" />
-      <span class="text-[13px] text-text-dark" [class.hidden]="isCollapsed()">ユーザ一覧</span>
+      <span
+        class="text-[13px]"
+        [class.text-primary]="isUserListActive()"
+        [class.text-text-dark]="!isUserListActive()"
+        [class.hidden]="isCollapsed()"
+      >ユーザ一覧</span>
     </div>
 
     <!-- User Profile -->

@@ -24,7 +24,7 @@
       <button class="view-toggle-btn" (click)="onToggleViewMode()" type="button">
         @if (viewMode() === 'grid') {
         <!-- List View Icon -->
-        <img src="assets/icons/Group.svg" alt="List View" width="24" height="22" />
+        <img src="assets/icons/group.svg" alt="List View" width="24" height="22" />
         } @else {
         <!-- Grid View Icon -->
         <svg
@@ -105,36 +105,11 @@
       </div>
 
       <!-- Pagination -->
-      @if (totalPages() >= 1) {
-      <div class="pagination">
-        <button
-          class="page-btn"
-          [disabled]="currentPage() === 1"
-          (click)="onPageChange(1)"
-          type="button"
-        >
-          «
-        </button>
-        @for (page of pageNumbers; track page) {
-        <button
-          class="page-btn"
-          [class.active]="page === currentPage()"
-          (click)="onPageChange(page)"
-          type="button"
-        >
-          {{ page }}
-        </button>
-        }
-        <button
-          class="page-btn"
-          [disabled]="currentPage() === totalPages()"
-          (click)="onPageChange(totalPages())"
-          type="button"
-        >
-          »
-        </button>
-      </div>
-      }
+      <app-pagination
+        [currentPage]="currentPage()"
+        [totalPages]="totalPages()"
+        (pageChange)="onPageChange($event)"
+      ></app-pagination>
     </div>
     } }
   </div>
