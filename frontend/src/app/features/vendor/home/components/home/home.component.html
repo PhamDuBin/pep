@@ -1,5 +1,4 @@
-<div class="flex h-full bg-white w-full">
-    <app-sidebar></app-sidebar>
+<div class="flex h-full bg-white overflow-hidden ml-[172px]" style="width: calc(100vw - 172px);">
     <app-message-list (messageSelected)="onMessageSelected($event)"></app-message-list>
     <app-message-detail [messageId]="selectedMessageId()"></app-message-detail>
 </div>

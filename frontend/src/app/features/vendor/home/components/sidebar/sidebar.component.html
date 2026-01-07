@@ -49,8 +49,8 @@
         </div>
 
         <!-- User Profile -->
-        <div
-            class="flex items-center px-[10px] py-[5px] gap-[7px] w-[152px] h-[40px] cursor-pointer rounded hover:bg-[#F0F0F0] transition-colors">
+        <div class="flex items-center px-[10px] py-[5px] gap-[7px] w-[152px] h-[40px] cursor-pointer rounded hover:bg-[#F0F0F0] transition-colors"
+            (click)="navigateToMyPage()">
             <div
                 class="flex flex-col justify-center items-center w-[30px] h-[30px] bg-avatar-bg rounded-full flex-shrink-0">
                 <span class="text-[13px] text-white font-normal leading-[18px] text-center">{{ currentUser.initials

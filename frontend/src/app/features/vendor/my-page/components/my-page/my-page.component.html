@@ -1,0 +1,190 @@
+<!-- Section 1: User Information -->
+<div class="flex flex-col items-start gap-[25px] w-[1008px]">
+    <!-- Header -->
+    <div class="flex flex-row items-center px-0 pb-[10px] gap-[10px] w-full h-[37px] border-b border-[#CFCFCF]">
+        <h2 class="font-noto font-bold text-[20px] leading-[27px] text-[#333333]">ユーザー情報</h2>
+    </div>
+
+    <!-- Content -->
+    <div class="flex flex-col justify-center items-center gap-[25px] w-full">
+        <div class="flex flex-col justify-center items-start gap-[25px] w-full">
+            <!-- Avatar Section (Above Form Fields) -->
+            <app-user-avatar [imageUrl]="userProfile().avatarUrl" [userName]="userProfile().name"
+                [initials]="userProfile().initials" [avatarColor]="userProfile().avatarColor" [editable]="true"
+                (uploadClick)="onAvatarUpload()">
+            </app-user-avatar>
+
+            <!-- Form Fields -->
+            <div class="flex flex-col items-start gap-[10px]">
+                <!-- Name Field -->
+                <div class="flex flex-row items-center gap-[10px] h-[35px]">
+                    <span class="w-[200px] font-noto text-[16px] text-[#000000]">氏名</span>
+                    <span class="h-[35px] px-[10px] py-[3px] font-noto text-[16px] text-[#000000] flex items-center">
+                        {{ userProfile().name }}
+                    </span>
+                    <div></div>
+                </div>
+
+
+                <!-- Email Field -->
+                <div class="flex flex-row items-center gap-[10px] h-[35px]">
+                    <span class="w-[200px] font-noto text-[16px] leading-none text-[#000000]">メールアドレスを変更</span>
+                    <span class="h-[35px] px-[10px] py-[3px] font-noto text-[16px] text-[#000000]">
+                        {{ userProfile().email }}
+                    </span>
+                    <button type="button" (click)="onEmailChange()"
+                        class="font-noto text-[16px] leading-none underline text-primary cursor-pointer bg-transparent border-none p-0 flex-shrink-0">
+                        メールアドレスを変更
+                    </button>
+                </div>
+
+
+
+                <!-- Current Password -->
+                <div class="flex flex-row items-center gap-[10px] w-full h-[35px]">
+                    <span class="w-[200px] font-noto text-[16px] leading-[22px] text-[#000000]">現在のパスワード</span>
+                    <input type="password" readonly placeholder="**********"
+                        class="w-[300px] h-[35px] px-[10px] py-[3px] bg-white font-noto text-[16px] leading-[22px] text-[#000000] text-left"
+                        style="text-align:left; cursor: not-allowed;" />
+                </div>
+
+                <!-- New Password -->
+                <app-password-input label="新しいパスワード" placeholder="●●●●●●●●●●" [(value)]="passwordData.newPassword">
+                </app-password-input>
+
+                <!-- Confirm Password -->
+                <app-password-input label="新しいパスワード（確認）" placeholder="●●●●●●●●●●"
+                    [(value)]="passwordData.confirmPassword">
+                </app-password-input>
+            </div>
+        </div>
+
+        <!-- Save Button -->
+        <button type="button" (click)="onSaveChanges()"
+            class="btn bg-primary hover:bg-primary/90 text-white border-none font-noto text-[14px] leading-[19px] normal-case w-[100px] h-[39px] px-[15px] rounded-[8px]">
+            変更を保存
+        </button>
+    </div>
+</div>
+
+<!-- Section 2: Payment Information -->
+<div class="flex flex-col items-start gap-[25px] w-[1008px]">
+    <!-- Header -->
+    <div class="flex flex-row items-center gap-[10px] w-full h-[27px]">
+        <h2 class="font-noto font-bold text-[20px] leading-[27px] text-[#000000]">決済情報</h2>
+    </div>
+
+    <!-- Content -->
+    <div class="flex flex-col justify-center items-start gap-[35px] w-full">
+        <div class="flex flex-col justify-center items-center gap-[25px] w-[410px]">
+            <div class="flex flex-col items-start gap-[10px] w-full">
+                <!-- Next Payment Date -->
+                <div class="flex flex-row items-center gap-[10px] w-full">
+                    <span class="w-[200px] font-noto text-[16px] leading-[22px] text-[#000000]">次回の請求日</span>
+                    <span class="font-noto text-[20px] leading-[27px] text-[#000000]">{{ paymentInfo().nextPaymentDate
+                        }}</span>
+                </div>
+
+                <!-- Amount -->
+                <div class="flex flex-row items-center gap-[10px] w-full">
+                    <span class="w-[200px] font-noto text-[16px] leading-[22px] text-[#000000]">請求金額</span>
+                    <span class="font-noto text-[20px] leading-[27px] text-[#000000]">{{ paymentInfo().amount | number
+                        }}円（税込）</span>
+                </div>
+
+                <!-- Payment Method -->
+                <div class="flex flex-col justify-center items-start gap-[5px] w-full">
+                    <span class="font-noto text-[16px] leading-[22px] text-[#000000]">支払い方法</span>
+                    <div class="flex flex-row items-center gap-[10px] w-full">
+                        <img src="pictures/visa.png" alt="Visa" class="w-[70px] h-[43px]" />
+                        <span class="font-noto text-[16px] leading-[22px] text-[#808080]">
+                            Visa **** **** {{ paymentInfo().paymentMethod.lastFourDigits }}
+                        </span>
+                    </div>
+                    <button type="button"
+                        class="btn btn-sm bg-[#E1E1E1] hover:bg-[#D1D1D1] border-none text-[#333333] font-noto text-[14px] leading-[19px] normal-case h-[39px] px-[15px] rounded-[8px]">
+                        支払い方法を追加
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Section 3: Payment History -->
+<div class="flex flex-col items-start gap-[25px] w-[1008px]">
+    <!-- Header -->
+    <div class="flex flex-row items-center gap-[10px] w-full h-[27px]">
+        <h2 class="font-noto font-bold text-[20px] leading-[27px] text-[#333333]">お支払い履歴</h2>
+    </div>
+
+    <!-- Table -->
+    <div class="w-full border border-[#D4D4D4] rounded">
+        <table class="table w-full">
+            <!-- Table Header -->
+            <thead>
+                <tr class="bg-[#F5F5F5] h-[50px]">
+                    <th
+                        class="w-[130px] font-inter font-semibold text-[14px] leading-[130%] text-center text-[#000000] border-t border-l border-[#D4D4D4]">
+                        支払日</th>
+                    <th
+                        class="font-inter font-semibold text-[14px] leading-[130%] text-center text-[#000000] border-t border-[#D4D4D4]">
+                        請求金額(税込)</th>
+                    <th
+                        class="w-[120px] font-inter font-semibold text-[14px] leading-[130%] text-center text-[#000000] border-t border-[#D4D4D4]">
+                        利用年月</th>
+                    <th
+                        class="font-inter font-semibold text-[14px] leading-[130%] text-center text-[#000000] border-t border-[#D4D4D4]">
+                        ステータス</th>
+                    <th
+                        class="font-inter font-semibold text-[14px] leading-[130%] text-center text-[#000000] border-t border-[#D4D4D4]">
+                        請求書</th>
+                </tr>
+            </thead>
+            <!-- Table Body -->
+            <tbody>
+                @for (payment of paymentHistory(); track payment.id) {
+                <tr class="h-[48px]">
+                    <td
+                        class="font-noto-jp font-medium text-[14px] leading-[130%] text-center text-[#000000] border-t border-l border-[#D4D4D4]">
+                        {{ payment.paymentDate }}</td>
+                    <td
+                        class="font-noto-jp font-medium text-[14px] leading-[130%] text-center text-[#000000] border-t border-[#D4D4D4]">
+                        {{ payment.amount | number }}円</td>
+                    <td
+                        class="font-noto-jp font-medium text-[14px] leading-[130%] text-center text-[#000000] border-t border-[#D4D4D4]">
+                        {{ payment.billingPeriod }}</td>
+                    <td
+                        class="font-noto-jp font-medium text-[12px] leading-[130%] text-center text-[#000000] border-t border-[#D4D4D4]">
+                        {{ payment.status }}</td>
+                    <td
+                        class="font-noto-jp font-semibold text-[12px] leading-[130%] text-center border-t border-[#D4D4D4]">
+                        <button type="button" (click)="downloadInvoice(payment.invoiceUrl)"
+                            class="text-primary cursor-pointer bg-transparent border-none p-0">
+                            Download
+                        </button>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- G-02: Email Change Modal -->
+<app-email-change-modal [isOpen]="showEmailModal()" (emailSent)="onEmailSent()" (close)="onCloseEmailModal()">
+</app-email-change-modal>
+
+<!-- G-03: Email Change Success Modal -->
+<app-email-change-success-modal [isOpen]="showEmailSuccessModal()" (close)="onCloseEmailSuccessModal()">
+</app-email-change-success-modal>
+
+<!-- G-03: Password Change Modal -->
+<app-password-change-modal [isOpen]="showPasswordModal()" (passwordChange)="onPasswordChangeSubmit($event)"
+    (close)="onClosePasswordModal()">
+</app-password-change-modal>
+
+<!-- G-04: Avatar Upload Modal -->
+<app-avatar-upload-modal [isOpen]="showAvatarModal()" [currentAvatarColor]="userProfile().avatarColor"
+    (avatarChange)="onAvatarColorChange($event)" (close)="onCloseAvatarModal()">
+</app-avatar-upload-modal>

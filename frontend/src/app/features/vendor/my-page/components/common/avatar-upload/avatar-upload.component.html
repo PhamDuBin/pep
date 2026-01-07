@@ -1,0 +1,50 @@
+@if (isOpen) {
+<div class="modal-backdrop fixed inset-0 bg-black/10 flex items-center justify-center z-50"
+    (click)="onBackdropClick($event)">
+    <!-- Modal Content -->
+    <div class="relative bg-white rounded-xl shadow-xl p-[20px_35px] w-[500px] flex flex-col items-center gap-[25px]">
+
+        <!-- Close Button (Outside modal, top-right) -->
+        <button type="button"
+            class="absolute -top-[20px] -right-[20px] w-[40px] h-[40px] bg-[#F5F5F5] rounded-full flex items-center justify-center hover:bg-[#E5E5E5] transition-colors"
+            (click)="onClose()">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 1L1 9M1 1L9 9" stroke="#333333" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
+        </button>
+
+        <!-- Content Container -->
+        <div class="flex flex-col items-center gap-[25px] w-[430px]">
+            <!-- Title -->
+            <h2 class="font-noto text-[20px] leading-[27px] text-primary">
+                アイコンの変更
+            </h2>
+
+            <!-- Avatar Color Options -->
+            <div class="flex flex-row items-start gap-[25px]">
+                @for (avatarColor of avatarColors; track avatarColor.color) {
+                <button type="button" class="w-[70px] h-[70px] rounded-full transition-all"
+                    [style.background]="avatarColor.color" [class.ring-[5px]]="selectedColor === avatarColor.color"
+                    [class.ring-primary]="selectedColor === avatarColor.color" (click)="selectColor(avatarColor.color)"
+                    [attr.aria-label]="'Select ' + avatarColor.label + ' avatar'">
+                </button>
+                }
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-row items-start gap-[10px]">
+            <button type="button"
+                class="px-[15px] py-[10px] bg-[#333333] hover:bg-[#222222] text-white rounded-lg font-noto text-[14px] leading-[19px] transition-colors"
+                (click)="onSave()">
+                保存
+            </button>
+            <button type="button"
+                class="px-[15px] py-[10px] bg-[#E1E1E1] hover:bg-[#D1D1D1] text-[#333333] rounded-lg font-noto text-[14px] leading-[19px] transition-colors"
+                (click)="onClose()">
+                閉じる
+            </button>
+        </div>
+    </div>
+</div>
+}

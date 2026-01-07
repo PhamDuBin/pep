@@ -1,0 +1,41 @@
+@if (isOpen) {
+<div class="modal-backdrop fixed inset-0 bg-black/10 flex items-center justify-center z-50"
+    (click)="onBackdropClick($event)">
+    <!-- Modal Content -->
+    <div class="relative bg-white rounded-xl shadow-xl p-[20px_35px] w-[560px] flex flex-col items-center gap-[25px]">
+
+        <!-- Close Button (Outside modal, top-right) -->
+        <button type="button"
+            class="absolute -top-[20px] -right-[20px] w-[40px] h-[40px] bg-[#F5F5F5] rounded-full flex items-center justify-center hover:bg-[#E5E5E5] transition-colors"
+            (click)="onClose()">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 1L1 9M1 1L9 9" stroke="#333333" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
+        </button>
+
+        <!-- Content Container -->
+        <div class="flex flex-col items-center gap-[25px] w-[490px]">
+            <!-- Title -->
+            <h2 class="font-noto text-[20px] leading-[27px] text-primary">
+                メールアドレスを変更
+            </h2>
+
+            <!-- Success Message -->
+            <div class="flex flex-col items-center gap-[25px] w-[420px]">
+                <p class="font-noto-jp font-medium text-[14px] leading-[130%] text-center text-[#000000]">
+                    ご入力いただいたメールアドレスへ再設定用URLを送信しました。<br>メール内のURLをクリックすると、<br>メールアドレス変更が完了いたします。
+                </p>
+            </div>
+        </div>
+
+        <!-- Close Button -->
+        <div class="flex flex-row items-start gap-[10px]">
+            <button type="button"
+                class="px-[15px] py-[10px] bg-[#E1E1E1] hover:bg-[#D1D1D1] text-[#333333] rounded-lg font-noto text-[14px] leading-[19px] transition-colors"
+                (click)="onClose()">
+                閉じる
+            </button>
+        </div>
+    </div>
+</div>
+}

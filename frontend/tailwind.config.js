@@ -11,6 +11,7 @@ module.exports = {
         'border-gray': '#B9B9B9',
         'border-light': '#E1E1E1',
         'avatar-bg': '#8EC5D0',
+        'text-black': '#000000',
       },
       fontFamily: {
         'noto': ['Noto Sans', 'sans-serif'],
