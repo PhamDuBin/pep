@@ -2,6 +2,26 @@
   display: block;
 }
 
+// Custom scrollbar for the scroll container
+.scrollable-container {
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+  }
+}
+
 .mode-indicator {
   animation: fadeIn 0.3s ease-out;
 }

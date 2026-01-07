@@ -3,13 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-chat-input-box',
+  selector: 'app-shared-chat-input-box',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './chat-input-box.component.html',
   styleUrl: './chat-input-box.component.scss'
 })
-export class ChatInputBoxComponent {
+export class SharedChatInputBoxComponent {
   @Input() placeholder = '何でもお聞きください！';
 
   @Output() messageSent = new EventEmitter<string>();

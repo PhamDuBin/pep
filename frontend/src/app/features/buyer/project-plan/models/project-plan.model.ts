@@ -1,3 +1,9 @@
+// Import shared models for local use
+import type { PdfPage, Vendor } from '../../shared/models/chat.model';
+
+// Re-export shared models
+export type { PdfPage, DownloadFormat, Vendor, ChatMessage } from '../../shared/models/chat.model';
+
 export interface ProjectPlan {
   id: string;
   title: string;
@@ -41,22 +47,7 @@ export interface StaffingItem {
   total: string;
 }
 
-export interface PdfPage {
-  id: string;
-  pageNumber: number;
-  title: string;
-  thumbnailUrl?: string;
-}
-
 export type ProjectPlanStatus = 'generating' | 'preview' | 'confirmed' | 'sent';
-
-export type DownloadFormat = 'pdf' | 'ppt';
-
-export interface Vendor {
-  id: string;
-  name: string;
-  isSelected: boolean;
-}
 
 export interface SendRfpRequest {
   projectPlanId: string;
@@ -67,12 +58,4 @@ export interface SendRfpResponse {
   success: boolean;
   sentVendors: Vendor[];
   message: string;
-}
-
-export interface ChatMessage {
-  id: string;
-  content: string;
-  timestamp: Date;
-  sender: 'user' | 'ai';
-  isNew?: boolean;
 }

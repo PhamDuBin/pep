@@ -16,10 +16,11 @@
       <div class="flex-1 flex flex-col gap-[25px] items-center overflow-hidden">
         <div class="w-full max-w-[800px] flex-1 overflow-hidden">
           <!-- Message List -->
-          <app-chat-message-list
+          <app-shared-chat-message-list
             [messages]="messages()"
             [isLoading]="isLoading()"
-          ></app-chat-message-list>
+            messageVariant="minimal"
+          ></app-shared-chat-message-list>
         </div>
       </div>
 
@@ -29,10 +30,10 @@
         <app-project-plan-mode-button></app-project-plan-mode-button>
 
         <!-- Chat Input -->
-        <app-chat-input-box
+        <app-shared-chat-input-box
           (messageSent)="onMessageSent($event)"
           (microphoneClicked)="onMicrophoneClicked()"
-        ></app-chat-input-box>
+        ></app-shared-chat-input-box>
       </div>
     </div>
   </main>

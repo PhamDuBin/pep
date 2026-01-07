@@ -14,22 +14,29 @@
     <div class="flex flex-col h-[calc(100vh-89px-94px)] bg-white px-[75px] py-[50px]">
       <!-- Chat Messages Container -->
       <div class="flex-1 flex flex-col gap-[25px] items-center overflow-hidden">
-        <div class="w-full max-w-[800px] flex-1 overflow-hidden flex flex-col gap-4">
+        <div #scrollContainer class="w-full max-w-[800px] flex-1 overflow-y-auto flex flex-col gap-4 pr-2 scrollable-container">
           <!-- Message List -->
-          <app-chat-message-list
+          <app-shared-chat-message-list
+            class="flex-shrink-0"
             [messages]="messages()"
             [isLoading]="isLoading()"
-          ></app-chat-message-list>
+            messageVariant="with-avatar"
+            [charsPerFrame]="1"
+            [typingSpeed]="15"
+            [useInternalScroll]="false"
+            (contentChanged)="onChatContentChanged()"
+          ></app-shared-chat-message-list>
 
           <!-- PDF Preview (shown after AI generates plan) -->
           @if (showPdfPreview()) {
-          <app-pdf-preview
+          <app-shared-pdf-preview
+            class="flex-shrink-0"
             [pages]="pdfPages()"
             [completedCount]="5"
             [totalCount]="5"
             (download)="onDownloadClick()"
             (confirm)="onConfirmClick()"
-          ></app-pdf-preview>
+          ></app-shared-pdf-preview>
           }
         </div>
       </div>
@@ -56,21 +63,21 @@
         </p>
 
         <!-- Chat Input -->
-        <app-chat-input-box
+        <app-shared-chat-input-box
           [placeholder]="chatPlaceholder"
           (messageSent)="onMessageSent($event)"
           (microphoneClicked)="onMicrophoneClicked()"
-        ></app-chat-input-box>
+        ></app-shared-chat-input-box>
       </div>
     </div>
   </main>
 
   <!-- Download Format Modal -->
-  <app-download-format-modal
+  <app-shared-download-format-modal
     [isOpen]="showDownloadModal()"
     (download)="onDownloadFormat($event)"
     (close)="onCloseDownloadModal()"
-  ></app-download-format-modal>
+  ></app-shared-download-format-modal>
 
   <!-- RFP Confirm Modal (Step 1) -->
   <app-rfp-confirm-modal
@@ -88,10 +95,11 @@
   ></app-vendor-selection-modal>
 
   <!-- RFP Sent Modal (Step 3) -->
-  <app-rfp-sent-modal
+  <app-shared-rfp-sent-modal
     [isOpen]="showRfpSentModal()"
     [vendors]="sentVendors()"
+    [itemsPerRow]="3"
     (vendorChat)="onVendorChat()"
     (close)="onCloseRfpModal()"
-  ></app-rfp-sent-modal>
+  ></app-shared-rfp-sent-modal>
 </div>

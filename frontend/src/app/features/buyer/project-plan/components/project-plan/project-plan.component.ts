@@ -1,19 +1,22 @@
-import { Component, computed, OnInit, OnDestroy } from '@angular/core';
+import { Component, computed, OnInit, OnDestroy, ViewChild, ElementRef, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { HeaderComponent } from '../../../../shared/components/header/header.component';
 import { SideMenuComponent } from '../../../../shared/components/side-menu/side-menu.component';
 import { TabNavigationComponent } from '../../../../shared/components/tab-navigation/tab-navigation.component';
-import { ChatMessageListComponent } from '../common/chat-message-list/chat-message-list.component';
-import { ChatInputBoxComponent } from '../common/chat-input-box/chat-input-box.component';
-import { PdfPreviewComponent } from '../common/pdf-preview/pdf-preview.component';
-import { DownloadFormatModalComponent } from '../common/download-format-modal/download-format-modal.component';
+import {
+  SharedChatMessageListComponent,
+  SharedChatInputBoxComponent,
+  SharedPdfPreviewComponent,
+  SharedDownloadFormatModalComponent,
+  SharedRfpSentModalComponent,
+  DownloadFormat,
+  Vendor
+} from '../../../shared';
 import { RfpConfirmModalComponent } from '../common/rfp-confirm-modal/rfp-confirm-modal.component';
 import { VendorSelectionModalComponent } from '../common/vendor-selection-modal/vendor-selection-modal.component';
-import { RfpSentModalComponent } from '../common/rfp-sent-modal/rfp-sent-modal.component';
 import { ProjectPlanService } from '../../services/project-plan.service';
 import { Tab } from '../../../home/models/tab.model';
-import { DownloadFormat, Vendor } from '../../models/project-plan.model';
 import { MODE_DESCRIPTION, CHAT_INPUT_PLACEHOLDER } from '../../constants/project-plan.constant';
 
 @Component({
@@ -24,13 +27,13 @@ import { MODE_DESCRIPTION, CHAT_INPUT_PLACEHOLDER } from '../../constants/projec
     HeaderComponent,
     SideMenuComponent,
     TabNavigationComponent,
-    ChatMessageListComponent,
-    ChatInputBoxComponent,
-    PdfPreviewComponent,
-    DownloadFormatModalComponent,
+    SharedChatMessageListComponent,
+    SharedChatInputBoxComponent,
+    SharedPdfPreviewComponent,
+    SharedDownloadFormatModalComponent,
     RfpConfirmModalComponent,
     VendorSelectionModalComponent,
-    RfpSentModalComponent,
+    SharedRfpSentModalComponent,
   ],
   templateUrl: './project-plan.component.html',
   styleUrl: './project-plan.component.scss',
@@ -69,7 +72,16 @@ export class ProjectPlanComponent implements OnInit, OnDestroy {
   modeDescription = MODE_DESCRIPTION;
   chatPlaceholder = CHAT_INPUT_PLACEHOLDER;
 
-  constructor(private projectPlanService: ProjectPlanService, private router: Router) {}
+  @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
+
+  constructor(private projectPlanService: ProjectPlanService, private router: Router) {
+    // Effect to scroll when PDF preview appears
+    effect(() => {
+      if (this.showPdfPreview()) {
+        setTimeout(() => this.scrollToBottom(), 100);
+      }
+    });
+  }
 
   ngOnInit(): void {
     // Reset state when entering the page
@@ -160,5 +172,20 @@ export class ProjectPlanComponent implements OnInit, OnDestroy {
 
   onBackToBuyerHome(): void {
     this.router.navigate(['/buyer']);
+  }
+
+  onChatContentChanged(): void {
+    this.scrollToBottom();
+  }
+
+  private scrollToBottom(): void {
+    try {
+      const element = this.scrollContainer?.nativeElement;
+      if (element) {
+        element.scrollTop = element.scrollHeight;
+      }
+    } catch (err) {
+      console.error('Error scrolling to bottom:', err);
+    }
   }
 }

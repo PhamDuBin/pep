@@ -1,17 +1,18 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Vendor } from '../../../models/project-plan.model';
+import { Vendor } from '../../models/chat.model';
 
 @Component({
-  selector: 'app-rfp-sent-modal',
+  selector: 'app-shared-rfp-sent-modal',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './rfp-sent-modal.component.html',
   styleUrl: './rfp-sent-modal.component.scss'
 })
-export class RfpSentModalComponent {
+export class SharedRfpSentModalComponent {
   @Input() isOpen = false;
   @Input() vendors: Vendor[] = [];
+  @Input() itemsPerRow = 2;
 
   @Output() vendorChat = new EventEmitter<void>();
   @Output() close = new EventEmitter<void>();
@@ -32,10 +33,9 @@ export class RfpSentModalComponent {
 
   getVendorRows(): Vendor[][] {
     const rows: Vendor[][] = [];
-    const itemsPerRow = 3;
 
-    for (let i = 0; i < this.vendors.length; i += itemsPerRow) {
-      rows.push(this.vendors.slice(i, i + itemsPerRow));
+    for (let i = 0; i < this.vendors.length; i += this.itemsPerRow) {
+      rows.push(this.vendors.slice(i, i + this.itemsPerRow));
     }
 
     return rows;

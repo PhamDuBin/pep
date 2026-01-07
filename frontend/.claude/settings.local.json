@@ -5,7 +5,9 @@
       "mcp__figma__get_screenshot",
       "Bash(npm run build:*)",
       "WebFetch(domain:www.figma.com)",
-      "mcp__figma__get_metadata"
+      "mcp__figma__get_metadata",
+      "Bash(tree:*)",
+      "Bash(cat:*)"
     ]
   }
 }

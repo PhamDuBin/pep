@@ -1,22 +1,36 @@
-import { Component, Input, OnInit, OnDestroy, OnChanges, SimpleChanges, ChangeDetectorRef, NgZone } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  OnDestroy,
+  OnChanges,
+  SimpleChanges,
+  ChangeDetectorRef,
+  NgZone
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ChatMessage } from '../../../models/chat-message.model';
+import { ChatMessage } from '../../models/chat.model';
+
+export type ChatMessageVariant = 'minimal' | 'with-avatar';
 
 @Component({
-  selector: 'app-chat-message',
+  selector: 'app-shared-chat-message',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './chat-message.component.html',
   styleUrl: './chat-message.component.scss'
 })
-export class ChatMessageComponent implements OnInit, OnDestroy, OnChanges {
+export class SharedChatMessageComponent implements OnInit, OnDestroy, OnChanges {
   @Input({ required: true }) message!: ChatMessage;
   @Input() animate = false;
-  @Input() typingSpeed = 10; // milliseconds per character
+  @Input() typingSpeed = 10;
+  @Input() charsPerFrame = 5;
+  @Input() variant: ChatMessageVariant = 'minimal';
+  @Input() showSkipHint = true;
 
   displayedContent = '';
   isTyping = false;
-  private typingTimeout: any;
+  private typingTimeout: ReturnType<typeof setTimeout> | null = null;
   private currentIndex = 0;
 
   constructor(
@@ -70,8 +84,7 @@ export class ChatMessageComponent implements OnInit, OnDestroy, OnChanges {
   private typeNextChars(content: string): void {
     if (this.currentIndex < content.length) {
       this.ngZone.run(() => {
-        // Add multiple characters at once for faster typing
-        const charsToAdd = Math.min(5, content.length - this.currentIndex);
+        const charsToAdd = Math.min(this.charsPerFrame, content.length - this.currentIndex);
         this.displayedContent += content.substring(this.currentIndex, this.currentIndex + charsToAdd);
         this.currentIndex += charsToAdd;
         this.cdr.detectChanges();

@@ -1,16 +1,16 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { DownloadFormat } from '../../../models/project-plan.model';
+import { DownloadFormat } from '../../models/chat.model';
 
 @Component({
-  selector: 'app-download-format-modal',
+  selector: 'app-shared-download-format-modal',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './download-format-modal.component.html',
   styleUrl: './download-format-modal.component.scss'
 })
-export class DownloadFormatModalComponent {
+export class SharedDownloadFormatModalComponent {
   @Input() isOpen = false;
 
   @Output() download = new EventEmitter<DownloadFormat>();

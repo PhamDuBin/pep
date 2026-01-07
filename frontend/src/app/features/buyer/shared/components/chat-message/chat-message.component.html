@@ -1,0 +1,79 @@
+@if (variant === 'minimal') {
+  <!-- Minimal variant (like ai-chat) -->
+  <div
+    class="flex w-full message-container"
+    [class.justify-end]="isUserMessage"
+    [class.justify-start]="!isUserMessage"
+    [class.animate-slide-in-right]="isUserMessage && message.isNew"
+    [class.animate-slide-in-left]="!isUserMessage && message.isNew"
+  >
+    @if (isUserMessage) {
+      <!-- User Message (Right aligned, blue bubble) -->
+      <div class="max-w-[70%] bg-primary text-white px-[10px] py-[10px] rounded-tl-[12px] rounded-tr-[12px] rounded-bl-[12px] shadow-md">
+        <p class="text-[14px] font-normal leading-normal whitespace-pre-wrap">{{ displayedContent }}</p>
+      </div>
+    } @else {
+      <!-- AI Message (Left aligned, plain text) -->
+      <div class="max-w-[600px] relative cursor-pointer" (click)="skipTyping()">
+        <div class="text-[14px] text-text-dark font-normal leading-normal whitespace-pre-wrap ai-message-content">
+          <span>{{ displayedContent }}</span>
+          @if (isTyping) {
+            <span class="typing-cursor">|</span>
+          }
+        </div>
+        @if (hasHighlight && !isTyping) {
+          <div class="mt-2 bg-yellow-100 px-2 py-1 rounded animate-fade-in">
+            <p class="text-[14px] text-text-dark whitespace-pre-wrap">{{ message.highlightedText }}</p>
+          </div>
+        }
+        @if (isTyping && showSkipHint) {
+          <p class="text-[11px] text-text-gray mt-2 opacity-60">クリックでスキップ</p>
+        }
+      </div>
+    }
+  </div>
+} @else {
+  <!-- With-avatar variant (like project-plan) -->
+  <div
+    class="message-container flex gap-3 w-full animate-slide-in"
+    [class.justify-end]="isUserMessage"
+  >
+    <!-- AI Avatar -->
+    @if (!isUserMessage) {
+      <div class="avatar w-[40px] h-[40px] rounded-full bg-primary flex items-center justify-center flex-shrink-0">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2Z" stroke="white" stroke-width="2"/>
+          <path d="M8 14C8 14 9.5 16 12 16C14.5 16 16 14 16 14" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="9" cy="9" r="1.5" fill="white"/>
+          <circle cx="15" cy="9" r="1.5" fill="white"/>
+        </svg>
+      </div>
+    }
+
+    <!-- Message Bubble -->
+    <div
+      class="message-bubble max-w-[70%] px-4 py-3 rounded-2xl cursor-pointer"
+      [class.bg-chat-ai]="!isUserMessage"
+      [class.bg-chat-user]="isUserMessage"
+      [class.text-white]="isUserMessage"
+      [class.rounded-bl-none]="!isUserMessage"
+      [class.rounded-br-none]="isUserMessage"
+      (click)="skipTyping()"
+    >
+      <span class="text-[14px] leading-relaxed whitespace-pre-wrap">{{ displayedContent }}</span>
+      @if (isTyping) {
+        <span class="typing-cursor">|</span>
+      }
+    </div>
+
+    <!-- User Avatar -->
+    @if (isUserMessage) {
+      <div class="avatar w-[40px] h-[40px] rounded-full bg-gray-300 flex items-center justify-center flex-shrink-0">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="8" r="4" stroke="#666" stroke-width="2"/>
+          <path d="M4 20C4 16.6863 6.68629 14 10 14H14C17.3137 14 20 16.6863 20 20" stroke="#666" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+    }
+  </div>
+}
