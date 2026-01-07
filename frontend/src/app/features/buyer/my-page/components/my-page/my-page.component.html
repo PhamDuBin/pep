@@ -1,0 +1,69 @@
+<!-- My Page content matching Figma G-01 Admin/Member design -->
+<div class="content-wrapper">
+  @if (isLoading()) {
+  <div class="loading-state">
+    <span class="loading loading-spinner loading-lg"></span>
+  </div>
+  } @else if (userProfile()) {
+  <div class="page-content">
+    <!-- User Info Section -->
+    <app-user-info-section
+      [user]="userProfile()!"
+      [showPassword]="showPassword()"
+      [showConfirmPassword]="showConfirmPassword()"
+      [newPassword]="newPassword()"
+      [confirmPassword]="confirmPassword()"
+      [isSaving]="isSaving()"
+      (openAvatarModal)="onAvatarClick()"
+      (openEmailModal)="onEmailChangeClick()"
+      (togglePasswordVisibility)="onTogglePasswordVisibility()"
+      (toggleConfirmPasswordVisibility)="onToggleConfirmPasswordVisibility()"
+      (newPasswordChange)="onNewPasswordInput($event)"
+      (confirmPasswordChange)="onConfirmPasswordInput($event)"
+      (saveChanges)="onSavePassword()"
+    ></app-user-info-section>
+
+    <!-- Payment sections only shown for admin users -->
+    @if (isAdmin() && paymentInfo()) {
+    <!-- Payment Info Section -->
+    <app-payment-info-section
+      [paymentInfo]="paymentInfo()!"
+      (addPaymentMethod)="onAddPaymentMethod()"
+    ></app-payment-info-section>
+
+    <!-- Payment History Section -->
+    @if (paymentHistory().length > 0) {
+    <app-payment-history-table
+      [records]="paymentHistory()"
+      [currentPage]="currentPage()"
+      [totalPages]="totalPages()"
+      (pageChange)="onPageChange($event)"
+      (downloadInvoice)="onDownloadInvoice($event)"
+    ></app-payment-history-table>
+    } }
+  </div>
+  }
+</div>
+
+<!-- Email Change Modal -->
+<app-email-change-modal
+  [isOpen]="activeModal() === 'email-change' || activeModal() === 'email-sent'"
+  [modalType]="activeModal() === 'email-sent' ? 'email-sent' : 'email-change'"
+  [newEmail]="newEmail()"
+  [confirmEmail]="confirmEmail()"
+  [isSaving]="isSaving()"
+  (close)="onCloseModal()"
+  (newEmailChange)="onNewEmailInput($event)"
+  (confirmEmailChange)="onConfirmEmailInput($event)"
+  (sendEmail)="onSendEmailChange()"
+></app-email-change-modal>
+
+<!-- Avatar Change Modal -->
+<app-avatar-change-modal
+  [isOpen]="activeModal() === 'avatar-change'"
+  [colorOptions]="avatarColorOptions()"
+  [isSaving]="isSaving()"
+  (close)="onCloseModal()"
+  (selectColor)="onSelectAvatarColor($event)"
+  (save)="onSaveAvatar()"
+></app-avatar-change-modal>

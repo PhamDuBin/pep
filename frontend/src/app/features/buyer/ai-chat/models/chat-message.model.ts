@@ -1,11 +1,6 @@
-export interface ChatMessage {
-  id: string;
-  content: string;
-  timestamp: Date;
-  sender: 'user' | 'ai';
-  highlightedText?: string;
-  isNew?: boolean; // Flag to indicate if this is a newly added message (for animation)
-}
+// Import and re-export ChatMessage from shared models
+import type { ChatMessage } from '../../shared/models/chat.model';
+export type { ChatMessage } from '../../shared/models/chat.model';
 
 export interface ChatConversation {
   id: string;

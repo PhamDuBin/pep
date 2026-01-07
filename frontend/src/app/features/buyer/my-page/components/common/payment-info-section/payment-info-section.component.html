@@ -1,0 +1,50 @@
+<!-- Payment Info Section matching Figma G-01 design -->
+<div class="payment-info-section">
+  <!-- Section Header -->
+  <div class="section-header">
+    <h2 class="section-title">決済情報</h2>
+  </div>
+
+  <!-- Section Content -->
+  <div class="section-content">
+    <div class="info-fields">
+      <!-- Next Billing Date -->
+      <div class="info-row">
+        <span class="info-label">次回の請求日</span>
+        <span class="info-value large">{{ paymentInfo?.nextBillingDate || '' }}</span>
+      </div>
+
+      <!-- Billing Amount -->
+      <div class="info-row">
+        <span class="info-label">請求金額</span>
+        <span class="info-value large">{{ formattedAmount }}</span>
+      </div>
+
+      <!-- Payment Method -->
+      <div class="payment-method-section">
+        <span class="info-label">支払い方法</span>
+
+        @if (paymentInfo?.paymentMethod) {
+        <div class="payment-method-row">
+          <img
+            src="pictures/visa.png"
+            alt="Visa"
+            class="card-logo"
+            width="70"
+            height="43"
+          />
+          <span class="payment-method-text">{{ paymentMethodDisplay }}</span>
+        </div>
+        }
+
+        <button
+          class="btn-add-payment"
+          type="button"
+          (click)="onAddPaymentMethod()"
+        >
+          支払い方法を追加
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

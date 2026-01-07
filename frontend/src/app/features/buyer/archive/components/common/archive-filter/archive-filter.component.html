@@ -1,0 +1,62 @@
+<!-- Archive Filter matching Figma F-02 design -->
+<div class="archive-filter">
+  <!-- Project Filter Dropdown -->
+  <div class="dropdown-container">
+    <button class="dropdown-trigger" (click)="onToggleFilter($event)" type="button">
+      <span class="dropdown-label">{{ selectedFilterLabel }}</span>
+      <svg class="dropdown-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2 3.5L5 6.5L8 3.5" stroke="#374151" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+
+    @if (showFilterDropdown) {
+      <div class="dropdown-menu filter-menu">
+        @for (option of filterOptions; track option.id) {
+          <button
+            class="dropdown-item"
+            [class.selected]="option.isSelected"
+            type="button"
+            (click)="onFilterSelect(option.id, $event)"
+          >
+            @if (option.isSelected) {
+              <svg class="check-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2.5 6.5L5.5 9.5L10.5 3.5" stroke="#066a9e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            }
+            <span [class.selected-text]="option.isSelected">{{ option.name }}</span>
+          </button>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Sort Dropdown -->
+  <div class="dropdown-container">
+    <button class="dropdown-trigger" (click)="onToggleSort($event)" type="button">
+      <span class="dropdown-label">作成日</span>
+      <svg class="dropdown-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2 3.5L5 6.5L8 3.5" stroke="#374151" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+
+    @if (showSortDropdown) {
+      <div class="dropdown-menu sort-menu">
+        @for (option of sortOptions; track option.value) {
+          <button
+            class="dropdown-item"
+            [class.selected]="option.isSelected"
+            type="button"
+            (click)="onSortSelect(option.value, $event)"
+          >
+            @if (option.isSelected) {
+              <svg class="check-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2.5 6.5L5.5 9.5L10.5 3.5" stroke="#066a9e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            }
+            <span [class.selected-text]="option.isSelected">{{ option.label }}</span>
+          </button>
+        }
+      </div>
+    }
+  </div>
+</div>
