@@ -94,9 +94,11 @@ pep/
 │
 ├── backend/                       # FastAPI
 │   ├── app/
-│   │   ├── api/routes/            # APIエンドポイント
+│   │   ├── api/routes/            # Controller層 (エンドポイント)
+│   │   ├── services/              # Service層 (ビジネスロジック)
+│   │   ├── crud/                  # Data Access層 (DB操作)
 │   │   ├── core/                  # Config, Supabase client
-│   │   └── logic/                 # ビジネスロジック
+│   │   └── schemas/               # Pydantic models
 │   ├── templates/                 # PDF生成用HTML
 │   ├── Dockerfile
 │   └── requirements.txt
@@ -133,6 +135,13 @@ pep/
    - Functions: `snake_case`
    - Classes: `PascalCase`
    - Constants: `UPPER_SNAKE_CASE`
+5. **Layering (3層構造)**:
+   - `api/routes/` → `services/` → `crud/` の順で呼び出し
+   - **`logic/` フォルダは作成しない** (ビジネスロジックは `services/` に統合)
+   - 逆方向の依存禁止 (crud から services を呼ばない)
+6. **Transaction Control**:
+   - 単一CRUD操作は Service層 → CRUD でそのまま実行
+   - 複数テーブル操作・決済などは **Supabase RPC** を使用 (`supabase-py` はトランザクション非対応)
 
 ### Database (Supabase)
 
@@ -140,6 +149,9 @@ pep/
 2. **UUID**: 主キーは UUID を使用
 3. **Timestamps**: `created_at`, `updated_at` を含める
 4. **Naming**: テーブル名は複数形 `snake_case`
+5. **Payment/Transaction**: 決済や重要なステータス更新は、Python側での複数回DB操作を禁止し、必ず **RPC (SQL Function)** 内で完結させること
+   - 理由: トランザクションの一貫性と冪等性を担保するため
+   - 例: Stripe Webhook処理 → `handle_stripe_webhook()` RPC を使用
 
 ## Environment Variables
 
