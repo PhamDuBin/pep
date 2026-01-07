@@ -1,7 +1,6 @@
 import { Component, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HeaderComponent } from '../../../../shared/components/header/header.component';
-import { SideMenuComponent } from '../../../../shared/components/side-menu/side-menu.component';
+import { Router } from '@angular/router';
 import { TabNavigationComponent } from '../../../../shared/components/tab-navigation/tab-navigation.component';
 import { ProjectPlanModeButtonComponent } from '../../../../shared/components/project-plan-mode-button/project-plan-mode-button.component';
 import {
@@ -17,8 +16,6 @@ import { AI_CHAT_TABS } from '../../constants/ai-chat-tabs.constant';
   standalone: true,
   imports: [
     CommonModule,
-    HeaderComponent,
-    SideMenuComponent,
     TabNavigationComponent,
     ProjectPlanModeButtonComponent,
     SharedChatMessageListComponent,
@@ -33,7 +30,7 @@ export class AiChatComponent implements OnInit {
   messages = computed(() => this.aiChatService.messages());
   isLoading = computed(() => this.aiChatService.isLoading());
 
-  constructor(private aiChatService: AiChatService) {}
+  constructor(private aiChatService: AiChatService, private router: Router) {}
 
   ngOnInit(): void {
     // Messages are already loaded with mock data from the service
@@ -46,7 +43,7 @@ export class AiChatComponent implements OnInit {
     }));
 
     if (tab.id === 'carry') {
-      console.log('Navigate to carry page');
+      this.router.navigate(['/buyer/carry']);
     }
   }
 

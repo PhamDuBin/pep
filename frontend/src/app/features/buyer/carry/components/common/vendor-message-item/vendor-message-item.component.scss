@@ -1,0 +1,67 @@
+:host {
+  display: block;
+}
+
+.vendor-message-item {
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 15px;
+  border-bottom: 1px solid #e1e1e1;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: rgba(230, 243, 245, 0.5);
+  }
+
+  &.selected {
+    background-color: #ffffff;
+  }
+}
+
+.vendor-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.vendor-name {
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: normal;
+  color: #333333;
+}
+
+.last-message {
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: normal;
+  color: #333333;
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.timestamp-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+
+.timestamp {
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 19px;
+  text-align: center;
+  color: #333333;
+}

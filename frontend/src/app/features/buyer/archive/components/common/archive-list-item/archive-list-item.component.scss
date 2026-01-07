@@ -1,0 +1,99 @@
+.archive-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+  width: 100%;
+}
+
+.project-name-cell {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  background: #ffffff;
+  border: 1px solid #e1e1e1;
+  border-radius: 12px;
+}
+
+.project-name {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #333333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: 0;
+}
+
+.info-section {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.info-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.author-cell {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+
+.pen-icon {
+  flex-shrink: 0;
+}
+
+.author-name {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  color: #808080;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.date-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  padding: 0 12px;
+  flex-shrink: 0;
+}
+
+.created-date {
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  color: #808080;
+}
+
+.menu-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36.5px;
+  height: 20.5px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}

@@ -1,4 +1,10 @@
-import { ProjectPlan, PdfPage, Vendor, ProjectPlanContent, ChatMessage } from '../models/project-plan.model';
+import {
+  ProjectPlan,
+  PdfPage,
+  Vendor,
+  ProjectPlanContent,
+  ChatMessage,
+} from '../models/project-plan.model';
 
 export const MOCK_PROJECT_PLAN_CONTENT: ProjectPlanContent = {
   background: `花屋業界での人手不足や業務効率化の課題が顕在化している
@@ -12,33 +18,63 @@ AI技術の進展により、接客や在庫管理の自動化が可能となっ
       phase: '1',
       item: '企画・要件定義',
       period: '2026年3-4月',
-      description: 'AI導入目的の明確化、要件整理と関係者調整'
+      description: 'AI導入目的の明確化、要件整理と関係者調整',
     },
     {
       phase: '2',
       item: 'プロジェクトスコープ',
       period: '2026年5-6月',
-      description: 'フェーズ項目概要実施時期の決定'
-    }
+      description: 'フェーズ項目概要実施時期の決定',
+    },
   ],
   schedule: [
-    { phase: 1, name: '企画・要件定義', period: '2026年3-4月', description: 'AI導入目的の明確化、要件整理と関係者調整' },
+    {
+      phase: 1,
+      name: '企画・要件定義',
+      period: '2026年3-4月',
+      description: 'AI導入目的の明確化、要件整理と関係者調整',
+    },
     { phase: 2, name: '設計・開発', period: '2026年5-8月', description: 'システム設計と開発' },
     { phase: 3, name: 'テスト・導入', period: '2026年9-10月', description: 'テストと本番導入' },
-    { phase: 4, name: '運用・改善', period: '2026年11月-2027年2月', description: '運用開始と継続的改善' }
+    {
+      phase: 4,
+      name: '運用・改善',
+      period: '2026年11月-2027年2月',
+      description: '運用開始と継続的改善',
+    },
   ],
-  qualityStandards: [
-    'AI応答精度95%以上',
-    'システム稼働率99.5%以上',
-    '顧客満足度80%以上'
-  ],
+  qualityStandards: ['AI応答精度95%以上', 'システム稼働率99.5%以上', '顧客満足度80%以上'],
   staffing: [
-    { department: 'プロジェクト管理', count: 1, duration: '12ヶ月', unitPrice: '90万円/月', total: '1,080万円' },
-    { department: 'AIエンジニア', count: 2, duration: '8ヶ月', unitPrice: '85万円/月', total: '1,360万円' },
-    { department: 'システム開発', count: 2, duration: '8ヶ月', unitPrice: '80万円/月', total: '1,280万円' },
-    { department: '店舗運営・研修', count: 2, duration: '4ヶ月', unitPrice: '60万円/月', total: '480万円' }
+    {
+      department: 'プロジェクト管理',
+      count: 1,
+      duration: '12ヶ月',
+      unitPrice: '90万円/月',
+      total: '1,080万円',
+    },
+    {
+      department: 'AIエンジニア',
+      count: 2,
+      duration: '8ヶ月',
+      unitPrice: '85万円/月',
+      total: '1,360万円',
+    },
+    {
+      department: 'システム開発',
+      count: 2,
+      duration: '8ヶ月',
+      unitPrice: '80万円/月',
+      total: '1,280万円',
+    },
+    {
+      department: '店舗運営・研修',
+      count: 2,
+      duration: '4ヶ月',
+      unitPrice: '60万円/月',
+      total: '480万円',
+    },
   ],
-  totalCost: '4,200万円'
+  totalCost: '4,200万円',
 };
 
 export const MOCK_PDF_PAGES: PdfPage[] = [
@@ -46,7 +82,7 @@ export const MOCK_PDF_PAGES: PdfPage[] = [
   { id: 'page-2', pageNumber: 2, title: 'スコープ' },
   { id: 'page-3', pageNumber: 3, title: '日程計画' },
   { id: 'page-4', pageNumber: 4, title: '品質基準' },
-  { id: 'page-5', pageNumber: 5, title: '要員・コスト計画' }
+  { id: 'page-5', pageNumber: 5, title: '要員・コスト計画' },
 ];
 
 export const MOCK_PROJECT_PLAN: ProjectPlan = {
@@ -56,7 +92,7 @@ export const MOCK_PROJECT_PLAN: ProjectPlan = {
   pdfPages: MOCK_PDF_PAGES,
   status: 'preview',
   createdAt: new Date('2024-01-15T10:00:00'),
-  updatedAt: new Date('2024-01-15T10:05:00')
+  updatedAt: new Date('2024-01-15T10:05:00'),
 };
 
 export const MOCK_VENDORS: Vendor[] = [
@@ -78,7 +114,7 @@ export const MOCK_VENDORS: Vendor[] = [
   { id: 'v16', name: '株式会社パイン', isSelected: false },
   { id: 'v17', name: '株式会社ストロベリー', isSelected: false },
   { id: 'v18', name: '株式会社レモン', isSelected: false },
-  { id: 'v19', name: '株式会社カシス', isSelected: false }
+  { id: 'v19', name: '株式会社カシス', isSelected: false },
 ];
 
 export const PROJECT_PLAN_AI_RESPONSE = `プロジェクト実行計画書
@@ -107,14 +143,17 @@ AIエンジニア 2名 8ヶ月 85万円/月 1,360万円
 店舗運営・研修 2名 4ヶ月 60万円/月 480万円
 総額: 4,200万円`;
 
-export const MODE_DESCRIPTION = 'プロジェクト概要から5項目(目的・ゴール/スコープ/日程計画/品質基準/体制・役割)に構造化されたPDF計画書を自動生成します';
+export const MODE_DESCRIPTION =
+  'プロジェクト概要から5項目(目的・ゴール/スコープ/日程計画/品質基準/体制・役割)に構造化されたPDF計画書を自動生成します';
 
-export const CHAT_INPUT_PLACEHOLDER = 'プロジェクトの概要、開始時期、業種、期間を入力してください（5項目のPDF計画書に構造化されます）';
+export const CHAT_INPUT_PLACEHOLDER =
+  'プロジェクトの概要、開始時期、業種、期間を入力してください（5項目のPDF計画書に構造化されます）';
 
 export const INITIAL_AI_MESSAGE: ChatMessage = {
   id: 'initial-ai',
-  content: 'プロジェクト計画書作成モードです。プロジェクトの概要、開始時期、業種、期間を入力してください。5項目のPDF計画書に構造化します。',
+  content:
+    'プロジェクト計画書作成モードです。プロジェクトの概要、開始時期、業種、期間を入力してください。5項目のPDF計画書に構造化します。',
   timestamp: new Date(),
   sender: 'ai',
-  isNew: false
+  isNew: false,
 };

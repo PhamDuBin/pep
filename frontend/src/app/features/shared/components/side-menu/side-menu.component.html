@@ -1,21 +1,29 @@
-<aside class="fixed left-0 top-[89px] bottom-0 w-[197px] bg-white flex flex-col justify-between items-start py-[15px] px-[10px] pb-[25px] z-40"
-       style="box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);">
+<aside
+  class="fixed left-0 top-[89px] bottom-0 bg-white flex flex-col justify-between items-start py-[15px] px-[10px] pb-[25px] z-40 transition-all duration-300"
+  [class.w-[197px]]="!isCollapsed()"
+  [class.w-[50px]]="isCollapsed()"
+  style="box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1)"
+>
   <!-- Top Section (Frame 14) -->
-  <div class="flex flex-col items-start gap-[25px] w-[177px] h-[434px] self-stretch">
+  <div class="flex flex-col items-start gap-[25px] self-stretch overflow-hidden">
     <!-- Menu Toggle -->
     <div>
-      <button class="hover:opacity-70 transition-opacity">
+      <button class="hover:opacity-70 transition-opacity" (click)="toggleMenu()">
         <img src="assets/icons/menu-toggle.svg" alt="Menu" width="20" height="13" />
       </button>
     </div>
 
     <!-- New Project Button -->
     <div class="flex flex-col gap-[3px] w-full">
-      <button class="flex flex-row items-center py-[3px] gap-[7px] w-full h-[26px] rounded cursor-pointer hover:bg-[#F0F0F0] active:bg-[#F0F0F0] transition-colors">
+      <button
+        class="flex flex-row items-center py-[3px] gap-[7px] w-full h-[26px] rounded cursor-pointer hover:bg-[#F0F0F0] active:bg-[#F0F0F0] transition-colors"
+        [class.justify-center]="isCollapsed()"
+        (click)="navigateToNewProject()"
+      >
         <div class="w-5 h-5 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
           <img src="assets/icons/plus.svg" alt="Plus" width="10" height="10" />
         </div>
-        <span class="text-[13px] text-text-dark whitespace-nowrap">新規プロジェクト作成</span>
+        <span class="text-[13px] text-text-dark whitespace-nowrap" [class.hidden]="isCollapsed()">新規プロジェクト作成</span>
       </button>
     </div>
 
@@ -23,24 +31,41 @@
     <div class="w-full h-[1px] bg-gray-200"></div>
 
     <!-- RFP Section -->
-    <div class="flex flex-col gap-[3px]">
+    <div class="flex flex-col gap-[3px] w-full" [class.hidden]="isCollapsed()">
       <div>
         <span class="text-[14px] text-text-gray">RFP</span>
       </div>
-      <div class="flex items-center gap-[7px] py-[7px] cursor-pointer hover:bg-gray-50 rounded transition-colors -mx-[10px] px-[10px]">
+      <div
+        class="archive-menu-item flex items-center gap-[7px] py-[5px] cursor-pointer rounded transition-colors -mx-[10px] px-[10px] w-full"
+        [class.active]="isArchiveActive()"
+        (click)="navigateToArchive()"
+      >
         <img src="assets/icons/folder.svg" alt="Archive" width="22" height="22" />
         <span class="text-[13px] text-text-dark">アーカイブ</span>
       </div>
     </div>
 
+    <!-- RFP Section Collapsed -->
+    <div class="flex flex-col gap-[3px] w-full items-center" [class.hidden]="!isCollapsed()">
+      <div
+        class="archive-menu-item flex items-center justify-center py-[5px] cursor-pointer rounded transition-colors w-full"
+        [class.active]="isArchiveActive()"
+        (click)="navigateToArchive()"
+      >
+        <img src="assets/icons/folder.svg" alt="Archive" width="22" height="22" />
+      </div>
+    </div>
+
     <!-- PROJECT Section -->
-    <div class="flex flex-col gap-[5px]">
+    <div class="flex flex-col gap-[5px]" [class.hidden]="isCollapsed()">
       <div>
         <span class="text-[14px] text-text-gray">PROJECT</span>
       </div>
-      
+
       <!-- Search -->
-      <div class="flex items-center gap-[7px] py-[7px] cursor-pointer hover:bg-gray-50 rounded transition-colors -mx-[10px] px-[10px]">
+      <div
+        class="flex items-center gap-[7px] py-[7px] cursor-pointer hover:bg-gray-50 rounded transition-colors -mx-[10px] px-[10px]"
+      >
         <img src="assets/icons/search.svg" alt="Search" width="20" height="20" />
         <span class="text-[13px] text-text-dark">プロジェクト検索</span>
       </div>
@@ -48,47 +73,93 @@
       <!-- Project List -->
       <div class="flex flex-col gap-[5px]">
         @for (project of projects(); track project.id) {
-          <div 
-            class="flex items-center gap-[3px] py-[5px] rounded cursor-pointer transition-colors group -mx-[10px] px-[10px]"
-            [class.bg-primary-light]="project.isSelected"
-            [class.hover:bg-gray-50]="!project.isSelected"
-            (click)="selectProject(project)"
+        <div
+          class="flex items-center gap-[3px] py-[5px] rounded cursor-pointer transition-colors group -mx-[10px] px-[10px]"
+          [class.bg-primary-light]="project.isSelected"
+          [class.hover:bg-gray-50]="!project.isSelected"
+          (click)="selectProject(project)"
+        >
+          <img
+            [src]="
+              project.isSelected ? 'assets/icons/project-active.svg' : 'assets/icons/project.svg'
+            "
+            alt="Project"
+            width="10"
+            height="12"
+            class="flex-shrink-0"
+          />
+          <span
+            class="text-[14px] flex-1 truncate font-normal"
+            [class.text-primary]="project.isSelected"
+            [class.text-text-dark]="!project.isSelected"
+            >{{ project.name }}</span
           >
-            <img 
-              [src]="project.isSelected ? 'assets/icons/project-active.svg' : 'assets/icons/project.svg'" 
-              alt="Project" 
-              width="10" 
-              height="12" 
-              class="flex-shrink-0"
-            />
-            <span 
-              class="text-[14px] flex-1 truncate font-normal"
-              [class.text-primary]="project.isSelected"
-              [class.text-text-dark]="!project.isSelected"
-            >{{ project.name }}</span>
-            @if (project.isSelected) {
-              <img src="assets/icons/more-dots.svg" alt="More" width="16" height="16" class="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
-            }
-          </div>
+          @if (project.isSelected) {
+          <img
+            src="assets/icons/more-dots.svg"
+            alt="More"
+            width="16"
+            height="16"
+            class="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
+          />
+          }
+        </div>
         }
+      </div>
+    </div>
+
+    <!-- PROJECT Section Collapsed -->
+    <div class="flex flex-col gap-[5px] items-center w-full" [class.hidden]="!isCollapsed()">
+      <div
+        class="flex items-center justify-center py-[7px] cursor-pointer hover:bg-gray-50 rounded transition-colors w-full"
+      >
+        <img src="assets/icons/search.svg" alt="Search" width="20" height="20" />
       </div>
     </div>
   </div>
 
   <!-- Bottom Section (Frame 15) -->
-  <div class="flex flex-col justify-center items-start gap-[5px] w-[177px] h-[77px] self-stretch">
+  <div
+    class="flex flex-col justify-center gap-[5px] w-full self-stretch"
+    [class.items-start]="!isCollapsed()"
+    [class.items-center]="isCollapsed()"
+  >
     <!-- User List -->
-    <div class="flex items-center gap-[7px] py-[7px] cursor-pointer hover:bg-gray-50 rounded transition-colors -mx-[10px] px-[10px]">
-      <img src="assets/icons/users.svg" alt="Users" width="29" height="16" />
-      <span class="text-[13px] text-text-dark">ユーザ一覧</span>
+    <div
+      class="flex items-center py-[7px] cursor-pointer hover:bg-gray-50 rounded transition-colors"
+      [class.gap-[7px]]="!isCollapsed()"
+      [class.-mx-[10px]]="!isCollapsed()"
+      [class.px-[10px]]="!isCollapsed()"
+      [class.w-full]="!isCollapsed()"
+      [class.justify-center]="isCollapsed()"
+      [class.px-[5px]]="isCollapsed()"
+    >
+      <img src="assets/icons/users.svg" alt="Users" width="29" height="16" class="flex-shrink-0" />
+      <span class="text-[13px] text-text-dark" [class.hidden]="isCollapsed()">ユーザ一覧</span>
     </div>
 
     <!-- User Profile -->
-    <div class="flex items-center gap-[7px] py-[5px] cursor-pointer hover:bg-gray-50 rounded transition-colors -mx-[10px] px-[10px]">
-      <div class="w-[30px] h-[30px] bg-avatar-bg rounded-full flex items-center justify-center">
+    <div
+      class="user-profile-item flex items-center py-[5px] cursor-pointer rounded transition-colors"
+      [class.active]="isMyPageActive()"
+      [class.gap-[7px]]="!isCollapsed()"
+      [class.-mx-[10px]]="!isCollapsed()"
+      [class.px-[10px]]="!isCollapsed()"
+      [class.w-full]="!isCollapsed()"
+      [class.justify-center]="isCollapsed()"
+      [class.px-[5px]]="isCollapsed()"
+      (click)="navigateToMyPage()"
+    >
+      <div class="w-[30px] h-[30px] bg-avatar-bg rounded-full flex items-center justify-center flex-shrink-0">
         <span class="text-[13px] text-white">TY</span>
       </div>
-      <span class="text-[13px] text-text-dark">山田 太郎</span>
+      <span
+        class="text-[13px]"
+        [class.text-primary]="isMyPageActive()"
+        [class.text-text-dark]="!isMyPageActive()"
+        [class.hidden]="isCollapsed()"
+        >山田 太郎</span
+      >
     </div>
   </div>
 </aside>

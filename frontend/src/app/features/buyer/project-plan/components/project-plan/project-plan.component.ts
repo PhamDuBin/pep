@@ -1,8 +1,6 @@
 import { Component, computed, OnInit, OnDestroy, ViewChild, ElementRef, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { HeaderComponent } from '../../../../shared/components/header/header.component';
-import { SideMenuComponent } from '../../../../shared/components/side-menu/side-menu.component';
 import { TabNavigationComponent } from '../../../../shared/components/tab-navigation/tab-navigation.component';
 import {
   SharedChatMessageListComponent,
@@ -24,8 +22,6 @@ import { MODE_DESCRIPTION, CHAT_INPUT_PLACEHOLDER } from '../../constants/projec
   standalone: true,
   imports: [
     CommonModule,
-    HeaderComponent,
-    SideMenuComponent,
     TabNavigationComponent,
     SharedChatMessageListComponent,
     SharedChatInputBoxComponent,
@@ -99,7 +95,7 @@ export class ProjectPlanComponent implements OnInit, OnDestroy {
     }));
 
     if (tab.id === 'carry') {
-      console.log('Navigate to carry page');
+      this.router.navigate(['/buyer/carry']);
     }
   }
 

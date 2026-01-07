@@ -1,40 +1,29 @@
-<div class="min-h-screen bg-white">
-  <!-- Header -->
-  <app-header></app-header>
+<!-- Tab Navigation -->
+<app-tab-navigation [tabs]="tabs" (tabChange)="onTabChange($event)"></app-tab-navigation>
 
-  <!-- Side Menu -->
-  <app-side-menu></app-side-menu>
-
-  <!-- Main Content Area -->
-  <main class="ml-[197px] pt-[89px]">
-    <!-- Tab Navigation -->
-    <app-tab-navigation [tabs]="tabs" (tabChange)="onTabChange($event)"></app-tab-navigation>
-
-    <!-- Chat Content Area -->
-    <div class="flex flex-col h-[calc(100vh-89px-94px)] bg-white px-[75px] py-[50px]">
-      <!-- Chat Messages Container -->
-      <div class="flex-1 flex flex-col gap-[25px] items-center overflow-hidden">
-        <div class="w-full max-w-[800px] flex-1 overflow-hidden">
-          <!-- Message List -->
-          <app-shared-chat-message-list
-            [messages]="messages()"
-            [isLoading]="isLoading()"
-            messageVariant="minimal"
-          ></app-shared-chat-message-list>
-        </div>
-      </div>
-
-      <!-- Bottom Section: Mode Selector + Input -->
-      <div class="flex flex-col gap-[20px] items-center justify-center w-full max-w-[800px] mx-auto pt-[20px]">
-        <!-- Project Plan Mode Button -->
-        <app-project-plan-mode-button></app-project-plan-mode-button>
-
-        <!-- Chat Input -->
-        <app-shared-chat-input-box
-          (messageSent)="onMessageSent($event)"
-          (microphoneClicked)="onMicrophoneClicked()"
-        ></app-shared-chat-input-box>
-      </div>
+<!-- Chat Content Area -->
+<div class="flex flex-col h-[calc(100vh-89px-94px)] bg-white px-[75px] py-[50px]">
+  <!-- Chat Messages Container -->
+  <div class="flex-1 flex flex-col gap-[25px] items-center overflow-hidden">
+    <div class="w-full max-w-[800px] flex-1 overflow-hidden">
+      <!-- Message List -->
+      <app-shared-chat-message-list
+        [messages]="messages()"
+        [isLoading]="isLoading()"
+        messageVariant="minimal"
+      ></app-shared-chat-message-list>
     </div>
-  </main>
+  </div>
+
+  <!-- Bottom Section: Mode Selector + Input -->
+  <div class="flex flex-col gap-[20px] items-center justify-center w-full max-w-[800px] mx-auto pt-[20px]">
+    <!-- Project Plan Mode Button -->
+    <app-project-plan-mode-button></app-project-plan-mode-button>
+
+    <!-- Chat Input -->
+    <app-shared-chat-input-box
+      (messageSent)="onMessageSent($event)"
+      (microphoneClicked)="onMicrophoneClicked()"
+    ></app-shared-chat-input-box>
+  </div>
 </div>

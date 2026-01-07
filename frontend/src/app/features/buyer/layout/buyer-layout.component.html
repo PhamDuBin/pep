@@ -1,0 +1,17 @@
+<!-- Buyer Layout with shared Header and Side Menu -->
+<div class="buyer-layout">
+  <!-- Header -->
+  <app-header></app-header>
+
+  <!-- Side Menu -->
+  <app-side-menu></app-side-menu>
+
+  <!-- Main Content Area - Child routes rendered here -->
+  <main
+    class="main-content transition-all duration-300"
+    [class.menu-expanded]="!isMenuCollapsed()"
+    [class.menu-collapsed]="isMenuCollapsed()"
+  >
+    <router-outlet></router-outlet>
+  </main>
+</div>

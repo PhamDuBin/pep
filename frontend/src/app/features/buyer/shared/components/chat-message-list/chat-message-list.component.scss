@@ -2,6 +2,14 @@
   display: block;
   width: 100%;
   height: 100%;
+  contain: layout style;
+}
+
+// Message container - optimized for smooth scrolling
+:host ::ng-deep .message-container {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  will-change: scroll-position;
 }
 
 // Custom scrollbar styling
