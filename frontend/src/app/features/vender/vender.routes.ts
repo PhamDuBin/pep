@@ -1,18 +1,17 @@
 import { Routes } from '@angular/router';
-import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 
 export const VENDOR_ROUTES: Routes = [
     {
         path: '',
-        component: MainLayoutComponent,
+        loadComponent: () => import('./layout/vender-layout.component').then(m => m.VenderLayoutComponent),
         children: [
             {
-                path: 'home',
+                path: '',
                 loadComponent: () => import('./home/pages/home-page').then(m => m.HomePageComponent)
             },
             {
                 path: 'my-page',
-                loadChildren: () => import('./my-page/my-page.routes').then(m => m.MY_PAGE_ROUTES)
+                loadComponent: () => import('./my-page/pages/my-page-page').then(m => m.MyPagePageComponent)
             },
             {
                 path: '',

@@ -1,0 +1,62 @@
+<aside
+    class="w-[172px] h-full bg-white flex flex-col justify-between items-start py-[15px] px-[10px] pb-[25px] flex-shrink-0"
+    style="box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);">
+    <!-- Top Section -->
+    <div class="flex flex-col items-start gap-[25px] w-[152px]">
+        <!-- Menu Toggle -->
+        <div class="flex flex-col items-start px-[10px] gap-[10px] w-[40px] h-[13px]">
+            <button
+                class="hover:opacity-70 transition-opacity p-0 bg-transparent border-none cursor-pointer flex items-center justify-center">
+                <img src="assets/icons/menu-toggle.svg" alt="Menu" class="w-[20px] h-[13px]" />
+            </button>
+        </div>
+
+        <!-- COMPANY Section -->
+        <div class="flex flex-col items-start gap-[5px] w-[152px]">
+            <div class="px-[10px]">
+                <span class="text-[14px] text-text-gray font-normal leading-[19px]">COMPANY</span>
+            </div>
+
+            <!-- Company Search -->
+            <div
+                class="flex items-center px-[10px] py-[7px] gap-[7px] w-[152px] h-[34px] cursor-pointer rounded hover:bg-[#F0F0F0] transition-colors">
+                <img src="assets/icons/search.svg" alt="Search" class="w-[24px] h-[24px]" />
+                <span class="text-[13px] text-text-dark font-normal leading-[18px]">会社検索</span>
+            </div>
+
+            <!-- Company List -->
+            <div class="flex flex-col items-start gap-[5px] w-[152px]">
+                @for (company of companies(); track company.id) {
+                <div class="flex items-start px-[10px] py-[5px] gap-[1px] w-[152px] min-h-[29px] rounded cursor-pointer transition-colors"
+                    [class.bg-primary-light]="company.isSelected" [class.hover:bg-[#F0F0F0]]="!company.isSelected"
+                    (click)="selectCompany(company.id)">
+                    <span class="text-[14px] font-normal leading-[19px] flex-1 break-words"
+                        [class.text-primary]="company.isSelected" [class.text-text-dark]="!company.isSelected">{{
+                        company.name }}</span>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Section (User) -->
+    <div class="flex flex-col justify-center items-start gap-[10px] w-[152px] mx-auto">
+        <!-- User List -->
+        <div
+            class="flex items-center px-[10px] py-[7px] gap-[7px] w-[152px] h-[32px] cursor-pointer rounded hover:bg-[#F0F0F0] transition-colors">
+            <img src="assets/icons/users.svg" alt="Users" class="w-[29px] h-[16px]" />
+            <span class="text-[13px] text-text-dark font-normal leading-[18px]">ユーザ一覧</span>
+        </div>
+
+        <!-- User Profile -->
+        <div class="flex items-center px-[10px] py-[5px] gap-[7px] w-[152px] h-[40px] cursor-pointer rounded hover:bg-[#F0F0F0] transition-colors"
+            (click)="navigateToMyPage()">
+            <div
+                class="flex flex-col justify-center items-center w-[30px] h-[30px] bg-avatar-bg rounded-full flex-shrink-0">
+                <span class="text-[13px] text-white font-normal leading-[18px] text-center">{{ currentUser.initials
+                    }}</span>
+            </div>
+            <span class="text-[13px] text-text-dark font-normal leading-[18px]">{{ currentUser.name }}</span>
+        </div>
+    </div>
+</aside>

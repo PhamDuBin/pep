@@ -1,7 +1,7 @@
 import { Component, Input, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ChatMessage } from '../../models/message.model';
+import { ChatMessage } from '../../../models/message.model';
 
 @Component({
     selector: 'app-message-detail',

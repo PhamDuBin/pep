@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MessageListComponent } from '../message-list/message-list.component';
-import { MessageDetailComponent } from '../message-detail/message-detail.component';
+import { MessageListComponent } from '../common/message-list/message-list.component';
+import { MessageDetailComponent } from '../common/message-detail/message-detail.component';
 import { VendorHomeService } from '../../services/vendor-home.service';
 
 @Component({

@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { VendorHomeService } from '../../services/vendor-home.service';
-import { MOCK_CURRENT_USER } from '../../constants/messages.constant';
+import { VendorHomeService } from '../../../services/vendor-home.service';
+import { MOCK_CURRENT_USER } from '../../../constants/messages.constant';
 
 @Component({
     selector: 'app-sidebar',
@@ -23,6 +23,6 @@ export class SidebarComponent {
     }
 
     navigateToMyPage() {
-        this.router.navigate(['/vendor/my-page']);
+        this.router.navigate(['/vender/my-page']);
     }
 }
