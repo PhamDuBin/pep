@@ -1,0 +1,49 @@
+<div
+    class="flex flex-col items-center py-[25px] gap-[10px] w-[357px] h-full bg-[#F5F5F5] border-r border-border-light flex-shrink-0">
+    <!-- Header -->
+    <div class="w-[160px] h-[22px]">
+        <h2 class="font-noto font-bold text-[16px] leading-[22px] text-text-dark m-0">全てのメッセージ一覧</h2>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="flex flex-col items-start px-[15px] gap-[10px] w-[357px] h-[40px]">
+        <div
+            class="box-border flex items-center px-[15px] py-[10px] gap-[10px] w-[327px] h-[40px] bg-white border border-[#8EC0D0] rounded-full cursor-pointer hover:border-primary transition-colors">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M19.7555 18.6065L16.3182 15.2458C17.7011 13.6129 18.4945 11.5329 18.4945 9.29776C18.4945 4.16878 14.3259 0 9.19679 0C4.06766 0 -0.100952 4.16878 -0.100952 9.29776C-0.100952 14.4267 4.06766 18.5955 9.19679 18.5955C11.2924 18.5955 13.2501 17.8915 14.8371 16.6461L18.3102 20.0452C18.5707 20.2946 18.9089 20.4194 19.2328 20.4194C19.5425 20.4194 19.8664 20.3089 20.1198 20.0738C20.6551 19.5741 20.6836 18.7414 20.1838 18.2062L19.7555 18.6065ZM9.19679 2.01392C13.2145 2.01392 16.4806 5.27994 16.4806 9.29776C16.4806 13.3156 13.2145 16.5816 9.19679 16.5816C5.17897 16.5816 1.91295 13.3156 1.91295 9.29776C1.91295 5.27994 5.17897 2.01392 9.19679 2.01392Z"
+                    fill="#066A9E" />
+            </svg>
+        </div>
+    </div>
+
+    <!-- Message List -->
+    <div class="flex flex-col items-start w-[357px] flex-1 overflow-y-auto">
+        @for (message of messages(); track message.id) {
+        <div class="box-border flex justify-end items-start p-[15px] gap-[10px] w-[357px] min-h-[87px] border-b border-border-light cursor-pointer transition-colors"
+            [class.bg-white]="message.isSelected" [class.hover:bg-white]="!message.isSelected"
+            (click)="selectMessage(message.id)">
+            <div class="flex flex-col items-start gap-[3px] w-[262px] flex-1">
+                <div class="flex items-center gap-[10px] h-[18px]">
+                    <span class="font-noto font-bold text-[13px] leading-[18px] text-text-dark">{{ message.companyName
+                        }}</span>
+                </div>
+                <p
+                    class="font-noto font-normal text-[13px] leading-[18px] text-text-dark m-0 w-[262px] h-[36px] overflow-hidden text-ellipsis line-clamp-2">
+                    {{ message.preview }}</p>
+            </div>
+            <div class="flex flex-col items-end gap-[10px] w-[55px]">
+                <span
+                    class="font-noto font-normal text-[10px] leading-[19px] text-center text-text-dark w-[55px] h-[19px]">{{
+                    message.timestamp }}</span>
+                @if (message.unreadCount > 0) {
+                <div class="flex flex-col justify-center items-center w-[20px] h-[20px] bg-primary rounded-full">
+                    <span class="font-noto font-normal text-[13px] leading-[19px] text-center text-white">{{
+                        message.unreadCount }}</span>
+                </div>
+                }
+            </div>
+        </div>
+        }
+    </div>
+</div>

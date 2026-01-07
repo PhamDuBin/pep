@@ -1,0 +1,5 @@
+<div class="flex h-full bg-white w-full">
+    <app-sidebar></app-sidebar>
+    <app-message-list (messageSelected)="onMessageSelected($event)"></app-message-list>
+    <app-message-detail [messageId]="selectedMessageId()"></app-message-detail>
+</div>
