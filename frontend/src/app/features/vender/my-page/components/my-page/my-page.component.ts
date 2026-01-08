@@ -102,7 +102,6 @@ export class MyPageComponent {
     }
 
     downloadInvoice(invoiceUrl: string) {
-        // TODO: Implement invoice download
-        console.log('Download invoice:', invoiceUrl);
+        this.myPageService.downloadInvoice(invoiceUrl);
     }
 }

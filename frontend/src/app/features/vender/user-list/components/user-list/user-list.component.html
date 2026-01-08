@@ -1,0 +1,112 @@
+<!-- H-01: User List Screen -->
+<div class="flex flex-col items-start gap-[25px] w-full max-w-[1008px]">
+    <!-- Header -->
+    <div class="flex flex-row items-center px-0 pb-[10px] gap-[10px] w-full h-[37px] border-b border-[#CFCFCF]">
+        <h2 class="font-noto font-bold text-[20px] leading-[27px] text-[#333333] w-[120px]">ユーザー一覧</h2>
+    </div>
+
+    <!-- Invite Button -->
+    <button type="button" (click)="onInviteMember()"
+        class="flex flex-row items-center px-[15px] py-[10px] gap-[10px] h-[39px] bg-[#066A9E] rounded-[8px] border-none cursor-pointer hover:bg-[#055580] transition-colors">
+        <span class="font-noto font-normal text-[14px] leading-[19px] text-white">メンバーを招待</span>
+    </button>
+
+    <!-- Table Container - Desktop/Tablet -->
+    <div class="w-full border border-[#D4D4D4] rounded bg-white overflow-x-auto">
+        <table class="w-full border-collapse min-w-[600px]">
+            <!-- Table Header -->
+            <thead>
+                <tr class="h-[50px] bg-[#F5F5F5]">
+                    <th class="w-[44px] border-t border-l border-[#CFCFCF] hidden sm:table-cell">
+                        <div class="flex flex-row justify-center items-center p-[10px_12px]">
+                            <input type="checkbox" [checked]="allSelected()" (change)="toggleAllSelection()" />
+                        </div>
+                    </th>
+                    <th class="border-t border-[#D4D4D4]">
+                        <div class="flex flex-row items-start p-[15px_12px]">
+                            <span
+                                class="font-inter font-semibold text-[14px] leading-[130%] text-center text-black">ユーザー</span>
+                        </div>
+                    </th>
+                    <th class="w-[120px] border-t border-[#D4D4D4] hidden md:table-cell">
+                        <div class="flex flex-row justify-center items-start p-[15px_12px]">
+                            <span
+                                class="font-inter font-semibold text-[14px] leading-[130%] text-center text-black">権限</span>
+                        </div>
+                    </th>
+                    <th class="border-t border-[#D4D4D4]">
+                        <!-- Empty header for action column -->
+                    </th>
+                </tr>
+            </thead>
+            <!-- Table Body -->
+            <tbody>
+                @for (user of users(); track user.id) {
+                <tr class="h-[70px] hover:bg-gray-50 transition-colors">
+                    <!-- Checkbox Cell -->
+                    <td class="w-[44px] bg-white/[0.002] border-t border-l border-[#CFCFCF] hidden sm:table-cell">
+                        <div class="flex flex-row items-start p-[10px_12px]">
+                            <input type="checkbox" [checked]="user.selected" (change)="toggleUserSelection(user)" />
+                        </div>
+                    </td>
+                    <!-- User Cell -->
+                    <td class="bg-white/[0.002] border-t border-[#D4D4D4]">
+                        <div
+                            class="flex flex-col sm:flex-row items-start sm:items-center p-[15px_12px] gap-[10px] sm:gap-[15px]">
+                            <div class="w-[40px] h-[40px] bg-[#8EC5D0] rounded-full flex-shrink-0"></div>
+                            <div class="flex flex-col gap-[2px]">
+                                <span class="font-noto-jp font-medium text-[14px] leading-[130%] text-black">{{
+                                    user.name }}</span>
+                                <!-- Show role on mobile (hidden on desktop) -->
+                                <span
+                                    class="font-noto-jp font-normal text-[12px] leading-[130%] text-gray-600 md:hidden">{{
+                                    user.role }}</span>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- Permission Cell - Hidden on mobile -->
+                    <td class="w-[120px] bg-white/[0.002] border-t border-[#D4D4D4] hidden md:table-cell">
+                        <div class="flex flex-row justify-center items-center p-[15px_12px]">
+                            <span class="font-noto-jp font-medium text-[14px] leading-[130%] text-center text-black">{{
+                                user.role }}</span>
+                        </div>
+                    </td>
+                    <!-- Action Cell -->
+                    <td class="bg-white/[0.002] border-t border-[#D4D4D4]">
+                        <div class="flex flex-row justify-center items-center p-[10px_12px] gap-[15px]">
+                            <button type="button" (click)="onEditUser(user)"
+                                class="flex flex-row items-center px-[15px] py-[10px] gap-[10px] h-[39px] bg-[#E1E1E1] rounded-[8px] border-none cursor-pointer hover:bg-[#D1D1D1] transition-colors">
+                                <span class="font-noto font-normal text-[14px] leading-[19px] text-[#333333]">変更</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Delete Button -->
+    <div class="flex flex-col justify-end items-center w-full h-[39px]">
+        <button type="button" (click)="onDeleteMembers()"
+            class="flex flex-row items-center px-[15px] py-[10px] gap-[10px] h-[39px] bg-[#333333] rounded-[8px] border-none cursor-pointer hover:bg-[#1a1a1a] transition-colors">
+            <span class="font-noto font-normal text-[14px] leading-[19px] text-white">メンバーを削除</span>
+        </button>
+    </div>
+</div>
+
+<!-- Modals -->
+<app-delete-confirmation-modal [isOpen]="showDeleteConfirmModal()" [selectedUsers]="getSelectedUsers()"
+    (confirm)="onDeleteConfirm()" (cancel)="onDeleteCancel()">
+</app-delete-confirmation-modal>
+
+<app-delete-success-modal [isOpen]="showDeleteSuccessModal()" (close)="onCloseDeleteSuccess()">
+</app-delete-success-modal>
+
+<app-edit-user-modal [isOpen]="showEditModal()" [user]="selectedUserForEdit()" (save)="onEditSave($event)"
+    (cancel)="onEditCancel()">
+</app-edit-user-modal>
+
+<app-edit-success-modal [isOpen]="showEditSuccessModal()" [userName]="editedUserName()" [newRole]="editedUserRole()"
+    (close)="onCloseEditSuccess()">
+</app-edit-success-modal>

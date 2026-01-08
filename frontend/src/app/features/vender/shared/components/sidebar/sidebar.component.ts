@@ -25,4 +25,8 @@ export class SidebarComponent {
     navigateToMyPage() {
         this.router.navigate(['/vender/my-page']);
     }
+
+    navigateToUserList() {
+        this.router.navigate(['/vender/user-list']);
+    }
 }

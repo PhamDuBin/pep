@@ -14,6 +14,10 @@ export const VENDOR_ROUTES: Routes = [
                 loadComponent: () => import('./my-page/pages/my-page-page').then(m => m.MyPagePageComponent)
             },
             {
+                path: 'user-list',
+                loadComponent: () => import('./user-list/pages/user-list-page').then((m) => m.UserListPageComponent),
+            },
+            {
                 path: '',
                 redirectTo: 'home',
                 pathMatch: 'full'

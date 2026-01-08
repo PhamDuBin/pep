@@ -187,6 +187,39 @@ export class MyPageService {
         }
     }
 
+    // Download invoice
+    downloadInvoice(invoiceUrl: string): void {
+        console.log('Downloading invoice:', invoiceUrl);
+        this.setLoading(true);
+        this.clearError();
+
+        try {
+            // TODO: Replace with actual API call for server-side download
+            // const response = await fetch(`/api/invoices/download?url=${invoiceUrl}`);
+            
+            // For client-side download from URL
+            if (!invoiceUrl) {
+                throw new Error('Invalid invoice URL');
+            }
+
+            // Create download link
+            const link = document.createElement('a');
+            link.href = invoiceUrl;
+            link.download = invoiceUrl.split('/').pop() || 'invoice.pdf';
+            
+            // Trigger download
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            this.setLoading(false);
+            console.log('Invoice downloaded successfully');
+        } catch (err) {
+            this.setError(err instanceof Error ? err.message : 'Failed to download invoice');
+            this.setLoading(false);
+        }
+    }
+
     // Utility methods
     refreshUserData(): void {
         console.log('Refreshing user data');
