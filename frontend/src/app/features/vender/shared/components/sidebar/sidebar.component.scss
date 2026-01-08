@@ -7,5 +7,32 @@
     height: calc(100vh - 89px);
     background: white;
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
-    z-index: 10;
+    transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    z-index: 40;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+:host.collapsed {
+    width: 60px;
+}
+
+/* Common transition for all interactive elements */
+.sidebar-item {
+    transition: padding-left 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Text fade transition */
+.sidebar-text {
+    opacity: 1;
+    width: auto;
+    transition: opacity 0.2s ease-in-out;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+:host.collapsed .sidebar-text {
+    opacity: 0;
+    width: 0;
+    pointer-events: none;
 }

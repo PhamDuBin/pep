@@ -1,4 +1,6 @@
-<div class="flex h-full bg-white overflow-hidden ml-[172px]" style="width: calc(100vw - 172px);">
+<div class="flex h-full bg-white overflow-hidden transition-all duration-300" [class.ml-[172px]]="!isSidebarCollapsed()"
+    [class.ml-[60px]]="isSidebarCollapsed()"
+    [style.width]="isSidebarCollapsed() ? 'calc(100vw - 60px)' : 'calc(100vw - 172px)'">
     <app-message-list (messageSelected)="onMessageSelected($event)"></app-message-list>
     <app-message-detail [messageId]="selectedMessageId()"></app-message-detail>
 </div>

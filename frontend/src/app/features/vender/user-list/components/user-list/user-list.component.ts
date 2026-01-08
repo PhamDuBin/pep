@@ -7,6 +7,7 @@ import { DeleteConfirmationModalComponent } from "../common/delete-confirmation-
 import { DeleteSuccessModalComponent } from "../common/delete-success-modal/delete-success-modal.component";
 import { EditUserModalComponent } from "../common/edit-user-modal/edit-user-modal.component";
 import { EditSuccessModalComponent } from "../common/edit-success-modal/edit-success-modal.component";
+import { SidebarService } from "../../../shared/services/sidebar.service";
 
 @Component({
     selector: 'app-user-list',
@@ -24,6 +25,9 @@ import { EditSuccessModalComponent } from "../common/edit-success-modal/edit-suc
 })
 export class UserListComponent {
     private userListService = inject(UserListService);
+    private sidebarService = inject(SidebarService);
+
+    isSidebarCollapsed = this.sidebarService.isCollapsed;
 
     // Use service getters for data
     users = this.userListService.getUsers();
