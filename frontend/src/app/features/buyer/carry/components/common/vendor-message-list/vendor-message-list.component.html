@@ -34,6 +34,7 @@
       [vendor]="vendor"
       [isSelected]="selectedVendorId === vendor.id"
       (selected)="onVendorSelect($event)"
+      (exitClicked)="onVendorExit($event)"
     ></app-vendor-message-item>
     }
   </div>

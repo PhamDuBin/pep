@@ -1,11 +1,12 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Vendor } from '../../models/chat.model';
+import { ModalComponent } from '../../../../shared/components/modal/modal.component';
 
 @Component({
   selector: 'app-shared-rfp-sent-modal',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ModalComponent],
   templateUrl: './rfp-sent-modal.component.html',
   styleUrl: './rfp-sent-modal.component.scss'
 })
@@ -23,12 +24,6 @@ export class SharedRfpSentModalComponent {
 
   onClose(): void {
     this.close.emit();
-  }
-
-  onBackdropClick(event: MouseEvent): void {
-    if ((event.target as HTMLElement).classList.contains('modal-backdrop')) {
-      this.onClose();
-    }
   }
 
   getVendorRows(): Vendor[][] {

@@ -52,4 +52,12 @@ export class SideMenuComponent {
   isMyPageActive(): boolean {
     return this.router.url.includes('/buyer/my-page');
   }
+
+  navigateToUserList(): void {
+    this.router.navigate(['/buyer/user-list']);
+  }
+
+  isUserListActive(): boolean {
+    return this.router.url.includes('/buyer/user-list');
+  }
 }

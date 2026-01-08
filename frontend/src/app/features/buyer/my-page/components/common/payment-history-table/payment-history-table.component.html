@@ -40,34 +40,9 @@
   </div>
 
   <!-- Pagination -->
-  @if (totalPages >= 1) {
-  <div class="pagination">
-    <button
-      class="page-btn"
-      [disabled]="currentPage === 1"
-      (click)="onFirstPage()"
-      type="button"
-    >
-      «
-    </button>
-    @for (page of pageNumbers; track page) {
-    <button
-      class="page-btn"
-      [class.active]="page === currentPage"
-      (click)="onPageChange(page)"
-      type="button"
-    >
-      {{ page }}
-    </button>
-    }
-    <button
-      class="page-btn"
-      [disabled]="currentPage === totalPages"
-      (click)="onLastPage()"
-      type="button"
-    >
-      »
-    </button>
-  </div>
-  }
+  <app-pagination
+    [currentPage]="currentPage"
+    [totalPages]="totalPages"
+    (pageChange)="onPageChange($event)"
+  ></app-pagination>
 </div>

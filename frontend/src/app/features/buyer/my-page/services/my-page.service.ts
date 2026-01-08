@@ -42,6 +42,9 @@ export class MyPageService {
   private _newEmail = signal<string>('');
   private _confirmEmail = signal<string>('');
 
+  // Success message state
+  private _showAvatarSaveSuccess = signal<boolean>(false);
+
   // Public computed signals
   userProfile = computed(() => this._userProfile());
   paymentInfo = computed(() => this._paymentInfo());
@@ -58,6 +61,7 @@ export class MyPageService {
   confirmPassword = computed(() => this._confirmPassword());
   newEmail = computed(() => this._newEmail());
   confirmEmail = computed(() => this._confirmEmail());
+  showAvatarSaveSuccess = computed(() => this._showAvatarSaveSuccess());
 
   // Computed for total pages
   totalPages = computed(() => Math.ceil(this._totalCount() / DEFAULT_PAYMENT_HISTORY_PAGE_SIZE));
@@ -282,6 +286,7 @@ export class MyPageService {
               return user;
             });
             this.closeModal();
+            this._showAvatarSaveSuccess.set(true);
           }
           observer.next(response);
           observer.complete();
@@ -292,6 +297,13 @@ export class MyPageService {
         }
       });
     });
+  }
+
+  /**
+   * Clear avatar save success message
+   */
+  clearAvatarSaveSuccess(): void {
+    this._showAvatarSaveSuccess.set(false);
   }
 
   /**

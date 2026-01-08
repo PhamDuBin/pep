@@ -34,3 +34,55 @@ html, body {
 ::-webkit-scrollbar-thumb:hover {
   background: #808080;
 }
+
+/* Custom Loading Spinner */
+.btn-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* DaisyUI Loading Spinner Override - ensure it shows */
+.loading.loading-spinner {
+  display: inline-block;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-width: 3px;
+  border-style: solid;
+  border-color: currentColor transparent currentColor transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.loading.loading-spinner.loading-xs {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-width: 2px;
+}
+
+.loading.loading-spinner.loading-sm {
+  width: 1rem;
+  height: 1rem;
+  border-width: 2px;
+}
+
+.loading.loading-spinner.loading-md {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-width: 3px;
+}
+
+.loading.loading-spinner.loading-lg {
+  width: 2rem;
+  height: 2rem;
+  border-width: 4px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,11 +1,12 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PaymentHistoryRecord } from '../../../models/my-page.model';
+import { PaginationComponent } from '../../../../../shared/components/pagination/pagination.component';
 
 @Component({
   selector: 'app-payment-history-table',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, PaginationComponent],
   templateUrl: './payment-history-table.component.html',
   styleUrl: './payment-history-table.component.scss'
 })
@@ -16,14 +17,6 @@ export class PaymentHistoryTableComponent {
 
   @Output() pageChange = new EventEmitter<number>();
   @Output() downloadInvoice = new EventEmitter<string>();
-
-  get pageNumbers(): number[] {
-    const pages: number[] = [];
-    for (let i = 1; i <= this.totalPages; i++) {
-      pages.push(i);
-    }
-    return pages;
-  }
 
   formatAmount(amount: number): string {
     return `${amount.toLocaleString('ja-JP')}円`;
@@ -48,13 +41,5 @@ export class PaymentHistoryTableComponent {
 
   onDownload(recordId: string): void {
     this.downloadInvoice.emit(recordId);
-  }
-
-  onFirstPage(): void {
-    this.pageChange.emit(1);
-  }
-
-  onLastPage(): void {
-    this.pageChange.emit(this.totalPages);
   }
 }

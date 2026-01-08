@@ -1,57 +1,40 @@
 <!-- Avatar Change Modal matching Figma G-04 design -->
-@if (isOpen) {
-<div class="modal-overlay" (click)="onBackdropClick($event)">
-  <div class="modal-content">
-    <!-- Close Button -->
-    <button class="btn-close" type="button" (click)="onClose()">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="40"
-        height="40"
-        viewBox="0 0 40 40"
-        fill="none"
-      >
-        <path
-          d="M10.5 29.5L20 20L29.5 10.5M10.5 10.5L20 20L29.5 29.5"
-          stroke="#333"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
-    </button>
-
-    <div class="modal-body">
-      <h2 class="modal-title">アイコンの変更</h2>
-
-      <!-- Color Options -->
-      <div class="color-options">
-        @for (option of colorOptions; track option.id) {
-        <button
-          class="color-option"
-          type="button"
-          [style.background-color]="option.color"
-          [class.selected]="option.isSelected"
-          [style.border-color]="option.isSelected ? '#066a9e' : 'transparent'"
-          (click)="onColorSelect(option.id)"
-        ></button>
-        }
-      </div>
-    </div>
-
-    <div class="modal-actions">
-      <button
-        class="btn-primary"
-        type="button"
-        [disabled]="isSaving"
-        (click)="onSave()"
-      >
-        {{ isSaving ? '保存中...' : '保存' }}
-      </button>
-      <button class="btn-secondary" type="button" (click)="onClose()">
-        閉じる
-      </button>
-    </div>
+<app-modal
+  [isOpen]="isOpen"
+  title="アイコンの変更"
+  size="md"
+  customClass="avatar-change-modal"
+  (closed)="onClose()"
+>
+  <!-- Color Options -->
+  <div class="color-options">
+    @for (option of colorOptions; track option.id) {
+    <button
+      class="color-option"
+      type="button"
+      [style.background-color]="option.color"
+      [class.selected]="option.isSelected"
+      [style.border-color]="option.isSelected ? '#066a9e' : 'transparent'"
+      (click)="onColorSelect(option.id)"
+    ></button>
+    }
   </div>
-</div>
-}
+
+  <div modal-actions class="flex flex-row gap-[10px] justify-center items-center">
+    <button
+      class="btn-primary"
+      type="button"
+      [disabled]="isSaving"
+      (click)="onSave()"
+    >
+      @if (isSaving) {
+        <span class="loading loading-spinner loading-sm"></span>
+      } @else {
+        保存
+      }
+    </button>
+    <button class="btn-secondary" type="button" (click)="onClose()">
+      閉じる
+    </button>
+  </div>
+</app-modal>

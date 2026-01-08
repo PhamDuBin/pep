@@ -1,0 +1,76 @@
+<!-- User List content matching Figma H-01 design -->
+<div class="content-wrapper">
+  @if (isLoading()) {
+  <div class="loading-state">
+    <span class="loading loading-spinner loading-lg"></span>
+  </div>
+  } @else {
+  <div class="page-content">
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1 class="page-title">ユーザー一覧</h1>
+    </div>
+
+    <!-- Invite Button -->
+    <div class="action-bar">
+      <button class="btn-invite" (click)="onInviteMember()">
+        メンバーを招待
+      </button>
+    </div>
+
+    <!-- User Table -->
+    <app-user-table
+      [users]="users()"
+      [isAllSelected]="isAllSelected()"
+      [showCheckbox]="true"
+      (toggleSelection)="onToggleSelection($event)"
+      (toggleAllSelection)="onToggleAllSelection()"
+      (changePermission)="onChangePermission($event)"
+    ></app-user-table>
+
+    <!-- Delete Button -->
+    <div class="delete-action">
+      <button
+        class="btn-delete"
+        [disabled]="!hasSelectedUsers()"
+        (click)="onDeleteMembers()"
+      >
+        メンバーを削除
+      </button>
+    </div>
+  </div>
+  }
+</div>
+
+<!-- Permission Change Modal -->
+<app-permission-change-modal
+  [isOpen]="isPermissionModalOpen()"
+  [modalType]="getPermissionModalType()"
+  [userName]="permissionChangeState().userName"
+  [currentPermission]="permissionChangeState().currentPermission"
+  [selectedPermission]="permissionChangeState().newPermission"
+  [isSaving]="isSaving()"
+  (close)="onCloseModal()"
+  (selectPermission)="onSelectPermission($event)"
+  (confirm)="onConfirmPermissionChange()"
+></app-permission-change-modal>
+
+<!-- Delete Confirmation Modal -->
+<app-delete-confirm-modal
+  [isOpen]="isDeleteModalOpen()"
+  [modalType]="getDeleteModalType()"
+  [selectedCount]="selectedCount()"
+  [isSaving]="isSaving()"
+  (close)="onCloseModal()"
+  (confirm)="onConfirmDelete()"
+></app-delete-confirm-modal>
+
+<!-- Invite Member Modal -->
+<app-invite-member-modal
+  [isOpen]="isInviteModalOpen()"
+  [modalType]="getInviteModalType()"
+  [isSaving]="isSaving()"
+  [existingEmails]="existingEmails()"
+  (close)="onCloseModal()"
+  (sendInvitation)="onConfirmInvite($event)"
+></app-invite-member-modal>

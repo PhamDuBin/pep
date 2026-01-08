@@ -64,3 +64,38 @@ export interface SendMessageResponse {
   success: boolean;
   message: VendorChatMessage;
 }
+
+/**
+ * Chat room member
+ */
+export interface ChatMember {
+  id: string;
+  name: string;
+  initials: string;
+}
+
+/**
+ * Searchable user for adding to chat
+ */
+export interface SearchableUser {
+  id: string;
+  name: string;
+  email: string;
+  initials: string;
+}
+
+/**
+ * Add member request
+ */
+export interface AddMemberRequest {
+  vendorId: string;
+  memberIds: string[];
+}
+
+/**
+ * Add member response
+ */
+export interface AddMemberResponse {
+  success: boolean;
+  members: ChatMember[];
+}
