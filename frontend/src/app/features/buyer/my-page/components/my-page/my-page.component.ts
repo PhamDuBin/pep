@@ -16,10 +16,10 @@ import { MyPageService } from '../../services/my-page.service';
     PaymentInfoSectionComponent,
     PaymentHistoryTableComponent,
     EmailChangeModalComponent,
-    AvatarChangeModalComponent
+    AvatarChangeModalComponent,
   ],
   templateUrl: './my-page.component.html',
-  styleUrl: './my-page.component.scss'
+  styleUrl: './my-page.component.scss',
 })
 export class MyPageComponent implements OnInit {
   // Computed signals from service
@@ -39,6 +39,7 @@ export class MyPageComponent implements OnInit {
   confirmPassword = computed(() => this.myPageService.confirmPassword());
   newEmail = computed(() => this.myPageService.newEmail());
   confirmEmail = computed(() => this.myPageService.confirmEmail());
+  showAvatarSaveSuccess = computed(() => this.myPageService.showAvatarSaveSuccess());
 
   constructor(private myPageService: MyPageService) {}
 
@@ -82,7 +83,7 @@ export class MyPageComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error saving password:', error);
-      }
+      },
     });
   }
 
@@ -123,7 +124,7 @@ export class MyPageComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error sending email change request:', error);
-      }
+      },
     });
   }
 
@@ -139,8 +140,12 @@ export class MyPageComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error saving avatar:', error);
-      }
+      },
     });
+  }
+
+  onClearAvatarSaveSuccess(): void {
+    this.myPageService.clearAvatarSaveSuccess();
   }
 
   // Helper for pagination

@@ -2,11 +2,12 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MyPageModalType } from '../../../models/my-page.model';
+import { ModalComponent } from '../../../../../shared/components/modal/modal.component';
 
 @Component({
   selector: 'app-email-change-modal',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ModalComponent],
   templateUrl: './email-change-modal.component.html',
   styleUrl: './email-change-modal.component.scss'
 })
@@ -24,12 +25,6 @@ export class EmailChangeModalComponent {
 
   onClose(): void {
     this.close.emit();
-  }
-
-  onBackdropClick(event: MouseEvent): void {
-    if ((event.target as HTMLElement).classList.contains('modal-overlay')) {
-      this.close.emit();
-    }
   }
 
   onNewEmailInput(event: Event): void {

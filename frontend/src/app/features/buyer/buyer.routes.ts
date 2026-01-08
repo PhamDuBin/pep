@@ -30,6 +30,10 @@ export const BUYER_ROUTES: Routes = [
         path: 'my-page',
         loadComponent: () => import('./my-page/pages/my-page-page').then((m) => m.MyPagePageComponent),
       },
+      {
+        path: 'user-list',
+        loadComponent: () => import('./user-list/pages/user-list-page').then((m) => m.UserListPageComponent),
+      },
     ],
   },
 ];

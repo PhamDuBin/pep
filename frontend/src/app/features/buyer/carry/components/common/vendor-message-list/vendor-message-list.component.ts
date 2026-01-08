@@ -19,6 +19,7 @@ export class VendorMessageListComponent {
   @Input() selectedVendorId: string | null = null;
 
   @Output() vendorSelected = new EventEmitter<VendorContact>();
+  @Output() vendorExitClicked = new EventEmitter<VendorContact>();
 
   searchQuery = signal('');
   private _vendors = signal<VendorContact[]>([]);
@@ -46,6 +47,10 @@ export class VendorMessageListComponent {
 
   onVendorSelect(vendor: VendorContact): void {
     this.vendorSelected.emit(vendor);
+  }
+
+  onVendorExit(vendor: VendorContact): void {
+    this.vendorExitClicked.emit(vendor);
   }
 
   trackByVendorId(index: number, vendor: VendorContact): string {

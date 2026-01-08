@@ -1,11 +1,12 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AvatarColorOption } from '../../../models/my-page.model';
+import { ModalComponent } from '../../../../../shared/components/modal/modal.component';
 
 @Component({
   selector: 'app-avatar-change-modal',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ModalComponent],
   templateUrl: './avatar-change-modal.component.html',
   styleUrl: './avatar-change-modal.component.scss'
 })
@@ -20,12 +21,6 @@ export class AvatarChangeModalComponent {
 
   onClose(): void {
     this.close.emit();
-  }
-
-  onBackdropClick(event: MouseEvent): void {
-    if ((event.target as HTMLElement).classList.contains('modal-overlay')) {
-      this.close.emit();
-    }
   }
 
   onColorSelect(colorId: string): void {

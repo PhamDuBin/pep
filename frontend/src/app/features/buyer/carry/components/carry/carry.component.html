@@ -35,6 +35,7 @@
       [vendors]="vendors()"
       [selectedVendorId]="selectedVendor()?.id ?? null"
       (vendorSelected)="onVendorSelected($event)"
+      (vendorExitClicked)="onVendorExitClicked($event)"
     ></app-vendor-message-list>
   </div>
 
@@ -42,6 +43,24 @@
   <app-vendor-chat
     [conversation]="currentConversation()"
     [isLoading]="isSending()"
+    [members]="chatMembers()"
     (messageSent)="onMessageSent($event)"
+    (addMemberClicked)="onAddMemberClicked()"
+    (exitChatClicked)="onExitChatClicked()"
   ></app-vendor-chat>
 </div>
+
+<!-- Add Member Modal -->
+<app-add-member-modal
+  [isOpen]="isAddMemberModalOpen"
+  [projectName]="projectName()"
+  [vendorName]="currentConversation()?.vendorName ?? ''"
+  [existingMembers]="chatMembers()"
+  [searchResults]="searchResults()"
+  [isLoading]="isAddingMembers"
+  [isSearching]="isSearching()"
+  [modalState]="addMemberModalState"
+  (close)="onCloseAddMemberModal()"
+  (search)="onSearchMembers($event)"
+  (addMembers)="onAddMembers($event)"
+></app-add-member-modal>

@@ -1,0 +1,36 @@
+@if (isOpen) {
+<div class="modal-backdrop" (click)="onBackdropClick($event)">
+  <div class="modal-container" [ngClass]="[sizeClass, customClass]">
+    <!-- Close button -->
+    @if (showCloseButton) {
+    <button class="close-btn" (click)="onClose()" type="button" aria-label="Close modal">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>
+    }
+
+    <!-- Modal Title -->
+    @if (title) {
+    <h2 class="modal-title">{{ title }}</h2>
+    }
+
+    <!-- Modal Body - ng-content for custom content -->
+    <div class="modal-body">
+      <ng-content></ng-content>
+    </div>
+
+    <!-- Modal Footer/Actions - named slot for buttons -->
+    <div class="modal-actions">
+      <ng-content select="[modal-actions]"></ng-content>
+    </div>
+
+    <!-- Loading Overlay -->
+    @if (isLoading) {
+    <div class="modal-loading-overlay">
+      <span class="loading loading-spinner loading-md"></span>
+    </div>
+    }
+  </div>
+</div>
+}
