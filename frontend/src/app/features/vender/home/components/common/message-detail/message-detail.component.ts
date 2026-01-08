@@ -1,4 +1,4 @@
-import { Component, Input, signal } from '@angular/core';
+import { Component, Input, signal, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ChatMessage } from '../../../models/message.model';
@@ -10,8 +10,9 @@ import { ChatMessage } from '../../../models/message.model';
     templateUrl: './message-detail.component.html',
     styleUrls: ['./message-detail.component.scss']
 })
-export class MessageDetailComponent {
+export class MessageDetailComponent implements AfterViewChecked {
     @Input() messageId: string | null = null;
+    @ViewChild('messageContainer') private messageContainer!: ElementRef;
 
     // Mock data for demonstration
     companyName = '株式会社ソラマメ';
@@ -45,6 +46,14 @@ export class MessageDetailComponent {
     ]);
 
     newMessage = '';
+    private shouldScroll = false;
+
+    ngAfterViewChecked() {
+        if (this.shouldScroll) {
+            this.scrollToBottom();
+            this.shouldScroll = false;
+        }
+    }
 
     sendMessage() {
         if (this.newMessage.trim()) {
@@ -56,6 +65,20 @@ export class MessageDetailComponent {
             };
             this.messages.update(msgs => [...msgs, message]);
             this.newMessage = '';
+            this.shouldScroll = true;
+        }
+    }
+
+    private scrollToBottom(): void {
+        try {
+            if (this.messageContainer) {
+                this.messageContainer.nativeElement.scrollTo({
+                    top: this.messageContainer.nativeElement.scrollHeight,
+                    behavior: 'smooth'
+                });
+            }
+        } catch (err) {
+            console.error('Scroll error:', err);
         }
     }
 }

@@ -1,4 +1,4 @@
-import { Component, inject, HostBinding } from '@angular/core';
+import { Component, inject, HostBinding, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { VendorHomeService } from '../../../home/services/vendor-home.service';

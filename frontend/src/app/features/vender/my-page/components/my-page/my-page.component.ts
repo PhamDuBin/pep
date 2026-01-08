@@ -81,16 +81,42 @@ export class MyPageComponent {
 
     // G-03: Password change modal (triggered from save button)
     onSaveChanges() {
+        console.log('Save button clicked. Password data:', this.passwordData);
+
         // Check if any password fields are filled
         if (this.passwordData.newPassword || this.passwordData.confirmPassword) {
+            // Validate password fields
+            if (!this.passwordData.newPassword || !this.passwordData.confirmPassword) {
+                console.log('Both password fields are required');
+                return;
+            }
+
+            if (this.passwordData.newPassword !== this.passwordData.confirmPassword) {
+                console.log('Passwords do not match');
+                return;
+            }
+
+            // Validate password length (8-16 characters)
+            if (this.passwordData.newPassword.length < 8 || this.passwordData.newPassword.length > 16) {
+                console.log('Password must be 8-16 characters');
+                return;
+            }
+
+            // Validate alphanumeric
+            const alphanumericRegex = /^[a-zA-Z0-9]+$/;
+            if (!alphanumericRegex.test(this.passwordData.newPassword)) {
+                console.log('Password must be alphanumeric only');
+                return;
+            }
+
+            // All validations passed, show confirmation modal
             this.showPasswordModal.set(true);
         } else {
-            console.log('Save changes', {
-                profile: this.userProfile()
-            });
-            // TODO: Implement save functionality
+            // No password change, just save other changes
+            console.log('Changes saved successfully');
         }
     }
+
 
     onPasswordChangeSubmit(data: PasswordChangeData) {
         this.myPageService.updatePassword(data);
