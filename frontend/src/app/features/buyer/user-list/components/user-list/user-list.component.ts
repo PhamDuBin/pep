@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { UserTableComponent } from '../common/user-table/user-table.component';
 import { PermissionChangeModalComponent } from '../common/permission-change-modal/permission-change-modal.component';
 import { DeleteConfirmModalComponent } from '../common/delete-confirm-modal/delete-confirm-modal.component';
+import { InviteMemberModalComponent } from '../common/invite-member-modal/invite-member-modal.component';
 import { UserListService } from '../../services/user-list.service';
 import { UserPermission } from '../../models/user-list.model';
 
@@ -13,7 +14,8 @@ import { UserPermission } from '../../models/user-list.model';
     CommonModule,
     UserTableComponent,
     PermissionChangeModalComponent,
-    DeleteConfirmModalComponent
+    DeleteConfirmModalComponent,
+    InviteMemberModalComponent
   ],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.scss'
@@ -28,6 +30,7 @@ export class UserListComponent implements OnInit {
   isAllSelected = computed(() => this.userListService.isAllSelected());
   hasSelectedUsers = computed(() => this.userListService.hasSelectedUsers());
   selectedCount = computed(() => this.userListService.selectedCount());
+  existingEmails = computed(() => this.userListService.existingEmails());
 
   constructor(private userListService: UserListService) {}
 
@@ -47,8 +50,29 @@ export class UserListComponent implements OnInit {
   // Invite member handler
   onInviteMember(): void {
     this.userListService.openInviteMemberModal();
-    // For now, just log - implement invite modal later if needed
-    console.log('Invite member clicked');
+  }
+
+  // Confirm send invitation
+  onConfirmInvite(emails: string[]): void {
+    this.userListService.confirmInviteMembers(emails).subscribe({
+      next: (response) => {
+        console.log('Invitations sent:', response);
+      },
+      error: (error) => {
+        console.error('Error sending invitations:', error);
+      }
+    });
+  }
+
+  // Check if invite modal is open
+  isInviteModalOpen(): boolean {
+    const modal = this.activeModal();
+    return modal === 'invite-member' || modal === 'invite-member-complete';
+  }
+
+  // Get invite modal type
+  getInviteModalType(): 'form' | 'complete' {
+    return this.activeModal() === 'invite-member-complete' ? 'complete' : 'form';
   }
 
   // Permission change handlers

@@ -33,6 +33,7 @@ export type UserListModalType =
   | 'delete-confirm'
   | 'delete-complete'
   | 'invite-member'
+  | 'invite-member-complete'
   | null;
 
 /**
@@ -48,6 +49,13 @@ export interface PermissionChangeData {
  */
 export interface DeleteUsersData {
   userIds: string[];
+}
+
+/**
+ * Invite members data
+ */
+export interface InviteMembersData {
+  emails: string[];
 }
 
 /**

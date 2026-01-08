@@ -17,6 +17,7 @@ export class UserInfoSectionComponent {
   @Input() showPassword: boolean = false;
   @Input() showConfirmPassword: boolean = false;
   @Input() isSaving: boolean = false;
+  @Input() showAvatarSaveSuccess: boolean = false;
 
   @Output() openAvatarModal = new EventEmitter<void>();
   @Output() openEmailModal = new EventEmitter<void>();
@@ -25,6 +26,7 @@ export class UserInfoSectionComponent {
   @Output() togglePasswordVisibility = new EventEmitter<void>();
   @Output() toggleConfirmPasswordVisibility = new EventEmitter<void>();
   @Output() saveChanges = new EventEmitter<void>();
+  @Output() clearAvatarSaveSuccess = new EventEmitter<void>();
 
   onAvatarClick(): void {
     this.openAvatarModal.emit();
@@ -54,5 +56,9 @@ export class UserInfoSectionComponent {
 
   onSaveChanges(): void {
     this.saveChanges.emit();
+  }
+
+  onDismissAvatarSuccess(): void {
+    this.clearAvatarSaveSuccess.emit();
   }
 }

@@ -1,0 +1,115 @@
+<app-modal
+  [isOpen]="isOpen"
+  title="メンバーを追加"
+  size="md"
+  customClass="add-member-modal"
+  [isLoading]="isLoading"
+  (closed)="onClose()"
+>
+  @if (modalState === 'search') {
+  <ng-container>
+    <!-- Search Mode -->
+    <div class="modal-content mb-3">
+      <!-- Project and Vendor Info -->
+      <div class="info-section">
+        <div class="info-row justify-center text-black">
+          <span class="info-label">プロジェクト名：AIを利用した花屋の業務効率化</span>
+        </div>
+        <div class="info-row justify-center text-black">
+          <span class="info-label">ベンダー：株式会社イチジク</span>
+        </div>
+      </div>
+
+      <!-- Search Input with Tags Inside -->
+      <div class="search-section">
+        <div class="search-input-container">
+          <!-- Selected Members Tags (inside input) -->
+          @for (member of selectedMembers; track trackByUserId($index, member)) {
+          <div class="member-tag-inline">
+            <div class="tag-avatar">
+              <span>{{ member.initials }}</span>
+            </div>
+            <span class="tag-name">{{ member.name }}</span>
+            <button type="button" class="tag-remove" (click)="removeMember(member)">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+              >
+                <path
+                  d="M15 5L5 15M5 5L15 15"
+                  stroke="#808080"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          }
+          <!-- Input field -->
+          <input
+            type="text"
+            class="search-input-inline"
+            [placeholder]="selectedMembers.length === 0 ? '名前またはメールアドレスで検索' : ''"
+            [(ngModel)]="searchQuery"
+            (input)="onSearchInput()"
+            (focus)="onSearchFocus()"
+            (blur)="onSearchBlur()"
+          />
+        </div>
+
+        <!-- Search Suggestions Dropdown (positioned outside modal) -->
+        @if (showSuggestions && filteredSearchResults.length > 0) {
+        <div class="suggestions-dropdown">
+          @for (user of filteredSearchResults; track trackByUserId($index, user)) {
+          <button type="button" class="suggestion-item" (mousedown)="selectMember(user)">
+            <div class="user-avatar">
+              <span>{{ user.initials }}</span>
+            </div>
+            <div class="user-info">
+              <span class="user-name">{{ user.name }}</span>
+            </div>
+          </button>
+          }
+        </div>
+        }
+
+        <!-- Loading indicator -->
+        @if (isSearching) {
+        <div class="search-loading">
+          <span class="loading loading-spinner loading-sm"></span>
+        </div>
+        }
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div modal-actions class="action-buttons">
+      <button type="button" class="btn-cancel" (click)="onClose()">キャンセル</button>
+      <button
+        type="button"
+        class="btn-add"
+        [disabled]="isLoading || !canAddMembers()"
+        (click)="onAddMembers()"
+      >
+        @if (isLoading) {
+        <span class="loading loading-spinner loading-sm"></span>
+        } @else {メンバーを追加}
+      </button>
+    </div>
+  </ng-container>
+  } @else {
+  <ng-container>
+    <!-- Completion Mode -->
+    <div class="complete-content mb-3">
+      <p class="complete-message">メンバーを追加しました。</p>
+    </div>
+
+    <div modal-actions class="action-buttons">
+      <button type="button" class="btn-cancel" (click)="onClose()">閉じる</button>
+    </div>
+  </ng-container>
+  }
+</app-modal>

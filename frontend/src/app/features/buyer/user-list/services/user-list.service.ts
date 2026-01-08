@@ -6,6 +6,7 @@ import {
   UserListModalType,
   PermissionChangeData,
   DeleteUsersData,
+  InviteMembersData,
   UserListResponse,
   UserActionResponse,
   PermissionChangeModalState
@@ -27,6 +28,7 @@ export class UserListService {
     currentPermission: null,
     newPermission: null
   });
+  private _invitedEmails = signal<string[]>([]);
 
   // Public computed signals
   users = computed(() => this._users());
@@ -34,6 +36,16 @@ export class UserListService {
   isSaving = computed(() => this._isSaving());
   activeModal = computed(() => this._activeModal());
   permissionChangeState = computed(() => this._permissionChangeState());
+  invitedEmails = computed(() => this._invitedEmails());
+
+  // Get all existing emails (users + invited)
+  existingEmails = computed(() => {
+    const userEmails = this._users()
+      .filter(u => u.email)
+      .map(u => u.email!.toLowerCase());
+    const invited = this._invitedEmails().map(e => e.toLowerCase());
+    return [...new Set([...userEmails, ...invited])];
+  });
 
   // Computed for selected users
   selectedUsers = computed(() => this._users().filter(user => user.isSelected));
@@ -281,13 +293,49 @@ export class UserListService {
   }
 
   /**
+   * Confirm invite members
+   */
+  confirmInviteMembers(emails: string[]): Observable<UserActionResponse> {
+    if (emails.length === 0) {
+      return of({ success: false, message: 'No emails provided' });
+    }
+
+    this._isSaving.set(true);
+
+    const data: InviteMembersData = { emails };
+
+    return new Observable(observer => {
+      this.inviteMembersApi(data).subscribe({
+        next: (response) => {
+          this._isSaving.set(false);
+          if (response.success) {
+            // Add invited emails to the list
+            this._invitedEmails.update(current => [
+              ...current,
+              ...emails.map(e => e.toLowerCase())
+            ]);
+            // Show completion modal
+            this._activeModal.set('invite-member-complete');
+          }
+          observer.next(response);
+          observer.complete();
+        },
+        error: (error) => {
+          this._isSaving.set(false);
+          observer.error(error);
+        }
+      });
+    });
+  }
+
+  /**
    * Mock: POST /api/users/invite
    */
-  inviteMember(email: string): Observable<UserActionResponse> {
-    console.log('Inviting member:', email);
+  private inviteMembersApi(data: InviteMembersData): Observable<UserActionResponse> {
+    console.log('Inviting members:', data);
     return of({
       success: true,
-      message: 'Invitation sent successfully'
+      message: 'Invitations sent successfully'
     }).pipe(delay(500));
   }
 }

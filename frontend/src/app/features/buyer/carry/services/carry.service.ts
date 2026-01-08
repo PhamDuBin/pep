@@ -6,7 +6,10 @@ import {
   VendorConversation,
   VendorListResponse,
   ConversationResponse,
-  SendMessageResponse
+  SendMessageResponse,
+  ChatMember,
+  SearchableUser,
+  AddMemberResponse
 } from '../models/carry.model';
 import {
   MOCK_VENDOR_CONTACTS,
@@ -25,6 +28,9 @@ export class CarryService {
   private _projectName = signal<string>(CURRENT_PROJECT_NAME);
   private _isLoading = signal(false);
   private _isSending = signal(false);
+  private _chatMembers = signal<ChatMember[]>([]);
+  private _searchResults = signal<SearchableUser[]>([]);
+  private _isSearching = signal(false);
 
   // Public computed signals
   vendors = computed(() => this._vendors());
@@ -33,6 +39,9 @@ export class CarryService {
   projectName = computed(() => this._projectName());
   isLoading = computed(() => this._isLoading());
   isSending = computed(() => this._isSending());
+  chatMembers = computed(() => this._chatMembers());
+  searchResults = computed(() => this._searchResults());
+  isSearching = computed(() => this._isSearching());
 
   currentMessages = computed(() => {
     const conversation = this._currentConversation();
@@ -200,6 +209,110 @@ export class CarryService {
     this.loadVendors();
   }
 
+  /**
+   * Load members for the current chat
+   */
+  loadChatMembers(): void {
+    const vendor = this._selectedVendor();
+    if (!vendor) return;
+
+    this.getChatMembersApi(vendor.id).subscribe({
+      next: (members) => {
+        this._chatMembers.set(members);
+      },
+      error: (error) => {
+        console.error('Error loading chat members:', error);
+      }
+    });
+  }
+
+  /**
+   * Search users by name or email
+   */
+  searchUsers(query: string): void {
+    this._isSearching.set(true);
+    this.searchUsersApi(query).subscribe({
+      next: (users) => {
+        this._searchResults.set(users);
+        this._isSearching.set(false);
+      },
+      error: (error) => {
+        console.error('Error searching users:', error);
+        this._isSearching.set(false);
+      }
+    });
+  }
+
+  /**
+   * Clear search results
+   */
+  clearSearchResults(): void {
+    this._searchResults.set([]);
+  }
+
+  /**
+   * Add members to the current chat
+   */
+  addMembers(members: SearchableUser[]): Observable<AddMemberResponse> {
+    const vendor = this._selectedVendor();
+    if (!vendor) {
+      return of({ success: false, members: [] });
+    }
+
+    return new Observable(observer => {
+      this.addMembersApi(vendor.id, members.map(m => m.id)).subscribe({
+        next: (response) => {
+          if (response.success) {
+            this._chatMembers.set(response.members);
+            // Update member count in conversation
+            const conversation = this._currentConversation();
+            if (conversation) {
+              this._currentConversation.set({
+                ...conversation,
+                memberCount: response.members.length
+              });
+            }
+          }
+          observer.next(response);
+          observer.complete();
+        },
+        error: (error) => {
+          observer.error(error);
+        }
+      });
+    });
+  }
+
+  /**
+   * Exit from current chat
+   */
+  exitChat(): Observable<boolean> {
+    const vendor = this._selectedVendor();
+    if (!vendor) {
+      return of(false);
+    }
+
+    return new Observable(observer => {
+      this.exitChatApi(vendor.id).subscribe({
+        next: (success) => {
+          if (success) {
+            // Remove vendor from list and clear selection
+            const updatedVendors = this._vendors().filter(v => v.id !== vendor.id);
+            this._vendors.set(updatedVendors);
+            this._selectedVendor.set(null);
+            this._currentConversation.set(null);
+            this._chatMembers.set([]);
+          }
+          observer.next(success);
+          observer.complete();
+        },
+        error: (error) => {
+          observer.error(error);
+        }
+      });
+    });
+  }
+
   // ==========================================
   // Mock API Methods (Replace with real API)
   // ==========================================
@@ -250,5 +363,64 @@ export class CarryService {
       success: true,
       message: newMessage
     }).pipe(delay(300));
+  }
+
+  /**
+   * Mock: GET /api/carry/chats/:vendorId/members
+   */
+  private getChatMembersApi(vendorId: string): Observable<ChatMember[]> {
+    const mockMembers: ChatMember[] = [
+      { id: 'member-1', name: '山田 太郎', initials: '山' },
+      { id: 'member-2', name: '田中 花子', initials: '田' },
+      { id: 'member-3', name: '鈴木 一郎', initials: '鈴' }
+    ];
+    return of(mockMembers).pipe(delay(200));
+  }
+
+  /**
+   * Mock: GET /api/carry/users/search?q=:query
+   */
+  private searchUsersApi(query: string): Observable<SearchableUser[]> {
+    const allUsers: SearchableUser[] = [
+      { id: 'user-1', name: '佐藤 健太', email: 'sato@example.com', initials: '佐' },
+      { id: 'user-2', name: '高橋 真由美', email: 'takahashi@example.com', initials: '高' },
+      { id: 'user-3', name: '渡辺 拓也', email: 'watanabe@example.com', initials: '渡' },
+      { id: 'user-4', name: '伊藤 美咲', email: 'ito@example.com', initials: '伊' },
+      { id: 'user-5', name: '中村 大輔', email: 'nakamura@example.com', initials: '中' }
+    ];
+
+    const filtered = allUsers.filter(
+      user =>
+        user.name.toLowerCase().includes(query.toLowerCase()) ||
+        user.email.toLowerCase().includes(query.toLowerCase())
+    );
+    return of(filtered).pipe(delay(300));
+  }
+
+  /**
+   * Mock: POST /api/carry/chats/:vendorId/members
+   */
+  private addMembersApi(vendorId: string, memberIds: string[]): Observable<AddMemberResponse> {
+    const currentMembers = this._chatMembers();
+    const newMembers: ChatMember[] = memberIds.map(id => {
+      const searchResult = this._searchResults().find(u => u.id === id);
+      return {
+        id,
+        name: searchResult?.name || 'Unknown',
+        initials: searchResult?.initials || '?'
+      };
+    });
+
+    return of({
+      success: true,
+      members: [...currentMembers, ...newMembers]
+    }).pipe(delay(500));
+  }
+
+  /**
+   * Mock: DELETE /api/carry/chats/:vendorId/exit
+   */
+  private exitChatApi(vendorId: string): Observable<boolean> {
+    return of(true).pipe(delay(300));
   }
 }

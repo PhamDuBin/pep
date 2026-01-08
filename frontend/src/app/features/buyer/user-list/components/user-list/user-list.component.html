@@ -64,3 +64,13 @@
   (close)="onCloseModal()"
   (confirm)="onConfirmDelete()"
 ></app-delete-confirm-modal>
+
+<!-- Invite Member Modal -->
+<app-invite-member-modal
+  [isOpen]="isInviteModalOpen()"
+  [modalType]="getInviteModalType()"
+  [isSaving]="isSaving()"
+  [existingEmails]="existingEmails()"
+  (close)="onCloseModal()"
+  (sendInvitation)="onConfirmInvite($event)"
+></app-invite-member-modal>
