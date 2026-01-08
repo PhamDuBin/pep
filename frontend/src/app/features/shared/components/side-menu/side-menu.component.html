@@ -7,7 +7,11 @@
   <!-- Top Section (Frame 14) -->
   <div class="flex flex-col items-start gap-[25px] self-stretch overflow-hidden">
     <!-- Menu Toggle -->
-    <div>
+    <div
+      class="flex flex-col gap-[3px] w-full"
+      [class.items-center]="isCollapsed()"
+      [class.items-start]="!isCollapsed()"
+    >
       <button class="hover:opacity-70 transition-opacity" (click)="toggleMenu()">
         <img src="assets/icons/menu-toggle.svg" alt="Menu" width="20" height="13" />
       </button>
@@ -23,7 +27,9 @@
         <div class="w-5 h-5 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
           <img src="assets/icons/plus.svg" alt="Plus" width="10" height="10" />
         </div>
-        <span class="text-[13px] text-text-dark whitespace-nowrap" [class.hidden]="isCollapsed()">新規プロジェクト作成</span>
+        <span class="text-[13px] text-text-dark whitespace-nowrap" [class.hidden]="isCollapsed()"
+          >新規プロジェクト作成</span
+        >
       </button>
     </div>
 
@@ -142,7 +148,8 @@
         [class.text-primary]="isUserListActive()"
         [class.text-text-dark]="!isUserListActive()"
         [class.hidden]="isCollapsed()"
-      >ユーザ一覧</span>
+        >ユーザ一覧</span
+      >
     </div>
 
     <!-- User Profile -->
@@ -157,7 +164,9 @@
       [class.px-[5px]]="isCollapsed()"
       (click)="navigateToMyPage()"
     >
-      <div class="w-[30px] h-[30px] bg-avatar-bg rounded-full flex items-center justify-center flex-shrink-0">
+      <div
+        class="w-[30px] h-[30px] bg-avatar-bg rounded-full flex items-center justify-center flex-shrink-0"
+      >
         <span class="text-[13px] text-white">TY</span>
       </div>
       <span
