@@ -1,10 +1,11 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ModalComponent } from '../../../../../shared/components/modal/modal.component';
 
 @Component({
   selector: 'app-delete-confirm-modal',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ModalComponent],
   templateUrl: './delete-confirm-modal.component.html',
   styleUrl: './delete-confirm-modal.component.scss'
 })
@@ -23,11 +24,5 @@ export class DeleteConfirmModalComponent {
 
   onConfirm(): void {
     this.confirm.emit();
-  }
-
-  onBackdropClick(event: MouseEvent): void {
-    if ((event.target as HTMLElement).classList.contains('modal-backdrop')) {
-      this.onClose();
-    }
   }
 }

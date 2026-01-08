@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserPermission, PermissionOption } from '../../../models/user-list.model';
 import { PERMISSION_OPTIONS, PERMISSION_LABELS } from '../../../constants/user-list.constant';
+import { ModalComponent } from '../../../../../shared/components/modal/modal.component';
 
 export interface PermissionTableRow {
   feature: string;
@@ -16,7 +17,7 @@ export interface PermissionTableRow {
 @Component({
   selector: 'app-permission-change-modal',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ModalComponent],
   templateUrl: './permission-change-modal.component.html',
   styleUrl: './permission-change-modal.component.scss'
 })
@@ -89,11 +90,5 @@ export class PermissionChangeModalComponent {
 
   onConfirm(): void {
     this.confirm.emit();
-  }
-
-  onBackdropClick(event: MouseEvent): void {
-    if ((event.target as HTMLElement).classList.contains('modal-backdrop')) {
-      this.onClose();
-    }
   }
 }

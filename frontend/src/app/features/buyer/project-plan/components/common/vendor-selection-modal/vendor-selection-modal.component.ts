@@ -2,17 +2,19 @@ import { Component, EventEmitter, Input, Output, OnChanges, SimpleChanges } from
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Vendor } from '../../../models/project-plan.model';
+import { ModalComponent } from '../../../../../shared/components/modal/modal.component';
 
 @Component({
   selector: 'app-vendor-selection-modal',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ModalComponent],
   templateUrl: './vendor-selection-modal.component.html',
   styleUrl: './vendor-selection-modal.component.scss'
 })
 export class VendorSelectionModalComponent implements OnChanges {
   @Input() isOpen = false;
   @Input() vendors: Vendor[] = [];
+  @Input() isLoading = false;
   @Output() send = new EventEmitter<Vendor[]>();
   @Output() close = new EventEmitter<void>();
 
@@ -62,11 +64,5 @@ export class VendorSelectionModalComponent implements OnChanges {
 
   onClose(): void {
     this.close.emit();
-  }
-
-  onBackdropClick(event: MouseEvent): void {
-    if (event.target === event.currentTarget) {
-      this.onClose();
-    }
   }
 }

@@ -1,81 +1,40 @@
-.modal-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
+// Custom styles for delete confirm modal
+// Override shared modal styles to match original design
 
-.modal-container {
-  position: relative;
-  width: 500px;
-  background: white;
-  border-radius: 12px;
-  padding: 20px 35px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 25px;
-  overflow: hidden;
-}
+:host ::ng-deep {
+  .delete-confirm-modal {
+    padding: 20px 35px;
+    gap: 25px;
 
-.close-btn {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 40px;
-  height: 40px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
+    .modal-title {
+      font-size: 20px;
+    }
 
-  svg {
-    width: 40px;
-    height: 40px;
+    .modal-body {
+      padding: 0 35px;
+      gap: 25px;
+    }
 
-    path {
-      stroke: #9ca3af;
-      transition: stroke 0.2s ease;
+    .modal-actions {
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
     }
   }
 
-  &:hover svg path {
-    stroke: #666;
+  .modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.1);
   }
 }
 
-.modal-content {
+.actions-row {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: center;
   align-items: center;
-  gap: 25px;
-  padding: 0 35px;
-  width: 100%;
-}
-
-.modal-title {
-  font-family: 'Noto Sans JP', sans-serif;
-  font-weight: 400;
-  font-size: 20px;
-  line-height: normal;
-  color: #066a9e;
-  margin: 0;
-}
-
-.modal-body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
 }
 
 .modal-text-container {
@@ -90,12 +49,6 @@
   color: #000000;
   text-align: center;
   margin: 0;
-}
-
-.modal-actions {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
 }
 
 .btn-primary {

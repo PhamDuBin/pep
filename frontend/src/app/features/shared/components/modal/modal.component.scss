@@ -1,0 +1,283 @@
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modal-container {
+  position: relative;
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  animation: slideIn 0.2s ease-out;
+  max-height: 90vh;
+  overflow-y: auto;
+
+  // Size variants
+  &.modal-sm {
+    min-width: 400px;
+    max-width: 400px;
+  }
+
+  &.modal-md {
+    min-width: 500px;
+    max-width: 500px;
+  }
+
+  &.modal-lg {
+    min-width: 700px;
+    max-width: 700px;
+  }
+
+  &.modal-xl {
+    min-width: 800px;
+    max-width: 800px;
+  }
+}
+
+.close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  color: #9ca3af;
+  transition: color 0.2s ease;
+  border-radius: 4px;
+
+  &:hover {
+    color: #666;
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  &:focus {
+    outline: 2px solid #066a9e;
+    outline-offset: 2px;
+  }
+}
+
+.modal-title {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: normal;
+  color: #066a9e;
+  margin: 0;
+  text-align: center;
+  padding-right: 24px; // Space for close button
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+
+  // Empty state - hide if no content
+  &:empty {
+    display: none;
+  }
+}
+
+.modal-actions {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+
+  // Empty state - hide if no content
+  &:empty {
+    display: none;
+  }
+}
+
+.modal-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+}
+
+// Animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+// Button styles that can be used in modal actions
+// These are global utility classes for modal buttons
+:host {
+  // Primary button (dark background)
+  ::ng-deep .modal-btn-primary {
+    padding: 10px 20px;
+    background-color: #333333;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    min-width: 80px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    &:hover:not(:disabled) {
+      background-color: #444444;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  // Secondary button (gray background)
+  ::ng-deep .modal-btn-secondary {
+    padding: 10px 20px;
+    background-color: #e1e1e1;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    color: #333333;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    min-width: 80px;
+
+    &:hover:not(:disabled) {
+      background-color: #d0d0d0;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  // Outline button (border only)
+  ::ng-deep .modal-btn-outline {
+    padding: 10px 20px;
+    background-color: transparent;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    color: #333333;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 80px;
+
+    &:hover:not(:disabled) {
+      background-color: #f9fafb;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  // Danger button (for delete actions)
+  ::ng-deep .modal-btn-danger {
+    padding: 10px 20px;
+    background-color: #dc2626;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    min-width: 80px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    &:hover:not(:disabled) {
+      background-color: #b91c1c;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  // Primary color button (blue)
+  ::ng-deep .modal-btn-primary-color {
+    padding: 10px 20px;
+    background-color: #066a9e;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    min-width: 80px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    &:hover:not(:disabled) {
+      opacity: 0.9;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}

@@ -1,63 +1,31 @@
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
+// Custom styles for avatar change modal to match original design
+:host ::ng-deep {
+  .avatar-change-modal {
+    padding: 20px 35px;
+    gap: 25px;
+    width: 500px;
 
-.modal-content {
-  position: relative;
-  background-color: white;
-  border-radius: 12px;
-  padding: 20px 35px;
-  width: 500px;
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-  align-items: center;
-  overflow: hidden;
-  max-width: 90vw;
-}
+    .modal-title {
+      font-size: 20px;
+    }
 
-.btn-close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    .modal-body {
+      padding: 0 35px;
+      gap: 25px;
+    }
 
-  &:hover {
-    opacity: 0.7;
+    .modal-actions {
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+    }
   }
-}
 
-.modal-body {
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-  align-items: center;
-  padding: 0 35px;
-  width: 100%;
-}
-
-.modal-title {
-  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
-  font-weight: 400;
-  font-size: 20px;
-  color: #066a9e;
-  margin: 0;
-  text-align: center;
+  .modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
 }
 
 .color-options {
@@ -85,15 +53,10 @@
   }
 }
 
-.modal-actions {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-}
-
 .btn-primary {
   display: flex;
   align-items: center;
+  justify-content: center;
   padding: 10px 15px;
   background-color: #333;
   border: none;
@@ -118,6 +81,7 @@
 .btn-secondary {
   display: flex;
   align-items: center;
+  justify-content: center;
   padding: 10px 15px;
   background-color: #e1e1e1;
   border: none;

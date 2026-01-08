@@ -1,69 +1,38 @@
-.modal-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
+// Custom styles for permission change modal to match original design
+:host ::ng-deep {
+  .permission-change-modal {
+    width: 800px;
+    padding: 20px 35px;
+    gap: 25px;
 
-.modal-container {
-  position: relative;
-  width: 800px;
-  background: white;
-  border-radius: 12px;
-  padding: 20px 35px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 25px;
-  overflow: hidden;
-}
+    .modal-title {
+      font-size: 20px;
+    }
 
-// Close button
-.close-btn {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  width: 24px;
-  height: 24px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  z-index: 10;
+    .modal-body {
+      gap: 25px;
+    }
 
-  svg path {
-    transition: stroke 0.2s ease;
+    .modal-actions {
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+    }
   }
 
-  &:hover svg path {
-    stroke: #666;
+  .modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.1);
   }
 }
 
-.modal-content {
+.actions-row {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: center;
   align-items: center;
-  gap: 25px;
-  width: 100%;
-}
-
-.modal-title {
-  font-family: 'Noto Sans JP', sans-serif;
-  font-weight: 400;
-  font-size: 20px;
-  line-height: normal;
-  color: #066a9e;
-  margin: 0;
 }
 
 .modal-text {
@@ -156,16 +125,16 @@
   }
 }
 
-// Save button matching Figma
+// Save button - PRIMARY BLUE color matching Figma
 .btn-save {
   padding: 10px 15px;
-  background-color: #066a9e;
+  background-color: #066a9e !important;
   border: none;
   border-radius: 8px;
   font-family: 'Noto Sans JP', sans-serif;
   font-weight: 400;
   font-size: 14px;
-  color: white;
+  color: white !important;
   cursor: pointer;
   transition: background-color 0.2s ease;
   min-width: 80px;
@@ -174,7 +143,7 @@
   justify-content: center;
 
   &:hover:not(:disabled) {
-    background-color: #055a85;
+    background-color: #055a85 !important;
   }
 
   &:disabled {

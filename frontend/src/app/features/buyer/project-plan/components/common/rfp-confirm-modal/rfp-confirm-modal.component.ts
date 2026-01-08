@@ -1,10 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ModalComponent } from '../../../../../shared/components/modal/modal.component';
 
 @Component({
   selector: 'app-rfp-confirm-modal',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ModalComponent],
   templateUrl: './rfp-confirm-modal.component.html',
   styleUrl: './rfp-confirm-modal.component.scss'
 })
@@ -24,11 +25,5 @@ export class RfpConfirmModalComponent {
 
   onClose(): void {
     this.close.emit();
-  }
-
-  onBackdropClick(event: MouseEvent): void {
-    if (event.target === event.currentTarget) {
-      this.onClose();
-    }
   }
 }
