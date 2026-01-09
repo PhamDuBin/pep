@@ -110,3 +110,9 @@
 <app-edit-success-modal [isOpen]="showEditSuccessModal()" [userName]="editedUserName()" [newRole]="editedUserRole()"
     (close)="onCloseEditSuccess()">
 </app-edit-success-modal>
+
+<app-invite-member-modal [isOpen]="showInviteModal()" (invite)="onInviteConfirm($event)" (cancel)="onInviteCancel()">
+</app-invite-member-modal>
+
+<app-invite-success-modal [isOpen]="showInviteSuccessModal()" (close)="onCloseInviteSuccess()">
+</app-invite-success-modal>
