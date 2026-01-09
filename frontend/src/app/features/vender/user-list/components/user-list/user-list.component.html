@@ -25,13 +25,13 @@
                     <th class="border-t border-[#D4D4D4]">
                         <div class="flex flex-row items-start p-[15px_12px]">
                             <span
-                                class="font-inter font-semibold text-[14px] leading-[130%] text-center text-black">ユーザー</span>
+                                class="font-inter font-semibold text-[14px] leading-[130%] text-center text-[#333333]">ユーザー</span>
                         </div>
                     </th>
                     <th class="w-[120px] border-t border-[#D4D4D4] hidden md:table-cell">
                         <div class="flex flex-row justify-center items-start p-[15px_12px]">
                             <span
-                                class="font-inter font-semibold text-[14px] leading-[130%] text-center text-black">権限</span>
+                                class="font-inter font-semibold text-[14px] leading-[130%] text-center text-[#333333]">権限</span>
                         </div>
                     </th>
                     <th class="border-t border-[#D4D4D4]">
@@ -42,7 +42,7 @@
             <!-- Table Body -->
             <tbody>
                 @for (user of users(); track user.id) {
-                                                                                                                                                            <tr class="h-[70px] hover:bg-gray-50 transition-colors cursor-pointer"
+                <tr class="h-[70px] hover:bg-gray-50 transition-colors cursor-pointer"
                     (click)="toggleUserSelection(user)">
                     <!-- Checkbox Cell -->
                     <td class="w-[44px] bg-white/[0.002] border-t border-l border-[#CFCFCF] hidden sm:table-cell">
@@ -57,7 +57,7 @@
                             class="flex flex-col sm:flex-row items-start sm:items-center p-[15px_12px] gap-[10px] sm:gap-[15px]">
                             <div class="w-[40px] h-[40px] bg-[#8EC5D0] rounded-full flex-shrink-0"></div>
                             <div class="flex flex-col gap-[2px]">
-                                <span class="font-noto-jp font-medium text-[14px] leading-[130%] text-black">{{
+                                <span class="font-noto-jp font-medium text-[14px] leading-[130%] text-[#333333]">{{
                                     user.name }}</span>
                                 <!-- Show role on mobile (hidden on desktop) -->
                                 <span
@@ -69,7 +69,8 @@
                     <!-- Permission Cell - Hidden on mobile -->
                     <td class="w-[120px] bg-white/[0.002] border-t border-[#D4D4D4] hidden md:table-cell">
                         <div class="flex flex-row justify-center items-center p-[15px_12px]">
-                            <span class="font-noto-jp font-medium text-[14px] leading-[130%] text-center text-black">{{
+                            <span
+                                class="font-noto-jp font-medium text-[14px] leading-[130%] text-center text-[#333333]">{{
                                 user.role }}</span>
                         </div>
                     </td>

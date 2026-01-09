@@ -11,10 +11,11 @@ module.exports = {
         'border-gray': '#B9B9B9',
         'border-light': '#E1E1E1',
         'avatar-bg': '#8EC5D0',
-        'text-black': '#000000',
       },
       fontFamily: {
         'noto': ['Noto Sans', 'sans-serif'],
+        'noto-jp': ['Noto Sans JP', 'sans-serif'],
+        'inter': ['Inter', 'sans-serif'],
       },
       boxShadow: {
         'header': '0px 4px 15px rgba(0, 0, 0, 0.05)',
