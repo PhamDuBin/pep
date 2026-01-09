@@ -7,6 +7,8 @@ import { DeleteConfirmationModalComponent } from "../common/delete-confirmation-
 import { DeleteSuccessModalComponent } from "../common/delete-success-modal/delete-success-modal.component";
 import { EditUserModalComponent } from "../common/edit-user-modal/edit-user-modal.component";
 import { EditSuccessModalComponent } from "../common/edit-success-modal/edit-success-modal.component";
+import { InviteMemberModalComponent } from "../common/invite-member-modal/invite-member-modal.component";
+import { InviteSuccessModalComponent } from "../common/invite-success-modal/invite-success-modal.component";
 import { SidebarService } from "../../../shared/services/sidebar.service";
 
 @Component({
@@ -18,7 +20,9 @@ import { SidebarService } from "../../../shared/services/sidebar.service";
         DeleteConfirmationModalComponent,
         DeleteSuccessModalComponent,
         EditUserModalComponent,
-        EditSuccessModalComponent
+        EditSuccessModalComponent,
+        InviteMemberModalComponent,
+        InviteSuccessModalComponent
     ],
     templateUrl: './user-list.component.html',
     styleUrl: './user-list.component.scss'
@@ -40,6 +44,8 @@ export class UserListComponent {
     showDeleteSuccessModal = signal(false);
     showEditModal = signal(false);
     showEditSuccessModal = signal(false);
+    showInviteModal = signal(false);
+    showInviteSuccessModal = signal(false);
 
     // Modal data
     selectedUserForEdit = signal<User | null>(null);
@@ -58,8 +64,25 @@ export class UserListComponent {
 
     // Invite member action
     onInviteMember(): void {
-        console.log('Invite member clicked');
-        // TODO: Open invite modal
+        this.showInviteModal.set(true);
+    }
+
+    // Handle invite confirmation
+    onInviteConfirm(emails: string[]): void {
+        console.log('Inviting members:', emails);
+        // TODO: Call service to send invitations
+        this.showInviteModal.set(false);
+        this.showInviteSuccessModal.set(true);
+    }
+
+    // Handle invite cancel
+    onInviteCancel(): void {
+        this.showInviteModal.set(false);
+    }
+
+    // Close invite success modal
+    onCloseInviteSuccess(): void {
+        this.showInviteSuccessModal.set(false);
     }
 
     // Edit user action
