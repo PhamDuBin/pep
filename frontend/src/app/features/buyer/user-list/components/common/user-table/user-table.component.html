@@ -17,7 +17,7 @@
           </label>
         </th>
         }
-        <th class="user-cell header-cell">ユーザー</th>
+        <th class="user-cell flex justify-center">ユーザー</th>
         <th class="permission-cell header-cell">権限</th>
         <th class="action-cell header-cell"></th>
       </tr>
@@ -52,9 +52,7 @@
           <span class="permission-text">{{ getPermissionLabel(user.permission) }}</span>
         </td>
         <td class="action-cell">
-          <button class="change-btn" (click)="onChangePermission(user.id)">
-            変更
-          </button>
+          <button class="change-btn" (click)="onChangePermission(user.id)">変更</button>
         </td>
       </tr>
       }

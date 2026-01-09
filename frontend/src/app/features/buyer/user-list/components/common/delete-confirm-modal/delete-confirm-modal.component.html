@@ -14,18 +14,12 @@
     </div>
 
     <div modal-actions class="actions-row">
-      <button
-        class="btn-primary"
-        [disabled]="isSaving"
-        (click)="onConfirm()"
-      >
+      <button class="btn-secondary" (click)="onClose()">キャンセル</button>
+      <button class="btn-primary" [disabled]="isSaving" (click)="onConfirm()">
         @if (isSaving) {
         <span class="loading loading-spinner loading-sm"></span>
-        } @else {
-        削除
-        }
+        } @else { 削除 }
       </button>
-      <button class="btn-secondary" (click)="onClose()">キャンセル</button>
     </div>
   </ng-container>
   } @else {

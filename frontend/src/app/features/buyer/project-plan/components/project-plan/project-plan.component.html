@@ -15,7 +15,7 @@
           class="chat-list-auto-height"
           [messages]="messages()"
           [isLoading]="isLoading()"
-          messageVariant="with-avatar"
+          messageVariant="minimal"
           [charsPerFrame]="1"
           [typingSpeed]="15"
           [useInternalScroll]="false"
@@ -24,7 +24,7 @@
 
         <!-- PDF Preview (shown after AI generates plan) - below answer -->
         @if (showPdfPreview()) {
-        <div class="pdf-preview-wrapper mt-6 ml-[53px]">
+        <div class="pdf-preview-wrapper mt-6">
           <app-shared-pdf-preview
             [pages]="pdfPages()"
             [completedCount]="5"
