@@ -42,11 +42,13 @@
             <!-- Table Body -->
             <tbody>
                 @for (user of users(); track user.id) {
-                <tr class="h-[70px] hover:bg-gray-50 transition-colors">
+                                                                                                                                                            <tr class="h-[70px] hover:bg-gray-50 transition-colors cursor-pointer"
+                    (click)="toggleUserSelection(user)">
                     <!-- Checkbox Cell -->
                     <td class="w-[44px] bg-white/[0.002] border-t border-l border-[#CFCFCF] hidden sm:table-cell">
                         <div class="flex flex-row items-start p-[10px_12px]">
-                            <input type="checkbox" [checked]="user.selected" (change)="toggleUserSelection(user)" />
+                            <input type="checkbox" [checked]="user.selected" (change)="toggleUserSelection(user)"
+                                (click)="$event.stopPropagation()" />
                         </div>
                     </td>
                     <!-- User Cell -->
@@ -74,7 +76,7 @@
                     <!-- Action Cell -->
                     <td class="bg-white/[0.002] border-t border-[#D4D4D4]">
                         <div class="flex flex-row justify-center items-center p-[10px_12px] gap-[15px]">
-                            <button type="button" (click)="onEditUser(user)"
+                            <button type="button" (click)="onEditUser(user); $event.stopPropagation()"
                                 class="flex flex-row items-center px-[15px] py-[10px] gap-[10px] h-[39px] bg-[#E1E1E1] rounded-[8px] border-none cursor-pointer hover:bg-[#D1D1D1] transition-colors">
                                 <span class="font-noto font-normal text-[14px] leading-[19px] text-[#333333]">変更</span>
                             </button>
