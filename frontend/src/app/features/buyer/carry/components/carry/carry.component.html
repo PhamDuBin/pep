@@ -10,7 +10,7 @@
     <div class="project-header">
       <p class="project-name">{{ projectName() }}</p>
       <!-- Document Stack Icon -->
-      <div class="document-icon">
+      <button type="button" class="document-icon" (click)="onProjectPlanClick()">
         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="none">
           <path
             fill-rule="evenodd"
@@ -27,7 +27,7 @@
             stroke-linejoin="round"
           />
         </svg>
-      </div>
+      </button>
     </div>
 
     <!-- Vendor Message List -->
@@ -64,3 +64,9 @@
   (search)="onSearchMembers($event)"
   (addMembers)="onAddMembers($event)"
 ></app-add-member-modal>
+
+<!-- Project Plan Modal -->
+<app-project-plan-modal
+  [isOpen]="isProjectPlanModalOpen"
+  (close)="onCloseProjectPlanModal()"
+></app-project-plan-modal>
