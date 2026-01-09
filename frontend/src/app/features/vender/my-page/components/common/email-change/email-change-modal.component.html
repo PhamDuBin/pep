@@ -1,0 +1,77 @@
+@if (isOpen) {
+<div class="modal-backdrop fixed inset-0 bg-black/10 flex items-center justify-center z-50"
+    (click)="onBackdropClick($event)">
+    <!-- Modal Content -->
+    <div class="relative bg-white rounded-xl shadow-xl p-[20px_35px] w-[674px] flex flex-col items-center gap-[25px]">
+
+        <!-- Close Button (Outside modal, top-right) -->
+        <button type="button"
+            class="absolute -top-[20px] -right-[20px] w-[40px] h-[40px] bg-[#F5F5F5] rounded-full flex items-center justify-center hover:bg-[#E5E5E5] transition-colors"
+            (click)="onClose()">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M5 5.579L0.709846 9.86915C0.633519 9.94548 0.539745 9.98637 0.428524 9.99182C0.317304 9.99727 0.218079 9.95638 0.130847 9.86915C0.0436156 9.78192 0 9.68542 0 9.57965C0 9.47388 0.0436156 9.37739 0.130847 9.29015L4.421 5L0.130847 0.709846C0.0545195 0.633519 0.0136297 0.539745 0.00817775 0.428524C0.00272578 0.317304 0.0436156 0.218079 0.130847 0.130847C0.218079 0.0436156 0.314578 0 0.420347 0C0.526115 0 0.622615 0.0436156 0.709846 0.130847L5 4.421L9.29015 0.130847C9.36648 0.0545195 9.46053 0.0136297 9.57229 0.00817775C9.68297 0.00272578 9.78192 0.0436156 9.86915 0.130847C9.95638 0.218079 10 0.314578 10 0.420347C10 0.526115 9.95638 0.622615 9.86915 0.709846L5.579 5L9.86915 9.29015C9.94548 9.36648 9.98637 9.46053 9.99182 9.57229C9.99727 9.68297 9.95638 9.78192 9.86915 9.86915C9.78192 9.95638 9.68542 10 9.57965 10C9.47388 10 9.37739 9.95638 9.29015 9.86915L5 5.579Z"
+                    fill="#333333" />
+            </svg>
+        </button>
+
+        <!-- Content Container -->
+        <div class="flex flex-col items-center gap-[25px] w-[604px]">
+            <!-- Title -->
+            <h2 class="font-noto text-[20px] leading-[27px] text-primary">
+                メールアドレスを変更
+            </h2>
+
+            <!-- Form Container -->
+            <div class="flex flex-col items-center gap-[25px] w-[534px]">
+                <!-- Instruction Text -->
+                <p class="font-noto-jp font-medium text-[14px] leading-[130%] text-center text-[#000000]">
+                    新しいメールアドレス入力してください。<br>メールアドレス再設定用URLを送信します。
+                </p>
+
+                <!-- Input Fields -->
+                <div class="flex flex-col items-start gap-[10px] w-full">
+                    <!-- New Email Field -->
+                    <div class="flex flex-row items-center gap-[10px] w-full">
+                        <label class="w-[224px] font-noto text-[16px] leading-[22px] text-[#000000]">
+                            新しいメールアドレス
+                        </label>
+                        <input type="email" [(ngModel)]="newEmail" placeholder="メールアドレス"
+                            class="w-[300px] h-[35px] px-[10px] py-[3px] bg-white border border-[#B9B9B9] rounded font-noto text-[16px] leading-[22px] text-[#000000] placeholder:text-[#808080]" />
+                    </div>
+
+                    <!-- Confirm Email Field -->
+                    <div class="flex flex-row items-center gap-[10px] w-full">
+                        <label class="w-[224px] font-noto text-[16px] leading-[22px] text-[#000000]">
+                            新しいメールアドレス（確認）
+                        </label>
+                        <input type="email" [(ngModel)]="confirmEmail" placeholder="メールアドレス"
+                            class="w-[300px] h-[35px] px-[10px] py-[3px] bg-white border border-[#B9B9B9] rounded font-noto text-[16px] leading-[22px] text-[#000000] placeholder:text-[#808080]" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Message -->
+        @if (errorMessage) {
+        <div class="w-full px-4 py-2 bg-red-50 border border-red-200 rounded">
+            <p class="font-noto text-[12px] text-red-600 text-center">{{ errorMessage }}</p>
+        </div>
+        }
+
+        <!-- Action Buttons -->
+        <div class="flex flex-row items-start gap-[10px]">
+            <button type="button"
+                class="px-[15px] py-[10px] bg-[#333333] hover:bg-[#222222] text-white rounded-lg font-noto text-[14px] leading-[19px] transition-colors"
+                (click)="onSave()">
+                メールを送信
+            </button>
+            <button type="button"
+                class="px-[15px] py-[10px] bg-[#E1E1E1] hover:bg-[#D1D1D1] text-[#333333] rounded-lg font-noto text-[14px] leading-[19px] transition-colors"
+                (click)="onClose()">
+                閉じる
+            </button>
+        </div>
+    </div>
+</div>
+}
