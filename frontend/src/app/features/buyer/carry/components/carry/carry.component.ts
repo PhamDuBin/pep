@@ -4,7 +4,11 @@ import { Router } from '@angular/router';
 import { TabNavigationComponent } from '../../../../shared/components/tab-navigation/tab-navigation.component';
 import { VendorMessageListComponent } from '../common/vendor-message-list/vendor-message-list.component';
 import { VendorChatComponent } from '../common/vendor-chat/vendor-chat.component';
-import { AddMemberModalComponent, AddMemberModalState } from '../common/add-member-modal/add-member-modal.component';
+import {
+  AddMemberModalComponent,
+  AddMemberModalState,
+} from '../common/add-member-modal/add-member-modal.component';
+import { ProjectPlanModalComponent } from '../common/project-plan-modal/project-plan-modal.component';
 import { CarryService } from '../../services/carry.service';
 import { VendorContact, SearchableUser } from '../../models/carry.model';
 import { Tab } from '../../../home/models/tab.model';
@@ -17,10 +21,11 @@ import { Tab } from '../../../home/models/tab.model';
     TabNavigationComponent,
     VendorMessageListComponent,
     VendorChatComponent,
-    AddMemberModalComponent
+    AddMemberModalComponent,
+    ProjectPlanModalComponent,
   ],
   templateUrl: './carry.component.html',
-  styleUrl: './carry.component.scss'
+  styleUrl: './carry.component.scss',
 })
 export class CarryComponent implements OnInit, OnDestroy {
   // Tab configuration matching Figma design
@@ -58,11 +63,9 @@ export class CarryComponent implements OnInit, OnDestroy {
   isAddMemberModalOpen = false;
   addMemberModalState: AddMemberModalState = 'search';
   isAddingMembers = false;
+  isProjectPlanModalOpen = false;
 
-  constructor(
-    private carryService: CarryService,
-    private router: Router
-  ) {}
+  constructor(private carryService: CarryService, private router: Router) {}
 
   ngOnInit(): void {
     // Service loads vendors in constructor
@@ -74,9 +77,9 @@ export class CarryComponent implements OnInit, OnDestroy {
   }
 
   onTabChange(tab: Tab): void {
-    this.tabs = this.tabs.map(t => ({
+    this.tabs = this.tabs.map((t) => ({
       ...t,
-      isActive: t.id === tab.id
+      isActive: t.id === tab.id,
     }));
 
     if (tab.id === 'kick') {
@@ -91,7 +94,7 @@ export class CarryComponent implements OnInit, OnDestroy {
       },
       error: (error) => {
         console.error('Error sending message:', error);
-      }
+      },
     });
   }
 
@@ -115,7 +118,7 @@ export class CarryComponent implements OnInit, OnDestroy {
       },
       error: (error) => {
         console.error('Error exiting chat:', error);
-      }
+      },
     });
   }
 
@@ -149,7 +152,15 @@ export class CarryComponent implements OnInit, OnDestroy {
       error: (error) => {
         this.isAddingMembers = false;
         console.error('Error adding members:', error);
-      }
+      },
     });
+  }
+
+  onProjectPlanClick(): void {
+    this.isProjectPlanModalOpen = true;
+  }
+
+  onCloseProjectPlanModal(): void {
+    this.isProjectPlanModalOpen = false;
   }
 }

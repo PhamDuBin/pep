@@ -1,0 +1,25 @@
+<app-modal
+  [isOpen]="isOpen"
+  title="プロジェクト計画書"
+  size="lg"
+  customClass="project-plan-modal"
+  [isLoading]="isLoading"
+  (closed)="onClose()"
+>
+  <div class="modal-content">
+    <!-- PDF Preview Section -->
+    <div class="flex flex-col h-96 gap-4 border border-border-gray rounded-lg overflow-auto">
+      <div class="w-full min-h-[300px] bg-gray-100 flex-shrink-0">
+        <img [src]="previewImages[0]" alt="PDF Preview" class="w-full h-full object-cover" />
+      </div>
+      <div class="w-full min-h-[300px] bg-gray-100 flex-shrink-0">
+        <img [src]="previewImages[1]" alt="PDF Preview" class="w-full h-full object-cover" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Close Button -->
+  <div modal-actions class="action-buttons">
+    <button type="button" class="btn-close" (click)="onClose()">閉じる</button>
+  </div>
+</app-modal>

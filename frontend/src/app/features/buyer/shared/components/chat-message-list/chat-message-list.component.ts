@@ -26,6 +26,7 @@ export class SharedChatMessageListComponent implements OnChanges {
 
   private shouldScrollToBottom = true;
   private scrollThrottleTimer: ReturnType<typeof setTimeout> | null = null;
+  private previousMessageCount = 0;
 
   constructor(private ngZone: NgZone) {}
 
@@ -33,7 +34,18 @@ export class SharedChatMessageListComponent implements OnChanges {
     if (changes['messages'] || changes['isLoading']) {
       this.contentChanged.emit();
 
-      if (this.useInternalScroll && this.shouldScrollToBottom) {
+      // Check if new messages were added (force scroll to bottom)
+      const currentMessageCount = this.messages?.length || 0;
+      const messagesAdded = currentMessageCount > this.previousMessageCount;
+      this.previousMessageCount = currentMessageCount;
+
+      // Force scroll to bottom when new messages are added OR when already at bottom
+      if (this.useInternalScroll && (messagesAdded || this.shouldScrollToBottom)) {
+        // Reset shouldScrollToBottom when new messages arrive
+        if (messagesAdded) {
+          this.shouldScrollToBottom = true;
+        }
+
         // Use requestAnimationFrame for smooth scrolling
         this.ngZone.runOutsideAngular(() => {
           requestAnimationFrame(() => {

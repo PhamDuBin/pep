@@ -50,10 +50,10 @@
 
 .close-btn {
   position: absolute;
-  top: 16px;
-  right: 16px;
-  width: 32px;
-  height: 32px;
+  top: 10px;
+  right: 10px;
+  width: 24px;
+  height: 24px;
   background: none;
   border: none;
   cursor: pointer;
@@ -61,18 +61,16 @@
   align-items: center;
   justify-content: center;
   padding: 0;
-  color: #9ca3af;
+  color: #808080;
   transition: color 0.2s ease;
   border-radius: 4px;
 
   &:hover {
-    color: #666;
-    background-color: rgba(0, 0, 0, 0.05);
+    color: #333;
   }
 
   &:focus {
-    outline: 2px solid #066a9e;
-    outline-offset: 2px;
+    outline: none;
   }
 }
 

@@ -8,11 +8,11 @@
   <!-- Vendor List -->
   <div class="text-center space-y-2">
     @for (row of getVendorRows(); track $index) {
-      <div class="flex justify-center gap-4">
-        @for (vendor of row; track vendor.id) {
-          <span class="text-[14px] text-text-dark">{{ vendor.name }}</span>
-        }
-      </div>
+    <div class="flex justify-center gap-4">
+      @for (vendor of row; track vendor.id) {
+      <span class="text-[14px] text-text-dark">{{ vendor.name }}</span>
+      }
+    </div>
     }
   </div>
 
@@ -27,7 +27,7 @@
     </button>
     <button
       type="button"
-      class="px-6 py-2 border border-border-gray rounded-lg text-[14px] text-text-dark hover:bg-gray-50 transition-colors"
+      class="px-6 py-2 border bg-[#E1E1E1] border-border-gray rounded-lg text-[14px] text-text-dark hover:bg-gray-50 transition-colors"
       (click)="onClose()"
     >
       閉じる

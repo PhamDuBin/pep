@@ -47,27 +47,31 @@
 
 // Radio button styles matching Figma
 .radio-circle {
-  width: 20px;
-  height: 20px;
-  border: 1px solid #e5e7eb;
-  border-radius: 9999px;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #B9B9B9;
+  border-radius: 50%;
   background-color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2px;
-  transition: border-color 0.2s ease;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
 
   &.selected {
-    border-color: #1f2937;
+    border-color: #333333;
+  }
+
+  &:hover {
+    border-color: #333333;
   }
 }
 
 .radio-dot {
-  width: 81.25%;
-  height: 81.25%;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  background-color: #1f2937;
+  background-color: #333333;
 }
 
 // Permission Table styles matching Figma

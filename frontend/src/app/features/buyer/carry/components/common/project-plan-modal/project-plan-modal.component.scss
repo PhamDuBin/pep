@@ -1,0 +1,42 @@
+// Custom styles for project plan modal to match original design
+:host ::ng-deep {
+  .project-plan-modal {
+    padding: 32px;
+    max-height: 80vh;
+    overflow-y: auto;
+
+    .modal-title {
+      font-size: 18px;
+      margin-bottom: 24px;
+      color: #066a9e;
+    }
+
+    .modal-body {
+      margin-bottom: 24px;
+    }
+  }
+}
+
+// Action Buttons
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-close {
+  padding: 10px 30px;
+  background-color: #e1e1e1;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #d0d0d0;
+  }
+}

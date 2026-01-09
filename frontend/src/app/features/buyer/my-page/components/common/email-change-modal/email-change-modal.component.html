@@ -41,6 +41,7 @@
     </div>
 
     <div modal-actions class="actions-row">
+      <button class="btn-secondary" type="button" (click)="onClose()">キャンセル</button>
       <button class="btn-primary" type="button" [disabled]="isSaving" (click)="onSendEmail()">
         @if (isSaving) {
           <span class="btn-spinner"></span>
@@ -48,7 +49,6 @@
           メールを送信
         }
       </button>
-      <button class="btn-secondary" type="button" (click)="onClose()">閉じる</button>
     </div>
   </ng-container>
   } @else if (modalType === 'email-sent') {
