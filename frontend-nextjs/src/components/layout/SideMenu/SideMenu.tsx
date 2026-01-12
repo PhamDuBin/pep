@@ -2,10 +2,81 @@
 
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 import { useSideMenu } from "@/contexts/SideMenuContext";
 import { useProjects } from "@/contexts/ProjectContext";
 import { Project } from "@/types";
 import styles from "./SideMenu.module.scss";
+
+// Animation variants - width values must match _tokens.scss
+const SIDEBAR_WIDTH = 197; // $sidebar-width in _tokens.scss
+const SIDEBAR_COLLAPSED_WIDTH = 50; // $sidebar-collapsed-width in _tokens.scss
+
+const sidebarVariants = {
+  expanded: {
+    width: SIDEBAR_WIDTH,
+    transition: {
+      duration: 0.3,
+      ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number],
+      when: "beforeChildren",
+      staggerChildren: 0.05,
+    },
+  },
+  collapsed: {
+    width: SIDEBAR_COLLAPSED_WIDTH,
+    transition: {
+      duration: 0.3,
+      ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number],
+      when: "afterChildren",
+      staggerChildren: 0.03,
+      staggerDirection: -1,
+    },
+  },
+};
+
+const textVariants = {
+  visible: {
+    opacity: 1,
+    x: 0,
+    display: "inline",
+    transition: {
+      duration: 0.2,
+      ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number],
+    },
+  },
+  hidden: {
+    opacity: 0,
+    x: -10,
+    transitionEnd: {
+      display: "none",
+    },
+    transition: {
+      duration: 0.15,
+    },
+  },
+};
+
+const menuItemVariants = {
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.2,
+    },
+  },
+  hidden: {
+    opacity: 0,
+    y: -5,
+    transition: {
+      duration: 0.15,
+    },
+  },
+};
+
+const toggleIconVariants = {
+  expanded: { rotate: 0 },
+  collapsed: { rotate: 180 },
+};
 
 interface SideMenuProps {
   onProjectSelected?: (project: Project) => void;
@@ -47,157 +118,213 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
   };
 
   return (
-    <aside
+    <motion.aside
       className={`${styles.sidebar} ${isCollapsed ? styles.collapsed : styles.expanded}`}
+      variants={sidebarVariants}
+      animate={isCollapsed ? "collapsed" : "expanded"}
+      initial={false}
     >
       {/* Top Section (Frame 14) */}
       <div className={styles.topSection}>
         {/* Menu Toggle */}
         <div className={`${styles.menuToggle} ${isCollapsed ? styles.centered : ""}`}>
-          <button className={styles.toggleButton} onClick={handleToggleMenu}>
-            <Image
-              src="/icons/menu-toggle.svg"
-              alt="Menu"
-              width={20}
-              height={13}
-            />
-          </button>
+          <motion.button
+            className={styles.toggleButton}
+            onClick={handleToggleMenu}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <motion.div
+              variants={toggleIconVariants}
+              animate={isCollapsed ? "collapsed" : "expanded"}
+              transition={{ duration: 0.3 }}
+            >
+              <Image
+                src="/icons/menu-toggle.svg"
+                alt="Menu"
+                width={20}
+                height={13}
+              />
+            </motion.div>
+          </motion.button>
         </div>
 
         {/* New Project Button */}
         <div className={styles.newProjectWrapper}>
-          <button
+          <motion.button
             className={`${styles.newProjectButton} ${isCollapsed ? styles.centered : ""}`}
             onClick={navigateToNewProject}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
           >
             <div className={styles.plusIcon}>
               <Image src="/icons/plus.svg" alt="Plus" width={10} height={10} />
             </div>
-            {!isCollapsed && (
-              <span className={styles.newProjectText}>新規プロジェクト作成</span>
-            )}
-          </button>
+            <AnimatePresence mode="wait">
+              {!isCollapsed && (
+                <motion.span
+                  className={styles.newProjectText}
+                  variants={textVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="hidden"
+                >
+                  新規プロジェクト作成
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </motion.button>
         </div>
 
         {/* Separator Line */}
         <div className={styles.separator} />
 
-        {/* RFP Section - Expanded */}
-        {!isCollapsed && (
-          <div className={styles.section}>
-            <div>
-              <span className={styles.sectionLabel}>RFP</span>
-            </div>
-            <div
-              className={`${styles.archiveMenuItem} ${isArchiveActive ? styles.active : ""}`}
-              onClick={navigateToArchive}
-            >
-              <Image
-                src="/icons/folder.svg"
-                alt="Archive"
-                width={22}
-                height={22}
-              />
-              <span className={styles.menuItemText}>アーカイブ</span>
-            </div>
-          </div>
-        )}
-
-        {/* RFP Section - Collapsed */}
-        {isCollapsed && (
-          <div className={`${styles.section} ${styles.centered}`}>
-            <div
-              className={`${styles.archiveMenuItem} ${styles.centered} ${isArchiveActive ? styles.active : ""}`}
-              onClick={navigateToArchive}
-            >
-              <Image
-                src="/icons/folder.svg"
-                alt="Archive"
-                width={22}
-                height={22}
-              />
-            </div>
-          </div>
-        )}
-
-        {/* PROJECT Section - Expanded */}
-        {!isCollapsed && (
-          <div className={styles.projectSection}>
-            <div>
-              <span className={styles.sectionLabel}>PROJECT</span>
-            </div>
-
-            {/* Search */}
-            <div className={styles.searchItem}>
-              <Image
-                src="/icons/search.svg"
-                alt="Search"
-                width={20}
-                height={20}
-              />
-              <span className={styles.menuItemText}>プロジェクト検索</span>
-            </div>
-
-            {/* Project List */}
-            <div className={styles.projectList}>
-              {projects.map((project) => (
-                <div
-                  key={project.id}
-                  className={`${styles.projectItem} ${project.isSelected ? styles.selected : ""}`}
-                  onClick={() => handleSelectProject(project)}
+        {/* RFP Section */}
+        <div className={`${styles.section} ${isCollapsed ? styles.centered : ""}`}>
+          <AnimatePresence mode="wait">
+            {!isCollapsed && (
+              <motion.div
+                variants={textVariants}
+                initial="hidden"
+                animate="visible"
+                exit="hidden"
+              >
+                <span className={styles.sectionLabel}>RFP</span>
+              </motion.div>
+            )}
+          </AnimatePresence>
+          <motion.div
+            className={`${styles.archiveMenuItem} ${isCollapsed ? styles.centered : ""} ${isArchiveActive ? styles.active : ""}`}
+            onClick={navigateToArchive}
+            whileHover={{ scale: 1.02, x: isCollapsed ? 0 : 3 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <Image
+              src="/icons/folder.svg"
+              alt="Archive"
+              width={22}
+              height={22}
+            />
+            <AnimatePresence mode="wait">
+              {!isCollapsed && (
+                <motion.span
+                  className={styles.menuItemText}
+                  variants={textVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="hidden"
                 >
-                  <Image
-                    src={
-                      project.isSelected
-                        ? "/icons/project-active.svg"
-                        : "/icons/project.svg"
-                    }
-                    alt="Project"
-                    width={10}
-                    height={12}
-                    className={styles.projectIcon}
-                  />
-                  <span
-                    className={`${styles.projectName} ${project.isSelected ? styles.selected : ""}`}
-                  >
-                    {project.name}
-                  </span>
-                  {project.isSelected && (
-                    <Image
-                      src="/icons/more-dots.svg"
-                      alt="More"
-                      width={16}
-                      height={16}
-                      className={styles.moreIcon}
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+                  アーカイブ
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </motion.div>
+        </div>
 
-        {/* PROJECT Section - Collapsed */}
-        {isCollapsed && (
-          <div className={`${styles.projectSection} ${styles.centered}`}>
-            <div className={`${styles.searchItem} ${styles.centered}`}>
-              <Image
-                src="/icons/search.svg"
-                alt="Search"
-                width={20}
-                height={20}
-              />
-            </div>
-          </div>
-        )}
+        {/* PROJECT Section */}
+        <div className={`${styles.projectSection} ${isCollapsed ? styles.centered : ""}`}>
+          <AnimatePresence mode="wait">
+            {!isCollapsed && (
+              <motion.div
+                variants={textVariants}
+                initial="hidden"
+                animate="visible"
+                exit="hidden"
+              >
+                <span className={styles.sectionLabel}>PROJECT</span>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Search */}
+          <motion.div
+            className={`${styles.searchItem} ${isCollapsed ? styles.centered : ""}`}
+            whileHover={{ scale: 1.02, x: isCollapsed ? 0 : 3 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <Image
+              src="/icons/search.svg"
+              alt="Search"
+              width={20}
+              height={20}
+            />
+            <AnimatePresence mode="wait">
+              {!isCollapsed && (
+                <motion.span
+                  className={styles.menuItemText}
+                  variants={textVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="hidden"
+                >
+                  プロジェクト検索
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </motion.div>
+
+          {/* Project List */}
+          <AnimatePresence mode="wait">
+            {!isCollapsed && (
+              <motion.div
+                className={styles.projectList}
+                variants={menuItemVariants}
+                initial="hidden"
+                animate="visible"
+                exit="hidden"
+              >
+                {projects.map((project, index) => (
+                  <motion.div
+                    key={project.id}
+                    className={`${styles.projectItem} ${project.isSelected ? styles.selected : ""}`}
+                    onClick={() => handleSelectProject(project)}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                    whileHover={{ scale: 1.02, x: 3 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <Image
+                      src={
+                        project.isSelected
+                          ? "/icons/project-active.svg"
+                          : "/icons/project.svg"
+                      }
+                      alt="Project"
+                      width={10}
+                      height={12}
+                      className={styles.projectIcon}
+                    />
+                    <span
+                      className={`${styles.projectName} ${project.isSelected ? styles.selected : ""}`}
+                    >
+                      {project.name}
+                    </span>
+                    {project.isSelected && (
+                      <Image
+                        src="/icons/more-dots.svg"
+                        alt="More"
+                        width={16}
+                        height={16}
+                        className={styles.moreIcon}
+                      />
+                    )}
+                  </motion.div>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
 
       {/* Bottom Section (Frame 15) */}
       <div className={`${styles.bottomSection} ${isCollapsed ? styles.centered : ""}`}>
         {/* User List */}
-        <div
+        <motion.div
           className={`${styles.userListItem} ${isCollapsed ? styles.centered : ""} ${isUserListActive ? styles.active : ""}`}
           onClick={navigateToUserList}
+          whileHover={{ scale: 1.02, x: isCollapsed ? 0 : 3 }}
+          whileTap={{ scale: 0.98 }}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -213,32 +340,49 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
               fill="#333333"
             />
           </svg>
-          {!isCollapsed && (
-            <span
-              className={`${styles.userListText} ${isUserListActive ? styles.active : ""}`}
-            >
-              ユーザ一覧
-            </span>
-          )}
-        </div>
+          <AnimatePresence mode="wait">
+            {!isCollapsed && (
+              <motion.span
+                className={`${styles.userListText} ${isUserListActive ? styles.active : ""}`}
+                variants={textVariants}
+                initial="hidden"
+                animate="visible"
+                exit="hidden"
+              >
+                ユーザ一覧
+              </motion.span>
+            )}
+          </AnimatePresence>
+        </motion.div>
 
         {/* User Profile */}
-        <div
+        <motion.div
           className={`${styles.userProfileItem} ${isCollapsed ? styles.centered : ""} ${isMyPageActive ? styles.active : ""}`}
           onClick={navigateToMyPage}
+          whileHover={{ scale: 1.02, x: isCollapsed ? 0 : 3 }}
+          whileTap={{ scale: 0.98 }}
         >
-          <div className={styles.avatar}>
+          <motion.div
+            className={styles.avatar}
+            whileHover={{ scale: 1.1 }}
+          >
             <span className={styles.avatarText}>TY</span>
-          </div>
-          {!isCollapsed && (
-            <span
-              className={`${styles.userName} ${isMyPageActive ? styles.active : ""}`}
-            >
-              山田 太郎
-            </span>
-          )}
-        </div>
+          </motion.div>
+          <AnimatePresence mode="wait">
+            {!isCollapsed && (
+              <motion.span
+                className={`${styles.userName} ${isMyPageActive ? styles.active : ""}`}
+                variants={textVariants}
+                initial="hidden"
+                animate="visible"
+                exit="hidden"
+              >
+                山田 太郎
+              </motion.span>
+            )}
+          </AnimatePresence>
+        </motion.div>
       </div>
-    </aside>
+    </motion.aside>
   );
 }
