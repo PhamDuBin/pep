@@ -1,10 +1,15 @@
 "use client";
 
 import { useState, useCallback, useMemo } from "react";
-import { Modal } from "@/components";
+import { InviteMemberModal, UserEditModal, DeleteConfirmModal, InfoModal } from "@/components";
 import { MOCK_VENDOR_USERS } from "@/mocks/vendor";
 import { VendorUser } from "@/types/vendor";
 import styles from "./page.module.scss";
+
+const VENDOR_PERMISSION_OPTIONS = [
+  { value: "管理者", label: "管理者" },
+  { value: "メンバー", label: "メンバー" },
+];
 
 export default function VendorUserListPage() {
   const [users, setUsers] = useState<VendorUser[]>(MOCK_VENDOR_USERS);
@@ -19,12 +24,8 @@ export default function VendorUserListPage() {
 
   // Edit state
   const [selectedUserForEdit, setSelectedUserForEdit] = useState<VendorUser | null>(null);
-  const [editedUserName, setEditedUserName] = useState("");
-  const [editedUserRole, setEditedUserRole] = useState("");
-
-  // Invite state
-  const [inviteEmail, setInviteEmail] = useState("");
-  const [inviteRole, setInviteRole] = useState("メンバー");
+  const [lastEditedUserName, setLastEditedUserName] = useState("");
+  const [lastEditedUserRole, setLastEditedUserRole] = useState("");
 
   const selectedUsers = useMemo(() => users.filter((u) => u.selected), [users]);
   const allSelected = useMemo(
@@ -45,50 +46,47 @@ export default function VendorUserListPage() {
 
   // Invite handlers
   const handleInviteMember = useCallback(() => {
-    setInviteEmail("");
-    setInviteRole("メンバー");
     setShowInviteModal(true);
   }, []);
 
-  const handleInviteConfirm = useCallback(() => {
-    if (!inviteEmail.trim()) return;
-
+  const handleInviteConfirm = useCallback((email: string, role: string) => {
     const newUser: VendorUser = {
       id: `u-${Date.now()}`,
-      name: inviteEmail.split("@")[0],
-      initials: inviteEmail.slice(0, 2).toUpperCase(),
-      email: inviteEmail,
+      name: email.split("@")[0],
+      initials: email.slice(0, 2).toUpperCase(),
+      email: email,
       avatarColor: "#8EC5D0",
-      role: inviteRole,
+      role: role,
       selected: false,
     };
 
     setUsers((prev) => [...prev, newUser]);
     setShowInviteModal(false);
     setShowInviteSuccessModal(true);
-  }, [inviteEmail, inviteRole]);
+  }, []);
 
   // Edit handlers
   const handleEditUser = useCallback((user: VendorUser) => {
     setSelectedUserForEdit(user);
-    setEditedUserName(user.name);
-    setEditedUserRole(user.role || "メンバー");
     setShowEditModal(true);
   }, []);
 
-  const handleEditSave = useCallback(() => {
+  const handleEditSave = useCallback((name: string, role: string) => {
     if (!selectedUserForEdit) return;
 
     setUsers((prev) =>
       prev.map((u) =>
         u.id === selectedUserForEdit.id
-          ? { ...u, name: editedUserName, role: editedUserRole }
+          ? { ...u, name: name, role: role }
           : u
       )
     );
+    setLastEditedUserName(name);
+    setLastEditedUserRole(role);
     setShowEditModal(false);
     setShowEditSuccessModal(true);
-  }, [selectedUserForEdit, editedUserName, editedUserRole]);
+    setSelectedUserForEdit(null);
+  }, [selectedUserForEdit]);
 
   // Delete handlers
   const handleDeleteMembers = useCallback(() => {
@@ -200,194 +198,58 @@ export default function VendorUserListPage() {
       </div>
 
       {/* Invite Modal */}
-      <Modal
+      <InviteMemberModal
         isOpen={showInviteModal}
         onClose={() => setShowInviteModal(false)}
-        title="メンバーを招待"
-        size="sm"
-      >
-        <div className={styles.modalForm}>
-          <div className={styles.formGroup}>
-            <label>メールアドレス</label>
-            <input
-              type="email"
-              value={inviteEmail}
-              onChange={(e) => setInviteEmail(e.target.value)}
-              placeholder="email@example.com"
-            />
-          </div>
-          <div className={styles.formGroup}>
-            <label>権限</label>
-            <select
-              value={inviteRole}
-              onChange={(e) => setInviteRole(e.target.value)}
-            >
-              <option value="管理者">管理者</option>
-              <option value="メンバー">メンバー</option>
-            </select>
-          </div>
-        </div>
-        <div className={styles.modalActions}>
-          <button
-            type="button"
-            className="modal-btn-secondary"
-            onClick={() => setShowInviteModal(false)}
-          >
-            キャンセル
-          </button>
-          <button
-            type="button"
-            className="modal-btn-primary-color"
-            onClick={handleInviteConfirm}
-            disabled={!inviteEmail.trim()}
-          >
-            招待
-          </button>
-        </div>
-      </Modal>
+        onInvite={handleInviteConfirm}
+        permissionOptions={VENDOR_PERMISSION_OPTIONS}
+        defaultPermission="メンバー"
+      />
 
       {/* Invite Success Modal */}
-      <Modal
+      <InfoModal
         isOpen={showInviteSuccessModal}
         onClose={() => setShowInviteSuccessModal(false)}
         title="招待を送信しました"
-        size="sm"
-      >
-        <div className={styles.modalMessage}>
-          <p>メンバーへの招待メールを送信しました。</p>
-        </div>
-        <div className={styles.modalActions}>
-          <button
-            type="button"
-            className="modal-btn-primary-color"
-            onClick={() => setShowInviteSuccessModal(false)}
-          >
-            閉じる
-          </button>
-        </div>
-      </Modal>
+        message="メンバーへの招待メールを送信しました。"
+      />
 
       {/* Edit Modal */}
-      <Modal
+      <UserEditModal
         isOpen={showEditModal}
-        onClose={() => setShowEditModal(false)}
-        title="ユーザー情報の変更"
-        size="sm"
-      >
-        <div className={styles.modalForm}>
-          <div className={styles.formGroup}>
-            <label>氏名</label>
-            <input
-              type="text"
-              value={editedUserName}
-              onChange={(e) => setEditedUserName(e.target.value)}
-            />
-          </div>
-          <div className={styles.formGroup}>
-            <label>権限</label>
-            <select
-              value={editedUserRole}
-              onChange={(e) => setEditedUserRole(e.target.value)}
-            >
-              <option value="管理者">管理者</option>
-              <option value="メンバー">メンバー</option>
-            </select>
-          </div>
-        </div>
-        <div className={styles.modalActions}>
-          <button
-            type="button"
-            className="modal-btn-secondary"
-            onClick={() => setShowEditModal(false)}
-          >
-            キャンセル
-          </button>
-          <button
-            type="button"
-            className="modal-btn-primary-color"
-            onClick={handleEditSave}
-          >
-            保存
-          </button>
-        </div>
-      </Modal>
+        onClose={() => {
+          setShowEditModal(false);
+          setSelectedUserForEdit(null);
+        }}
+        onSave={handleEditSave}
+        currentName={selectedUserForEdit?.name}
+        currentPermission={selectedUserForEdit?.role}
+        permissionOptions={VENDOR_PERMISSION_OPTIONS}
+      />
 
       {/* Edit Success Modal */}
-      <Modal
+      <InfoModal
         isOpen={showEditSuccessModal}
         onClose={() => setShowEditSuccessModal(false)}
         title="変更を保存しました"
-        size="sm"
-      >
-        <div className={styles.modalMessage}>
-          <p>
-            {editedUserName}さんの権限を「{editedUserRole}」に変更しました。
-          </p>
-        </div>
-        <div className={styles.modalActions}>
-          <button
-            type="button"
-            className="modal-btn-primary-color"
-            onClick={() => setShowEditSuccessModal(false)}
-          >
-            閉じる
-          </button>
-        </div>
-      </Modal>
+        message={`${lastEditedUserName}さんの権限を「${lastEditedUserRole}」に変更しました。`}
+      />
 
       {/* Delete Confirmation Modal */}
-      <Modal
+      <DeleteConfirmModal
         isOpen={showDeleteConfirmModal}
         onClose={() => setShowDeleteConfirmModal(false)}
-        title="メンバーを削除"
-        size="sm"
-      >
-        <div className={styles.modalMessage}>
-          <p>以下のメンバーを削除しますか？</p>
-          <ul className={styles.deleteList}>
-            {selectedUsers.map((user) => (
-              <li key={user.id}>{user.name}</li>
-            ))}
-          </ul>
-        </div>
-        <div className={styles.modalActions}>
-          <button
-            type="button"
-            className="modal-btn-secondary"
-            onClick={() => setShowDeleteConfirmModal(false)}
-          >
-            キャンセル
-          </button>
-          <button
-            type="button"
-            className={styles.deleteConfirmButton}
-            onClick={handleDeleteConfirm}
-          >
-            削除
-          </button>
-        </div>
-      </Modal>
+        onConfirm={handleDeleteConfirm}
+        message={`以下のメンバーを削除しますか？\n${selectedUsers.map(u => u.name).join("、")}`}
+      />
 
       {/* Delete Success Modal */}
-      <Modal
+      <InfoModal
         isOpen={showDeleteSuccessModal}
         onClose={() => setShowDeleteSuccessModal(false)}
         title="削除しました"
-        size="sm"
-      >
-        <div className={styles.modalMessage}>
-          <p>選択したメンバーを削除しました。</p>
-        </div>
-        <div className={styles.modalActions}>
-          <button
-            type="button"
-            className="modal-btn-primary-color"
-            onClick={() => setShowDeleteSuccessModal(false)}
-          >
-            閉じる
-          </button>
-        </div>
-      </Modal>
+        message="選択したメンバーを削除しました。"
+      />
     </div>
   );
 }

@@ -18,6 +18,13 @@ export type { SelectProps, SelectSize, SelectVariant, SelectOption } from "./Sel
 // Modal
 export { Modal } from "./Modal";
 export type { ModalProps, ModalSize } from "./Modal";
+export { EmailChangeModal } from "./Modal";
+export { AvatarChangeModal } from "./Modal";
+export { InviteMemberModal } from "./Modal";
+export { PermissionChangeModal } from "./Modal";
+export { DeleteConfirmModal } from "./Modal";
+export { InfoModal } from "./Modal";
+export { UserEditModal } from "./Modal";
 
 // Badge
 export { Badge } from "./Badge";

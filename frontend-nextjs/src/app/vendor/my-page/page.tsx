@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from "react";
 import Image from "next/image";
-import { Modal } from "@/components";
+import { EmailChangeModal, AvatarChangeModal, InfoModal } from "@/components";
 import {
   MOCK_VENDOR_USER_PROFILE,
   MOCK_VENDOR_PAYMENT_INFO,
@@ -25,19 +25,6 @@ export default function VendorMyPage() {
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [showEmailSuccessModal, setShowEmailSuccessModal] = useState(false);
   const [showAvatarModal, setShowAvatarModal] = useState(false);
-  const [emailInput, setEmailInput] = useState("");
-
-  // Avatar color options
-  const avatarColors = [
-    "#8EC5D0",
-    "#F5A623",
-    "#7ED321",
-    "#BD10E0",
-    "#9013FE",
-    "#4A90E2",
-    "#50E3C2",
-    "#B8E986",
-  ];
 
   const handleEmailChange = useCallback(() => {
     setShowEmailModal(true);
@@ -270,97 +257,29 @@ export default function VendorMyPage() {
       </section>
 
       {/* Email Change Modal */}
-      <Modal
+      <EmailChangeModal
         isOpen={showEmailModal}
         onClose={() => setShowEmailModal(false)}
-        title="メールアドレスの変更"
-        size="sm"
-      >
-        <div className={styles.modalContent}>
-          <p className={styles.modalDescription}>
-            新しいメールアドレスを入力してください。確認メールを送信します。
-          </p>
-          <div className={styles.modalFormGroup}>
-            <label>新しいメールアドレス</label>
-            <input
-              type="email"
-              value={emailInput}
-              onChange={(e) => setEmailInput(e.target.value)}
-              placeholder="email@example.com"
-            />
-          </div>
-        </div>
-        <div className={styles.modalActions}>
-          <button
-            type="button"
-            className="modal-btn-secondary"
-            onClick={() => setShowEmailModal(false)}
-          >
-            キャンセル
-          </button>
-          <button
-            type="button"
-            className="modal-btn-primary-color"
-            onClick={handleEmailSent}
-            disabled={!emailInput.trim()}
-          >
-            送信
-          </button>
-        </div>
-      </Modal>
+        onSend={handleEmailSent}
+        mode="single"
+        description="新しいメールアドレスを入力してください。確認メールを送信します。"
+      />
 
       {/* Email Success Modal */}
-      <Modal
+      <InfoModal
         isOpen={showEmailSuccessModal}
         onClose={() => setShowEmailSuccessModal(false)}
         title="確認メールを送信しました"
-        size="sm"
-      >
-        <div className={styles.modalContent}>
-          <p className={styles.modalDescription}>
-            入力されたメールアドレスに確認メールを送信しました。
-            メール内のリンクをクリックして変更を完了してください。
-          </p>
-        </div>
-        <div className={styles.modalActions}>
-          <button
-            type="button"
-            className="modal-btn-primary-color"
-            onClick={() => setShowEmailSuccessModal(false)}
-          >
-            閉じる
-          </button>
-        </div>
-      </Modal>
+        message="入力されたメールアドレスに確認メールを送信しました。メール内のリンクをクリックして変更を完了してください。"
+      />
 
       {/* Avatar Change Modal */}
-      <Modal
+      <AvatarChangeModal
         isOpen={showAvatarModal}
         onClose={() => setShowAvatarModal(false)}
-        title="アイコンカラーを選択"
-        size="sm"
-      >
-        <div className={styles.avatarColorGrid}>
-          {avatarColors.map((color) => (
-            <button
-              key={color}
-              type="button"
-              className={`${styles.colorOption} ${userProfile.avatarColor === color ? styles.selected : ""}`}
-              style={{ backgroundColor: color }}
-              onClick={() => handleAvatarColorChange(color)}
-            />
-          ))}
-        </div>
-        <div className={styles.modalActions}>
-          <button
-            type="button"
-            className="modal-btn-secondary"
-            onClick={() => setShowAvatarModal(false)}
-          >
-            キャンセル
-          </button>
-        </div>
-      </Modal>
+        onSave={handleAvatarColorChange}
+        currentColor={userProfile.avatarColor}
+      />
     </div>
   );
 }

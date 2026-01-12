@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useMemo } from "react";
-import { Modal } from "@/components";
+import { InviteMemberModal, PermissionChangeModal, DeleteConfirmModal } from "@/components";
 import { MOCK_USERS, PERMISSION_OPTIONS } from "@/mocks";
 import { User, UserPermission } from "@/types";
 import styles from "./page.module.scss";
@@ -11,11 +11,7 @@ export default function UserListPage() {
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [showPermissionModal, setShowPermissionModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [inviteEmail, setInviteEmail] = useState("");
-  const [invitePermission, setInvitePermission] =
-    useState<UserPermission>("member");
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
-  const [newPermission, setNewPermission] = useState<UserPermission>("member");
 
   const isAllSelected = useMemo(
     () => users.length > 0 && users.every((u) => u.isSelected),
@@ -25,6 +21,11 @@ export default function UserListPage() {
   const selectedCount = useMemo(
     () => users.filter((u) => u.isSelected).length,
     [users]
+  );
+
+  const selectedUser = useMemo(
+    () => users.find((u) => u.id === selectedUserId),
+    [users, selectedUserId]
   );
 
   const handleToggleSelection = useCallback((userId: string) => {
@@ -40,19 +41,12 @@ export default function UserListPage() {
     setUsers((prev) => prev.map((u) => ({ ...u, isSelected: !allSelected })));
   }, [users]);
 
-  const handleOpenPermissionModal = useCallback(
-    (userId: string) => {
-      const user = users.find((u) => u.id === userId);
-      if (user) {
-        setSelectedUserId(userId);
-        setNewPermission(user.permission);
-        setShowPermissionModal(true);
-      }
-    },
-    [users]
-  );
+  const handleOpenPermissionModal = useCallback((userId: string) => {
+    setSelectedUserId(userId);
+    setShowPermissionModal(true);
+  }, []);
 
-  const handleConfirmPermissionChange = useCallback(() => {
+  const handleConfirmPermissionChange = useCallback((newPermission: UserPermission) => {
     if (selectedUserId) {
       setUsers((prev) =>
         prev.map((u) =>
@@ -62,7 +56,7 @@ export default function UserListPage() {
       setShowPermissionModal(false);
       setSelectedUserId(null);
     }
-  }, [selectedUserId, newPermission]);
+  }, [selectedUserId]);
 
   const handleDeleteMembers = useCallback(() => {
     if (selectedCount > 0) {
@@ -75,23 +69,19 @@ export default function UserListPage() {
     setShowDeleteModal(false);
   }, []);
 
-  const handleInvite = useCallback(() => {
-    if (!inviteEmail.trim()) return;
-
+  const handleInvite = useCallback((email: string, permission: string) => {
     const newUser: User = {
       id: `user-${Date.now()}`,
-      name: inviteEmail.split("@")[0],
-      initials: inviteEmail.slice(0, 2).toUpperCase(),
+      name: email.split("@")[0],
+      initials: email.slice(0, 2).toUpperCase(),
       avatarColor: "#8ec5d0",
-      permission: invitePermission,
-      email: inviteEmail,
+      permission: permission as UserPermission,
+      email: email,
       isSelected: false,
     };
     setUsers((prev) => [...prev, newUser]);
-    setInviteEmail("");
-    setInvitePermission("member");
     setShowInviteModal(false);
-  }, [inviteEmail, invitePermission]);
+  }, []);
 
   const getPermissionLabel = (permission: UserPermission) => {
     const option = PERMISSION_OPTIONS.find((o) => o.value === permission);
@@ -205,129 +195,31 @@ export default function UserListPage() {
       </div>
 
       {/* Invite Modal */}
-      <Modal
+      <InviteMemberModal
         isOpen={showInviteModal}
         onClose={() => setShowInviteModal(false)}
-        title="メンバーを招待"
-        size="sm"
-      >
-        <div className={styles.inviteForm}>
-          <div className={styles.formGroup}>
-            <label>メールアドレス</label>
-            <input
-              type="email"
-              value={inviteEmail}
-              onChange={(e) => setInviteEmail(e.target.value)}
-              placeholder="email@example.com"
-            />
-          </div>
-          <div className={styles.formGroup}>
-            <label>権限</label>
-            <select
-              value={invitePermission}
-              onChange={(e) =>
-                setInvitePermission(e.target.value as UserPermission)
-              }
-            >
-              {PERMISSION_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-        <div className={styles.modalActions}>
-          <button
-            type="button"
-            className="modal-btn-secondary"
-            onClick={() => setShowInviteModal(false)}
-          >
-            キャンセル
-          </button>
-          <button
-            type="button"
-            className="modal-btn-primary-color"
-            onClick={handleInvite}
-            disabled={!inviteEmail.trim()}
-          >
-            招待
-          </button>
-        </div>
-      </Modal>
+        onInvite={handleInvite}
+      />
 
       {/* Permission Change Modal */}
-      <Modal
+      <PermissionChangeModal
         isOpen={showPermissionModal}
-        onClose={() => setShowPermissionModal(false)}
-        title="権限の変更"
-        size="sm"
-      >
-        <div className={styles.permissionForm}>
-          <div className={styles.formGroup}>
-            <label>権限を選択</label>
-            <select
-              value={newPermission}
-              onChange={(e) =>
-                setNewPermission(e.target.value as UserPermission)
-              }
-            >
-              {PERMISSION_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-        <div className={styles.modalActions}>
-          <button
-            type="button"
-            className="modal-btn-secondary"
-            onClick={() => setShowPermissionModal(false)}
-          >
-            キャンセル
-          </button>
-          <button
-            type="button"
-            className="modal-btn-primary"
-            onClick={handleConfirmPermissionChange}
-          >
-            変更
-          </button>
-        </div>
-      </Modal>
+        onClose={() => {
+          setShowPermissionModal(false);
+          setSelectedUserId(null);
+        }}
+        onConfirm={handleConfirmPermissionChange}
+        currentPermission={selectedUser?.permission}
+        userName={selectedUser?.name}
+      />
 
       {/* Delete Confirmation Modal */}
-      <Modal
+      <DeleteConfirmModal
         isOpen={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}
-        title="メンバーの削除"
-        size="sm"
-      >
-        <div className={styles.deleteConfirm}>
-          <p>
-            選択した{selectedCount}名のメンバーを削除しますか？
-            この操作は取り消せません。
-          </p>
-        </div>
-        <div className={styles.modalActions}>
-          <button
-            type="button"
-            className="modal-btn-secondary"
-            onClick={() => setShowDeleteModal(false)}
-          >
-            キャンセル
-          </button>
-          <button
-            type="button"
-            className="modal-btn-primary"
-            onClick={handleConfirmDelete}
-          >
-            削除
-          </button>
-        </div>
-      </Modal>
+        onConfirm={handleConfirmDelete}
+        message={`選択した${selectedCount}名のメンバーを削除しますか？`}
+      />
     </div>
   );
 }

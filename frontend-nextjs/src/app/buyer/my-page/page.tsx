@@ -1,12 +1,11 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { Modal } from "@/components";
+import { EmailChangeModal, AvatarChangeModal } from "@/components";
 import {
   MOCK_ADMIN_USER,
   MOCK_PAYMENT_INFO,
   MOCK_PAYMENT_HISTORY,
-  AVATAR_COLOR_OPTIONS,
 } from "@/mocks";
 import styles from "./page.module.scss";
 
@@ -25,8 +24,6 @@ export default function MyPage() {
   // Modal state
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [showAvatarModal, setShowAvatarModal] = useState(false);
-  const [newEmail, setNewEmail] = useState("");
-  const [confirmEmail, setConfirmEmail] = useState("");
 
   const handleAvatarClick = useCallback(() => {
     setShowAvatarModal(true);
@@ -36,11 +33,8 @@ export default function MyPage() {
     setShowEmailModal(true);
   }, []);
 
-  const handleSelectColor = useCallback((color: string) => {
+  const handleSaveAvatar = useCallback((color: string) => {
     setUser(prev => ({ ...prev, avatarColor: color }));
-  }, []);
-
-  const handleSaveAvatar = useCallback(() => {
     setShowAvatarModal(false);
     setShowAvatarSaveSuccess(true);
     setTimeout(() => setShowAvatarSaveSuccess(false), 3000);
@@ -59,8 +53,6 @@ export default function MyPage() {
   const handleSendEmailChange = useCallback(() => {
     setShowEmailModal(false);
     alert("確認メールを送信しました");
-    setNewEmail("");
-    setConfirmEmail("");
   }, []);
 
   return (
@@ -282,88 +274,19 @@ export default function MyPage() {
       </div>
 
       {/* Email Change Modal */}
-      <Modal
+      <EmailChangeModal
         isOpen={showEmailModal}
         onClose={() => setShowEmailModal(false)}
-        title="メールアドレスの変更"
-        size="sm"
-      >
-        <div className={styles.modalContent}>
-          <div className={styles.modalFormGroup}>
-            <label>新しいメールアドレス</label>
-            <input
-              type="email"
-              value={newEmail}
-              onChange={(e) => setNewEmail(e.target.value)}
-              placeholder="新しいメールアドレスを入力"
-            />
-          </div>
-          <div className={styles.modalFormGroup}>
-            <label>新しいメールアドレス（確認）</label>
-            <input
-              type="email"
-              value={confirmEmail}
-              onChange={(e) => setConfirmEmail(e.target.value)}
-              placeholder="新しいメールアドレスを再入力"
-            />
-          </div>
-        </div>
-        <div className={styles.modalActions}>
-          <button
-            type="button"
-            className="modal-btn-secondary"
-            onClick={() => setShowEmailModal(false)}
-          >
-            キャンセル
-          </button>
-          <button
-            type="button"
-            className="modal-btn-primary-color"
-            onClick={handleSendEmailChange}
-            disabled={!newEmail || !confirmEmail}
-          >
-            送信
-          </button>
-        </div>
-      </Modal>
+        onSend={handleSendEmailChange}
+      />
 
       {/* Avatar Change Modal */}
-      <Modal
+      <AvatarChangeModal
         isOpen={showAvatarModal}
         onClose={() => setShowAvatarModal(false)}
-        title="アイコンカラーを選択"
-        size="sm"
-      >
-        <div className={styles.avatarColorGrid}>
-          {AVATAR_COLOR_OPTIONS.map((option) => (
-            <button
-              key={option.id}
-              type="button"
-              className={`${styles.colorOption} ${
-                user.avatarColor === option.color ? styles.selected : ""
-              }`}
-              style={{ backgroundColor: option.color }}
-              onClick={() => handleSelectColor(option.color)}
-            />
-          ))}
-        </div>
-        <div className={styles.modalActions}>
-          <button
-            type="button"
-            className="modal-btn-secondary"
-            onClick={() => setShowAvatarModal(false)}
-          >
-            キャンセル
-          </button>
-          <button
-            type="button"
-            className="modal-btn-primary-color"
-            onClick={handleSaveAvatar}
-          >
-            保存
-          </button>
-        </div>
-      </Modal>
+        onSave={handleSaveAvatar}
+        currentColor={user.avatarColor}
+      />
     </div>
   );
 }
