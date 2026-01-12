@@ -1,7 +1,15 @@
 "use client";
 
 import { useState, useCallback, useMemo, useEffect, useRef } from "react";
-import { Loading, Pagination } from "@/components";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Loading,
+  Pagination,
+  AnimatedDropdown,
+  AnimatedList,
+  AnimatedListItem,
+  PageTransition,
+} from "@/components";
 import {
   MOCK_ARCHIVE_PROJECTS,
   PROJECT_FILTER_OPTIONS,
@@ -124,11 +132,12 @@ export default function ArchivePage() {
   ];
 
   return (
-    <div className={styles.contentWrapper}>
-      {/* Page Title */}
-      <div className={styles.pageHeader}>
-        <h1 className={styles.pageTitle}>アーカイブ</h1>
-      </div>
+    <PageTransition>
+      <div className={styles.contentWrapper}>
+        {/* Page Title */}
+        <div className={styles.pageHeader}>
+          <h1 className={styles.pageTitle}>アーカイブ</h1>
+        </div>
 
       {/* Filters and View Toggle Section */}
       <div className={styles.filterSection}>
@@ -162,7 +171,7 @@ export default function ArchivePage() {
                 </svg>
               </button>
 
-              {showFilterDropdown && (
+              <AnimatedDropdown isOpen={showFilterDropdown}>
                 <div className={`${styles.dropdownMenu} ${styles.filterMenu}`}>
                   {PROJECT_FILTER_OPTIONS.map((option) => (
                     <button
@@ -202,7 +211,7 @@ export default function ArchivePage() {
                     </button>
                   ))}
                 </div>
-              )}
+              </AnimatedDropdown>
             </div>
 
             {/* Sort Dropdown */}
@@ -230,7 +239,7 @@ export default function ArchivePage() {
                 </svg>
               </button>
 
-              {showSortDropdown && (
+              <AnimatedDropdown isOpen={showSortDropdown}>
                 <div className={`${styles.dropdownMenu} ${styles.sortMenu}`}>
                   {SORT_OPTIONS.map((option) => (
                     <button
@@ -270,7 +279,7 @@ export default function ArchivePage() {
                     </button>
                   ))}
                 </div>
-              )}
+              </AnimatedDropdown>
             </div>
           </div>
 
@@ -333,15 +342,19 @@ export default function ArchivePage() {
           </div>
         ) : viewMode === "grid" ? (
           /* Grid View */
-          <div className={styles.projectsGrid}>
+          <AnimatedList className={styles.projectsGrid} staggerDelay={0.03}>
             {paginatedProjects.map((project) => (
-              <div
+              <AnimatedListItem
                 key={project.id}
                 className={styles.cardWrapper}
-                onClick={(e) => e.stopPropagation()}
               >
-                {/* Archive Card */}
-                <div className={styles.archiveCard}>
+                <motion.div
+                  onClick={(e) => e.stopPropagation()}
+                  whileHover={{ y: -2 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {/* Archive Card */}
+                  <div className={styles.archiveCard}>
                   <div className={styles.cardContent}>
                     <p className={styles.projectName}>{project.name}</p>
                   </div>
@@ -404,32 +417,41 @@ export default function ArchivePage() {
                   </div>
                 </div>
 
-                {/* Context Menu */}
-                {openContextMenuId === project.id && (
-                  <>
-                    <div
-                      className={styles.contextMenuBackdrop}
-                      onClick={handleCloseContextMenu}
-                    />
-                    <div className={styles.contextMenu}>
-                      {menuItems.map((item) => (
-                        <button
-                          key={item.action}
-                          className={styles.menuItem}
-                          type="button"
-                          onClick={() =>
-                            handleContextAction(project.id, item.action)
-                          }
+                  {/* Context Menu */}
+                  <AnimatePresence>
+                    {openContextMenuId === project.id && (
+                      <>
+                        <div
+                          className={styles.contextMenuBackdrop}
+                          onClick={handleCloseContextMenu}
+                        />
+                        <motion.div
+                          className={styles.contextMenu}
+                          initial={{ opacity: 0, scale: 0.95, y: -5 }}
+                          animate={{ opacity: 1, scale: 1, y: 0 }}
+                          exit={{ opacity: 0, scale: 0.95, y: -5 }}
+                          transition={{ duration: 0.15 }}
                         >
-                          {item.label}
-                        </button>
-                      ))}
-                    </div>
-                  </>
-                )}
-              </div>
+                          {menuItems.map((item) => (
+                            <button
+                              key={item.action}
+                              className={styles.menuItem}
+                              type="button"
+                              onClick={() =>
+                                handleContextAction(project.id, item.action)
+                              }
+                            >
+                              {item.label}
+                            </button>
+                          ))}
+                        </motion.div>
+                      </>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              </AnimatedListItem>
             ))}
-          </div>
+          </AnimatedList>
         ) : (
           /* List View */
           <div className={styles.projectsList}>
@@ -444,15 +466,19 @@ export default function ArchivePage() {
             </div>
 
             {/* List Items */}
-            <div className={styles.listItems}>
+            <AnimatedList className={styles.listItems} staggerDelay={0.05}>
               {paginatedProjects.map((project) => (
-                <div
+                <AnimatedListItem
                   key={project.id}
                   className={styles.listItemWrapper}
-                  onClick={(e) => e.stopPropagation()}
                 >
-                  {/* Archive List Item */}
-                  <div className={styles.archiveListItem}>
+                  <motion.div
+                    onClick={(e) => e.stopPropagation()}
+                    whileHover={{ scale: 1.005 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    {/* Archive List Item */}
+                    <div className={styles.archiveListItem}>
                     <div className={styles.projectNameCell}>
                       <p className={styles.projectNameList}>{project.name}</p>
                     </div>
@@ -501,32 +527,41 @@ export default function ArchivePage() {
                     </div>
                   </div>
 
-                  {/* Context Menu */}
-                  {openContextMenuId === project.id && (
-                    <>
-                      <div
-                        className={styles.contextMenuBackdrop}
-                        onClick={handleCloseContextMenu}
-                      />
-                      <div className={styles.contextMenu}>
-                        {menuItems.map((item) => (
-                          <button
-                            key={item.action}
-                            className={styles.menuItem}
-                            type="button"
-                            onClick={() =>
-                              handleContextAction(project.id, item.action)
-                            }
+                    {/* Context Menu */}
+                    <AnimatePresence>
+                      {openContextMenuId === project.id && (
+                        <>
+                          <div
+                            className={styles.contextMenuBackdrop}
+                            onClick={handleCloseContextMenu}
+                          />
+                          <motion.div
+                            className={styles.contextMenu}
+                            initial={{ opacity: 0, scale: 0.95, y: -5 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: -5 }}
+                            transition={{ duration: 0.15 }}
                           >
-                            {item.label}
-                          </button>
-                        ))}
-                      </div>
-                    </>
-                  )}
-                </div>
+                            {menuItems.map((item) => (
+                              <button
+                                key={item.action}
+                                className={styles.menuItem}
+                                type="button"
+                                onClick={() =>
+                                  handleContextAction(project.id, item.action)
+                                }
+                              >
+                                {item.label}
+                              </button>
+                            ))}
+                          </motion.div>
+                        </>
+                      )}
+                    </AnimatePresence>
+                  </motion.div>
+                </AnimatedListItem>
               ))}
-            </div>
+            </AnimatedList>
 
             {/* Pagination */}
             <Pagination
@@ -536,7 +571,8 @@ export default function ArchivePage() {
             />
           </div>
         )}
+        </div>
       </div>
-    </div>
+    </PageTransition>
   );
 }

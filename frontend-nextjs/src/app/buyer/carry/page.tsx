@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { TabNavigation, Modal } from "@/components";
+import { TabNavigation, Modal, PageTransition } from "@/components";
 import {
   MOCK_VENDOR_CONTACTS,
   MOCK_VENDOR_CHAT_MESSAGES,
@@ -121,8 +121,9 @@ export default function CarryPage() {
   }, [messages]);
 
   return (
-    <div className={styles.container}>
-      <TabNavigation tabs={CARRY_TABS} onTabChange={handleTabChange} />
+    <PageTransition>
+      <div className={styles.container}>
+        <TabNavigation tabs={CARRY_TABS} onTabChange={handleTabChange} />
 
       <div className={styles.contentArea}>
         {/* Left Panel: Project Header + Vendor Message List */}
@@ -463,6 +464,7 @@ export default function CarryPage() {
           <p>プロジェクト計画書の内容がここに表示されます。</p>
         </div>
       </Modal>
-    </div>
+      </div>
+    </PageTransition>
   );
 }

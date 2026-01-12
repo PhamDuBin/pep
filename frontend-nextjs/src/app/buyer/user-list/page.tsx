@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useMemo, useEffect } from "react";
-import { InviteMemberModal, PermissionChangeModal, DeleteConfirmModal, Loading } from "@/components";
+import { InviteMemberModal, PermissionChangeModal, DeleteConfirmModal, Loading, PageTransition } from "@/components";
 import { MOCK_USERS, PERMISSION_OPTIONS } from "@/mocks";
 import { User, UserPermission } from "@/types";
 import styles from "./page.module.scss";
@@ -102,8 +102,9 @@ export default function UserListPage() {
   };
 
   return (
-    <div className={styles.contentWrapper}>
-      {isLoading ? (
+    <PageTransition>
+      <div className={styles.contentWrapper}>
+        {isLoading ? (
         <div className={styles.loadingState}>
           <Loading type="spinner" size="lg" />
         </div>
@@ -239,6 +240,7 @@ export default function UserListPage() {
         onConfirm={handleConfirmDelete}
         message={`選択した${selectedCount}名のメンバーを削除しますか？`}
       />
-    </div>
+      </div>
+    </PageTransition>
   );
 }

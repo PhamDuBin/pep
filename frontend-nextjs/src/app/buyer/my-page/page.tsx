@@ -6,6 +6,7 @@ import {
   AvatarChangeModal,
   Loading,
   Pagination,
+  PageTransition,
 } from "@/components";
 import {
   MOCK_ADMIN_USER,
@@ -109,8 +110,9 @@ export default function MyPage() {
   }, []);
 
   return (
-    <div className={styles.contentWrapper}>
-      {isLoading ? (
+    <PageTransition>
+      <div className={styles.contentWrapper}>
+        {isLoading ? (
         <div className={styles.loadingState}>
           <Loading type="spinner" size="lg" />
         </div>
@@ -400,6 +402,7 @@ export default function MyPage() {
         onSave={handleSaveAvatar}
         currentColor={user.avatarColor}
       />
-    </div>
+      </div>
+    </PageTransition>
   );
 }

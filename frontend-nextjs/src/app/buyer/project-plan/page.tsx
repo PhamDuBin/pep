@@ -8,6 +8,7 @@ import {
   ChatInputBox,
   PdfPreview,
   Modal,
+  PageTransition,
 } from "@/components";
 import {
   MOCK_PDF_PAGES,
@@ -162,8 +163,9 @@ export default function ProjectPlanPage() {
   }, [scrollToBottom]);
 
   return (
-    <div className={styles.container}>
-      <TabNavigation tabs={PROJECT_PLAN_TABS} onTabChange={handleTabChange} />
+    <PageTransition>
+      <div className={styles.container}>
+        <TabNavigation tabs={PROJECT_PLAN_TABS} onTabChange={handleTabChange} />
 
       <div className={styles.chatContent}>
         {/* Chat Messages Container */}
@@ -361,6 +363,7 @@ export default function ProjectPlanPage() {
           </button>
         </div>
       </Modal>
-    </div>
+      </div>
+    </PageTransition>
   );
 }

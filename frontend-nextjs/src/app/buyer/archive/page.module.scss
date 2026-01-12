@@ -1,4 +1,5 @@
 @use "../../../styles/tokens" as *;
+@use "../../../styles/animations" as anim;
 
 // Content Wrapper
 .contentWrapper {
@@ -78,6 +79,12 @@
 
 .dropdownIcon {
   flex-shrink: 0;
+  transition: transform anim.$transition-fast anim.$ease-out-quart;
+}
+
+.dropdownTrigger[aria-expanded="true"] .dropdownIcon,
+.dropdownContainer:has(.dropdownMenu) .dropdownIcon {
+  transform: rotate(180deg);
 }
 
 .dropdownMenu {
@@ -119,9 +126,11 @@
   cursor: pointer;
   text-align: left;
   white-space: nowrap;
+  transition: all anim.$transition-fast anim.$ease-out-quart;
 
   &:hover {
     color: #066a9e;
+    transform: translateX(2px);
   }
 
   &.selected {
@@ -148,9 +157,15 @@
   background: transparent;
   border: none;
   cursor: pointer;
+  transition: all anim.$transition-fast anim.$ease-out-quart;
 
   &:hover {
     opacity: 0.7;
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(0.95);
   }
 }
 
@@ -208,6 +223,12 @@
   border: 1px solid #e1e1e1;
   border-radius: 12px;
   box-sizing: border-box;
+  transition: all anim.$transition-normal anim.$ease-out-quart;
+
+  &:hover {
+    border-color: #066a9e;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
 }
 
 .projectName {
@@ -329,9 +350,11 @@
   cursor: pointer;
   text-align: left;
   white-space: nowrap;
+  transition: all anim.$transition-fast anim.$ease-out-quart;
 
   &:hover {
     color: #066a9e;
+    transform: translateX(2px);
   }
 }
 
@@ -415,6 +438,12 @@
   background: #ffffff;
   border: 1px solid #e1e1e1;
   border-radius: 12px;
+  transition: all anim.$transition-normal anim.$ease-out-quart;
+
+  &:hover {
+    border-color: #066a9e;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
 }
 
 .projectNameList {

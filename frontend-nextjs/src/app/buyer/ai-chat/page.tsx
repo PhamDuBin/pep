@@ -7,6 +7,7 @@ import {
   ProjectPlanModeButton,
   ChatMessageList,
   ChatInputBox,
+  PageTransition,
 } from "@/components";
 import { MOCK_CHAT_MESSAGES, AI_RESPONSES } from "@/mocks";
 import { Tab, ChatMessage } from "@/types";
@@ -115,33 +116,35 @@ function AiChatContent() {
   }, []);
 
   return (
-    <div className={styles.container}>
-      <TabNavigation tabs={AI_CHAT_TABS} onTabChange={handleTabChange} />
+    <PageTransition>
+      <div className={styles.container}>
+        <TabNavigation tabs={AI_CHAT_TABS} onTabChange={handleTabChange} />
 
-      <div className={styles.chatContent}>
-        {/* Chat Messages Container */}
-        <div className={styles.messagesArea}>
-          <div className={styles.messagesWrapper}>
-            <ChatMessageList
-              messages={messages}
-              isLoading={isLoading}
-              messageVariant="minimal"
-              animateMessages
+        <div className={styles.chatContent}>
+          {/* Chat Messages Container */}
+          <div className={styles.messagesArea}>
+            <div className={styles.messagesWrapper}>
+              <ChatMessageList
+                messages={messages}
+                isLoading={isLoading}
+                messageVariant="minimal"
+                animateMessages
+              />
+            </div>
+          </div>
+
+          {/* Bottom Section: Mode Selector + Input */}
+          <div className={styles.bottomSection}>
+            <ProjectPlanModeButton />
+            <ChatInputBox
+              onMessageSent={handleMessageSent}
+              onMicrophoneClicked={handleMicrophoneClicked}
+              disabled={isLoading}
             />
           </div>
         </div>
-
-        {/* Bottom Section: Mode Selector + Input */}
-        <div className={styles.bottomSection}>
-          <ProjectPlanModeButton />
-          <ChatInputBox
-            onMessageSent={handleMessageSent}
-            onMicrophoneClicked={handleMicrophoneClicked}
-            disabled={isLoading}
-          />
-        </div>
       </div>
-    </div>
+    </PageTransition>
   );
 }
 

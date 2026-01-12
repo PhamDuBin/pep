@@ -58,3 +58,9 @@ export { PdfPreview } from "./PdfPreview";
 // Loading
 export { Loading } from "./Loading";
 export type { LoadingProps, LoadingType, LoadingSize } from "./Loading";
+
+// Animation Components
+export { PageTransition } from "./PageTransition";
+export { AnimatedList, AnimatedListItem } from "./AnimatedList";
+export { FadeIn } from "./FadeIn";
+export { AnimatedDropdown } from "./AnimatedDropdown";

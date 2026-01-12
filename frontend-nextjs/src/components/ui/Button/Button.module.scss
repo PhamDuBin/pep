@@ -1,11 +1,22 @@
 @use "../../../styles/tokens" as *;
 @use "../../../styles/mixins" as *;
+@use "../../../styles/animations" as anim;
 
 .button {
   @include flex-center;
   gap: $spacing-2;
-  @include transition-fast;
   @include focus-visible-only;
+  transition: all anim.$transition-normal anim.$ease-out-quart;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
 
   &:disabled {
     cursor: not-allowed;

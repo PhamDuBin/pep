@@ -1,0 +1,267 @@
+// =============================================================================
+// GLOBAL ANIMATION STYLES
+// =============================================================================
+// Common animation utilities and hover effects
+
+// Transition durations
+$transition-fast: 0.15s;
+$transition-normal: 0.2s;
+$transition-slow: 0.3s;
+
+// Easing functions
+$ease-out-quart: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+$ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+$ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+// Button hover animations
+@mixin button-hover {
+  transition: all $transition-normal $ease-out-quart;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Subtle button hover (no shadow)
+@mixin button-hover-subtle {
+  transition: all $transition-fast $ease-out-quart;
+
+  &:hover:not(:disabled) {
+    opacity: 0.85;
+    transform: scale(1.02);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+}
+
+// Card hover animations
+@mixin card-hover {
+  transition: all $transition-normal $ease-out-quart;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Subtle card hover (border only)
+@mixin card-hover-subtle {
+  transition: all $transition-fast $ease-out-quart;
+
+  &:hover {
+    border-color: #066a9e;
+  }
+}
+
+// Link hover animation
+@mixin link-hover {
+  transition: color $transition-fast $ease-out-quart;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: currentColor;
+    transition: width $transition-normal $ease-out-quart;
+  }
+
+  &:hover::after {
+    width: 100%;
+  }
+}
+
+// Icon hover animation
+@mixin icon-hover {
+  transition: all $transition-fast $ease-out-quart;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+// Dropdown item hover
+@mixin dropdown-item-hover {
+  transition: all $transition-fast $ease-out-quart;
+
+  &:hover {
+    background-color: rgba(6, 106, 158, 0.05);
+    color: #066a9e;
+  }
+}
+
+// Input focus animation
+@mixin input-focus {
+  transition: all $transition-fast $ease-out-quart;
+
+  &:focus {
+    border-color: #066a9e;
+    box-shadow: 0 0 0 3px rgba(6, 106, 158, 0.1);
+    outline: none;
+  }
+}
+
+// Checkbox animation
+@mixin checkbox-animation {
+  transition: all $transition-fast $ease-out-quart;
+
+  &:checked {
+    animation: checkmark-pop 0.2s $ease-out-quart;
+  }
+}
+
+@keyframes checkmark-pop {
+  0% {
+    transform: scale(0.8);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+// Ripple effect
+@mixin ripple-effect {
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.4s $ease-out-expo, height 0.4s $ease-out-expo;
+  }
+
+  &:active::before {
+    width: 200%;
+    height: 200%;
+  }
+}
+
+// Pulse animation
+@mixin pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+// Shimmer loading effect
+@mixin shimmer {
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 25%,
+    #e0e0e0 50%,
+    #f0f0f0 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+// Fade in animation
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+// Slide up animation
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Slide down animation
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Scale in animation
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// Utility classes
+.animate-fade-in {
+  animation: fadeIn 0.3s $ease-out-quart forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s $ease-out-quart forwards;
+}
+
+.animate-slide-down {
+  animation: slideDown 0.3s $ease-out-quart forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.2s $ease-out-quart forwards;
+}
+
+.animate-shimmer {
+  @include shimmer;
+}
