@@ -9,23 +9,41 @@ import {
   PdfPreview,
   Modal,
 } from "@/components";
-import { HOME_TABS } from "@/mocks";
 import {
   MOCK_PDF_PAGES,
   MOCK_VENDORS,
   PROJECT_PLAN_AI_RESPONSE,
   MODE_DESCRIPTION,
   CHAT_INPUT_PLACEHOLDER,
-  INITIAL_AI_MESSAGE,
 } from "@/mocks/project-plan";
 import { Tab, ChatMessage, Vendor } from "@/types";
+
+// Tab configuration for project-plan page (matches Angular)
+const PROJECT_PLAN_TABS: Tab[] = [
+  {
+    id: "kick",
+    label: "kick",
+    subLabel: "(AI Chat)",
+    icon: "kick",
+    isActive: true,
+    isDisabled: false,
+  },
+  {
+    id: "carry",
+    label: "carry",
+    subLabel: "(コミュニケーション)",
+    icon: "carry",
+    isActive: false,
+    isDisabled: false,
+  },
+];
 import styles from "./page.module.scss";
 
 export default function ProjectPlanPage() {
   const router = useRouter();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  const [messages, setMessages] = useState<ChatMessage[]>([INITIAL_AI_MESSAGE]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showPdfPreview, setShowPdfPreview] = useState(false);
   const [showDownloadModal, setShowDownloadModal] = useState(false);
@@ -60,39 +78,36 @@ export default function ProjectPlanPage() {
     [router]
   );
 
-  const handleMessageSent = useCallback(
-    (message: string) => {
-      // Add user message
-      const userMessage: ChatMessage = {
-        id: `user-${Date.now()}`,
-        content: message,
+  const handleMessageSent = useCallback((message: string) => {
+    // Add user message
+    const userMessage: ChatMessage = {
+      id: `user-${Date.now()}`,
+      content: message,
+      timestamp: new Date(),
+      sender: "user",
+      isNew: true,
+    };
+    setMessages((prev) => [...prev, userMessage]);
+    setIsLoading(true);
+
+    // Simulate AI response with project plan
+    setTimeout(() => {
+      const aiMessage: ChatMessage = {
+        id: `ai-${Date.now()}`,
+        content: PROJECT_PLAN_AI_RESPONSE,
         timestamp: new Date(),
-        sender: "user",
+        sender: "ai",
         isNew: true,
       };
-      setMessages((prev) => [...prev, userMessage]);
-      setIsLoading(true);
+      setMessages((prev) => [...prev, aiMessage]);
+      setIsLoading(false);
 
-      // Simulate AI response with project plan
+      // Show PDF preview after AI generates plan
       setTimeout(() => {
-        const aiMessage: ChatMessage = {
-          id: `ai-${Date.now()}`,
-          content: PROJECT_PLAN_AI_RESPONSE,
-          timestamp: new Date(),
-          sender: "ai",
-          isNew: true,
-        };
-        setMessages((prev) => [...prev, aiMessage]);
-        setIsLoading(false);
-
-        // Show PDF preview after AI generates plan
-        setTimeout(() => {
-          setShowPdfPreview(true);
-        }, 500);
-      }, 2000);
-    },
-    []
-  );
+        setShowPdfPreview(true);
+      }, 500);
+    }, 2000);
+  }, []);
 
   const handleMicrophoneClicked = useCallback(() => {
     console.log("Microphone clicked - voice input not implemented");
@@ -148,7 +163,7 @@ export default function ProjectPlanPage() {
 
   return (
     <div className={styles.container}>
-      <TabNavigation tabs={HOME_TABS} onTabChange={handleTabChange} />
+      <TabNavigation tabs={PROJECT_PLAN_TABS} onTabChange={handleTabChange} />
 
       <div className={styles.chatContent}>
         {/* Chat Messages Container */}

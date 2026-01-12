@@ -54,3 +54,7 @@ export { ChatInputBox } from "./ChatInputBox";
 
 // PdfPreview
 export { PdfPreview } from "./PdfPreview";
+
+// Loading
+export { Loading } from "./Loading";
+export type { LoadingProps, LoadingType, LoadingSize } from "./Loading";

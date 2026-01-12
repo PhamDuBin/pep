@@ -12,8 +12,8 @@
   align-items: flex-start;
   padding: 15px 10px 25px;
   z-index: $z-sidebar;
-  transition: width $transition-slow $transition-timing;
-  box-shadow: $shadow-sidebar;
+  transition: all $transition-slow $transition-timing;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
 
   &.expanded {
     width: $sidebar-width;
@@ -124,12 +124,23 @@
   }
 }
 
+.projectSection {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  &.centered {
+    align-items: center;
+    width: 100%;
+  }
+}
+
 .sectionLabel {
   font-size: $font-size-base;
   color: $text-gray;
 }
 
-.menuItem {
+.archiveMenuItem {
   display: flex;
   align-items: center;
   gap: 7px;

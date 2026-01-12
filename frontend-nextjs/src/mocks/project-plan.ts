@@ -193,12 +193,3 @@ export const MODE_DESCRIPTION =
 
 export const CHAT_INPUT_PLACEHOLDER =
   "プロジェクトの概要、開始時期、業種、期間を入力してください（5項目のPDF計画書に構造化されます）";
-
-export const INITIAL_AI_MESSAGE: ChatMessage = {
-  id: "initial-ai",
-  content:
-    "プロジェクト計画書作成モードです。プロジェクトの概要、開始時期、業種、期間を入力してください。5項目のPDF計画書に構造化します。",
-  timestamp: new Date(),
-  sender: "ai",
-  isNew: false,
-};

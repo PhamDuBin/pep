@@ -3,335 +3,672 @@
 .container {
   display: flex;
   flex-direction: column;
-  height: 100%;
-  background-color: $white;
-}
-
-.contentArea {
-  display: flex;
-  flex: 1;
-  height: calc(100vh - 89px - 94px);
+  height: calc(100vh - 90px);
   overflow: hidden;
 }
 
-// Left Panel - Vendor List
-.leftPanel {
-  width: 320px;
-  border-right: 1px solid $border-light;
+// Content Area - fills remaining height after tab navigation
+.contentArea {
   display: flex;
-  flex-direction: column;
-  background-color: $white;
+  flex: 1;
+  min-height: 0;
+  background: #ffffff;
+  overflow: hidden;
 }
 
+// Left Panel - contains project header and vendor list
+.leftPanel {
+  display: flex;
+  flex-direction: column;
+  width: 350px;
+  height: 100%;
+  flex-shrink: 0;
+  border-right: 1px solid #e1e1e1;
+  overflow: hidden;
+}
+
+// Project Header - matches Angular exactly
 .projectHeader {
   display: flex;
-  justify-content: space-between;
+  gap: 10px;
   align-items: center;
-  padding: 15px 20px;
-  border-bottom: 1px solid $border-light;
+  justify-content: center;
+  width: 100%;
+  height: 85px;
+  padding: 10px 15px;
+  border-bottom: 1px solid #e1e1e1;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  background: #ffffff;
 }
 
 .projectName {
+  flex: 1;
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  font-weight: 400;
   font-size: 14px;
-  font-weight: $font-weight-medium;
-  color: $text-dark;
+  line-height: normal;
+  color: #000000;
   margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  white-space: pre-wrap;
 }
 
 .documentIcon {
-  padding: 5px;
-  border-radius: $border-radius-default;
-  transition: background-color $transition-default $transition-timing;
-
-  &:hover {
-    background-color: $gray-100;
-  }
-}
-
-.vendorList {
-  flex: 1;
-  overflow-y: auto;
-}
-
-.vendorListHeader {
-  padding: 15px 20px;
-  font-size: 13px;
-  font-weight: $font-weight-medium;
-  color: $text-gray;
-  border-bottom: 1px solid $border-light;
-}
-
-.vendorItem {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 15px 20px;
-  cursor: pointer;
-  transition: background-color $transition-default $transition-timing;
-  border-bottom: 1px solid $border-light;
-
-  &:hover {
-    background-color: $gray-50;
-  }
-
-  &.selected {
-    background-color: $primary-light;
-  }
-}
-
-.vendorAvatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: $avatar-bg;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
-  font-weight: $font-weight-medium;
-  color: $white;
+  padding: 3px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: rgba(6, 106, 158, 0.1);
+  }
+}
+
+// Message List Container
+.messageListContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
+  width: 100%;
+  padding: 15px 0;
+  background-color: #f5f5f5;
+  overflow: hidden;
+  box-sizing: border-box;
+  flex: 1;
+  min-height: 0;
+}
+
+.listTitle {
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: normal;
+  color: #333333;
+  text-align: center;
+  margin: 0;
   flex-shrink: 0;
 }
 
-.vendorInfo {
+.searchWrapper {
+  padding: 0 15px;
+  width: 100%;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.searchBox {
+  display: flex;
+  align-items: center;
+  padding: 7px 15px;
+  background: #ffffff;
+  border: 1px solid #8ec0d0;
+  border-radius: 1000px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.searchInput {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  font-size: 14px;
+  color: #333333;
+  margin-left: 8px;
+
+  &::placeholder {
+    color: #808080;
+  }
+}
+
+// Vendor List
+.vendorList {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+
+  // Custom scrollbar
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+  }
+}
+
+.vendorItem {
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 15px;
+  border-bottom: 1px solid #e1e1e1;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: rgba(230, 243, 245, 0.5);
+  }
+
+  &.selected {
+    background-color: #ffffff;
+  }
+}
+
+.vendorContent {
   flex: 1;
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
 }
 
 .vendorName {
-  font-size: 14px;
-  font-weight: $font-weight-medium;
-  color: $text-dark;
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: normal;
+  color: #333333;
 }
 
-.vendorLastMessage {
+.lastMessage {
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: normal;
+  color: #333333;
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.rightSection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex-shrink: 0;
+  gap: 5px;
+}
+
+.timestamp {
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 19px;
+  text-align: center;
+  color: #333333;
+}
+
+// Menu styles
+.menuContainer {
+  position: relative;
+}
+
+.menuBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 4px;
+  transition: background-color 0.15s ease;
+
+  &:hover,
+  &.active {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 5px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  overflow: hidden;
+  min-width: 100px;
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 15px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #333333;
+  text-align: left;
+  width: 100%;
+  white-space: nowrap;
+
+  &:hover {
+    background: #f5f5f5;
+  }
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+.exitText,
+.actionText {
+  color: #066a9e;
+}
+
+// Right Panel - Chat Area
+.rightPanel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.chatContainer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+// Chat Header
+.chatHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 25px;
+  border-bottom: 1px solid #d9d9d9;
+  flex-shrink: 0;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.chatVendorName {
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: normal;
+  color: #333333;
+  margin: 0;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+}
+
+.memberBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: #066a9e;
+  border-radius: 50%;
+}
+
+.memberCount {
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 1;
+  color: #ffffff;
+  text-align: center;
+}
+
+// Add Person Button and Dropdown
+.addPersonContainer {
+  position: relative;
+}
+
+.addPersonBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+
+  &:hover,
+  &.active {
+    opacity: 0.8;
+  }
+}
+
+.memberDropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 5px;
+  width: 210px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  overflow: hidden;
+}
+
+.dropdownActions {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0;
+}
+
+.dropdownDivider {
+  height: 1px;
+  background: #d9d9d9;
+  margin: 0 15px;
+}
+
+.membersSection {
+  padding: 10px 15px 15px;
+}
+
+.membersLabel {
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  font-weight: 400;
   font-size: 12px;
-  color: $text-gray;
+  color: #808080;
+  margin: 0 0 10px 0;
+}
+
+.membersList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.memberItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.memberAvatar {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #066a9e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  span {
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 500;
+    font-size: 10px;
+    color: #ffffff;
+  }
+}
+
+.memberName {
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #333333;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.vendorTime {
-  font-size: 11px;
-  color: $text-light;
-  flex-shrink: 0;
-}
-
-// Right Panel - Chat Area
-.rightPanel {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  background-color: $bg-light;
-}
-
-.noVendorSelected {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  p {
-    font-size: 14px;
-    color: $text-gray;
-  }
-}
-
-.chatHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 25px;
-  background-color: $white;
-  border-bottom: 1px solid $border-light;
-}
-
-.chatHeaderInfo {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.chatVendorName {
-  font-size: 16px;
-  font-weight: $font-weight-medium;
-  color: $text-dark;
-}
-
-.chatMemberCount {
-  font-size: 12px;
-  color: $text-gray;
-}
-
-.chatHeaderActions {
-  display: flex;
-  gap: 10px;
-}
-
-.addMemberBtn {
-  padding: 8px 16px;
-  background-color: $white;
-  border: 1px solid $primary;
-  border-radius: $border-radius-default;
-  font-size: 13px;
-  color: $primary;
-  transition: all $transition-default $transition-timing;
-
-  &:hover {
-    background-color: $primary-light;
-  }
-}
-
-.exitChatBtn {
-  padding: 8px 16px;
-  background-color: $white;
-  border: 1px solid $border-gray;
-  border-radius: $border-radius-default;
-  font-size: 13px;
-  color: $text-gray;
-  transition: all $transition-default $transition-timing;
-
-  &:hover {
-    background-color: $gray-100;
-  }
-}
-
-.chatMessages {
+// Messages Area
+.messagesArea {
   flex: 1;
   overflow-y: auto;
   padding: 25px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-}
+  min-height: 0;
 
-.chatMessage {
-  display: flex;
-  gap: 12px;
-  max-width: 70%;
+  // Custom scrollbar
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
 
-  &.buyerMessage {
-    margin-left: auto;
-    flex-direction: row-reverse;
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
   }
 }
 
-.messageAvatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background-color: $avatar-bg;
+.messagesContent {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  font-weight: $font-weight-medium;
-  color: $white;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+// Message Row
+.messageRow {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+
+  &.vendor {
+    justify-content: flex-start;
+  }
+
+  &.buyer {
+    justify-content: flex-end;
+  }
+}
+
+// Avatar
+.avatar {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #cccccc;
   flex-shrink: 0;
 }
 
-.messageContent {
+// Message Content
+.messageContentWrapper {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-}
+  gap: 2px;
+  max-width: 60%;
+  min-width: 200px;
 
-.messageMeta {
-  display: flex;
-  gap: 10px;
-  align-items: center;
+  .buyer & {
+    align-items: flex-end;
+  }
 }
 
 .senderName {
-  font-size: 13px;
-  font-weight: $font-weight-medium;
-  color: $text-dark;
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  line-height: 19px;
+  color: #333333;
+  margin: 0;
 }
 
-.messageTime {
-  font-size: 11px;
-  color: $text-light;
+// Message Bubble
+.messageBubble {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+
+  &.vendor {
+    background: #ffffff;
+    border: 1px solid #8ec0d0;
+  }
+
+  &.buyer {
+    background: #e6f3f5;
+    border: 1px solid #8ec0d0;
+  }
 }
 
 .messageText {
-  padding: 12px 16px;
-  background-color: $white;
-  border-radius: $border-radius-lg;
-  font-size: 14px;
-  color: $text-dark;
-  line-height: 1.5;
-  box-shadow: $shadow-sm;
+  flex: 1;
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: normal;
+  color: #333333;
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
-.buyerMessage .messageText {
-  background-color: $primary;
-  color: $white;
+.messageTime {
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 19px;
+  color: #808080;
+  margin: 0;
 }
 
-.chatInput {
+// Chat Input
+.chatInputWrapper {
+  padding: 15px 25px 25px 25px;
+  flex-shrink: 0;
+}
+
+.chatInputBox {
   display: flex;
-  gap: 10px;
-  padding: 15px 25px;
-  background-color: $white;
-  border-top: 1px solid $border-light;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 10px 10px 15px;
+  border: 1px solid #b9b9b9;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
 
-  input {
-    flex: 1;
-    padding: 12px 16px;
-    border: 1px solid $border-gray;
-    border-radius: 9999px;
-    font-size: 14px;
-    outline: none;
-    transition: border-color $transition-default $transition-timing;
+.messageInput {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: normal;
+  color: #333333;
 
-    &:focus {
-      border-color: $primary;
-    }
-
-    &::placeholder {
-      color: $text-gray;
-    }
-  }
-
-  button {
-    width: 44px;
-    height: 44px;
-    background-color: $primary;
-    border: none;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all $transition-default $transition-timing;
-
-    &:hover:not(:disabled) {
-      opacity: 0.9;
-    }
-
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
+  &::placeholder {
+    color: #808080;
   }
 }
 
+.sendButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// Empty State
+.emptyState {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  height: 100%;
+  width: 100%;
+}
+
+.emptyMessage {
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: normal;
+  color: #808080;
+  margin: 0;
+}
+
+// Project Plan Modal Content
 .projectPlanContent {
   padding: 20px;
   text-align: center;
 
   h3 {
     font-size: 18px;
-    font-weight: $font-weight-medium;
-    color: $text-dark;
+    font-weight: 500;
+    color: #333333;
     margin-bottom: 15px;
   }
 
   p {
     font-size: 14px;
-    color: $text-gray;
+    color: #808080;
   }
 }

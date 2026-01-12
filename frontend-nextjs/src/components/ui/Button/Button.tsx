@@ -37,6 +37,13 @@ const sizeClassMap: Record<ButtonSize, string> = {
   lg: "btn-lg",
 };
 
+const loadingSizeMap: Record<ButtonSize, string> = {
+  xs: "loading-xs",
+  sm: "loading-sm",
+  md: "loading-sm",
+  lg: "loading-md",
+};
+
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
@@ -58,7 +65,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       variantClassMap[variant],
       sizeClassMap[size],
       fullWidth ? "btn-block" : "",
-      loading ? "loading" : "",
       styles.button,
       className,
     ]
@@ -74,7 +80,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         {loading && (
-          <span className="loading loading-spinner loading-sm" aria-hidden="true" />
+          <span
+            className={`loading loading-spinner ${loadingSizeMap[size]}`}
+            aria-hidden="true"
+          />
         )}
         {!loading && leftIcon && (
           <span className={styles.iconLeft} aria-hidden="true">

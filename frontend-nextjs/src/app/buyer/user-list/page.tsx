@@ -1,17 +1,30 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
-import { InviteMemberModal, PermissionChangeModal, DeleteConfirmModal } from "@/components";
+import { useState, useCallback, useMemo, useEffect } from "react";
+import { InviteMemberModal, PermissionChangeModal, DeleteConfirmModal, Loading } from "@/components";
 import { MOCK_USERS, PERMISSION_OPTIONS } from "@/mocks";
 import { User, UserPermission } from "@/types";
 import styles from "./page.module.scss";
 
 export default function UserListPage() {
-  const [users, setUsers] = useState<User[]>(MOCK_USERS);
+  const [isLoading, setIsLoading] = useState(true);
+  const [users, setUsers] = useState<User[]>([]);
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [showPermissionModal, setShowPermissionModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+
+  // Simulate loading data
+  useEffect(() => {
+    const loadData = async () => {
+      setIsLoading(true);
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      setUsers(MOCK_USERS);
+      setIsLoading(false);
+    };
+    loadData();
+  }, []);
 
   const isAllSelected = useMemo(
     () => users.length > 0 && users.every((u) => u.isSelected),
@@ -90,109 +103,115 @@ export default function UserListPage() {
 
   return (
     <div className={styles.contentWrapper}>
-      <div className={styles.pageContent}>
-        {/* Page Header */}
-        <div className={styles.pageHeader}>
-          <h1 className={styles.pageTitle}>ユーザー一覧</h1>
+      {isLoading ? (
+        <div className={styles.loadingState}>
+          <Loading type="spinner" size="lg" />
         </div>
+      ) : (
+        <div className={styles.pageContent}>
+          {/* Page Header */}
+          <div className={styles.pageHeader}>
+            <h1 className={styles.pageTitle}>ユーザー一覧</h1>
+          </div>
 
-        {/* Invite Button */}
-        <div className={styles.actionBar}>
-          <button
-            type="button"
-            className={styles.btnInvite}
-            onClick={() => setShowInviteModal(true)}
-          >
-            メンバーを招待
-          </button>
-        </div>
+          {/* Invite Button */}
+          <div className={styles.actionBar}>
+            <button
+              type="button"
+              className={styles.btnInvite}
+              onClick={() => setShowInviteModal(true)}
+            >
+              メンバーを招待
+            </button>
+          </div>
 
-        {/* User Table */}
-        <div className={styles.tableContainer}>
-          <table className={styles.userTable}>
-            <thead>
-              <tr className={styles.headerRow}>
-                <th className={`${styles.checkboxCell} ${styles.headerCell}`}>
-                  <label className={styles.checkboxWrapper}>
-                    <input
-                      type="checkbox"
-                      checked={isAllSelected}
-                      onChange={handleToggleAllSelection}
-                      className={styles.checkbox}
-                    />
-                    <span
-                      className={`${styles.checkmark} ${isAllSelected ? styles.checked : ""}`}
-                    />
-                  </label>
-                </th>
-                <th className={styles.userCellHeader}>ユーザー</th>
-                <th className={`${styles.permissionCell} ${styles.headerCell}`}>
-                  権限
-                </th>
-                <th className={`${styles.actionCell} ${styles.headerCell}`} />
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((user) => (
-                <tr key={user.id} className={styles.dataRow}>
-                  <td className={styles.checkboxCell}>
+          {/* User Table */}
+          <div className={styles.tableContainer}>
+            <table className={styles.userTable}>
+              <thead>
+                <tr className={styles.headerRow}>
+                  <th className={`${styles.checkboxCell} ${styles.headerCell}`}>
                     <label className={styles.checkboxWrapper}>
                       <input
                         type="checkbox"
-                        checked={user.isSelected}
-                        onChange={() => handleToggleSelection(user.id)}
+                        checked={isAllSelected}
+                        onChange={handleToggleAllSelection}
                         className={styles.checkbox}
                       />
                       <span
-                        className={`${styles.checkmark} ${user.isSelected ? styles.checked : ""}`}
+                        className={`${styles.checkmark} ${isAllSelected ? styles.checked : ""}`}
                       />
                     </label>
-                  </td>
-                  <td className={styles.userCell}>
-                    <div className={styles.userInfo}>
-                      <div
-                        className={styles.avatar}
-                        style={{ backgroundColor: user.avatarColor }}
-                      >
-                        <span className={styles.avatarText}>
-                          {user.initials}
-                        </span>
-                      </div>
-                      <span className={styles.userName}>{user.name}</span>
-                    </div>
-                  </td>
-                  <td className={styles.permissionCell}>
-                    <span className={styles.permissionText}>
-                      {getPermissionLabel(user.permission)}
-                    </span>
-                  </td>
-                  <td className={styles.actionCell}>
-                    <button
-                      type="button"
-                      className={styles.changeBtn}
-                      onClick={() => handleOpenPermissionModal(user.id)}
-                    >
-                      変更
-                    </button>
-                  </td>
+                  </th>
+                  <th className={styles.userCellHeader}>ユーザー</th>
+                  <th className={`${styles.permissionCell} ${styles.headerCell}`}>
+                    権限
+                  </th>
+                  <th className={`${styles.actionCell} ${styles.headerCell}`} />
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {users.map((user) => (
+                  <tr key={user.id} className={styles.dataRow}>
+                    <td className={styles.checkboxCell}>
+                      <label className={styles.checkboxWrapper}>
+                        <input
+                          type="checkbox"
+                          checked={user.isSelected}
+                          onChange={() => handleToggleSelection(user.id)}
+                          className={styles.checkbox}
+                        />
+                        <span
+                          className={`${styles.checkmark} ${user.isSelected ? styles.checked : ""}`}
+                        />
+                      </label>
+                    </td>
+                    <td className={styles.userCell}>
+                      <div className={styles.userInfo}>
+                        <div
+                          className={styles.avatar}
+                          style={{ backgroundColor: user.avatarColor }}
+                        >
+                          <span className={styles.avatarText}>
+                            {user.initials}
+                          </span>
+                        </div>
+                        <span className={styles.userName}>{user.name}</span>
+                      </div>
+                    </td>
+                    <td className={styles.permissionCell}>
+                      <span className={styles.permissionText}>
+                        {getPermissionLabel(user.permission)}
+                      </span>
+                    </td>
+                    <td className={styles.actionCell}>
+                      <button
+                        type="button"
+                        className={styles.changeBtn}
+                        onClick={() => handleOpenPermissionModal(user.id)}
+                      >
+                        変更
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-        {/* Delete Button */}
-        <div className={styles.deleteAction}>
-          <button
-            type="button"
-            className={styles.btnDelete}
-            disabled={selectedCount === 0}
-            onClick={handleDeleteMembers}
-          >
-            メンバーを削除
-          </button>
+          {/* Delete Button */}
+          <div className={styles.deleteAction}>
+            <button
+              type="button"
+              className={styles.btnDelete}
+              disabled={selectedCount === 0}
+              onClick={handleDeleteMembers}
+            >
+              メンバーを削除
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Invite Modal */}
       <InviteMemberModal

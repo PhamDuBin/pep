@@ -50,7 +50,7 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
     <aside
       className={`${styles.sidebar} ${isCollapsed ? styles.collapsed : styles.expanded}`}
     >
-      {/* Top Section */}
+      {/* Top Section (Frame 14) */}
       <div className={styles.topSection}>
         {/* Menu Toggle */}
         <div className={`${styles.menuToggle} ${isCollapsed ? styles.centered : ""}`}>
@@ -79,15 +79,17 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
           </button>
         </div>
 
-        {/* Separator */}
+        {/* Separator Line */}
         <div className={styles.separator} />
 
         {/* RFP Section - Expanded */}
         {!isCollapsed && (
           <div className={styles.section}>
-            <span className={styles.sectionLabel}>RFP</span>
+            <div>
+              <span className={styles.sectionLabel}>RFP</span>
+            </div>
             <div
-              className={`${styles.menuItem} ${isArchiveActive ? styles.active : ""}`}
+              className={`${styles.archiveMenuItem} ${isArchiveActive ? styles.active : ""}`}
               onClick={navigateToArchive}
             >
               <Image
@@ -105,7 +107,7 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
         {isCollapsed && (
           <div className={`${styles.section} ${styles.centered}`}>
             <div
-              className={`${styles.menuItem} ${styles.centered} ${isArchiveActive ? styles.active : ""}`}
+              className={`${styles.archiveMenuItem} ${styles.centered} ${isArchiveActive ? styles.active : ""}`}
               onClick={navigateToArchive}
             >
               <Image
@@ -120,8 +122,10 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
 
         {/* PROJECT Section - Expanded */}
         {!isCollapsed && (
-          <div className={styles.section}>
-            <span className={styles.sectionLabel}>PROJECT</span>
+          <div className={styles.projectSection}>
+            <div>
+              <span className={styles.sectionLabel}>PROJECT</span>
+            </div>
 
             {/* Search */}
             <div className={styles.searchItem}>
@@ -175,7 +179,7 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
 
         {/* PROJECT Section - Collapsed */}
         {isCollapsed && (
-          <div className={`${styles.section} ${styles.centered}`}>
+          <div className={`${styles.projectSection} ${styles.centered}`}>
             <div className={`${styles.searchItem} ${styles.centered}`}>
               <Image
                 src="/icons/search.svg"
@@ -188,7 +192,7 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
         )}
       </div>
 
-      {/* Bottom Section */}
+      {/* Bottom Section (Frame 15) */}
       <div className={`${styles.bottomSection} ${isCollapsed ? styles.centered : ""}`}>
         {/* User List */}
         <div

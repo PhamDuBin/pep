@@ -8,8 +8,28 @@ import {
   ChatMessageList,
   ChatInputBox,
 } from "@/components";
-import { HOME_TABS, MOCK_CHAT_MESSAGES, AI_RESPONSES } from "@/mocks";
+import { MOCK_CHAT_MESSAGES, AI_RESPONSES } from "@/mocks";
 import { Tab, ChatMessage } from "@/types";
+
+// Tab configuration for ai-chat page (matches Angular)
+const AI_CHAT_TABS: Tab[] = [
+  {
+    id: "kick",
+    label: "kick",
+    subLabel: "(AI Chat)",
+    icon: "kick",
+    isActive: true,
+    isDisabled: false,
+  },
+  {
+    id: "carry",
+    label: "carry",
+    subLabel: "(コミュニケーション)",
+    icon: "carry",
+    isActive: false,
+    isDisabled: false,
+  },
+];
 import styles from "./page.module.scss";
 
 function AiChatContent() {
@@ -96,7 +116,7 @@ function AiChatContent() {
 
   return (
     <div className={styles.container}>
-      <TabNavigation tabs={HOME_TABS} onTabChange={handleTabChange} />
+      <TabNavigation tabs={AI_CHAT_TABS} onTabChange={handleTabChange} />
 
       <div className={styles.chatContent}>
         {/* Chat Messages Container */}

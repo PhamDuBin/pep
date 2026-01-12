@@ -1,121 +1,160 @@
 @use "../../../styles/tokens" as *;
 
 .container {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding: 20px;
+  display: block;
+  width: 100%;
+  max-width: 500px;
+  padding: 16px;
   background: $white;
-  border: 1px solid $border-light;
-  border-radius: $border-radius-lg;
-  box-shadow: $shadow-card;
+  border: 1px solid #b9b9b9;
+  border-radius: 8px;
+  animation: fadeInUp 0.3s ease-out;
 }
 
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Header
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.headerLeft {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  margin-bottom: 16px;
 }
 
 .title {
-  font-size: 16px;
-  font-weight: $font-weight-medium;
-  color: $text-dark;
-}
-
-.headerRight {
-  display: flex;
-  align-items: center;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #333;
+  margin: 0;
 }
 
 .progress {
+  font-family: 'Noto Sans JP', sans-serif;
   font-size: 14px;
-  color: $primary;
-  font-weight: $font-weight-medium;
+  color: #066a9e;
 }
 
-.pageGrid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 15px;
-}
-
-.pageCard {
+// Thumbnail List
+.thumbnailList {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-}
+  gap: 12px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  padding-bottom: 8px;
 
-.pageThumbnail {
-  width: 100%;
-  aspect-ratio: 3/4;
-  background: $gray-100;
-  border: 1px solid $border-light;
-  border-radius: $border-radius-default;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all $transition-default $transition-timing;
+  // Custom scrollbar
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
 
-  &:hover {
-    border-color: $primary;
-    box-shadow: $shadow-md;
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 2px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 2px;
   }
 }
 
-.pageNumber {
-  font-size: 24px;
-  font-weight: $font-weight-bold;
-  color: $gray-400;
+.thumbnailItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 80px;
+  flex-shrink: 0;
+}
+
+.thumbnailOuter {
+  width: 80px;
+  height: 100px;
+  border: 1px solid #b9b9b9;
+  border-radius: 4px;
+  background: #f9fafb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.thumbnailInner {
+  width: 60px;
+  height: 80px;
+  background: $white;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pdfText {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 10px;
+  color: #808080;
 }
 
 .pageTitle {
+  font-family: 'Noto Sans JP', sans-serif;
   font-size: 12px;
-  color: $text-gray;
+  color: #333;
   text-align: center;
+  white-space: nowrap;
 }
 
+.pageNumber {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 11px;
+  color: #808080;
+}
+
+// Actions
 .actions {
   display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  padding-top: 10px;
-  border-top: 1px solid $border-light;
+  gap: 12px;
 }
 
 .downloadBtn {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   padding: 8px 16px;
   background: $white;
-  border: 1px solid $border-gray;
-  border-radius: $border-radius-default;
+  border: 1px solid #b9b9b9;
+  border-radius: 8px;
+  font-family: 'Noto Sans JP', sans-serif;
   font-size: 14px;
-  color: $text-dark;
-  transition: all $transition-default $transition-timing;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.2s;
 
   &:hover {
-    background: $gray-100;
+    background: #f9fafb;
   }
 }
 
 .confirmBtn {
-  padding: 8px 20px;
-  background: $primary;
+  padding: 8px 24px;
+  background: #808080;
   border: none;
-  border-radius: $border-radius-default;
+  border-radius: 8px;
+  font-family: 'Noto Sans JP', sans-serif;
   font-size: 14px;
   color: $white;
-  font-weight: $font-weight-medium;
-  transition: all $transition-default $transition-timing;
+  cursor: pointer;
+  transition: opacity 0.2s;
 
   &:hover {
     opacity: 0.9;
