@@ -1,0 +1,8 @@
+@use "../../../styles/tokens" as *;
+@use "../../../styles/mixins" as *;
+
+.badge {
+  @include flex-center;
+  font-weight: $font-weight-medium;
+  @include transition-fast;
+}

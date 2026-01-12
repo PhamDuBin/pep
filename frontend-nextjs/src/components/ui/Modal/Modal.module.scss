@@ -1,0 +1,91 @@
+@use "../../../styles/tokens" as *;
+@use "../../../styles/mixins" as *;
+
+.modal {
+  z-index: $z-index-modal;
+
+  &::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+  }
+}
+
+.modalBox {
+  @include flex-column;
+  max-height: calc(100vh - $spacing-8);
+  overflow: hidden;
+}
+
+// Size variants
+.sizeSm {
+  width: min(100%, 24rem); // 384px
+}
+
+.sizeMd {
+  width: min(100%, 32rem); // 512px
+}
+
+.sizeLg {
+  width: min(100%, 42rem); // 672px
+}
+
+.sizeXl {
+  width: min(100%, 56rem); // 896px
+}
+
+.sizeFull {
+  width: calc(100% - $spacing-8);
+  height: calc(100vh - $spacing-8);
+  max-width: none;
+  max-height: none;
+}
+
+.header {
+  @include flex-between;
+  padding-bottom: $spacing-4;
+  border-bottom: $border-width-1 solid $color-border-light;
+  flex-shrink: 0;
+}
+
+.title {
+  @include heading-4;
+  margin: 0;
+}
+
+.closeButton {
+  @include flex-center;
+  width: $spacing-8;
+  height: $spacing-8;
+  border-radius: $border-radius-lg;
+  color: $color-text-tertiary;
+  @include transition-fast;
+
+  &:hover {
+    background-color: $color-neutral-100;
+    color: $color-text-primary;
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+
+  svg {
+    width: $spacing-5;
+    height: $spacing-5;
+  }
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding-block: $spacing-4;
+  @include custom-scrollbar;
+}
+
+.footer {
+  @include flex-end;
+  gap: $spacing-3;
+  padding-top: $spacing-4;
+  border-top: $border-width-1 solid $color-border-light;
+  flex-shrink: 0;
+}
