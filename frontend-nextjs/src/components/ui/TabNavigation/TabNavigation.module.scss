@@ -1,0 +1,102 @@
+@use "../../../styles/tokens" as *;
+
+.nav {
+  height: 94px;
+  background-color: $white;
+  box-shadow: $shadow-tab;
+  display: flex;
+}
+
+.tabButton {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 25px 10px;
+  transition: all 200ms;
+  border-bottom: 2px solid;
+  cursor: pointer;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+
+  &.active {
+    border-bottom-color: $primary;
+  }
+
+  &.inactive {
+    border-bottom-color: $border-gray;
+  }
+
+  &:not(.disabled):hover {
+    background-color: $primary;
+
+    .label,
+    .subLabel {
+      color: $white;
+    }
+
+    .iconPath {
+      fill: $white;
+    }
+  }
+
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+.icon {
+  transition: colors 200ms;
+}
+
+.iconPath {
+  transition: fill 200ms;
+
+  &.iconActive {
+    fill: $primary;
+  }
+
+  &.iconInactive {
+    fill: $text-gray;
+  }
+}
+
+.labelContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.label {
+  font-size: 16px;
+  font-weight: $font-weight-bold;
+  text-align: center;
+  transition: color 200ms;
+
+  &.labelActive {
+    color: $primary;
+  }
+
+  &.labelInactive {
+    color: $text-gray;
+  }
+}
+
+.subLabel {
+  font-size: 16px;
+  text-align: center;
+  transition: color 200ms;
+
+  &.subLabelActive {
+    color: $primary;
+    font-weight: $font-weight-bold;
+  }
+
+  &.subLabelInactive {
+    color: $text-gray;
+  }
+}

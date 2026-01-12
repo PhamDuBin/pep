@@ -1,0 +1,428 @@
+@use "../../../styles/tokens" as *;
+
+// Content Wrapper
+.contentWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  width: 100%;
+  padding: 25px 50px;
+}
+
+.pageContent {
+  display: flex;
+  flex-direction: column;
+  gap: 35px;
+}
+
+// User Info Section
+.userInfoSection {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  width: 100%;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #cfcfcf;
+}
+
+.sectionTitle {
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: normal;
+  color: #333;
+  margin: 0;
+}
+
+.sectionContent {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+// Avatar Row
+.avatarRow {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  width: 100%;
+}
+
+.avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.avatarInitials {
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 400;
+  font-size: 24px;
+  color: white;
+}
+
+.btnSelectImage {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  background-color: #e1e1e1;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #d1d1d1;
+  }
+}
+
+// Success Message
+.successMessage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  background-color: #e6f3f5;
+  border-radius: 4px;
+  align-self: flex-start;
+}
+
+.successText {
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: normal;
+  color: #066a9e;
+}
+
+// Form Fields
+.formFields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.formRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.formLabel {
+  width: 200px;
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: black;
+}
+
+.formValue {
+  display: flex;
+  align-items: center;
+  height: 35px;
+  padding: 3px 10px;
+  background-color: white;
+  border-radius: 4px;
+  width: 300px;
+
+  &.emailField {
+    width: auto;
+    gap: 25px;
+  }
+}
+
+.valueText {
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: black;
+}
+
+.btnLink {
+  background: none;
+  border: none;
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: #066a9e;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+// Form Input
+.formInputWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 35px;
+  padding: 3px 10px;
+  background-color: white;
+  border: 1px solid #b9b9b9;
+  border-radius: 4px;
+  width: 300px;
+  box-sizing: border-box;
+}
+
+.formInput {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: black;
+  background: transparent;
+
+  &::placeholder {
+    color: #808080;
+  }
+}
+
+.btnToggleVisibility {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+// Save Button
+.saveButtonWrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.btnSave {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  background-color: #066a9e;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover:not(:disabled) {
+    background-color: #055a84;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+// Payment Info Section
+.paymentInfoSection {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  width: 100%;
+}
+
+.paymentContent {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.paymentRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.paymentLabel {
+  width: 200px;
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: black;
+}
+
+.paymentValue {
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: black;
+  padding: 3px 0;
+}
+
+// Payment History Section
+.paymentHistorySection {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #d4d4d4;
+}
+
+.historyTable {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  border: 1px solid #d4d4d4;
+  border-radius: 4px;
+  overflow: hidden;
+
+  thead {
+    tr {
+      background-color: #f5f5f5;
+    }
+
+    th {
+      font-family: 'Inter', 'Noto Sans JP', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      color: black;
+      text-align: center;
+      padding: 15px 12px;
+      border-top: 1px solid #d4d4d4;
+      white-space: nowrap;
+    }
+  }
+
+  tbody {
+    td {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      color: black;
+      text-align: center;
+      padding: 15px 12px;
+      border-top: 1px solid #d4d4d4;
+    }
+  }
+}
+
+.statusBadge {
+  display: inline-block;
+  padding: 4px 10px;
+  background-color: #e6f3f5;
+  color: #066a9e;
+  border-radius: 9999px;
+  font-size: 12px;
+}
+
+// Modal Content
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0 15px;
+}
+
+.modalFormGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  label {
+    font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    color: #333;
+  }
+
+  input {
+    height: 40px;
+    padding: 8px 12px;
+    border: 1px solid #b9b9b9;
+    border-radius: 4px;
+    font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+    font-size: 14px;
+    outline: none;
+
+    &:focus {
+      border-color: #066a9e;
+    }
+
+    &::placeholder {
+      color: #808080;
+    }
+  }
+}
+
+.modalActions {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0;
+}
+
+// Avatar Color Grid
+.avatarColorGrid {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.colorOption {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 0;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  &.selected {
+    border-color: #066a9e;
+  }
+}

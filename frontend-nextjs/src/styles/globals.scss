@@ -263,3 +263,134 @@ ol {
   background-color: $color-primary;
   color: $color-text-inverse;
 }
+
+// =============================================================================
+// MODAL BUTTON STYLES
+// =============================================================================
+
+.modal-btn-primary {
+  padding: 10px 20px;
+  background-color: $text-dark;
+  border: none;
+  border-radius: 8px;
+  font-family: $font-noto-jp;
+  font-weight: $font-weight-normal;
+  font-size: 14px;
+  color: $white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  min-width: 80px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  &:hover:not(:disabled) {
+    background-color: #444444;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.modal-btn-secondary {
+  padding: 10px 20px;
+  background-color: $border-light;
+  border: none;
+  border-radius: 8px;
+  font-family: $font-noto-jp;
+  font-weight: $font-weight-normal;
+  font-size: 14px;
+  color: $text-dark;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  min-width: 80px;
+
+  &:hover:not(:disabled) {
+    background-color: #d0d0d0;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.modal-btn-outline {
+  padding: 10px 20px;
+  background-color: transparent;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-family: $font-noto-jp;
+  font-weight: $font-weight-normal;
+  font-size: 14px;
+  color: $text-dark;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 80px;
+
+  &:hover:not(:disabled) {
+    background-color: $bg-light;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.modal-btn-danger {
+  padding: 10px 20px;
+  background-color: #dc2626;
+  border: none;
+  border-radius: 8px;
+  font-family: $font-noto-jp;
+  font-weight: $font-weight-normal;
+  font-size: 14px;
+  color: $white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  min-width: 80px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  &:hover:not(:disabled) {
+    background-color: #b91c1c;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.modal-btn-primary-color {
+  padding: 10px 20px;
+  background-color: $primary;
+  border: none;
+  border-radius: 8px;
+  font-family: $font-noto-jp;
+  font-weight: $font-weight-normal;
+  font-size: 14px;
+  color: $white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  min-width: 80px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  &:hover:not(:disabled) {
+    opacity: 0.9;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}

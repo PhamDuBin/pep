@@ -1,91 +1,145 @@
 @use "../../../styles/tokens" as *;
-@use "../../../styles/mixins" as *;
 
-.modal {
-  z-index: $z-index-modal;
-
-  &::backdrop {
-    background-color: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(2px);
-  }
+.modalBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
 }
 
-.modalBox {
-  @include flex-column;
-  max-height: calc(100vh - $spacing-8);
-  overflow: hidden;
+.modalContainer {
+  position: relative;
+  background: $white;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  animation: slideIn 0.2s ease-out;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 // Size variants
 .sizeSm {
-  width: min(100%, 24rem); // 384px
+  min-width: 400px;
+  max-width: 400px;
 }
 
 .sizeMd {
-  width: min(100%, 32rem); // 512px
+  min-width: 500px;
+  max-width: 500px;
 }
 
 .sizeLg {
-  width: min(100%, 42rem); // 672px
+  min-width: 700px;
+  max-width: 700px;
 }
 
 .sizeXl {
-  width: min(100%, 56rem); // 896px
+  min-width: 800px;
+  max-width: 800px;
 }
 
-.sizeFull {
-  width: calc(100% - $spacing-8);
-  height: calc(100vh - $spacing-8);
-  max-width: none;
-  max-height: none;
-}
-
-.header {
-  @include flex-between;
-  padding-bottom: $spacing-4;
-  border-bottom: $border-width-1 solid $color-border-light;
-  flex-shrink: 0;
-}
-
-.title {
-  @include heading-4;
-  margin: 0;
-}
-
-.closeButton {
-  @include flex-center;
-  width: $spacing-8;
-  height: $spacing-8;
-  border-radius: $border-radius-lg;
-  color: $color-text-tertiary;
-  @include transition-fast;
+.closeBtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 24px;
+  height: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  color: $text-gray;
+  transition: color 0.2s ease;
+  border-radius: 4px;
 
   &:hover {
-    background-color: $color-neutral-100;
-    color: $color-text-primary;
+    color: $text-dark;
   }
 
-  &:focus-visible {
-    @include focus-ring;
-  }
-
-  svg {
-    width: $spacing-5;
-    height: $spacing-5;
+  &:focus {
+    outline: none;
   }
 }
 
-.content {
-  flex: 1;
-  overflow-y: auto;
-  padding-block: $spacing-4;
-  @include custom-scrollbar;
+.modalTitle {
+  font-family: $font-noto-jp;
+  font-weight: $font-weight-normal;
+  font-size: 16px;
+  line-height: normal;
+  color: $primary;
+  margin: 0;
+  text-align: center;
+  padding-right: 24px;
 }
 
-.footer {
-  @include flex-end;
-  gap: $spacing-3;
-  padding-top: $spacing-4;
-  border-top: $border-width-1 solid $color-border-light;
-  flex-shrink: 0;
+.modalBody {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+
+  &:empty {
+    display: none;
+  }
+}
+
+.modalActions {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+
+  &:empty {
+    display: none;
+  }
+}
+
+.modalLoadingOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+}
+
+// Animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }

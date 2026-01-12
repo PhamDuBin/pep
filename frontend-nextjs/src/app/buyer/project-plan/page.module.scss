@@ -1,0 +1,191 @@
+@use "../../../styles/tokens" as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: $white;
+}
+
+.chatContent {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 89px - 94px);
+  background-color: $white;
+  padding: 50px 75px;
+}
+
+.messagesArea {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  align-items: center;
+  overflow: hidden;
+}
+
+.scrollContainer {
+  width: 100%;
+  max-width: 800px;
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 8px;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  scroll-behavior: auto;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+  }
+}
+
+.messagesWrapper {
+  display: block;
+  width: 100%;
+}
+
+.pdfPreviewWrapper {
+  display: block;
+  position: relative;
+  z-index: 1;
+  margin-top: 24px;
+}
+
+.bottomSection {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding-top: 20px;
+}
+
+.modeIndicator {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 15px;
+  background: linear-gradient(to right, #8ec5d0, #066a9e);
+  border: none;
+  border-radius: $border-radius-lg;
+  cursor: pointer;
+  transition: opacity $transition-default $transition-timing;
+
+  &:hover {
+    opacity: 0.9;
+  }
+
+  span {
+    font-size: 14px;
+    color: $white;
+    font-weight: $font-weight-normal;
+  }
+}
+
+.modeDescription {
+  font-size: 13px;
+  color: $primary;
+  text-align: center;
+  padding: 8px;
+  background-color: #f5f5f5;
+  border-radius: 2px;
+  width: 100%;
+}
+
+// Modal styles
+.downloadOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  padding: 20px 0;
+}
+
+.modalContent {
+  width: 100%;
+  text-align: center;
+  padding: 10px 0;
+
+  p {
+    font-size: 14px;
+    color: $text-dark;
+    margin-bottom: 15px;
+  }
+}
+
+.modalActions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding-top: 20px;
+  width: 100%;
+}
+
+.vendorGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  width: 100%;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 10px 0;
+}
+
+.vendorItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: $gray-50;
+  border-radius: $border-radius-default;
+  cursor: pointer;
+  transition: background-color $transition-default $transition-timing;
+
+  &:hover {
+    background: $gray-100;
+  }
+
+  input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: $primary;
+  }
+
+  span {
+    font-size: 13px;
+    color: $text-dark;
+  }
+}
+
+.sentVendorList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  padding: 10px 0;
+}
+
+.vendorBadge {
+  display: inline-block;
+  padding: 6px 12px;
+  background: $primary-light;
+  color: $primary;
+  border-radius: 9999px;
+  font-size: 13px;
+}

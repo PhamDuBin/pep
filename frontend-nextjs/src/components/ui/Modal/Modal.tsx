@@ -10,18 +10,19 @@ import {
 } from "react";
 import styles from "./Modal.module.scss";
 
-export type ModalSize = "sm" | "md" | "lg" | "xl" | "full";
+export type ModalSize = "sm" | "md" | "lg" | "xl";
 
-export interface ModalProps extends HTMLAttributes<HTMLDialogElement> {
+export interface ModalProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
   isOpen: boolean;
   onClose: () => void;
   title?: string;
   size?: ModalSize;
-  closeOnBackdropClick?: boolean;
-  closeOnEscape?: boolean;
+  closeOnBackdrop?: boolean;
   showCloseButton?: boolean;
+  isLoading?: boolean;
+  customClass?: string;
   children: ReactNode;
-  footer?: ReactNode;
+  actions?: ReactNode;
 }
 
 const sizeClassMap: Record<ModalSize, string> = {
@@ -29,144 +30,120 @@ const sizeClassMap: Record<ModalSize, string> = {
   md: styles.sizeMd,
   lg: styles.sizeLg,
   xl: styles.sizeXl,
-  full: styles.sizeFull,
 };
 
-export const Modal = forwardRef<HTMLDialogElement, ModalProps>(
+export const Modal = forwardRef<HTMLDivElement, ModalProps>(
   (
     {
       isOpen,
       onClose,
       title,
       size = "md",
-      closeOnBackdropClick = true,
-      closeOnEscape = true,
+      closeOnBackdrop = true,
       showCloseButton = true,
+      isLoading = false,
+      customClass = "",
       children,
-      footer,
+      actions,
       className = "",
       ...props
     },
     ref
   ) => {
-    const dialogRef = useRef<HTMLDialogElement>(null);
-    const resolvedRef = (ref as React.RefObject<HTMLDialogElement>) || dialogRef;
+    const modalRef = useRef<HTMLDivElement>(null);
+    const resolvedRef = (ref as React.RefObject<HTMLDivElement>) || modalRef;
 
     const handleBackdropClick = useCallback(
-      (event: React.MouseEvent<HTMLDialogElement>) => {
-        if (closeOnBackdropClick && event.target === event.currentTarget) {
+      (event: React.MouseEvent<HTMLDivElement>) => {
+        if (closeOnBackdrop && event.target === event.currentTarget) {
           onClose();
         }
       },
-      [closeOnBackdropClick, onClose]
+      [closeOnBackdrop, onClose]
     );
 
     const handleKeyDown = useCallback(
       (event: KeyboardEvent) => {
-        if (closeOnEscape && event.key === "Escape") {
+        if (event.key === "Escape") {
           onClose();
         }
       },
-      [closeOnEscape, onClose]
+      [onClose]
     );
 
     useEffect(() => {
-      const dialog = resolvedRef.current;
-      if (!dialog) return;
-
       if (isOpen) {
-        dialog.showModal();
         document.body.style.overflow = "hidden";
+        document.addEventListener("keydown", handleKeyDown);
       } else {
-        dialog.close();
         document.body.style.overflow = "";
       }
 
       return () => {
         document.body.style.overflow = "";
+        document.removeEventListener("keydown", handleKeyDown);
       };
-    }, [isOpen, resolvedRef]);
+    }, [isOpen, handleKeyDown]);
 
-    useEffect(() => {
-      if (isOpen && closeOnEscape) {
-        document.addEventListener("keydown", handleKeyDown);
-        return () => {
-          document.removeEventListener("keydown", handleKeyDown);
-        };
-      }
-    }, [isOpen, closeOnEscape, handleKeyDown]);
-
-    const modalClasses = [
-      "modal",
-      styles.modal,
-      isOpen ? "modal-open" : "",
-      className,
-    ]
-      .filter(Boolean)
-      .join(" ");
-
-    const boxClasses = [
-      "modal-box",
-      styles.modalBox,
-      sizeClassMap[size],
-    ]
-      .filter(Boolean)
-      .join(" ");
+    if (!isOpen) return null;
 
     return (
-      <dialog
+      <div
         ref={resolvedRef}
-        className={modalClasses}
+        className={`${styles.modalBackdrop} ${className}`}
         onClick={handleBackdropClick}
+        role="dialog"
         aria-modal="true"
         aria-labelledby={title ? "modal-title" : undefined}
         {...props}
       >
-        <div className={boxClasses}>
-          {(title || showCloseButton) && (
-            <header className={styles.header}>
-              {title && (
-                <h3 id="modal-title" className={styles.title}>
-                  {title}
-                </h3>
-              )}
-              {showCloseButton && (
-                <button
-                  type="button"
-                  className={styles.closeButton}
-                  onClick={onClose}
-                  aria-label="Close modal"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden="true"
-                  >
-                    <line x1="18" y1="6" x2="6" y2="18" />
-                    <line x1="6" y1="6" x2="18" y2="18" />
-                  </svg>
-                </button>
-              )}
-            </header>
+        <div className={`${styles.modalContainer} ${sizeClassMap[size]} ${customClass}`}>
+          {/* Close button */}
+          {showCloseButton && (
+            <button
+              className={styles.closeBtn}
+              onClick={onClose}
+              type="button"
+              aria-label="Close modal"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M15 5L5 15M5 5L15 15"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </button>
           )}
 
-          <div className={styles.content}>{children}</div>
+          {/* Modal Title */}
+          {title && (
+            <h2 id="modal-title" className={styles.modalTitle}>
+              {title}
+            </h2>
+          )}
 
-          {footer && <footer className={styles.footer}>{footer}</footer>}
+          {/* Modal Body */}
+          <div className={styles.modalBody}>{children}</div>
+
+          {/* Modal Actions */}
+          {actions && <div className={styles.modalActions}>{actions}</div>}
+
+          {/* Loading Overlay */}
+          {isLoading && (
+            <div className={styles.modalLoadingOverlay}>
+              <span className="loading loading-spinner loading-md"></span>
+            </div>
+          )}
         </div>
-        <form method="dialog" className="modal-backdrop">
-          <button type="button" onClick={onClose} aria-label="Close">
-            close
-          </button>
-        </form>
-      </dialog>
+      </div>
     );
   }
 );
