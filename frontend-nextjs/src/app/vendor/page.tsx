@@ -1,5 +1,3 @@
-"use client";
-
 import { VendorHomePage } from "@/features/vendor/home";
 
 export default function Page() {

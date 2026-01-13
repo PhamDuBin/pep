@@ -1,5 +1,3 @@
-"use client";
-
 import { CarryPage } from "@/features/buyer/carry";
 
 export default function Page() {
