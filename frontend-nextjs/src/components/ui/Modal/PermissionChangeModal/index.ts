@@ -1,1 +1,0 @@
-export { PermissionChangeModal } from "./PermissionChangeModal";

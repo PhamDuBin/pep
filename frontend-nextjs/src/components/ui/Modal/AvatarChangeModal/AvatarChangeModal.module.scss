@@ -1,11 +1,35 @@
 @use "../../../../styles/tokens" as *;
 
-.colorGrid {
+// Custom styles for avatar change modal to match Angular design
+.avatarChangeModal {
+  padding: 20px 35px;
+  gap: 25px;
+  width: 500px;
+  max-width: 500px;
+
+  :global(.modal-title) {
+    font-size: 20px;
+  }
+
+  :global(.modal-body) {
+    padding: 0 35px;
+    gap: 25px;
+  }
+
+  :global(.modal-actions) {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.colorOptions {
   display: flex;
   gap: 15px;
   align-items: center;
   justify-content: center;
-  padding: 20px 0;
 }
 
 .colorOption {
@@ -26,11 +50,56 @@
   }
 }
 
-.actions {
+.actionsRow {
   display: flex;
   flex-direction: row;
   gap: 10px;
   justify-content: center;
   align-items: center;
-  padding: 10px 0;
+}
+
+.btnPrimary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 15px;
+  background-color: #333;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  min-width: 80px;
+
+  &:hover:not(:disabled) {
+    background-color: #222;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.btnSecondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 15px;
+  background-color: #e1e1e1;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #d1d1d1;
+  }
 }

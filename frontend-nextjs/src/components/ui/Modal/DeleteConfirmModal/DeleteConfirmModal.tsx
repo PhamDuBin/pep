@@ -1,62 +1,73 @@
 "use client";
 
-import { Modal } from "@/components";
+import { Modal } from "../Modal";
 import styles from "./DeleteConfirmModal.module.scss";
+
+export type DeleteConfirmModalState = "confirm" | "complete";
 
 interface DeleteConfirmModalProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
-  userName?: string;
+  selectedCount?: number;
   message?: string;
   isDeleting?: boolean;
+  modalState?: DeleteConfirmModalState;
 }
 
 export function DeleteConfirmModal({
   isOpen,
   onClose,
   onConfirm,
-  userName = "",
+  selectedCount = 0,
   message,
   isDeleting = false,
+  modalState = "confirm",
 }: DeleteConfirmModalProps) {
-  const defaultMessage = userName
-    ? `${userName} さんをこのプロジェクトから削除しますか？`
-    : "このユーザーをプロジェクトから削除しますか？";
-
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="ユーザーの削除"
-      size="sm"
+      title="メンバー削除"
+      size="md"
+      customClass={styles.deleteConfirmModal}
+      isLoading={isDeleting}
+      actions={
+        modalState === "confirm" ? (
+          <div className={styles.actionsRow}>
+            <button type="button" className={styles.btnSecondary} onClick={onClose}>
+              キャンセル
+            </button>
+            <button
+              type="button"
+              className={styles.btnPrimary}
+              disabled={isDeleting}
+              onClick={onConfirm}
+            >
+              {isDeleting ? (
+                <span className="loading loading-spinner loading-sm"></span>
+              ) : (
+                "削除"
+              )}
+            </button>
+          </div>
+        ) : (
+          <div className={styles.actionsRow}>
+            <button type="button" className={styles.btnSecondary} onClick={onClose}>
+              閉じる
+            </button>
+          </div>
+        )
+      }
     >
-      <div className={styles.content}>
-        <p className={styles.message}>
-          {message || defaultMessage}
-        </p>
-        <p className={styles.warning}>
-          この操作は取り消せません。
-        </p>
-      </div>
-      <div className={styles.actions}>
-        <button
-          type="button"
-          className="modal-btn-secondary"
-          onClick={onClose}
-          disabled={isDeleting}
-        >
-          キャンセル
-        </button>
-        <button
-          type="button"
-          className={styles.deleteBtn}
-          onClick={onConfirm}
-          disabled={isDeleting}
-        >
-          {isDeleting ? "削除中..." : "削除"}
-        </button>
-      </div>
+      {modalState === "confirm" ? (
+        <div className={styles.modalTextContainer}>
+          <p className={styles.modalText}>選択したメンバーを削除します。</p>
+          <p className={styles.modalText}>よろしいですか？</p>
+        </div>
+      ) : (
+        <p className={styles.modalText}>削除完了しました。</p>
+      )}
     </Modal>
   );
 }

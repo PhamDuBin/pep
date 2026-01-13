@@ -1,35 +1,36 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
-import { Modal } from "@/components";
+import { Modal } from "../Modal";
 import styles from "./EmailChangeModal.module.scss";
+
+export type EmailChangeModalState = "email-change" | "email-sent";
 
 interface EmailChangeModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSend: (newEmail: string, confirmEmail?: string) => void;
-  mode?: "single" | "confirm";
-  description?: string;
+  onSend: (newEmail: string, confirmEmail: string) => void;
   isSaving?: boolean;
+  modalState?: EmailChangeModalState;
 }
 
 export function EmailChangeModal({
   isOpen,
   onClose,
   onSend,
-  mode = "confirm",
-  description,
   isSaving = false,
+  modalState = "email-change",
 }: EmailChangeModalProps) {
   const [newEmail, setNewEmail] = useState("");
   const [confirmEmail, setConfirmEmail] = useState("");
 
+  // Reset form when modal opens in email-change state
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && modalState === "email-change") {
       setNewEmail("");
       setConfirmEmail("");
     }
-  }, [isOpen]);
+  }, [isOpen, modalState]);
 
   const handleClose = useCallback(() => {
     setNewEmail("");
@@ -38,69 +39,93 @@ export function EmailChangeModal({
   }, [onClose]);
 
   const handleSend = useCallback(() => {
-    if (mode === "single") {
-      onSend(newEmail);
-    } else {
-      onSend(newEmail, confirmEmail);
+    if (newEmail.trim() && confirmEmail.trim() && newEmail === confirmEmail) {
+      onSend(newEmail.trim(), confirmEmail.trim());
     }
-    setNewEmail("");
-    setConfirmEmail("");
-  }, [newEmail, confirmEmail, onSend, mode]);
+  }, [newEmail, confirmEmail, onSend]);
 
-  const isValid = mode === "single"
-    ? newEmail.trim() !== ""
-    : newEmail.trim() !== "" && confirmEmail.trim() !== "" && newEmail === confirmEmail;
+  const isValid = newEmail.trim() !== "" && confirmEmail.trim() !== "" && newEmail === confirmEmail;
 
   return (
     <Modal
       isOpen={isOpen}
       onClose={handleClose}
-      title="メールアドレスの変更"
-      size="sm"
-    >
-      <div className={styles.content}>
-        {description && (
-          <p className={styles.description}>{description}</p>
-        )}
-        <div className={styles.formGroup}>
-          <label>新しいメールアドレス</label>
-          <input
-            type="email"
-            value={newEmail}
-            onChange={(e) => setNewEmail(e.target.value)}
-            placeholder={mode === "single" ? "email@example.com" : "新しいメールアドレスを入力"}
-          />
-        </div>
-        {mode === "confirm" && (
-          <div className={styles.formGroup}>
-            <label>新しいメールアドレス（確認）</label>
-            <input
-              type="email"
-              value={confirmEmail}
-              onChange={(e) => setConfirmEmail(e.target.value)}
-              placeholder="新しいメールアドレスを再入力"
-            />
+      title="メールアドレスを変更"
+      size="lg"
+      customClass={styles.emailChangeModal}
+      isLoading={isSaving}
+      actions={
+        modalState === "email-change" ? (
+          <div className={styles.actionsRow}>
+            <button type="button" className={styles.btnSecondary} onClick={handleClose}>
+              キャンセル
+            </button>
+            <button
+              type="button"
+              className={styles.btnPrimary}
+              disabled={!isValid || isSaving}
+              onClick={handleSend}
+            >
+              {isSaving ? (
+                <span className="loading loading-spinner loading-sm"></span>
+              ) : (
+                "メールを送信"
+              )}
+            </button>
           </div>
-        )}
-      </div>
-      <div className={styles.actions}>
-        <button
-          type="button"
-          className="modal-btn-secondary"
-          onClick={handleClose}
-          disabled={isSaving}
-        >
-          キャンセル
-        </button>
-        <button
-          type="button"
-          className="modal-btn-primary-color"
-          onClick={handleSend}
-          disabled={!isValid || isSaving}
-        >
-          {isSaving ? "送信中..." : "送信"}
-        </button>
-      </div>
+        ) : (
+          <div className={styles.actionsRow}>
+            <button type="button" className={styles.btnSecondary} onClick={handleClose}>
+              閉じる
+            </button>
+          </div>
+        )
+      }
+    >
+      {modalState === "email-change" ? (
+        <>
+          {/* Email Change Form */}
+          <div className={styles.modalDescription}>
+            <p>新しいメールアドレス入力してください。</p>
+            <p>メールアドレス再設定用URLを送信します。</p>
+          </div>
+
+          <div className={styles.formFields}>
+            {/* New Email */}
+            <div className={styles.formRow}>
+              <label className={styles.formLabel}>新しいメールアドレス</label>
+              <input
+                type="email"
+                className={styles.formInput}
+                placeholder="メールアドレス"
+                value={newEmail}
+                onChange={(e) => setNewEmail(e.target.value)}
+              />
+            </div>
+
+            {/* Confirm Email */}
+            <div className={styles.formRow}>
+              <label className={styles.formLabel}>新しいメールアドレス（確認）</label>
+              <input
+                type="email"
+                className={styles.formInput}
+                placeholder="メールアドレス"
+                value={confirmEmail}
+                onChange={(e) => setConfirmEmail(e.target.value)}
+              />
+            </div>
+          </div>
+        </>
+      ) : (
+        <>
+          {/* Email Sent Confirmation */}
+          <div className={`${styles.modalDescription} ${styles.centered}`}>
+            <p>ご入力いただいたメールアドレスへ再設定用URLを送信しました。</p>
+            <p>メール内のURLをクリックすると、</p>
+            <p>メールアドレス変更が完了いたします。</p>
+          </div>
+        </>
+      )}
     </Modal>
   );
 }

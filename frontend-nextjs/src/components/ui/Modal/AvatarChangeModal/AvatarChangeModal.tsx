@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
-import { Modal } from "@/components";
+import { Modal } from "../Modal";
 import { AVATAR_COLOR_OPTIONS } from "@/mocks";
 import styles from "./AvatarChangeModal.module.scss";
 
@@ -36,10 +36,32 @@ export function AvatarChangeModal({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="アイコンカラーを選択"
-      size="sm"
+      title="アイコンの変更"
+      size="md"
+      customClass={styles.avatarChangeModal}
+      isLoading={isSaving}
+      actions={
+        <div className={styles.actionsRow}>
+          <button
+            type="button"
+            className={styles.btnPrimary}
+            disabled={isSaving}
+            onClick={handleSave}
+          >
+            {isSaving ? (
+              <span className="loading loading-spinner loading-sm"></span>
+            ) : (
+              "保存"
+            )}
+          </button>
+          <button type="button" className={styles.btnSecondary} onClick={onClose}>
+            閉じる
+          </button>
+        </div>
+      }
     >
-      <div className={styles.colorGrid}>
+      {/* Color Options */}
+      <div className={styles.colorOptions}>
         {AVATAR_COLOR_OPTIONS.map((option) => (
           <button
             key={option.id}
@@ -47,28 +69,13 @@ export function AvatarChangeModal({
             className={`${styles.colorOption} ${
               selectedColor === option.color ? styles.selected : ""
             }`}
-            style={{ backgroundColor: option.color }}
+            style={{
+              backgroundColor: option.color,
+              borderColor: selectedColor === option.color ? "#066a9e" : "transparent",
+            }}
             onClick={() => setSelectedColor(option.color)}
           />
         ))}
-      </div>
-      <div className={styles.actions}>
-        <button
-          type="button"
-          className="modal-btn-secondary"
-          onClick={onClose}
-          disabled={isSaving}
-        >
-          キャンセル
-        </button>
-        <button
-          type="button"
-          className="modal-btn-primary-color"
-          onClick={handleSave}
-          disabled={isSaving}
-        >
-          {isSaving ? "保存中..." : "保存"}
-        </button>
       </div>
     </Modal>
   );
