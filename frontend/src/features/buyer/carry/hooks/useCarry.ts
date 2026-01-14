@@ -6,14 +6,13 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { VendorContact, VendorChatMessage, Tab, ChatMember, SearchableUser } from "../types";
+import { VendorContact, VendorChatMessage, Tab, ChatMember, SearchableUser, AddMemberModalState } from "../types";
 import {
   getVendorContacts,
   getVendorMessages,
   sendMessage as sendMessageService,
 } from "../services/carry.service";
 import { MEMBERS_MOCK, SEARCHABLE_USERS_MOCK, CURRENT_PROJECT_NAME_MOCK } from "../mock";
-import type { AddMemberModalState } from "../components/AddMemberModal";
 
 export interface UseCarryReturn {
   // State

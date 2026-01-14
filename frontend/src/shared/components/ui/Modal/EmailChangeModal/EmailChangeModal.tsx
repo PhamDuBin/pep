@@ -3,8 +3,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { Modal } from "../Modal";
 import styles from "./EmailChangeModal.module.scss";
-
-export type EmailChangeModalState = "email-change" | "email-sent";
+import { EmailChangeModalState } from "@/shared/types";
 
 interface EmailChangeModalProps {
   isOpen: boolean;
@@ -44,7 +43,10 @@ export function EmailChangeModal({
     }
   }, [newEmail, confirmEmail, onSend]);
 
-  const isValid = newEmail.trim() !== "" && confirmEmail.trim() !== "" && newEmail === confirmEmail;
+  const isValid =
+    newEmail.trim() !== "" &&
+    confirmEmail.trim() !== "" &&
+    newEmail === confirmEmail;
 
   return (
     <Modal
@@ -57,7 +59,11 @@ export function EmailChangeModal({
       actions={
         modalState === "email-change" ? (
           <div className={styles.actionsRow}>
-            <button type="button" className={styles.btnSecondary} onClick={handleClose}>
+            <button
+              type="button"
+              className={styles.btnSecondary}
+              onClick={handleClose}
+            >
               キャンセル
             </button>
             <button
@@ -75,7 +81,11 @@ export function EmailChangeModal({
           </div>
         ) : (
           <div className={styles.actionsRow}>
-            <button type="button" className={styles.btnSecondary} onClick={handleClose}>
+            <button
+              type="button"
+              className={styles.btnSecondary}
+              onClick={handleClose}
+            >
               閉じる
             </button>
           </div>
@@ -105,7 +115,9 @@ export function EmailChangeModal({
 
             {/* Confirm Email */}
             <div className={styles.formRow}>
-              <label className={styles.formLabel}>新しいメールアドレス（確認）</label>
+              <label className={styles.formLabel}>
+                新しいメールアドレス（確認）
+              </label>
               <input
                 type="email"
                 className={styles.formInput}

@@ -1,7 +1,9 @@
 "use client";
 
-import { InviteMemberModal, DeleteConfirmModal } from "@/shared/components";
+import { InviteMemberModal, DeleteConfirmModal, PageTransition } from "@/shared/components";
 import { ChangePermissionModal } from "./components";
+import { InfoModal } from "@/features/vendor/shared/components";
+import { UserEditModal } from "./components";
 import { useVendorUserList } from "./hooks";
 import styles from "./VendorUserListPage.module.scss";
 
@@ -48,8 +50,9 @@ export function VendorUserListPage() {
   } = useVendorUserList();
 
   return (
-    <div className={styles.container}>
-      <div className={styles.content}>
+    <PageTransition>
+      <div className={styles.container}>
+        <div className={styles.content}>
         {/* Header */}
         <div className={styles.header}>
           <h2 className={styles.title}>ユーザー一覧</h2>
@@ -171,6 +174,7 @@ export function VendorUserListPage() {
         userName={selectedUserForPermission?.name}
         modalState={changePermissionModalState}
       />
-    </div>
+      </div>
+    </PageTransition>
   );
 }

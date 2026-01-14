@@ -15,7 +15,7 @@ export { DeleteConfirmModal } from "./Modal";
 
 // Loading (used by multiple features)
 export { Loading } from "./Loading";
-export type { LoadingProps, LoadingType, LoadingSize } from "./Loading";
+export type { LoadingProps } from "./Loading";
 
 // PageTransition (moved to buyer features)
 export { PageTransition } from "@/features/buyer/shared/components";
@@ -31,8 +31,10 @@ export { Pagination } from "@/features/buyer/shared/components";
 export { ChatInput } from "@/features/buyer/shared/components";
 export { ChatInputBox } from "@/features/buyer/shared/components";
 export { ChatMessage } from "@/features/buyer/shared/components";
-export type { ChatMessageVariant } from "@/features/buyer/shared/components/ChatMessage";
 export { ChatMessageList } from "@/features/buyer/shared/components";
 export { ProjectPlanModeButton } from "@/features/buyer/shared/components";
-export { AnimatedList, AnimatedListItem } from "@/features/buyer/archive/components";
+export {
+  AnimatedList,
+  AnimatedListItem,
+} from "@/features/buyer/archive/components";
 export { AnimatedDropdown } from "@/features/buyer/archive/components";

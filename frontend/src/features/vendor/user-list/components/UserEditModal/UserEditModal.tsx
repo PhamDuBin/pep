@@ -2,12 +2,8 @@
 
 import { useState, useCallback, useEffect } from "react";
 import { Modal } from "@/shared/components";
+import { PermissionOption } from "../../types";
 import styles from "./UserEditModal.module.scss";
-
-interface PermissionOption {
-  value: string;
-  label: string;
-}
 
 interface UserEditModalProps {
   isOpen: boolean;

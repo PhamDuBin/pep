@@ -2,8 +2,9 @@
 
 import { useRef, useEffect, useCallback, useState } from "react";
 import { ChatMessage as ChatMessageType } from "@/shared/types";
-import { ChatMessage, ChatMessageVariant } from "../ChatMessage";
+import { ChatMessage } from "../ChatMessage";
 import styles from "./ChatMessageList.module.scss";
+import { ChatMessageVariant } from "../../types";
 
 interface ChatMessageListProps {
   messages: ChatMessageType[];

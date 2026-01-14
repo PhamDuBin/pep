@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { EmailChangeModal, AvatarChangeModal } from "@/shared/components";
+import { EmailChangeModal, AvatarChangeModal, PageTransition } from "@/shared/components";
 import { InfoModal } from "@/features/vendor/shared/components";
 import { useVendorMyPage } from "./hooks";
 import styles from "./VendorMyPage.module.scss";
@@ -36,14 +36,17 @@ export function VendorMyPage() {
 
   if (isLoading || !userProfile || !paymentInfo) {
     return (
-      <div className={styles.container}>
-        <div className={styles.loading}>Loading...</div>
-      </div>
+      <PageTransition>
+        <div className={styles.container}>
+          <div className={styles.loading}>Loading...</div>
+        </div>
+      </PageTransition>
     );
   }
 
   return (
-    <div className={styles.container}>
+    <PageTransition>
+      <div className={styles.container}>
       {/* Section 1: User Information */}
       <section className={styles.section}>
         <div className={styles.sectionHeader}>
@@ -51,110 +54,139 @@ export function VendorMyPage() {
         </div>
 
         <div className={styles.sectionContent}>
-          {/* Avatar Section */}
-          <div className={styles.avatarSection}>
-            <div
-              className={styles.userAvatar}
-              style={{ backgroundColor: userProfile.avatarColor }}
-            >
-              <span>{userProfile.initials}</span>
-            </div>
-            <button
-              type="button"
-              className={styles.uploadButton}
-              onClick={handleAvatarUpload}
-            >
-              アイコンを変更
-            </button>
-          </div>
-
-          {/* Form Fields */}
-          <div className={styles.formFields}>
-            {/* Name Field */}
-            <div className={styles.formRow}>
-              <span className={styles.label}>氏名</span>
-              <span className={styles.value}>{userProfile.name}</span>
-            </div>
-
-            {/* Email Field */}
-            <div className={styles.formRow}>
-              <span className={styles.label}>メールアドレスを変更</span>
-              <span className={styles.value}>{userProfile.email}</span>
+          {/* User Info Content */}
+          <div className={styles.userInfoContent}>
+            {/* Avatar Section - Horizontal Layout like Angular */}
+            <div className={styles.avatarSection}>
+              <div
+                className={styles.userAvatar}
+                style={{ backgroundColor: userProfile.avatarColor }}
+              >
+                {userProfile.avatarUrl ? (
+                  <Image
+                    src={userProfile.avatarUrl}
+                    alt={userProfile.name}
+                    width={70}
+                    height={70}
+                    className={styles.avatarImage}
+                  />
+                ) : (
+                  <span>{userProfile.initials}</span>
+                )}
+              </div>
               <button
                 type="button"
-                className={styles.linkButton}
-                onClick={handleEmailChange}
+                className={styles.uploadButton}
+                onClick={handleAvatarUpload}
               >
-                メールアドレスを変更
+                画像を選択
               </button>
             </div>
 
-            {/* Current Password */}
-            <div className={styles.formRow}>
-              <span className={styles.label}>現在のパスワード</span>
-              <input
-                type="password"
-                readOnly
-                placeholder="**********"
-                className={styles.readonlyInput}
-              />
-            </div>
-
-            {/* New Password */}
-            <div className={styles.formRow}>
-              <span className={styles.label}>新しいパスワード</span>
-              <div className={styles.passwordInput}>
-                <input
-                  type={showNewPassword ? "text" : "password"}
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  placeholder="8~16文字の英数字で入力"
-                />
-                <button
-                  type="button"
-                  className={styles.togglePassword}
-                  onClick={() => setShowNewPassword(!showNewPassword)}
-                >
-                  {showNewPassword ? "非表示" : "表示"}
-                </button>
+            {/* Form Fields */}
+            <div className={styles.formFields}>
+              {/* Name Field */}
+              <div className={styles.formRow}>
+                <span className={styles.label}>氏名</span>
+                <span className={styles.value}>{userProfile.name}</span>
               </div>
-            </div>
 
-            {/* Confirm Password */}
-            <div className={styles.formRow}>
-              <span className={styles.label}>新しいパスワード（確認）</span>
-              <div className={styles.passwordInput}>
+              {/* Email Field */}
+              <div className={styles.formRow}>
+                <span className={styles.label}>メールアドレス</span>
+                <div className={styles.emailValue}>
+                  <span>{userProfile.email}</span>
+                  <button
+                    type="button"
+                    className={styles.linkButton}
+                    onClick={handleEmailChange}
+                  >
+                    メールアドレスを変更
+                  </button>
+                </div>
+              </div>
+
+              {/* Current Password */}
+              <div className={styles.formRow}>
+                <span className={styles.label}>現在のパスワード</span>
                 <input
-                  type={showConfirmPassword ? "text" : "password"}
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="8~16文字の英数字で入力"
+                  type="password"
+                  readOnly
+                  placeholder="**********"
+                  className={styles.readonlyInput}
                 />
-                <button
-                  type="button"
-                  className={styles.togglePassword}
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                >
-                  {showConfirmPassword ? "非表示" : "表示"}
-                </button>
+              </div>
+
+              {/* New Password */}
+              <div className={styles.formRow}>
+                <span className={styles.label}>新しいパスワード</span>
+                <div className={styles.passwordInput}>
+                  <input
+                    type={showNewPassword ? "text" : "password"}
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder="●●●●●●●●●●"
+                  />
+                  <button
+                    type="button"
+                    className={styles.togglePassword}
+                    onClick={() => setShowNewPassword(!showNewPassword)}
+                  >
+                    <svg
+                      className={styles.eyeIcon}
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              {/* Confirm Password */}
+              <div className={styles.formRow}>
+                <span className={styles.label}>新しいパスワード（確認）</span>
+                <div className={styles.passwordInput}>
+                  <input
+                    type={showConfirmPassword ? "text" : "password"}
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="●●●●●●●●●●"
+                  />
+                  <button
+                    type="button"
+                    className={styles.togglePassword}
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  >
+                    <svg
+                      className={styles.eyeIcon}
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Save Button */}
-          <button
-            type="button"
-            className={styles.saveButton}
-            onClick={handleSaveChanges}
-          >
-            変更を保存
-          </button>
+          {/* Save Button - Centered */}
+          <div className={styles.saveButtonWrapper}>
+            <button
+              type="button"
+              className={styles.saveButton}
+              onClick={handleSaveChanges}
+            >
+              変更を保存
+            </button>
+          </div>
         </div>
       </section>
 
       {/* Section 2: Payment Information */}
       <section className={styles.section}>
-        <div className={styles.sectionHeader}>
+        <div className={styles.sectionHeaderNoBorder}>
           <h2 className={styles.sectionTitle}>決済情報</h2>
         </div>
 
@@ -204,7 +236,7 @@ export function VendorMyPage() {
 
       {/* Section 3: Payment History */}
       <section className={styles.section}>
-        <div className={styles.sectionHeader}>
+        <div className={styles.sectionHeaderNoBorder}>
           <h2 className={styles.sectionTitle}>お支払い履歴</h2>
         </div>
 
@@ -253,8 +285,8 @@ export function VendorMyPage() {
       <InfoModal
         isOpen={showEmailSuccessModal}
         onClose={() => setShowEmailSuccessModal(false)}
-        title="確認メールを送信しました"
-        message="入力されたメールアドレスに確認メールを送信しました。メール内のリンクをクリックして変更を完了してください。"
+        title="メールアドレスを変更"
+        message={"ご入力いただいたメールアドレスへ再設定用URLを送信しました。\nメール内のURLをクリックすると、\nメールアドレス変更が完了いたします。"}
       />
 
       {/* Avatar Change Modal */}
@@ -264,6 +296,7 @@ export function VendorMyPage() {
         onSave={handleAvatarColorChange}
         currentColor={userProfile.avatarColor}
       />
-    </div>
+      </div>
+    </PageTransition>
   );
 }

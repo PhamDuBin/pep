@@ -1,9 +1,8 @@
 "use client";
 
 import { Modal } from "../Modal";
+import { DeleteConfirmModalState } from "@/shared/types";
 import styles from "./DeleteConfirmModal.module.scss";
-
-export type DeleteConfirmModalState = "confirm" | "complete";
 
 interface DeleteConfirmModalProps {
   isOpen: boolean;

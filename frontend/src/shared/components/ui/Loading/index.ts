@@ -1,1 +1,1 @@
-export { Loading, type LoadingProps, type LoadingType, type LoadingSize } from "./Loading";
+export { Loading, type LoadingProps } from "./Loading";

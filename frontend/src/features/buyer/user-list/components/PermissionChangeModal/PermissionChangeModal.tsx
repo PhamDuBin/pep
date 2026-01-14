@@ -2,11 +2,9 @@
 
 import { useState, useCallback, useEffect } from "react";
 import { Modal } from "@/shared/components";
-import { UserPermission } from "../../types";
+import { UserPermission, PermissionChangeModalState } from "../../types";
 import { PERMISSION_OPTIONS, PERMISSION_LABELS } from "../../mock";
 import styles from "./PermissionChangeModal.module.scss";
-
-export type PermissionChangeModalState = "select" | "complete";
 
 interface PermissionTableRow {
   feature: string;
