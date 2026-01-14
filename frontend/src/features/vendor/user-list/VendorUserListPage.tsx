@@ -1,6 +1,6 @@
 "use client";
 
-import { InviteMemberModal, DeleteConfirmModal } from "@/shared/components";
+import { InviteMemberModal, DeleteConfirmModal, PageTransition } from "@/shared/components";
 import { InfoModal } from "@/features/vendor/shared/components";
 import { UserEditModal } from "./components";
 import { useVendorUserList } from "./hooks";
@@ -51,8 +51,9 @@ export function VendorUserListPage() {
   } = useVendorUserList();
 
   return (
-    <div className={styles.container}>
-      <div className={styles.content}>
+    <PageTransition>
+      <div className={styles.container}>
+        <div className={styles.content}>
         {/* Header */}
         <div className={styles.header}>
           <h2 className={styles.title}>ユーザー一覧</h2>
@@ -199,6 +200,7 @@ export function VendorUserListPage() {
         title="削除しました"
         message="選択したメンバーを削除しました。"
       />
-    </div>
+      </div>
+    </PageTransition>
   );
 }

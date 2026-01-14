@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { EmailChangeModal, AvatarChangeModal } from "@/shared/components";
+import { EmailChangeModal, AvatarChangeModal, PageTransition } from "@/shared/components";
 import { InfoModal } from "@/features/vendor/shared/components";
 import { useVendorMyPage } from "./hooks";
 import styles from "./VendorMyPage.module.scss";
@@ -36,14 +36,17 @@ export function VendorMyPage() {
 
   if (isLoading || !userProfile || !paymentInfo) {
     return (
-      <div className={styles.container}>
-        <div className={styles.loading}>Loading...</div>
-      </div>
+      <PageTransition>
+        <div className={styles.container}>
+          <div className={styles.loading}>Loading...</div>
+        </div>
+      </PageTransition>
     );
   }
 
   return (
-    <div className={styles.container}>
+    <PageTransition>
+      <div className={styles.container}>
       {/* Section 1: User Information */}
       <section className={styles.section}>
         <div className={styles.sectionHeader}>
@@ -282,8 +285,8 @@ export function VendorMyPage() {
       <InfoModal
         isOpen={showEmailSuccessModal}
         onClose={() => setShowEmailSuccessModal(false)}
-        title="確認メールを送信しました"
-        message="入力されたメールアドレスに確認メールを送信しました。メール内のリンクをクリックして変更を完了してください。"
+        title="メールアドレスを変更"
+        message={"ご入力いただいたメールアドレスへ再設定用URLを送信しました。\nメール内のURLをクリックすると、\nメールアドレス変更が完了いたします。"}
       />
 
       {/* Avatar Change Modal */}
@@ -293,6 +296,7 @@ export function VendorMyPage() {
         onSave={handleAvatarColorChange}
         currentColor={userProfile.avatarColor}
       />
-    </div>
+      </div>
+    </PageTransition>
   );
 }

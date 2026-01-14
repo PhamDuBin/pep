@@ -30,7 +30,7 @@ export function InfoModal({
       <div className={styles.actions}>
         <button
           type="button"
-          className="modal-btn-primary-color"
+          className="modal-btn-secondary"
           onClick={onClose}
         >
           {buttonText}
