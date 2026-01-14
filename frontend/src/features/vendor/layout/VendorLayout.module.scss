@@ -1,0 +1,22 @@
+@use "../../../shared/styles/tokens" as *;
+
+.vendorLayout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: $white;
+}
+
+.mainContent {
+  margin-top: 90px;
+  min-height: calc(100vh - 90px);
+  transition: margin-left $transition-slow $transition-timing;
+
+  &.menuExpanded {
+    margin-left: $sidebar-width;
+  }
+
+  &.menuCollapsed {
+    margin-left: $sidebar-collapsed-width;
+  }
+}

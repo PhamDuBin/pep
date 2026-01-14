@@ -1,0 +1,1 @@
+export { BuyerLayout } from "./BuyerLayout";
