@@ -126,7 +126,7 @@ export function InviteMemberModal({
       onClose={onClose}
       title="新しいメンバーを招待"
       size="md"
-      customClass={styles.inviteMemberModal}
+      customClass={`${styles.inviteMemberModal} ${modalState === "complete" ? styles.completeState : ""}`}
       isLoading={isSaving}
       actions={
         modalState === "form" ? (

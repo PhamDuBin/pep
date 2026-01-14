@@ -4,23 +4,14 @@
 .deleteConfirmModal {
   padding: 20px 35px;
   gap: 25px;
+}
 
-  :global(.modal-title) {
-    font-size: 20px;
-  }
-
-  :global(.modal-body) {
-    padding: 0 35px;
-    gap: 25px;
-  }
-
-  :global(.modal-actions) {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    justify-content: center;
-    align-items: center;
-  }
+.deleteConfirmModal.completeState {
+  width: 500px;
+  max-width: 500px;
+  height: 174px;
+  padding: 20px 35px;
+  gap: 25px;
 }
 
 .actionsRow {
@@ -33,16 +24,25 @@
 
 .modalTextContainer {
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 .modalText {
   font-family: 'Noto Sans JP', sans-serif;
   font-weight: 500;
   font-size: 14px;
-  line-height: 1.3;
-  color: #000000;
+  line-height: 130%;
+  color: #333333;
   text-align: center;
   margin: 0;
+  width: 100%;
+  padding: 0;
 }
 
 .btnPrimary {
@@ -50,13 +50,15 @@
   background-color: #333333;
   border: none;
   border-radius: 8px;
-  font-family: 'Noto Sans JP', sans-serif;
+  font-family: 'Noto Sans', sans-serif;
   font-weight: 400;
   font-size: 14px;
+  line-height: 19px;
   color: white;
   cursor: pointer;
   transition: background-color 0.2s ease;
   min-width: 80px;
+  height: 39px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -76,12 +78,18 @@
   background-color: #e1e1e1;
   border: none;
   border-radius: 8px;
-  font-family: 'Noto Sans JP', sans-serif;
+  font-family: 'Noto Sans', sans-serif;
   font-weight: 400;
   font-size: 14px;
+  line-height: 19px;
   color: #333333;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  min-width: 72px;
+  height: 39px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
     background-color: #d0d0d0;

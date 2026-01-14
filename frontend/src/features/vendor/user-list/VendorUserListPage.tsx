@@ -1,6 +1,7 @@
 "use client";
 
 import { InviteMemberModal, DeleteConfirmModal, PageTransition } from "@/shared/components";
+import { ChangePermissionModal } from "./components";
 import { InfoModal } from "@/features/vendor/shared/components";
 import { UserEditModal } from "./components";
 import { useVendorUserList } from "./hooks";
@@ -12,17 +13,17 @@ export function VendorUserListPage() {
     users,
     selectedUsers,
     allSelected,
-    selectedUserForEdit,
-    lastEditedUserName,
-    lastEditedUserRole,
+    selectedUserForPermission,
+    lastChangedPermissionUserName,
+    lastChangedPermissionRole,
 
     // Modal states
     showDeleteConfirmModal,
-    showDeleteSuccessModal,
-    showEditModal,
-    showEditSuccessModal,
+    deleteModalState,
     showInviteModal,
-    showInviteSuccessModal,
+    inviteModalState,
+    showChangePermissionModal,
+    changePermissionModalState,
 
     // Selection handlers
     toggleUserSelection,
@@ -32,19 +33,17 @@ export function VendorUserListPage() {
     handleInviteMember,
     handleInviteConfirm,
     handleCloseInviteModal,
-    handleCloseInviteSuccessModal,
-
-    // Edit handlers
-    handleEditUser,
-    handleEditSave,
-    handleCloseEditModal,
-    handleCloseEditSuccessModal,
 
     // Delete handlers
     handleDeleteMembers,
     handleDeleteConfirm,
     handleCloseDeleteConfirmModal,
     handleCloseDeleteSuccessModal,
+
+    // Change permission handlers
+    handleChangePermission,
+    handleChangePermissionSave,
+    handleCloseChangePermissionModal,
 
     // Constants
     permissionOptions,
@@ -124,7 +123,7 @@ export function VendorUserListPage() {
                         className={styles.editButton}
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleEditUser(user);
+                          handleChangePermission(user);
                         }}
                       >
                         変更
@@ -155,32 +154,7 @@ export function VendorUserListPage() {
         isOpen={showInviteModal}
         onClose={handleCloseInviteModal}
         onInvite={handleInviteConfirm}
-      />
-
-      {/* Invite Success Modal */}
-      <InfoModal
-        isOpen={showInviteSuccessModal}
-        onClose={handleCloseInviteSuccessModal}
-        title="招待を送信しました"
-        message="メンバーへの招待メールを送信しました。"
-      />
-
-      {/* Edit Modal */}
-      <UserEditModal
-        isOpen={showEditModal}
-        onClose={handleCloseEditModal}
-        onSave={handleEditSave}
-        currentName={selectedUserForEdit?.name}
-        currentPermission={selectedUserForEdit?.role}
-        permissionOptions={permissionOptions}
-      />
-
-      {/* Edit Success Modal */}
-      <InfoModal
-        isOpen={showEditSuccessModal}
-        onClose={handleCloseEditSuccessModal}
-        title="変更を保存しました"
-        message={`${lastEditedUserName}さんの権限を「${lastEditedUserRole}」に変更しました。`}
+        modalState={inviteModalState}
       />
 
       {/* Delete Confirmation Modal */}
@@ -188,17 +162,17 @@ export function VendorUserListPage() {
         isOpen={showDeleteConfirmModal}
         onClose={handleCloseDeleteConfirmModal}
         onConfirm={handleDeleteConfirm}
-        message={`以下のメンバーを削除しますか？\n${selectedUsers
-          .map((u) => u.name)
-          .join("、")}`}
+        modalState={deleteModalState}
       />
 
-      {/* Delete Success Modal */}
-      <InfoModal
-        isOpen={showDeleteSuccessModal}
-        onClose={handleCloseDeleteSuccessModal}
-        title="削除しました"
-        message="選択したメンバーを削除しました。"
+      {/* Change Permission Modal */}
+      <ChangePermissionModal
+        isOpen={showChangePermissionModal}
+        onClose={handleCloseChangePermissionModal}
+        onConfirm={handleChangePermissionSave}
+        currentPermission={selectedUserForPermission?.role as any}
+        userName={selectedUserForPermission?.name}
+        modalState={changePermissionModalState}
       />
       </div>
     </PageTransition>

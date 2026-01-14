@@ -28,8 +28,10 @@ export function DeleteConfirmModal({
       isOpen={isOpen}
       onClose={onClose}
       title="メンバー削除"
-      size="md"
-      customClass={styles.deleteConfirmModal}
+      size={modalState === "complete" ? "sm" : "md"}
+      customClass={`${styles.deleteConfirmModal} ${
+        modalState === "complete" ? styles.completeState : ""
+      }`}
       isLoading={isDeleting}
       actions={
         modalState === "confirm" ? (
@@ -65,7 +67,7 @@ export function DeleteConfirmModal({
           <p className={styles.modalText}>よろしいですか？</p>
         </div>
       ) : (
-        <p className={styles.modalText}>削除完了しました。</p>
+        <p className={styles.modalText}>選択したメンバーを削除しました。</p>
       )}
     </Modal>
   );
