@@ -9,6 +9,13 @@
     font-weight: 400;
     color: #066a9e;
   }
+
+  &.completeState {
+    width: 340px;
+    min-width: 340px;
+    max-width: 340px;
+    height: 174px;
+  }
 }
 
 .inviteFormContent {
@@ -79,10 +86,6 @@
   &:focus {
     border-color: #066a9e;
   }
-
-  &.hasError {
-    border-color: #c10000;
-  }
 }
 
 .addBtn {
@@ -150,6 +153,28 @@
   color: #333;
   cursor: pointer;
   transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #d0d0d0;
+  }
+}
+
+.btnCloseComplete {
+  padding: 10px 15px;
+  background-color: #e1e1e1;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  width: 100px;
+  height: 39px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
     background-color: #d0d0d0;

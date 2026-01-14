@@ -1,0 +1,1 @@
+export { ChangePermissionModal } from "./ChangePermissionModal";
