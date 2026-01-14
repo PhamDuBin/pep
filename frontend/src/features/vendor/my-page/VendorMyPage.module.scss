@@ -1,0 +1,354 @@
+@use "../../../shared/styles/tokens" as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 25px 50px;
+  gap: 50px;
+  width: 100%;
+  min-height: calc(100vh - 89px);
+  background: $white;
+  box-sizing: border-box;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 25px;
+  width: 100%;
+  max-width: 1008px;
+}
+
+.sectionHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 0 10px;
+  gap: 10px;
+  width: 100%;
+  height: 37px;
+  border-bottom: 1px solid #cfcfcf;
+}
+
+.sectionTitle {
+  font-weight: $font-weight-bold;
+  font-size: 20px;
+  line-height: 27px;
+  color: $text-dark;
+  margin: 0;
+}
+
+.sectionContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+  width: 100%;
+}
+
+.avatarSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.userAvatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  span {
+    font-size: 24px;
+    font-weight: $font-weight-bold;
+    color: $white;
+  }
+}
+
+.uploadButton {
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid $primary;
+  border-radius: $border-radius-default;
+  color: $primary;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all $transition-default;
+
+  &:hover {
+    background: $primary-light;
+  }
+}
+
+.formFields {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+}
+
+.formRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  height: 35px;
+  width: 100%;
+}
+
+.label {
+  width: 200px;
+  font-size: 16px;
+  color: $text-dark;
+  flex-shrink: 0;
+}
+
+.value {
+  height: 35px;
+  padding: 3px 10px;
+  font-size: 16px;
+  color: $text-dark;
+  display: flex;
+  align-items: center;
+}
+
+.linkButton {
+  font-size: 16px;
+  text-decoration: underline;
+  color: $primary;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  padding: 0;
+  flex-shrink: 0;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.readonlyInput {
+  width: 300px;
+  height: 35px;
+  padding: 3px 10px;
+  background: $white;
+  font-size: 16px;
+  color: $text-dark;
+  text-align: left;
+  cursor: not-allowed;
+  border: none;
+
+  &::placeholder {
+    color: $text-dark;
+  }
+}
+
+.passwordInput {
+  display: flex;
+  align-items: center;
+  width: 300px;
+  height: 35px;
+  border: 1px solid $border-gray;
+  border-radius: $border-radius-default;
+  overflow: hidden;
+
+  input {
+    flex: 1;
+    height: 100%;
+    padding: 3px 10px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    color: $text-dark;
+
+    &::placeholder {
+      color: $text-gray;
+    }
+  }
+}
+
+.togglePassword {
+  padding: 0 10px;
+  height: 100%;
+  background: transparent;
+  border: none;
+  color: $primary;
+  font-size: 12px;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.saveButton {
+  width: 100px;
+  height: 39px;
+  padding: 10px 15px;
+  background: $primary;
+  border: none;
+  border-radius: $border-radius-default;
+  font-size: 14px;
+  color: $white;
+  cursor: pointer;
+  transition: background-color $transition-default;
+
+  &:hover {
+    background: #055580;
+  }
+}
+
+.paymentContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 35px;
+  width: 100%;
+}
+
+.paymentInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+  width: 410px;
+}
+
+.paymentRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.paymentLabel {
+  width: 200px;
+  font-size: 16px;
+  line-height: 22px;
+  color: $text-dark;
+}
+
+.paymentValue {
+  font-size: 20px;
+  line-height: 27px;
+  color: $text-dark;
+}
+
+.paymentMethodSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 5px;
+  width: 100%;
+}
+
+.paymentMethodRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.cardIcon {
+  width: 70px;
+  height: 43px;
+  object-fit: contain;
+}
+
+.cardNumber {
+  font-size: 16px;
+  line-height: 22px;
+  color: #808080;
+}
+
+.addPaymentButton {
+  height: 39px;
+  padding: 10px 15px;
+  background: #e1e1e1;
+  border: none;
+  border-radius: $border-radius-default;
+  font-size: 14px;
+  color: $text-dark;
+  cursor: pointer;
+  transition: background-color $transition-default;
+
+  &:hover {
+    background: #d1d1d1;
+  }
+}
+
+.tableContainer {
+  width: 100%;
+  border: 1px solid #d4d4d4;
+  border-radius: $border-radius-default;
+  overflow: hidden;
+}
+
+.paymentTable {
+  width: 100%;
+  border-collapse: collapse;
+
+  th,
+  td {
+    padding: 15px 12px;
+    text-align: center;
+    border-top: 1px solid #d4d4d4;
+  }
+
+  th {
+    font-weight: $font-weight-semibold;
+    font-size: 14px;
+    line-height: 130%;
+    color: $text-dark;
+    background: #f5f5f5;
+
+    &:first-child {
+      border-left: 1px solid #d4d4d4;
+    }
+  }
+
+  td {
+    font-weight: $font-weight-medium;
+    font-size: 14px;
+    line-height: 130%;
+    color: $text-dark;
+
+    &:first-child {
+      border-left: 1px solid #d4d4d4;
+    }
+  }
+
+  thead tr {
+    height: 50px;
+  }
+
+  tbody tr {
+    height: 48px;
+  }
+}
+
+.downloadLink {
+  color: $primary;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-weight: $font-weight-semibold;
+  font-size: 12px;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
