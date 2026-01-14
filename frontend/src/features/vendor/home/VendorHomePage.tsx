@@ -65,8 +65,8 @@ export function VendorHomePage() {
               className={`${styles.messageItem} ${message.id === selectedMessageId ? styles.selected : ""}`}
               onClick={() => handleSelectMessage(message.id)}
             >
-              <div className={styles.messageContent}>
-                <div className={styles.companyName}>{message.companyName}</div>
+              <div className={styles.messageItemContent}>
+                <div className={styles.projectName}>{message.projectName}</div>
                 <p className={styles.messagePreview}>{message.preview}</p>
               </div>
               <div className={styles.messageMeta}>
@@ -106,49 +106,52 @@ export function VendorHomePage() {
               </div>
             </div>
 
-            {/* Message Thread */}
-            <div className={styles.messageThread} ref={messageContainerRef}>
-              {threadMessages.map((msg) => (
-                <div
-                  key={msg.id}
-                  className={`${styles.threadMessage} ${msg.isFromUser ? styles.fromUser : styles.fromOther}`}
-                >
-                  {!msg.isFromUser && <div className={styles.otherAvatar} />}
-                  <div className={styles.messageWrapper}>
-                    <div
-                      className={`${styles.messageBubble} ${msg.isFromUser ? styles.userBubble : styles.otherBubble}`}
-                    >
-                      <p>{msg.content}</p>
+            {/* Message Content Area */}
+            <div className={styles.messageDetailContent}>
+              {/* Message Thread */}
+              <div className={styles.messageThread} ref={messageContainerRef}>
+                {threadMessages.map((msg) => (
+                  <div
+                    key={msg.id}
+                    className={`${styles.threadMessage} ${msg.isFromUser ? styles.fromUser : styles.fromOther}`}
+                  >
+                    {!msg.isFromUser && <div className={styles.otherAvatar} />}
+                    <div className={styles.messageWrapper}>
+                      <div
+                        className={`${styles.messageBubble} ${msg.isFromUser ? styles.userBubble : styles.otherBubble}`}
+                      >
+                        <p>{msg.content}</p>
+                      </div>
+                      <span className={styles.messageTimestamp}>{msg.timestamp}</span>
                     </div>
-                    <span className={styles.messageTimestamp}>{msg.timestamp}</span>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
 
-            {/* Message Input */}
-            <div className={styles.messageInputContainer}>
-              <div className={styles.messageInputBox}>
-                <input
-                  type="text"
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  placeholder="メッセージを入力"
-                  className={styles.messageInput}
-                />
-                <button
-                  type="button"
-                  className={styles.sendButton}
-                  onClick={handleSendMessage}
-                >
-                  <Image
-                    src="/assets/icons/vendor-send.svg"
-                    alt="Send"
-                    width={20}
-                    height={20}
+              {/* Message Input */}
+              <div className={styles.messageInputContainer}>
+                <div className={styles.messageInputBox}>
+                  <input
+                    type="text"
+                    value={newMessage}
+                    onChange={(e) => setNewMessage(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    placeholder="メッセージを入力"
+                    className={styles.messageInput}
                   />
-                </button>
+                  <button
+                    type="button"
+                    className={styles.sendButton}
+                    onClick={handleSendMessage}
+                  >
+                    <Image
+                      src="/assets/icons/vendor-send.svg"
+                      alt="Send"
+                      width={20}
+                      height={20}
+                    />
+                  </button>
+                </div>
               </div>
             </div>
           </>

@@ -11,8 +11,8 @@ export function VendorSideMenu() {
   const pathname = usePathname();
   const { isCollapsed, toggleSidebar, companies, selectCompany } = useVendor();
 
-  const isMyPageActive = pathname.includes("/vendor/my-page");
-  const isUserListActive = pathname.includes("/vendor/user-list");
+  const isMyPageActive = pathname.includes("/vender/my-page");
+  const isUserListActive = pathname.includes("/vender/user-list");
 
   const handleToggleMenu = () => {
     toggleSidebar();
@@ -20,15 +20,15 @@ export function VendorSideMenu() {
 
   const handleSelectCompany = (companyId: string) => {
     selectCompany(companyId);
-    router.push("/vendor");
+    router.push("/vender/home");
   };
 
   const navigateToMyPage = () => {
-    router.push("/vendor/my-page");
+    router.push("/vender/my-page");
   };
 
   const navigateToUserList = () => {
-    router.push("/vendor/user-list");
+    router.push("/vender/user-list");
   };
 
   return (
