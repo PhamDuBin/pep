@@ -11,7 +11,6 @@ export type {
   VendorPaymentMethod,
   VendorPaymentInfo,
   VendorPaymentHistory,
-  VendorMyPageModalType,
 } from "./types";
 
 // Mock data

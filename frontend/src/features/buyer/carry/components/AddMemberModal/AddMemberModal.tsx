@@ -2,10 +2,8 @@
 
 import { useState, useCallback, useEffect } from "react";
 import { Modal } from "@/shared/components";
-import { SearchableUser, ChatMember } from "../../models";
+import { SearchableUser, ChatMember, AddMemberModalState } from "../../types";
 import styles from "./AddMemberModal.module.scss";
-
-export type AddMemberModalState = "search" | "complete";
 
 interface AddMemberModalProps {
   isOpen: boolean;

@@ -3,4 +3,4 @@
 // =============================================================================
 
 export { AddMemberModal } from "./AddMemberModal";
-export type { AddMemberModalState } from "./AddMemberModal";
+export type { AddMemberModalState } from "../types";
