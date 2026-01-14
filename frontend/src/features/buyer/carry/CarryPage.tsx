@@ -427,10 +427,10 @@ export function CarryPage() {
             {/* PDF Preview Section */}
             <div className={styles.pdfPreviewContainer}>
               <div className={styles.pdfPreviewItem}>
-                <img src="/pictures/pic1.jpg" alt="PDF Preview" />
+                <img src="/assets/pictures/pic1.jpg" alt="PDF Preview" />
               </div>
               <div className={styles.pdfPreviewItem}>
-                <img src="/pictures/pic2.jpg" alt="PDF Preview" />
+                <img src="/assets/pictures/pic2.jpg" alt="PDF Preview" />
               </div>
             </div>
           </div>

@@ -3,4 +3,4 @@
 // =============================================================================
 // Central export for all services.
 
-export { api, ApiError } from "./api";
+export { api } from "./api";

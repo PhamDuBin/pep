@@ -247,7 +247,7 @@ export function MyPage() {
                         {paymentInfo.paymentMethod && (
                           <div className={styles.paymentMethodRow}>
                             <img
-                              src="/pictures/visa.png"
+                              src="/assets/pictures/visa.png"
                               alt="Visa"
                               className={styles.cardLogo}
                               width={70}

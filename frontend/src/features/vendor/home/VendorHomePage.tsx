@@ -98,7 +98,7 @@ export function VendorHomePage() {
               </div>
               <div className={styles.documentIcon}>
                 <Image
-                  src="/icons/vendor-docutment-stack.svg"
+                  src="/assets/icons/vendor-docutment-stack.svg"
                   alt="Documents"
                   width={29}
                   height={30}
@@ -143,7 +143,7 @@ export function VendorHomePage() {
                   onClick={handleSendMessage}
                 >
                   <Image
-                    src="/icons/vendor-send.svg"
+                    src="/assets/icons/vendor-send.svg"
                     alt="Send"
                     width={20}
                     height={20}

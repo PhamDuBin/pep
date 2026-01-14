@@ -139,7 +139,7 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
               transition={{ duration: 0.3 }}
             >
               <Image
-                src="/icons/menu-toggle.svg"
+                src="/assets/icons/menu-toggle.svg"
                 alt="Menu"
                 width={20}
                 height={13}
@@ -157,7 +157,7 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
             whileTap={{ scale: 0.98 }}
           >
             <div className={styles.plusIcon}>
-              <Image src="/icons/plus.svg" alt="Plus" width={10} height={10} />
+              <Image src="/assets/icons/plus.svg" alt="Plus" width={10} height={10} />
             </div>
             <AnimatePresence mode="wait">
               {!isCollapsed && (
@@ -199,7 +199,7 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
             whileTap={{ scale: 0.98 }}
           >
             <Image
-              src="/icons/folder.svg"
+              src="/assets/icons/folder.svg"
               alt="Archive"
               width={22}
               height={22}
@@ -242,7 +242,7 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
             whileTap={{ scale: 0.98 }}
           >
             <Image
-              src="/icons/search.svg"
+              src="/assets/icons/search.svg"
               alt="Search"
               width={20}
               height={20}
@@ -286,8 +286,8 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
                     <Image
                       src={
                         project.isSelected
-                          ? "/icons/project-active.svg"
-                          : "/icons/project.svg"
+                          ? "/assets/icons/project-active.svg"
+                          : "/assets/icons/project.svg"
                       }
                       alt="Project"
                       width={10}
@@ -301,7 +301,7 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
                     </span>
                     {project.isSelected && (
                       <Image
-                        src="/icons/more-dots.svg"
+                        src="/assets/icons/more-dots.svg"
                         alt="More"
                         width={16}
                         height={16}

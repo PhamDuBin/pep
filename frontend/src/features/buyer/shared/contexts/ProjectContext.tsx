@@ -1,6 +1,12 @@
 "use client";
 
-import React, { createContext, useContext, useState, useCallback, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  ReactNode,
+} from "react";
 import { Project } from "@/shared/types";
 import { INITIAL_PROJECTS } from "@/shared/mocks";
 
@@ -37,11 +43,14 @@ export function ProjectProvider({ children }: ProjectProviderProps) {
     setProjects((prev) => [...prev, project]);
   }, []);
 
-  const updateProject = useCallback((projectId: string, updates: Partial<Project>) => {
-    setProjects((prev) =>
-      prev.map((p) => (p.id === projectId ? { ...p, ...updates } : p))
-    );
-  }, []);
+  const updateProject = useCallback(
+    (projectId: string, updates: Partial<Project>) => {
+      setProjects((prev) =>
+        prev.map((p) => (p.id === projectId ? { ...p, ...updates } : p))
+      );
+    },
+    []
+  );
 
   const deleteProject = useCallback((projectId: string) => {
     setProjects((prev) => prev.filter((p) => p.id !== projectId));

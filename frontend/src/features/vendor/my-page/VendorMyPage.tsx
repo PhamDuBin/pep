@@ -181,7 +181,7 @@ export function VendorMyPage() {
               <span className={styles.paymentLabel}>支払い方法</span>
               <div className={styles.paymentMethodRow}>
                 <Image
-                  src="/icons/visa.png"
+                  src="/assets/pictures/visa.png"
                   alt="Visa"
                   width={70}
                   height={43}

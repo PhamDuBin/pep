@@ -41,7 +41,7 @@ export function VendorSideMenu() {
         <div className={`${styles.menuToggle} ${isCollapsed ? styles.centered : ""}`}>
           <button className={styles.toggleButton} onClick={handleToggleMenu}>
             <Image
-              src="/icons/menu-toggle.svg"
+              src="/assets/icons/menu-toggle.svg"
               alt="Menu"
               width={20}
               height={13}
@@ -57,7 +57,7 @@ export function VendorSideMenu() {
             {/* Company Search */}
             <div className={styles.searchItem}>
               <Image
-                src="/icons/search.svg"
+                src="/assets/icons/search.svg"
                 alt="Search"
                 width={24}
                 height={24}
@@ -89,7 +89,7 @@ export function VendorSideMenu() {
           <div className={`${styles.section} ${styles.centered}`}>
             <div className={`${styles.searchItem} ${styles.centered}`}>
               <Image
-                src="/icons/search.svg"
+                src="/assets/icons/search.svg"
                 alt="Search"
                 width={24}
                 height={24}
@@ -107,7 +107,7 @@ export function VendorSideMenu() {
           onClick={navigateToUserList}
         >
           <Image
-            src="/icons/users.svg"
+            src="/assets/icons/users.svg"
             alt="Users"
             width={29}
             height={16}

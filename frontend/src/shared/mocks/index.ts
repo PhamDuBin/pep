@@ -5,4 +5,5 @@
 // Feature-specific mocks have been moved to their respective features.
 
 export * from "./projects";
-export * from "./my-page";
+export * from "./avatar-color-option";
+export * from "./tab";

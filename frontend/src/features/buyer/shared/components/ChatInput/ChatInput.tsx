@@ -47,7 +47,7 @@ export function ChatInput({
 
       {/* Mic Button */}
       <button type="button" className={styles.micButton}>
-        <Image src="/icons/mic.svg" alt="Microphone" width={30} height={30} />
+        <Image src="/assets/icons/mic.svg" alt="Microphone" width={30} height={30} />
       </button>
 
       {/* Send Button */}
@@ -56,7 +56,7 @@ export function ChatInput({
         className={styles.sendButton}
         onClick={sendMessage}
       >
-        <Image src="/icons/send.svg" alt="Send" width={40} height={40} />
+        <Image src="/assets/icons/send.svg" alt="Send" width={40} height={40} />
       </button>
     </div>
   );

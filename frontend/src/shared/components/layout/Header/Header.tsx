@@ -7,7 +7,7 @@ export function Header() {
   return (
     <header className={styles.header}>
       <Image
-        src="/icons/logo-pep.svg"
+        src="/assets/icons/logo-pep.svg"
         alt="PEP"
         width={100}
         height={50}

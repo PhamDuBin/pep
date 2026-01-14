@@ -5,50 +5,13 @@
 // Ready for future API integration.
 
 import { API_CONFIG, HTTP_STATUS } from "@/shared/constants";
-import type { ApiResponse, ErrorResponse } from "@/shared/types";
-
-/**
- * HTTP methods
- */
-type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
-
-/**
- * Request options
- */
-interface RequestOptions {
-  method?: HttpMethod;
-  headers?: Record<string, string>;
-  body?: unknown;
-  timeout?: number;
-}
-
-/**
- * API error class
- */
-export class ApiError extends Error {
-  status: number;
-  code?: string;
-  details?: Record<string, unknown>;
-
-  constructor(message: string, status: number, code?: string, details?: Record<string, unknown>) {
-    super(message);
-    this.name = "ApiError";
-    this.status = status;
-    this.code = code;
-    this.details = details;
-  }
-}
-
-/**
- * Create a timeout promise
- */
-function createTimeout(ms: number): Promise<never> {
-  return new Promise((_, reject) => {
-    setTimeout(() => {
-      reject(new ApiError("Request timeout", 408));
-    }, ms);
-  });
-}
+import {
+  ApiError,
+  type ApiResponse,
+  type ErrorResponse,
+  type RequestOptions,
+} from "@/shared/types";
+import { createTimeout } from "../utils/utils";
 
 /**
  * Make an API request
@@ -121,18 +84,31 @@ async function request<T>(
  * API service methods
  */
 export const api = {
-  get: <T>(endpoint: string, options?: Omit<RequestOptions, "method" | "body">) =>
-    request<T>(endpoint, { ...options, method: "GET" }),
+  get: <T>(
+    endpoint: string,
+    options?: Omit<RequestOptions, "method" | "body">
+  ) => request<T>(endpoint, { ...options, method: "GET" }),
 
-  post: <T>(endpoint: string, body?: unknown, options?: Omit<RequestOptions, "method">) =>
-    request<T>(endpoint, { ...options, method: "POST", body }),
+  post: <T>(
+    endpoint: string,
+    body?: unknown,
+    options?: Omit<RequestOptions, "method">
+  ) => request<T>(endpoint, { ...options, method: "POST", body }),
 
-  put: <T>(endpoint: string, body?: unknown, options?: Omit<RequestOptions, "method">) =>
-    request<T>(endpoint, { ...options, method: "PUT", body }),
+  put: <T>(
+    endpoint: string,
+    body?: unknown,
+    options?: Omit<RequestOptions, "method">
+  ) => request<T>(endpoint, { ...options, method: "PUT", body }),
 
-  patch: <T>(endpoint: string, body?: unknown, options?: Omit<RequestOptions, "method">) =>
-    request<T>(endpoint, { ...options, method: "PATCH", body }),
+  patch: <T>(
+    endpoint: string,
+    body?: unknown,
+    options?: Omit<RequestOptions, "method">
+  ) => request<T>(endpoint, { ...options, method: "PATCH", body }),
 
-  delete: <T>(endpoint: string, options?: Omit<RequestOptions, "method" | "body">) =>
-    request<T>(endpoint, { ...options, method: "DELETE" }),
+  delete: <T>(
+    endpoint: string,
+    options?: Omit<RequestOptions, "method" | "body">
+  ) => request<T>(endpoint, { ...options, method: "DELETE" }),
 };

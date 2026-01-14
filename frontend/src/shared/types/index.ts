@@ -4,10 +4,10 @@
 // Central export for shared type definitions.
 // Feature-specific types have been moved to their respective features.
 
-export * from "./common";
+export * from "./api";
 export * from "./project";
-export * from "./my-page";
-
+export * from "./avatar-color-option";
+export * from "./tab";
 // =============================================================================
 // RE-EXPORTS FOR BACKWARD COMPATIBILITY
 // =============================================================================

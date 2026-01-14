@@ -230,10 +230,10 @@ export function ProjectPlanPage() {
         >
           <div className={styles.rfpPreviewContainer}>
             <div className={styles.rfpPreviewImage}>
-              <img src="/pictures/pic1.jpg" alt="PDF Preview" />
+              <img src="/assets/pictures/pic1.jpg" alt="PDF Preview" />
             </div>
             <div className={styles.rfpPreviewImage}>
-              <img src="/pictures/pic2.jpg" alt="PDF Preview" />
+              <img src="/assets/pictures/pic2.jpg" alt="PDF Preview" />
             </div>
           </div>
 
