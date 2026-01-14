@@ -8,8 +8,8 @@ import { Project } from "@/shared/types";
 import styles from "./SideMenu.module.scss";
 
 // Animation variants - width values must match _tokens.scss
-const SIDEBAR_WIDTH = 197; // $sidebar-width in _tokens.scss
-const SIDEBAR_COLLAPSED_WIDTH = 50; // $sidebar-collapsed-width in _tokens.scss
+const SIDEBAR_WIDTH = 172; // $sidebar-width in _tokens.scss
+const SIDEBAR_COLLAPSED_WIDTH = 60; // $sidebar-collapsed-width in _tokens.scss
 
 const sidebarVariants = {
   expanded: {
