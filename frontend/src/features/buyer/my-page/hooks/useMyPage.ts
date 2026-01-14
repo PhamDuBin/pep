@@ -11,7 +11,7 @@ import {
   requestEmailChange,
   downloadInvoice as downloadInvoiceService,
 } from "../services/my-page.service";
-import type { EmailChangeModalState } from "@/shared/components/ui/Modal/EmailChangeModal/EmailChangeModal";
+import { EmailChangeModalState } from "@/shared/types";
 
 export interface UseMyPageReturn {
   // Loading state

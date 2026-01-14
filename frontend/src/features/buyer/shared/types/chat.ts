@@ -32,3 +32,5 @@ export interface ChatModeOption {
   label: string;
   description?: string;
 }
+
+export type ChatMessageVariant = "minimal" | "with-avatar";

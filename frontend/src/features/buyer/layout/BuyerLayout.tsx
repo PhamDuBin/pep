@@ -1,37 +1,11 @@
 "use client";
 
-import { ReactNode } from "react";
-import { Header, SideMenu } from "@/shared/components";
-import { SideMenuProvider, useSideMenu, ProjectProvider } from "@/shared/contexts";
-import styles from "./BuyerLayout.module.scss";
+import { SideMenuProvider, ProjectProvider } from "@/shared/contexts";
 
-interface BuyerLayoutContentProps {
-  children: ReactNode;
-}
+import { BuyerLayoutContentProps } from "../shared/types";
+import { BuyerLayoutContent } from "../shared/components/BuyerLayoutContent";
 
-function BuyerLayoutContent({ children }: BuyerLayoutContentProps) {
-  const { isCollapsed } = useSideMenu();
-
-  return (
-    <div className={styles.buyerLayout}>
-      <Header />
-      <SideMenu />
-      <main
-        className={`${styles.mainContent} ${
-          isCollapsed ? styles.menuCollapsed : styles.menuExpanded
-        }`}
-      >
-        {children}
-      </main>
-    </div>
-  );
-}
-
-interface BuyerLayoutProps {
-  children: ReactNode;
-}
-
-export function BuyerLayout({ children }: BuyerLayoutProps) {
+export function BuyerLayout({ children }: BuyerLayoutContentProps) {
   return (
     <SideMenuProvider>
       <ProjectProvider>

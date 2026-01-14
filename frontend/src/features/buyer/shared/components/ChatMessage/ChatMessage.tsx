@@ -3,8 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { ChatMessage as ChatMessageType } from "@/shared/types";
 import styles from "./ChatMessage.module.scss";
-
-export type ChatMessageVariant = "minimal" | "with-avatar";
+import { ChatMessageVariant } from "../../types";
 
 interface ChatMessageProps {
   message: ChatMessageType;
@@ -57,12 +56,13 @@ export function ChatMessage({
             charsPerFrame,
             content.length - currentIndexRef.current
           );
-          setDisplayedContent((prev) =>
-            prev +
-            content.substring(
-              currentIndexRef.current,
-              currentIndexRef.current + charsToAdd
-            )
+          setDisplayedContent(
+            (prev) =>
+              prev +
+              content.substring(
+                currentIndexRef.current,
+                currentIndexRef.current + charsToAdd
+              )
           );
           currentIndexRef.current += charsToAdd;
 
@@ -155,7 +155,9 @@ export function ChatMessage({
 
       <div
         className={`${styles.messageBubbleWithAvatar} ${
-          isUserMessage ? styles.userBubbleWithAvatar : styles.aiBubbleWithAvatar
+          isUserMessage
+            ? styles.userBubbleWithAvatar
+            : styles.aiBubbleWithAvatar
         }`}
         onClick={skipTyping}
       >

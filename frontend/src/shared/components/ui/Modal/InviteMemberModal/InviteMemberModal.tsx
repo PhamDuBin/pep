@@ -3,8 +3,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { Modal } from "../Modal";
 import styles from "./InviteMemberModal.module.scss";
-
-export type InviteMemberModalState = "form" | "complete";
+import { InviteMemberModalState } from "@/shared/types";
 
 interface EmailEntry {
   value: string;
@@ -30,7 +29,9 @@ export function InviteMemberModal({
   isSaving = false,
   modalState = "form",
 }: InviteMemberModalProps) {
-  const [emails, setEmails] = useState<EmailEntry[]>([{ value: "", error: null }]);
+  const [emails, setEmails] = useState<EmailEntry[]>([
+    { value: "", error: null },
+  ]);
 
   // Reset form when modal opens in form state
   useEffect(() => {
@@ -39,29 +40,32 @@ export function InviteMemberModal({
     }
   }, [isOpen, modalState]);
 
-  const validateEmail = useCallback((email: string, allEmails: EmailEntry[]): string | null => {
-    if (!email.trim()) {
-      return null; // Empty is ok, will be filtered out
-    }
+  const validateEmail = useCallback(
+    (email: string, allEmails: EmailEntry[]): string | null => {
+      if (!email.trim()) {
+        return null; // Empty is ok, will be filtered out
+      }
 
-    if (!EMAIL_REGEX.test(email.trim())) {
-      return "正しいメールアドレス形式で入力してください";
-    }
+      if (!EMAIL_REGEX.test(email.trim())) {
+        return "正しいメールアドレス形式で入力してください";
+      }
 
-    if (existingEmails.includes(email.trim().toLowerCase())) {
-      return "このメールアドレスは既に招待されています";
-    }
+      if (existingEmails.includes(email.trim().toLowerCase())) {
+        return "このメールアドレスは既に招待されています";
+      }
 
-    // Check for duplicates within the form
-    const duplicateCount = allEmails.filter(
-      (e) => e.value.trim().toLowerCase() === email.trim().toLowerCase()
-    ).length;
-    if (duplicateCount > 1) {
-      return "このメールアドレスは既に入力されています";
-    }
+      // Check for duplicates within the form
+      const duplicateCount = allEmails.filter(
+        (e) => e.value.trim().toLowerCase() === email.trim().toLowerCase()
+      ).length;
+      if (duplicateCount > 1) {
+        return "このメールアドレスは既に入力されています";
+      }
 
-    return null;
-  }, [existingEmails]);
+      return null;
+    },
+    [existingEmails]
+  );
 
   const handleEmailChange = useCallback((index: number, value: string) => {
     setEmails((prev) => {
@@ -81,7 +85,9 @@ export function InviteMemberModal({
   }, [emails]);
 
   const hasValidEmails = useCallback((): boolean => {
-    return emails.some((e) => e.value.trim() && !validateEmail(e.value, emails));
+    return emails.some(
+      (e) => e.value.trim() && !validateEmail(e.value, emails)
+    );
   }, [emails, validateEmail]);
 
   const validateAllEmails = useCallback((): boolean => {
@@ -125,7 +131,11 @@ export function InviteMemberModal({
       actions={
         modalState === "form" ? (
           <div className={styles.actionButtons}>
-            <button type="button" className={styles.btnCancel} onClick={onClose}>
+            <button
+              type="button"
+              className={styles.btnCancel}
+              onClick={onClose}
+            >
               キャンセル
             </button>
             <button
@@ -143,7 +153,11 @@ export function InviteMemberModal({
           </div>
         ) : (
           <div className={styles.actionButtons}>
-            <button type="button" className={styles.btnCancel} onClick={onClose}>
+            <button
+              type="button"
+              className={styles.btnCancel}
+              onClick={onClose}
+            >
               閉じる
             </button>
           </div>
@@ -168,7 +182,9 @@ export function InviteMemberModal({
                   <div className={styles.emailInputRow}>
                     <input
                       type="email"
-                      className={`${styles.emailInput} ${email.error ? styles.hasError : ""}`}
+                      className={`${styles.emailInput} ${
+                        email.error ? styles.hasError : ""
+                      }`}
                       placeholder="email@address.com"
                       value={email.value}
                       onChange={(e) => handleEmailChange(index, e.target.value)}
@@ -176,7 +192,9 @@ export function InviteMemberModal({
                     {isLast ? (
                       <button
                         type="button"
-                        className={`${styles.addBtn} ${canAddMore() ? styles.active : ""}`}
+                        className={`${styles.addBtn} ${
+                          canAddMore() ? styles.active : ""
+                        }`}
                         disabled={!canAddMore()}
                         onClick={addEmailField}
                         aria-label="Add email field"
@@ -192,15 +210,23 @@ export function InviteMemberModal({
                             d="M17.4996 29.4001C10.9196 29.4001 5.59961 24.0801 5.59961 17.5001C5.59961 10.9201 10.9196 5.6001 17.4996 5.6001C24.0796 5.6001 29.3996 10.9201 29.3996 17.5001C29.3996 24.0801 24.0796 29.4001 17.4996 29.4001ZM17.4996 7.0001C11.6896 7.0001 6.99961 11.6901 6.99961 17.5001C6.99961 23.3101 11.6896 28.0001 17.4996 28.0001C23.3096 28.0001 27.9996 23.3101 27.9996 17.5001C27.9996 11.6901 23.3096 7.0001 17.4996 7.0001Z"
                             fill="currentColor"
                           />
-                          <path d="M11.2002 16.7998H23.8002V18.1998H11.2002V16.7998Z" fill="currentColor" />
-                          <path d="M16.7998 11.2002H18.1998V23.8002H16.7998V11.2002Z" fill="currentColor" />
+                          <path
+                            d="M11.2002 16.7998H23.8002V18.1998H11.2002V16.7998Z"
+                            fill="currentColor"
+                          />
+                          <path
+                            d="M16.7998 11.2002H18.1998V23.8002H16.7998V11.2002Z"
+                            fill="currentColor"
+                          />
                         </svg>
                       </button>
                     ) : (
                       <div className={styles.addBtnSpacer}></div>
                     )}
                   </div>
-                  {email.error && <span className={styles.errorMessage}>{email.error}</span>}
+                  {email.error && (
+                    <span className={styles.errorMessage}>{email.error}</span>
+                  )}
                 </div>
               );
             })}
