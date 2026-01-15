@@ -84,7 +84,7 @@ export function DeleteConfirmModal({
         </div>
       ) : (
         <p className="font-noto-jp font-[500] text-[14px] leading-[130%] text-[#333333] text-center m-0 w-full p-0">
-          選択したメンバーを削除しました。
+          削除完了しました。
         </p>
       )}
     </Modal>
