@@ -36,6 +36,7 @@ export function ArchivePage() {
     toggleContextMenu,
     closeContextMenu,
     handleContextAction,
+    handleProjectClick,
     changePage,
     toggleFilterDropdown,
     toggleSortDropdown,
@@ -267,8 +268,11 @@ export function ArchivePage() {
                     whileHover={{ y: -2 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <div className="flex flex-col gap-[5px] w-[220px] flex-shrink-0">
-                      <div className="flex items-center p-[15px] h-[70px] bg-white border border-[#e1e1e1] rounded-[12px] box-border transition-all duration-300 hover:border-primary hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
+                    <div className="flex flex-col gap-[5px] w-[220px] flex-shrink-0 group/card">
+                      <div
+                        className="flex items-center p-[15px] h-[70px] bg-white border border-[#e1e1e1] rounded-[12px] box-border transition-all duration-300 hover:border-primary hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] cursor-pointer"
+                        onClick={() => handleProjectClick(project.id)}
+                      >
                         <p className="font-bold text-[14px] leading-[1.4] text-[#333333] overflow-hidden text-ellipsis line-clamp-2 break-words m-0">
                           {project.name}
                         </p>
@@ -298,21 +302,22 @@ export function ArchivePage() {
                           </span>
                         </div>
                         <div className="flex items-center gap-[5px] flex-shrink-0">
-                          {/* ... (Giữ nguyên icon favorite và 3 chấm) ... */}
-                          {project.isFavorite && (
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="24"
-                              height="24"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                            >
-                              <path
-                                d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.62L12 2L9.19 8.62L2 9.24L7.45 13.97L5.82 21L12 17.27Z"
-                                fill="#066A9E"
-                              />
-                            </svg>
-                          )}
+                          {/* Favorite star - shows on hover or when favorited */}
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            className={`cursor-pointer transition-opacity duration-200 ${
+                              project.isFavorite ? "opacity-100" : "opacity-0 group-hover/card:opacity-100"
+                            }`}
+                          >
+                            <path
+                              d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.62L12 2L9.19 8.62L2 9.24L7.45 13.97L5.82 21L12 17.27Z"
+                              fill={project.isFavorite ? "#066A9E" : "#b9b9b9"}
+                            />
+                          </svg>
                           <button
                             className="flex items-center justify-center w-[20px] h-[20px] p-0 bg-transparent border-none cursor-pointer flex-shrink-0 hover:opacity-70"
                             onClick={() => toggleContextMenu(project.id)}
@@ -403,10 +408,11 @@ export function ArchivePage() {
                       whileHover={{ scale: 1.005 }}
                       transition={{ duration: 0.2 }}
                     >
-                      {/* ... (Giữ nguyên nội dung bên trong List Item) ... */}
                       <div className="flex items-center justify-center gap-[25px] w-full">
-                        {/* ... Nội dung thẻ ... */}
-                        <div className="flex-1 min-w-0 flex items-center p-[15px] bg-white border border-[#e1e1e1] rounded-[12px] transition-all duration-300 hover:border-primary hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
+                        <div
+                          className="flex-1 min-w-0 flex items-center p-[15px] bg-white border border-[#e1e1e1] rounded-[12px] transition-all duration-300 hover:border-primary hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] cursor-pointer"
+                          onClick={() => handleProjectClick(project.id)}
+                        >
                           <p className="font-bold text-[14px] leading-[1.4] text-[#333333] overflow-hidden text-ellipsis whitespace-nowrap m-0">
                             {project.name}
                           </p>

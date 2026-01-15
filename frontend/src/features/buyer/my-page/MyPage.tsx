@@ -21,6 +21,7 @@ export function MyPage() {
     showPassword,
     showConfirmPassword,
     showAvatarSaveSuccess,
+    showPasswordSaveSuccess,
     currentPage,
     totalPages,
     showEmailModal,
@@ -60,7 +61,9 @@ export function MyPage() {
             <div className="flex flex-col gap-[25px] w-full">
               {/* Section Header */}
               <div className="flex items-center pb-[10px] border-b border-[#cfcfcf]">
-                <h2 className="font-bold text-[20px] leading-normal text-[#333] m-0">ユーザー情報</h2>
+                <h2 className="font-bold text-[20px] leading-normal text-[#333] m-0">
+                  ユーザー情報
+                </h2>
               </div>
 
               {/* Section Content */}
@@ -85,8 +88,8 @@ export function MyPage() {
                   </button>
                 </div>
 
-                {/* Success Message */}
-                {showAvatarSaveSuccess && (
+                {/* Success Message - shows for both avatar and password save */}
+                {(showAvatarSaveSuccess || showPasswordSaveSuccess) && (
                   <div className="flex items-center justify-center px-[20px] py-[10px] bg-[#e6f3f5] rounded-[4px] self-start">
                     <span className="font-semibold text-[14px] leading-normal text-[#066a9e]">
                       変更を保存しました。
@@ -98,17 +101,25 @@ export function MyPage() {
                 <div className="flex flex-col gap-[10px] items-start w-full">
                   {/* Name Field */}
                   <div className="flex items-center gap-[10px]">
-                    <label className="w-[200px] font-normal text-[16px] text-black">氏名</label>
+                    <label className="w-[200px] font-normal text-[16px] text-black">
+                      氏名
+                    </label>
                     <div className="flex items-center h-[35px] px-[10px] py-[3px] bg-white rounded-[4px] w-[300px]">
-                      <span className="font-normal text-[16px] text-black">{user.name}</span>
+                      <span className="font-normal text-[16px] text-black">
+                        {user.name}
+                      </span>
                     </div>
                   </div>
 
                   {/* Email Field */}
                   <div className="flex items-center gap-[10px]">
-                    <label className="w-[200px] font-normal text-[16px] text-black">メールアドレス</label>
+                    <label className="w-[200px] font-normal text-[16px] text-black">
+                      メールアドレス
+                    </label>
                     <div className="flex items-center h-[35px] px-[10px] py-[3px] bg-white rounded-[4px] w-auto gap-[25px]">
-                      <span className="font-normal text-[16px] text-black">{user.email}</span>
+                      <span className="font-normal text-[16px] text-black">
+                        {user.email}
+                      </span>
                       <button
                         type="button"
                         className="bg-transparent border-none font-normal text-[16px] text-[#066a9e] underline cursor-pointer p-0 hover:opacity-80"
@@ -121,15 +132,21 @@ export function MyPage() {
 
                   {/* Current Password Field */}
                   <div className="flex items-center gap-[10px]">
-                    <label className="w-[200px] font-normal text-[16px] text-black">現在のパスワード</label>
+                    <label className="w-[200px] font-normal text-[16px] text-black">
+                      現在のパスワード
+                    </label>
                     <div className="flex items-center h-[35px] px-[10px] py-[3px] bg-white rounded-[4px] w-[300px]">
-                      <span className="font-normal text-[16px] text-black">**********</span>
+                      <span className="font-normal text-[16px] text-black">
+                        **********
+                      </span>
                     </div>
                   </div>
 
                   {/* New Password Field */}
                   <div className="flex items-center gap-[10px]">
-                    <label className="w-[200px] font-normal text-[16px] text-black">新しいパスワード</label>
+                    <label className="w-[200px] font-normal text-[16px] text-black">
+                      新しいパスワード
+                    </label>
                     <div className="flex items-center justify-between h-[35px] px-[10px] py-[3px] bg-white border border-[#b9b9b9] rounded-[4px] w-[300px] box-border">
                       <input
                         type={showPassword ? "text" : "password"}
@@ -143,18 +160,41 @@ export function MyPage() {
                         className="flex items-center justify-center bg-transparent border-none p-0 cursor-pointer shrink-0 hover:opacity-70"
                         onClick={() => setShowPassword(!showPassword)}
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                        >
-                          <path
-                            d="M12 4.5C7 4.5 2.73 7.61 1 12C2.73 16.39 7 19.5 12 19.5C17 19.5 21.27 16.39 23 12C21.27 7.61 17 4.5 12 4.5ZM12 17C9.24 17 7 14.76 7 12C7 9.24 9.24 7 12 7C14.76 7 17 9.24 17 12C17 14.76 14.76 17 12 17ZM12 9C10.34 9 9 10.34 9 12C9 13.66 10.34 15 12 15C13.66 15 15 13.66 15 12C15 10.34 13.66 9 12 9Z"
-                            fill="#808080"
-                          />
-                        </svg>
+                        {showPassword ? (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            className="lucide lucide-eye-icon lucide-eye"
+                          >
+                            <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+                            <circle cx="12" cy="12" r="3" />
+                          </svg>
+                        ) : (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            className="lucide lucide-eye-off-icon lucide-eye-off"
+                          >
+                            <path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49" />
+                            <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" />
+                            <path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143" />
+                            <path d="m2 2 20 20" />
+                          </svg>
+                        )}
                       </button>
                     </div>
                   </div>
@@ -179,18 +219,41 @@ export function MyPage() {
                           setShowConfirmPassword(!showConfirmPassword)
                         }
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                        >
-                          <path
-                            d="M12 4.5C7 4.5 2.73 7.61 1 12C2.73 16.39 7 19.5 12 19.5C17 19.5 21.27 16.39 23 12C21.27 7.61 17 4.5 12 4.5ZM12 17C9.24 17 7 14.76 7 12C7 9.24 9.24 7 12 7C14.76 7 17 9.24 17 12C17 14.76 14.76 17 12 17ZM12 9C10.34 9 9 10.34 9 12C9 13.66 10.34 15 12 15C13.66 15 15 13.66 15 12C15 10.34 13.66 9 12 9Z"
-                            fill="#808080"
-                          />
-                        </svg>
+                        {showConfirmPassword ? (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            className="lucide lucide-eye-icon lucide-eye"
+                          >
+                            <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+                            <circle cx="12" cy="12" r="3" />
+                          </svg>
+                        ) : (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            className="lucide lucide-eye-off-icon lucide-eye-off"
+                          >
+                            <path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49" />
+                            <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" />
+                            <path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143" />
+                            <path d="m2 2 20 20" />
+                          </svg>
+                        )}
                       </button>
                     </div>
                   </div>
@@ -216,13 +279,17 @@ export function MyPage() {
                 {/* Payment Info Section */}
                 <div className="flex flex-col gap-[25px] w-full">
                   <div className="flex items-center pb-[10px] border-b border-[#cfcfcf]">
-                    <h2 className="font-bold text-[20px] leading-normal text-[#333] m-0">決済情報</h2>
+                    <h2 className="font-bold text-[20px] leading-normal text-[#333] m-0">
+                      決済情報
+                    </h2>
                   </div>
                   <div className="flex flex-col items-start justify-center w-full">
                     <div className="flex flex-col gap-[10px] items-start">
                       {/* Next Billing Date */}
                       <div className="flex items-center gap-[10px]">
-                        <span className="w-[200px] font-normal text-[16px] text-black">次回の請求日</span>
+                        <span className="w-[200px] font-normal text-[16px] text-black">
+                          次回の請求日
+                        </span>
                         <span className="font-normal text-[20px] text-black py-[3px]">
                           {paymentInfo.nextBillingDate}
                         </span>
@@ -230,7 +297,9 @@ export function MyPage() {
 
                       {/* Billing Amount */}
                       <div className="flex items-center gap-[10px]">
-                        <span className="w-[200px] font-normal text-[16px] text-black">請求金額</span>
+                        <span className="w-[200px] font-normal text-[16px] text-black">
+                          請求金額
+                        </span>
                         <span className="font-normal text-[20px] text-black py-[3px]">
                           {formatAmount(
                             paymentInfo.billingAmount,
@@ -241,7 +310,9 @@ export function MyPage() {
 
                       {/* Payment Method */}
                       <div className="flex flex-col gap-[5px] items-start justify-center w-full">
-                        <span className="w-[200px] font-normal text-[16px] text-black">支払い方法</span>
+                        <span className="w-[200px] font-normal text-[16px] text-black">
+                          支払い方法
+                        </span>
 
                         {paymentInfo.paymentMethod && (
                           <div className="flex items-center gap-[10px] w-full">
@@ -274,17 +345,29 @@ export function MyPage() {
                 {paymentHistory.length > 0 && (
                   <div className="flex flex-col gap-[25px] items-center justify-center w-full">
                     <div className="flex items-center pb-[10px] border-b border-[#cfcfcf] w-full">
-                      <h2 className="font-bold text-[20px] leading-normal text-[#333] m-0">お支払い履歴</h2>
+                      <h2 className="font-bold text-[20px] leading-normal text-[#333] m-0">
+                        お支払い履歴
+                      </h2>
                     </div>
                     <div className="w-full overflow-x-auto border border-[#d4d4d4]">
                       <table className="w-full border-collapse bg-white border border-[#d4d4d4] rounded-[4px] overflow-hidden">
                         <thead>
                           <tr className="bg-[#f5f5f5]">
-                            <th className="w-[130px] border-l border-t border-[#d4d4d4] font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">支払日</th>
-                            <th className="flex-1 border-t border-[#d4d4d4] font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">請求金額(税込)</th>
-                            <th className="w-[179px] border-t border-[#d4d4d4] font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">利用年月</th>
-                            <th className="flex-1 border-t border-[#d4d4d4] font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">ステータス</th>
-                            <th className="flex-1 border-t border-[#d4d4d4] font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">請求書</th>
+                            <th className="w-[130px] border-l border-t border-[#d4d4d4] font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">
+                              支払日
+                            </th>
+                            <th className="flex-1 border-t border-[#d4d4d4] font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">
+                              請求金額(税込)
+                            </th>
+                            <th className="w-[179px] border-t border-[#d4d4d4] font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">
+                              利用年月
+                            </th>
+                            <th className="flex-1 border-t border-[#d4d4d4] font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">
+                              ステータス
+                            </th>
+                            <th className="flex-1 border-t border-[#d4d4d4] font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">
+                              請求書
+                            </th>
                           </tr>
                         </thead>
                         <tbody>

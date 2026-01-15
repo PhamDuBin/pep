@@ -41,21 +41,27 @@ export function InviteMemberModal({
 
   const validateEmail = useCallback(
     (email: string, allEmails: EmailEntry[]): string | null => {
-      if (!email.trim()) {
-        return null; // Empty is ok, will be filtered out
+      const trimmedEmail = email.trim();
+
+      // Empty is ok - will be filtered out when sending
+      if (!trimmedEmail) {
+        return null;
       }
 
-      if (!EMAIL_REGEX.test(email.trim())) {
+      // Check email format
+      if (!EMAIL_REGEX.test(trimmedEmail)) {
         return "正しいメールアドレス形式で入力してください";
       }
 
-      if (existingEmails.includes(email.trim().toLowerCase())) {
+      // Check if already invited
+      if (existingEmails.includes(trimmedEmail.toLowerCase())) {
         return "このメールアドレスは既に招待されています";
       }
 
-      // Check for duplicates within the form
-      const duplicateCount = allEmails.filter(
-        (e) => e.value.trim().toLowerCase() === email.trim().toLowerCase()
+      // Check for duplicates within non-empty emails only
+      const nonEmptyEmails = allEmails.filter((e) => e.value.trim());
+      const duplicateCount = nonEmptyEmails.filter(
+        (e) => e.value.trim().toLowerCase() === trimmedEmail.toLowerCase()
       ).length;
       if (duplicateCount > 1) {
         return "このメールアドレスは既に入力されています";
@@ -84,25 +90,49 @@ export function InviteMemberModal({
   }, [emails]);
 
   const hasValidEmails = useCallback((): boolean => {
-    return emails.some(
-      (e) => e.value.trim() && !validateEmail(e.value, emails)
-    );
-  }, [emails, validateEmail]);
+    // Check if there's at least one non-empty email with valid format
+    const nonEmptyEmails = emails.filter((e) => e.value.trim());
+    if (nonEmptyEmails.length === 0) return false;
+
+    // Check if at least one email is valid (ignore empty fields)
+    return nonEmptyEmails.some((entry) => {
+      const email = entry.value.trim();
+      // Check format
+      if (!EMAIL_REGEX.test(email)) return false;
+      // Check if already exists
+      if (existingEmails.includes(email.toLowerCase())) return false;
+      // Check duplicates within non-empty emails only
+      const duplicateCount = nonEmptyEmails.filter(
+        (e) => e.value.trim().toLowerCase() === email.toLowerCase()
+      ).length;
+      if (duplicateCount > 1) return false;
+      return true;
+    });
+  }, [emails, existingEmails]);
 
   const validateAllEmails = useCallback((): boolean => {
     let isValid = true;
+    // Only validate non-empty emails
+    const nonEmptyEmails = emails.filter((e) => e.value.trim());
+
     const newEmails = emails.map((entry) => {
-      if (entry.value.trim()) {
-        const error = validateEmail(entry.value, emails);
-        if (error) {
-          isValid = false;
-        }
-        return { ...entry, error };
+      const email = entry.value.trim();
+      // Skip empty fields - they are valid (will be filtered out when sending)
+      if (!email) {
+        return { ...entry, error: null };
       }
-      return entry;
+
+      // Validate non-empty email
+      const error = validateEmail(entry.value, emails);
+      if (error) {
+        isValid = false;
+      }
+      return { ...entry, error };
     });
+
     setEmails(newEmails);
-    return isValid;
+    // Return true if we have at least one valid non-empty email
+    return isValid && nonEmptyEmails.length > 0;
   }, [emails, validateEmail]);
 
   const handleSendInvitation = useCallback(() => {
@@ -126,7 +156,9 @@ export function InviteMemberModal({
       title="新しいメンバーを招待"
       size="md"
       customClass={`min-w-[520px] max-w-[520px] [&_.modal-title]:text-[20px] [&_.modal-title]:font-normal [&_.modal-title]:text-[#066a9e] ${
-        modalState === "complete" ? "w-[340px] min-w-[340px] max-w-[340px] h-[174px]" : ""
+        modalState === "complete"
+          ? "w-[340px] min-w-[340px] max-w-[340px] h-[174px]"
+          : ""
       }`}
       isLoading={isSaving}
       actions={
@@ -142,7 +174,7 @@ export function InviteMemberModal({
             <button
               type="button"
               className="py-[10px] px-[15px] bg-[#333333] border-none rounded-[8px] text-[14px] font-normal text-white cursor-pointer transition-colors duration-200 flex items-center justify-center gap-[8px] min-w-[130px] hover:enabled:bg-[#444444] disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={isSaving || !hasValidEmails()}
+              // disabled={isSaving || !hasValidEmails()}
               onClick={handleSendInvitation}
             >
               {isSaving ? (
@@ -171,7 +203,9 @@ export function InviteMemberModal({
           <div className="text-center text-[14px] font-medium leading-[24px] text-[#333333] [&_p]:m-0">
             <p>追加したいメンバーのメールアドレスを入力してください。</p>
             <p>入力したメールアドレス宛に招待メールを送信します。</p>
-            <p className="text-[#333333]">※ 招待メールの有効期限は10日間です。</p>
+            <p className="text-[#333333]">
+              ※ 招待メールの有効期限は10日間です。
+            </p>
           </div>
 
           {/* Email inputs */}
@@ -224,7 +258,9 @@ export function InviteMemberModal({
                     )}
                   </div>
                   {email.error && (
-                    <span className="text-[12px] font-normal text-[#c10000] leading-normal">{email.error}</span>
+                    <span className="text-[12px] font-normal text-[#c10000] leading-normal">
+                      {email.error}
+                    </span>
                   )}
                 </div>
               );
@@ -233,7 +269,9 @@ export function InviteMemberModal({
         </div>
       ) : (
         <div className="flex flex-col items-center px-[35px]">
-          <p className="text-[14px] font-medium text-[#333333] text-center leading-[1.3] m-0">招待メールを送信しました。</p>
+          <p className="text-[14px] font-medium text-[#333333] text-center leading-[1.3] m-0">
+            招待メールを送信しました。
+          </p>
         </div>
       )}
     </Modal>
