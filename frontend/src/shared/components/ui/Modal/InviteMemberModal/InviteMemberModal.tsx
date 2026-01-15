@@ -153,7 +153,6 @@ export function InviteMemberModal({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="新しいメンバーを招待"
       size="md"
       customClass={`min-w-[520px] max-w-[520px] [&_.modal-title]:text-[20px] [&_.modal-title]:font-normal [&_.modal-title]:text-[#066a9e] ${
         modalState === "complete"
@@ -197,6 +196,10 @@ export function InviteMemberModal({
         )
       }
     >
+      <div className="font-noto font-[400] text-[20px] leading-[27px] text-[#066A9E] text-center w-full mb-[25px]">
+        新しいメンバーを招待
+      </div>
+
       {modalState === "form" ? (
         <div className="flex flex-col items-center gap-[25px] w-full px-[35px]">
           {/* Description text */}
@@ -220,6 +223,10 @@ export function InviteMemberModal({
                       className="flex-1 h-[35px] py-[3px] px-[10px] border border-[#b9b9b9] rounded-[4px] text-[16px] font-normal text-[#333333] bg-white outline-none transition-colors duration-200 placeholder:text-[#b9b9b9] focus:border-[#066a9e]"
                       placeholder="email@address.com"
                       value={email.value}
+                      spellCheck={false}
+                      autoComplete="off"
+                      autoCorrect="off"
+                      autoCapitalize="off"
                       onChange={(e) => handleEmailChange(index, e.target.value)}
                     />
                     {isLast ? (
