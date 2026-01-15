@@ -37,6 +37,7 @@ const config: ConfigWithDaisyUI = {
         "avatar-bg": "#8EC5D0",
       },
       fontFamily: {
+        sans: ["Noto Sans", "Noto Sans JP", "sans-serif"],
         noto: ["Noto Sans", "sans-serif"],
         "noto-jp": ["Noto Sans JP", "sans-serif"],
         inter: ["Inter", "sans-serif"],

@@ -5,7 +5,12 @@
 // =============================================================================
 
 import { useState, useCallback, useMemo, useEffect } from "react";
-import { User, UserPermission, PermissionOption, PermissionChangeModalState } from "../types";
+import {
+  User,
+  UserPermission,
+  PermissionOption,
+  PermissionChangeModalState,
+} from "../types/types";
 import {
   getUsers,
   getPermissionOptions,
@@ -13,7 +18,10 @@ import {
   deleteUsers,
   inviteUser,
 } from "../services/user-list.service";
-import { DeleteConfirmModalState, InviteMemberModalState } from "@/shared/types";
+import {
+  DeleteConfirmModalState,
+  InviteMemberModalState,
+} from "@/shared/types";
 
 export function useUserList() {
   const [isLoading, setIsLoading] = useState(true);

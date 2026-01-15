@@ -60,7 +60,7 @@ export function MyPage() {
             <div className="flex flex-col gap-[25px] w-full">
               {/* Section Header */}
               <div className="flex items-center pb-[10px] border-b border-[#cfcfcf]">
-                <h2 className="font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-bold text-[20px] leading-normal text-[#333] m-0">ユーザー情報</h2>
+                <h2 className="font-bold text-[20px] leading-normal text-[#333] m-0">ユーザー情報</h2>
               </div>
 
               {/* Section Content */}
@@ -72,13 +72,13 @@ export function MyPage() {
                     style={{ backgroundColor: user.avatarColor || "#8ec5d0" }}
                     onClick={handleAvatarClick}
                   >
-                    <span className="font-['Noto_Sans',sans-serif] font-normal text-[24px] text-white">
+                    <span className="font-normal text-[24px] text-white">
                       {user.initials}
                     </span>
                   </div>
                   <button
                     type="button"
-                    className="flex items-center px-[15px] py-[10px] bg-[#e1e1e1] border-none rounded-[8px] font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[14px] text-[#333] cursor-pointer transition-colors duration-200 hover:bg-[#d1d1d1]"
+                    className="flex items-center px-[15px] py-[10px] bg-[#e1e1e1] border-none rounded-[8px] font-normal text-[14px] text-[#333] cursor-pointer transition-colors duration-200 hover:bg-[#d1d1d1]"
                     onClick={handleAvatarClick}
                   >
                     画像を選択
@@ -88,7 +88,7 @@ export function MyPage() {
                 {/* Success Message */}
                 {showAvatarSaveSuccess && (
                   <div className="flex items-center justify-center px-[20px] py-[10px] bg-[#e6f3f5] rounded-[4px] self-start">
-                    <span className="font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-semibold text-[14px] leading-normal text-[#066a9e]">
+                    <span className="font-semibold text-[14px] leading-normal text-[#066a9e]">
                       変更を保存しました。
                     </span>
                   </div>
@@ -98,20 +98,20 @@ export function MyPage() {
                 <div className="flex flex-col gap-[10px] items-start w-full">
                   {/* Name Field */}
                   <div className="flex items-center gap-[10px]">
-                    <label className="w-[200px] font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[16px] text-black">氏名</label>
+                    <label className="w-[200px] font-normal text-[16px] text-black">氏名</label>
                     <div className="flex items-center h-[35px] px-[10px] py-[3px] bg-white rounded-[4px] w-[300px]">
-                      <span className="font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[16px] text-black">{user.name}</span>
+                      <span className="font-normal text-[16px] text-black">{user.name}</span>
                     </div>
                   </div>
 
                   {/* Email Field */}
                   <div className="flex items-center gap-[10px]">
-                    <label className="w-[200px] font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[16px] text-black">メールアドレス</label>
+                    <label className="w-[200px] font-normal text-[16px] text-black">メールアドレス</label>
                     <div className="flex items-center h-[35px] px-[10px] py-[3px] bg-white rounded-[4px] w-auto gap-[25px]">
-                      <span className="font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[16px] text-black">{user.email}</span>
+                      <span className="font-normal text-[16px] text-black">{user.email}</span>
                       <button
                         type="button"
-                        className="bg-transparent border-none font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[16px] text-[#066a9e] underline cursor-pointer p-0 hover:opacity-80"
+                        className="bg-transparent border-none font-normal text-[16px] text-[#066a9e] underline cursor-pointer p-0 hover:opacity-80"
                         onClick={handleEmailChangeClick}
                       >
                         メールアドレスを変更
@@ -121,19 +121,19 @@ export function MyPage() {
 
                   {/* Current Password Field */}
                   <div className="flex items-center gap-[10px]">
-                    <label className="w-[200px] font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[16px] text-black">現在のパスワード</label>
+                    <label className="w-[200px] font-normal text-[16px] text-black">現在のパスワード</label>
                     <div className="flex items-center h-[35px] px-[10px] py-[3px] bg-white rounded-[4px] w-[300px]">
-                      <span className="font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[16px] text-black">**********</span>
+                      <span className="font-normal text-[16px] text-black">**********</span>
                     </div>
                   </div>
 
                   {/* New Password Field */}
                   <div className="flex items-center gap-[10px]">
-                    <label className="w-[200px] font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[16px] text-black">新しいパスワード</label>
+                    <label className="w-[200px] font-normal text-[16px] text-black">新しいパスワード</label>
                     <div className="flex items-center justify-between h-[35px] px-[10px] py-[3px] bg-white border border-[#b9b9b9] rounded-[4px] w-[300px] box-border">
                       <input
                         type={showPassword ? "text" : "password"}
-                        className="flex-1 border-none outline-none font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[16px] text-black bg-transparent placeholder:text-[#808080]"
+                        className="flex-1 border-none outline-none font-normal text-[16px] text-black bg-transparent placeholder:text-[#808080]"
                         placeholder="8〜16文字の英数字で入力"
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
@@ -161,13 +161,13 @@ export function MyPage() {
 
                   {/* Confirm Password Field */}
                   <div className="flex items-center gap-[10px]">
-                    <label className="w-[200px] font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[16px] text-black">
+                    <label className="w-[200px] font-normal text-[16px] text-black">
                       新しいパスワード（確認）
                     </label>
                     <div className="flex items-center justify-between h-[35px] px-[10px] py-[3px] bg-white border border-[#b9b9b9] rounded-[4px] w-[300px] box-border">
                       <input
                         type={showConfirmPassword ? "text" : "password"}
-                        className="flex-1 border-none outline-none font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[16px] text-black bg-transparent placeholder:text-[#808080]"
+                        className="flex-1 border-none outline-none font-normal text-[16px] text-black bg-transparent placeholder:text-[#808080]"
                         placeholder="8〜16文字の英数字で入力"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
@@ -200,7 +200,7 @@ export function MyPage() {
                 <div className="flex justify-center w-full">
                   <button
                     type="button"
-                    className="flex items-center px-[15px] py-[10px] bg-[#066a9e] border-none rounded-[8px] font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[14px] text-white cursor-pointer transition-colors duration-200 hover:enabled:bg-[#055a84] disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="flex items-center px-[15px] py-[10px] bg-[#066a9e] border-none rounded-[8px] font-normal text-[14px] text-white cursor-pointer transition-colors duration-200 hover:enabled:bg-[#055a84] disabled:opacity-60 disabled:cursor-not-allowed"
                     disabled={isSaving}
                     onClick={handleSavePassword}
                   >
@@ -216,22 +216,22 @@ export function MyPage() {
                 {/* Payment Info Section */}
                 <div className="flex flex-col gap-[25px] w-full">
                   <div className="flex items-center pb-[10px] border-b border-[#cfcfcf]">
-                    <h2 className="font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-bold text-[20px] leading-normal text-[#333] m-0">決済情報</h2>
+                    <h2 className="font-bold text-[20px] leading-normal text-[#333] m-0">決済情報</h2>
                   </div>
                   <div className="flex flex-col items-start justify-center w-full">
                     <div className="flex flex-col gap-[10px] items-start">
                       {/* Next Billing Date */}
                       <div className="flex items-center gap-[10px]">
-                        <span className="w-[200px] font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[16px] text-black">次回の請求日</span>
-                        <span className="font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[20px] text-black py-[3px]">
+                        <span className="w-[200px] font-normal text-[16px] text-black">次回の請求日</span>
+                        <span className="font-normal text-[20px] text-black py-[3px]">
                           {paymentInfo.nextBillingDate}
                         </span>
                       </div>
 
                       {/* Billing Amount */}
                       <div className="flex items-center gap-[10px]">
-                        <span className="w-[200px] font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[16px] text-black">請求金額</span>
-                        <span className="font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[20px] text-black py-[3px]">
+                        <span className="w-[200px] font-normal text-[16px] text-black">請求金額</span>
+                        <span className="font-normal text-[20px] text-black py-[3px]">
                           {formatAmount(
                             paymentInfo.billingAmount,
                             paymentInfo.taxIncluded
@@ -241,7 +241,7 @@ export function MyPage() {
 
                       {/* Payment Method */}
                       <div className="flex flex-col gap-[5px] items-start justify-center w-full">
-                        <span className="w-[200px] font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[16px] text-black">支払い方法</span>
+                        <span className="w-[200px] font-normal text-[16px] text-black">支払い方法</span>
 
                         {paymentInfo.paymentMethod && (
                           <div className="flex items-center gap-[10px] w-full">
@@ -252,7 +252,7 @@ export function MyPage() {
                               width={70}
                               height={43}
                             />
-                            <span className="font-['Noto_Sans',sans-serif] font-normal text-[16px] text-[#808080]">
+                            <span className="font-normal text-[16px] text-[#808080]">
                               {getPaymentMethodDisplay()}
                             </span>
                           </div>
@@ -260,7 +260,7 @@ export function MyPage() {
 
                         <button
                           type="button"
-                          className="flex items-center px-[15px] py-[10px] bg-[#e1e1e1] border-none rounded-[8px] font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[14px] text-[#333] cursor-pointer transition-colors duration-200 hover:bg-[#d1d1d1]"
+                          className="flex items-center px-[15px] py-[10px] bg-[#e1e1e1] border-none rounded-[8px] font-normal text-[14px] text-[#333] cursor-pointer transition-colors duration-200 hover:bg-[#d1d1d1]"
                           onClick={handleAddPaymentMethod}
                         >
                           支払い方法を追加
@@ -274,38 +274,38 @@ export function MyPage() {
                 {paymentHistory.length > 0 && (
                   <div className="flex flex-col gap-[25px] items-center justify-center w-full">
                     <div className="flex items-center pb-[10px] border-b border-[#cfcfcf] w-full">
-                      <h2 className="font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-bold text-[20px] leading-normal text-[#333] m-0">お支払い履歴</h2>
+                      <h2 className="font-bold text-[20px] leading-normal text-[#333] m-0">お支払い履歴</h2>
                     </div>
                     <div className="w-full overflow-x-auto border border-[#d4d4d4]">
                       <table className="w-full border-collapse bg-white border border-[#d4d4d4] rounded-[4px] overflow-hidden">
                         <thead>
                           <tr className="bg-[#f5f5f5]">
-                            <th className="w-[130px] border-l border-t border-[#d4d4d4] font-['Inter','Noto_Sans_JP',sans-serif] font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">支払日</th>
-                            <th className="flex-1 border-t border-[#d4d4d4] font-['Inter','Noto_Sans_JP',sans-serif] font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">請求金額(税込)</th>
-                            <th className="w-[179px] border-t border-[#d4d4d4] font-['Inter','Noto_Sans_JP',sans-serif] font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">利用年月</th>
-                            <th className="flex-1 border-t border-[#d4d4d4] font-['Inter','Noto_Sans_JP',sans-serif] font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">ステータス</th>
-                            <th className="flex-1 border-t border-[#d4d4d4] font-['Inter','Noto_Sans_JP',sans-serif] font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">請求書</th>
+                            <th className="w-[130px] border-l border-t border-[#d4d4d4] font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">支払日</th>
+                            <th className="flex-1 border-t border-[#d4d4d4] font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">請求金額(税込)</th>
+                            <th className="w-[179px] border-t border-[#d4d4d4] font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">利用年月</th>
+                            <th className="flex-1 border-t border-[#d4d4d4] font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">ステータス</th>
+                            <th className="flex-1 border-t border-[#d4d4d4] font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">請求書</th>
                           </tr>
                         </thead>
                         <tbody>
                           {paymentHistory.map((record) => (
                             <tr key={record.id}>
-                              <td className="w-[130px] border-l border-t border-[#d4d4d4] font-['Noto_Sans_JP',sans-serif] font-medium text-[14px] text-black text-center px-[12px] py-[15px]">
+                              <td className="w-[130px] border-l border-t border-[#d4d4d4] font-medium text-[14px] text-black text-center px-[12px] py-[15px]">
                                 {record.paymentDate}
                               </td>
-                              <td className="flex-1 border-t border-[#d4d4d4] font-['Noto_Sans_JP',sans-serif] font-medium text-[14px] text-black text-center px-[12px] py-[15px]">
+                              <td className="flex-1 border-t border-[#d4d4d4] font-medium text-[14px] text-black text-center px-[12px] py-[15px]">
                                 {formatAmount(record.amount)}
                               </td>
-                              <td className="w-[179px] border-t border-[#d4d4d4] font-['Noto_Sans_JP',sans-serif] font-medium text-[14px] text-black text-center px-[12px] py-[15px]">
+                              <td className="w-[179px] border-t border-[#d4d4d4] font-medium text-[14px] text-black text-center px-[12px] py-[15px]">
                                 {record.usagePeriod}
                               </td>
-                              <td className="flex-1 border-t border-[#d4d4d4] font-['Noto_Sans_JP',sans-serif] font-medium text-[12px] text-black text-center px-[12px] py-[15px]">
+                              <td className="flex-1 border-t border-[#d4d4d4] font-medium text-[12px] text-black text-center px-[12px] py-[15px]">
                                 {getStatusLabel(record.status)}
                               </td>
-                              <td className="flex-1 border-t border-[#d4d4d4] font-['Noto_Sans_JP',sans-serif] font-medium text-[14px] text-black text-center px-[12px] py-[15px]">
+                              <td className="flex-1 border-t border-[#d4d4d4] font-medium text-[14px] text-black text-center px-[12px] py-[15px]">
                                 <button
                                   type="button"
-                                  className="bg-transparent border-none font-['Noto_Sans_JP',sans-serif] font-medium text-[12px] text-[#066a9e] cursor-pointer p-0 hover:underline"
+                                  className="bg-transparent border-none font-medium text-[12px] text-[#066a9e] cursor-pointer p-0 hover:underline"
                                   onClick={() =>
                                     handleDownloadInvoice(record.id)
                                   }

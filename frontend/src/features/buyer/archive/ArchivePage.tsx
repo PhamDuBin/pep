@@ -45,7 +45,7 @@ export function ArchivePage() {
     <PageTransition>
       <div className="flex flex-col gap-[25px] w-full py-[25px] px-[50px]">
         <div className="flex items-center pb-[10px] border-b border-[#cfcfcf]">
-          <h1 className="font-noto-jp font-bold text-[20px] leading-normal text-[#333333] m-0">
+          <h1 className="font-bold text-[20px] leading-normal text-[#333333] m-0">
             アーカイブ
           </h1>
         </div>
@@ -59,7 +59,7 @@ export function ArchivePage() {
                   onClick={toggleFilterDropdown}
                   type="button"
                 >
-                  <span className="font-noto-jp font-normal text-[14px] leading-normal text-[#374151] whitespace-nowrap">
+                  <span className="font-normal text-[14px] leading-normal text-[#374151] whitespace-nowrap">
                     {selectedFilterLabel}
                   </span>
                   <svg
@@ -86,7 +86,7 @@ export function ArchivePage() {
                     {filterOptions.map((option) => (
                       <button
                         key={option.id}
-                        className={`flex items-center gap-[5px] py-[6px] bg-[#ffffff] hover:bg-[#f5f5f5] border-none font-noto-jp font-normal text-[14px] leading-[18px] cursor-pointer text-left whitespace-nowrap transition-all duration-150 hover:text-primary hover:translate-x-[2px] ${
+                        className={`flex items-center gap-[5px] py-[6px] bg-[#ffffff] hover:bg-[#f5f5f5] border-none font-normal text-[14px] leading-[18px] cursor-pointer text-left whitespace-nowrap transition-all duration-150 hover:text-primary hover:translate-x-[2px] ${
                           option.id === selectedFilter
                             ? "text-primary"
                             : "text-black"
@@ -130,7 +130,7 @@ export function ArchivePage() {
                   onClick={toggleSortDropdown}
                   type="button"
                 >
-                  <span className="font-noto-jp font-normal text-[14px] leading-normal text-[#374151] whitespace-nowrap">
+                  <span className="font-normal text-[14px] leading-normal text-[#374151] whitespace-nowrap">
                     作成日
                   </span>
                   <svg
@@ -157,7 +157,7 @@ export function ArchivePage() {
                     {sortOptions.map((option) => (
                       <button
                         key={option.value}
-                        className={`flex items-center gap-[5px] py-[6px] bg-[#ffffff] hover:bg-[#f5f5f5] border-none font-noto-jp font-normal text-[14px] leading-[18px] cursor-pointer text-left whitespace-nowrap transition-all duration-150 hover:text-primary hover:translate-x-[2px] ${
+                        className={`flex items-center gap-[5px] py-[6px] bg-[#ffffff] hover:bg-[#f5f5f5] border-none font-normal text-[14px] leading-[18px] cursor-pointer text-left whitespace-nowrap transition-all duration-150 hover:text-primary hover:translate-x-[2px] ${
                           option.value === sortOrder
                             ? "text-primary"
                             : "text-black"
@@ -246,7 +246,7 @@ export function ArchivePage() {
               <Loading type="spinner" size="lg" />
             </div>
           ) : filteredProjects.length === 0 ? (
-            <div className="flex items-center justify-center min-h-[200px] font-noto-jp text-[14px] text-[#808080]">
+            <div className="flex items-center justify-center min-h-[200px] text-[14px] text-[#808080]">
               <p>アーカイブされたプロジェクトはありません</p>
             </div>
           ) : viewMode === "grid" ? (
@@ -269,7 +269,7 @@ export function ArchivePage() {
                   >
                     <div className="flex flex-col gap-[5px] w-[220px] flex-shrink-0">
                       <div className="flex items-center p-[15px] h-[70px] bg-white border border-[#e1e1e1] rounded-[12px] box-border transition-all duration-300 hover:border-primary hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
-                        <p className="font-noto-jp font-bold text-[14px] leading-[1.4] text-[#333333] overflow-hidden text-ellipsis line-clamp-2 break-words m-0">
+                        <p className="font-bold text-[14px] leading-[1.4] text-[#333333] overflow-hidden text-ellipsis line-clamp-2 break-words m-0">
                           {project.name}
                         </p>
                       </div>
@@ -289,11 +289,11 @@ export function ArchivePage() {
                                 fill="#808080"
                               />
                             </svg>
-                            <span className="font-noto-jp font-normal text-[12px] text-[#808080] overflow-hidden text-ellipsis whitespace-nowrap">
+                            <span className="font-normal text-[12px] text-[#808080] overflow-hidden text-ellipsis whitespace-nowrap">
                               {project.authorName}
                             </span>
                           </div>
-                          <span className="font-noto font-normal text-[12px] text-[#808080]">
+                          <span className="font-normal text-[12px] text-[#808080]">
                             {project.createdAt}
                           </span>
                         </div>
@@ -351,7 +351,7 @@ export function ArchivePage() {
                             {MENU_ITEMS.map((item) => (
                               <button
                                 key={item.action}
-                                className="flex items-center justify-start py-[6px] bg-[#ffffff] hover:bg-[#f5f5f5] border-none font-noto-jp font-normal text-[14px] leading-[18px] text-black cursor-pointer text-left whitespace-nowrap transition-all duration-150 hover:text-primary hover:translate-x-[2px]"
+                                className="flex items-center justify-start py-[6px] bg-[#ffffff] hover:bg-[#f5f5f5] border-none font-normal text-[14px] leading-[18px] text-black cursor-pointer text-left whitespace-nowrap transition-all duration-150 hover:text-primary hover:translate-x-[2px]"
                                 type="button"
                                 onClick={() =>
                                   handleContextAction(project.id, item.action)
@@ -372,14 +372,14 @@ export function ArchivePage() {
             <div className="flex flex-col gap-[25px]">
               {/* ... (Giữ nguyên phần Header của List view) ... */}
               <div className="flex items-center gap-[25px] py-[10px] border-b border-[#c3c3c3]">
-                <span className="flex-1 font-noto-jp font-normal text-[14px] text-[#333333]">
+                <span className="flex-1 font-normal text-[14px] text-[#333333]">
                   プロジェクト名
                 </span>
                 <div className="flex-1 flex items-center ml-[8px]">
-                  <span className="flex-1 font-noto-jp font-normal text-[12px] text-[#333333] ml-[12px]">
+                  <span className="flex-1 font-normal text-[12px] text-[#333333] ml-[12px]">
                     作成者
                   </span>
-                  <span className="w-[150px] text-center font-noto-jp font-normal text-[12px] text-[#333333]">
+                  <span className="w-[150px] text-center font-normal text-[12px] text-[#333333]">
                     作成日
                   </span>
                   <span className="w-[36.5px]"></span>
@@ -407,7 +407,7 @@ export function ArchivePage() {
                       <div className="flex items-center justify-center gap-[25px] w-full">
                         {/* ... Nội dung thẻ ... */}
                         <div className="flex-1 min-w-0 flex items-center p-[15px] bg-white border border-[#e1e1e1] rounded-[12px] transition-all duration-300 hover:border-primary hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
-                          <p className="font-noto-jp font-bold text-[14px] leading-[1.4] text-[#333333] overflow-hidden text-ellipsis whitespace-nowrap m-0">
+                          <p className="font-bold text-[14px] leading-[1.4] text-[#333333] overflow-hidden text-ellipsis whitespace-nowrap m-0">
                             {project.name}
                           </p>
                         </div>
@@ -423,13 +423,13 @@ export function ArchivePage() {
                               >
                                 <path d="..." fill="#808080" />
                               </svg>
-                              <span className="font-noto-jp font-normal text-[12px] text-[#808080] overflow-hidden text-ellipsis whitespace-nowrap">
+                              <span className="font-normal text-[12px] text-[#808080] overflow-hidden text-ellipsis whitespace-nowrap">
                                 {project.authorName}
                               </span>
                             </div>
                             {/* ... Ngày tháng ... */}
                             <div className="flex items-center justify-center w-[150px] px-[12px] flex-shrink-0">
-                              <span className="font-noto font-normal text-[12px] text-[#808080]">
+                              <span className="font-normal text-[12px] text-[#808080]">
                                 {project.createdAt}
                               </span>
                             </div>
@@ -471,7 +471,7 @@ export function ArchivePage() {
                               {MENU_ITEMS.map((item) => (
                                 <button
                                   key={item.action}
-                                  className="flex items-center justify-start py-[6px] bg-[#ffffff] hover:bg-[#f5f5f5] border-none font-noto-jp font-normal text-[14px] leading-[18px] text-black cursor-pointer text-left whitespace-nowrap transition-all duration-150 hover:text-primary hover:translate-x-[2px]"
+                                  className="flex items-center justify-start py-[6px] bg-[#ffffff] hover:bg-[#f5f5f5] border-none font-normal text-[14px] leading-[18px] text-black cursor-pointer text-left whitespace-nowrap transition-all duration-150 hover:text-primary hover:translate-x-[2px]"
                                   type="button"
                                   onClick={() =>
                                     handleContextAction(project.id, item.action)

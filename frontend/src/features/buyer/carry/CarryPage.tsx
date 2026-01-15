@@ -56,7 +56,7 @@ export function CarryPage() {
           <div className="flex flex-col w-[350px] h-full flex-shrink-0 border-r border-[#e1e1e1] overflow-hidden">
             {/* Project Header */}
             <div className="flex gap-[10px] items-center justify-center w-full h-[85px] p-[10px_15px] border-b border-[#e1e1e1] box-border flex-shrink-0 bg-white">
-              <p className="flex-1 font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[14px] leading-normal text-black m-0 overflow-hidden text-ellipsis [-webkit-box-orient:vertical] whitespace-pre-wrap">
+              <p className="flex-1 font-normal text-[14px] leading-normal text-black m-0 overflow-hidden text-ellipsis [-webkit-box-orient:vertical] whitespace-pre-wrap">
                 {projectName}
               </p>
               <button
@@ -92,7 +92,7 @@ export function CarryPage() {
             {/* Message List Container */}
             <div className="flex flex-col gap-[10px] h-full w-full py-[15px] bg-[#f5f5f5] overflow-hidden box-border flex-1 min-h-0">
               {/* Title */}
-              <p className="font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-bold text-[14px] leading-normal text-[#333333] text-center m-0 flex-shrink-0">
+              <p className="font-bold text-[14px] leading-normal text-[#333333] text-center m-0 flex-shrink-0">
                 メッセージ一覧
               </p>
 
@@ -113,7 +113,7 @@ export function CarryPage() {
                   </svg>
                   <input
                     type="text"
-                    className="flex-1 border-none outline-none bg-transparent font-['Noto_Sans','Noto_Sans_JP',sans-serif] text-[14px] text-[#333333] ml-[8px] placeholder:text-[#808080]"
+                    className="flex-1 border-none outline-none bg-transparent text-[14px] text-[#333333] ml-[8px] placeholder:text-[#808080]"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
@@ -121,7 +121,7 @@ export function CarryPage() {
               </div>
 
               {/* Vendor List */}
-              <div className="flex-1 overflow-y-auto flex flex-col min-h-0 [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#d1d5db] [&::-webkit-scrollbar-thumb]:rounded-[3px] [&::-webkit-scrollbar-thumb:hover]:bg-[#9ca3af]">
+              <div className="flex-1 overflow-y-auto overflow-x-hidden flex flex-col min-h-0 [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#d1d5db] [&::-webkit-scrollbar-thumb]:rounded-[3px] [&::-webkit-scrollbar-thumb:hover]:bg-[#9ca3af]">
                 {filteredVendors.map((vendor) => (
                   <div
                     key={vendor.id}
@@ -138,18 +138,18 @@ export function CarryPage() {
                     }}
                   >
                     <div className="flex-1 min-w-0 flex flex-col gap-[3px]">
-                      <span className="font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-bold text-[13px] leading-normal text-[#333333]">
+                      <span className="font-bold text-[13px] leading-normal text-[#333333]">
                         {vendor.name}
                       </span>
                       {vendor.lastMessage && (
-                        <p className="font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[13px] leading-normal text-[#333333] m-0 whitespace-pre-wrap">
+                        <p className="font-normal text-[13px] leading-normal text-[#333333] m-0 whitespace-pre-wrap">
                           {vendor.lastMessage}
                         </p>
                       )}
                     </div>
                     <div className="flex flex-col items-end flex-shrink-0 gap-[5px]">
                       {vendor.lastMessageTime && (
-                        <span className="font-['Noto_Sans',sans-serif] font-normal text-[10px] leading-[19px] text-center text-[#333333]">
+                        <span className="font-normal text-[10px] leading-[19px] text-center text-[#333333]">
                           {vendor.lastMessageTime}
                         </span>
                       )}
@@ -177,10 +177,10 @@ export function CarryPage() {
                             </svg>
                           </button>
                           {showVendorMenu === vendor.id && (
-                            <div className="absolute top-[calc(100%+5px)] left-0 bg-white rounded-[8px] shadow-[0px_4px_20px_rgba(0,0,0,0.15)] z-[100] overflow-hidden min-w-[100px]">
+                            <div className="absolute top-[calc(100%+5px)] right-full mr-[-20px] bg-[#ffffff] rounded-[8px] shadow-[0px_4px_20px_rgba(0,0,0,0.15)] z-[100] overflow-hidden min-w-[100px]">
                               <button
                                 type="button"
-                                className="flex items-center gap-[8px] p-[10px_15px] bg-transparent border-none cursor-pointer font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[14px] text-[#333333] text-left w-full whitespace-nowrap hover:bg-[#f5f5f5] [&_svg]:flex-shrink-0"
+                                className="flex items-center gap-[8px] p-[10px_15px] bg-transparent border-none cursor-pointer font-normal text-[14px] text-[#333333] text-left w-full whitespace-nowrap hover:bg-[#f5f5f5] [&_svg]:flex-shrink-0"
                                 onClick={(e) => handleVendorExit(e, vendor.id)}
                               >
                                 <svg
@@ -215,14 +215,14 @@ export function CarryPage() {
                 {/* Chat Header */}
                 <div className="flex items-center justify-between p-[10px_25px] border-b border-[#d9d9d9] flex-shrink-0">
                   <div className="flex items-center gap-[15px]">
-                    <p className="font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-bold text-[16px] leading-normal text-[#333333] m-0">
+                    <p className="font-bold text-[16px] leading-normal text-[#333333] m-0">
                       {selectedVendor.name}
                     </p>
                   </div>
                   <div className="flex items-center justify-end gap-[5px]">
                     {/* Member count badge */}
                     <div className="flex items-center justify-center w-[20px] h-[20px] bg-[#066a9e] rounded-full">
-                      <span className="font-['Noto_Sans',sans-serif] font-medium text-[11px] leading-none text-white text-center">
+                      <span className="font-medium text-[11px] leading-none text-white text-center">
                         {chatMembers.length}
                       </span>
                     </div>
@@ -252,11 +252,11 @@ export function CarryPage() {
                       </button>
                       {/* Member Dropdown Menu */}
                       {showMemberDropdown && (
-                        <div className="absolute top-full right-0 mt-[5px] w-[210px] bg-white rounded-[8px] shadow-[0px_4px_20px_rgba(0,0,0,0.15)] z-[100] overflow-hidden">
+                        <div className="absolute top-[calc(100%+5px)] right-[-10px] w-[210px] bg-[#ffffff] rounded-[8px] shadow-[0px_4px_20px_rgba(0,0,0,0.15)] z-[100] overflow-hidden">
                           <div className="flex flex-col py-[10px]">
                             <button
                               type="button"
-                              className="flex items-center gap-[8px] p-[10px_15px] bg-transparent border-none cursor-pointer font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[14px] text-[#333333] text-left w-full whitespace-nowrap hover:bg-[#f5f5f5] [&_svg]:flex-shrink-0"
+                              className="flex items-center gap-[8px] p-[10px_15px] bg-transparent border-none cursor-pointer font-normal text-[14px] text-[#333333] text-left w-full whitespace-nowrap hover:bg-[#f5f5f5] [&_svg]:flex-shrink-0"
                               onClick={handleOpenAddMemberModal}
                             >
                               <svg
@@ -279,7 +279,7 @@ export function CarryPage() {
                             </button>
                             <button
                               type="button"
-                              className="flex items-center gap-[8px] p-[10px_15px] bg-transparent border-none cursor-pointer font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[14px] text-[#333333] text-left w-full whitespace-nowrap hover:bg-[#f5f5f5] [&_svg]:flex-shrink-0"
+                              className="flex items-center gap-[8px] p-[10px_15px] bg-transparent border-none cursor-pointer font-normal text-[14px] text-[#333333] text-left w-full whitespace-nowrap hover:bg-[#f5f5f5] [&_svg]:flex-shrink-0"
                               onClick={() => {
                                 console.log("Exit chat");
                                 setShowMemberDropdown(false);
@@ -305,7 +305,7 @@ export function CarryPage() {
                           </div>
                           <div className="h-[1px] bg-[#d9d9d9] mx-[15px]"></div>
                           <div className="p-[10px_15px_15px]">
-                            <p className="font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[12px] text-[#808080] m-0 mb-[10px]">
+                            <p className="font-normal text-[12px] text-[#808080] m-0 mb-[10px]">
                               メンバー({chatMembers.length})
                             </p>
                             <div className="flex flex-col gap-[8px] max-h-[150px] overflow-y-auto">
@@ -315,11 +315,11 @@ export function CarryPage() {
                                   className="flex items-center gap-[10px]"
                                 >
                                   <div className="w-[25px] h-[25px] rounded-full bg-[#066a9e] flex items-center justify-center flex-shrink-0">
-                                    <span className="font-['Noto_Sans',sans-serif] font-medium text-[10px] text-white">
+                                    <span className="font-medium text-[10px] text-white">
                                       {member.initials}
                                     </span>
                                   </div>
-                                  <span className="font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[14px] text-[#333333] whitespace-nowrap overflow-hidden text-ellipsis">
+                                  <span className="font-normal text-[14px] text-[#333333] whitespace-nowrap overflow-hidden text-ellipsis">
                                     {member.name}
                                   </span>
                                 </div>
@@ -349,7 +349,7 @@ export function CarryPage() {
                           msg.sender === "buyer" ? "items-end" : ""
                         }`}>
                           {msg.sender === "vendor" && (
-                            <p className="font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-bold text-[10px] leading-[19px] text-[#333333] m-0">
+                            <p className="font-bold text-[10px] leading-[19px] text-[#333333] m-0">
                               {msg.senderName}
                             </p>
                           )}
@@ -360,11 +360,11 @@ export function CarryPage() {
                                 : "bg-white"
                             }`}
                           >
-                            <p className="flex-1 font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[13px] leading-normal text-[#333333] m-0 whitespace-pre-wrap break-words">
+                            <p className="flex-1 font-normal text-[13px] leading-normal text-[#333333] m-0 whitespace-pre-wrap break-words">
                               {msg.content}
                             </p>
                           </div>
-                          <p className="font-['Noto_Sans',sans-serif] font-normal text-[10px] leading-[19px] text-[#808080] m-0">
+                          <p className="font-normal text-[10px] leading-[19px] text-[#808080] m-0">
                             {msg.timestamp}
                           </p>
                         </div>
@@ -379,7 +379,7 @@ export function CarryPage() {
                   <div className="flex items-center justify-between p-[10px_10px_10px_15px] border border-[#b9b9b9] rounded-[4px] w-full box-border">
                     <input
                       type="text"
-                      className="flex-1 border-none outline-none bg-transparent font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[14px] leading-normal text-[#333333] placeholder:text-[#808080]"
+                      className="flex-1 border-none outline-none bg-transparent font-normal text-[14px] leading-normal text-[#333333] placeholder:text-[#808080]"
                       placeholder={MESSAGE_INPUT_PLACEHOLDER}
                       value={newMessage}
                       onChange={(e) => setNewMessage(e.target.value)}
@@ -409,7 +409,7 @@ export function CarryPage() {
               </div>
             ) : (
               <div className="flex-1 flex items-center justify-center p-[10px] h-full w-full">
-                <p className="font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[16px] leading-normal text-[#808080] m-0">
+                <p className="font-normal text-[16px] leading-normal text-[#808080] m-0">
                   ベンダーを選択してください
                 </p>
               </div>
@@ -428,7 +428,7 @@ export function CarryPage() {
             <div className="flex justify-center items-center">
               <button
                 type="button"
-                className="p-[10px_30px] bg-[#e1e1e1] border-none rounded-[8px] font-['Noto_Sans_JP',sans-serif] text-[14px] font-normal text-[#333333] cursor-pointer transition-colors duration-200 hover:bg-[#d0d0d0]"
+                className="p-[10px_30px] bg-[#e1e1e1] border-none rounded-[8px] text-[14px] font-normal text-[#333333] cursor-pointer transition-colors duration-200 hover:bg-[#d0d0d0]"
                 onClick={() => setShowProjectPlanModal(false)}
               >
                 閉じる

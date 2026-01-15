@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect } from "react";
 import { Modal } from "@/shared/components";
-import { UserPermission, PermissionChangeModalState } from "../../types";
+import { UserPermission, PermissionChangeModalState } from "../../types/types";
 import { PERMISSION_OPTIONS, PERMISSION_LABELS } from "../../mock";
 
 interface PermissionTableRow {
@@ -120,7 +120,7 @@ export function PermissionChangeModal({
           <div className="flex flex-row gap-[10px] justify-center items-center">
             <button
               type="button"
-              className="px-[15px] py-[10px] bg-[#066a9e] border-none rounded-[8px] font-['Noto_Sans_JP',sans-serif] font-normal text-[14px] text-white cursor-pointer transition-colors duration-200 min-w-[80px] flex items-center justify-center hover:enabled:bg-[#055a85] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-[15px] py-[10px] bg-[#066a9e] border-none rounded-[8px] font-normal text-[14px] text-white cursor-pointer transition-colors duration-200 min-w-[80px] flex items-center justify-center hover:enabled:bg-[#055a85] disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={isSaving || !selectedPermission}
               onClick={handleConfirm}
             >
@@ -135,7 +135,7 @@ export function PermissionChangeModal({
           <div className="flex flex-row gap-[10px] justify-center items-center">
             <button
               type="button"
-              className="px-[15px] py-[10px] bg-[#e1e1e1] border-none rounded-[8px] font-['Noto_Sans_JP',sans-serif] font-normal text-[14px] text-[#333] cursor-pointer transition-colors duration-200 min-w-[80px] flex items-center justify-center hover:bg-[#999797]"
+              className="px-[15px] py-[10px] bg-[#e1e1e1] border-none rounded-[8px] font-normal text-[14px] text-[#333] cursor-pointer transition-colors duration-200 min-w-[80px] flex items-center justify-center hover:bg-[#999797]"
               onClick={onClose}
             >
               閉じる
@@ -148,7 +148,7 @@ export function PermissionChangeModal({
         <>
           {/* Permission Selection Mode */}
           <div className="flex flex-col items-center gap-[10px]">
-            <p className="font-['Noto_Sans_JP',sans-serif] font-medium text-[14px] leading-[1.3] text-black text-center m-0">
+            <p className="font-medium text-[14px] leading-[1.3] text-black text-center m-0">
               このユーザーを以下の権限へ変更します。
             </p>
 
@@ -180,7 +180,7 @@ export function PermissionChangeModal({
                     }
                     className="hidden"
                   />
-                  <span className="font-['Noto_Sans_JP',sans-serif] text-[14px] font-normal leading-[18px] text-[#333]">
+                  <span className="text-[14px] font-normal leading-[18px] text-[#333]">
                     {option.label}
                   </span>
                 </label>
@@ -190,7 +190,7 @@ export function PermissionChangeModal({
 
           {/* Permissions Table */}
           <div className="border border-[#d4d4d4] rounded-[10px] w-full overflow-hidden">
-            <table className="w-full border-collapse font-['Noto_Sans_JP',sans-serif]">
+            <table className="w-full border-collapse ">
               <thead>
                 <tr className="bg-[#f5f5f5]">
                   <th className="px-[12px] py-[15px] font-semibold text-[14px] leading-[1.3] text-[#333] text-center border-b border-[#d4d4d4]">
@@ -270,11 +270,11 @@ export function PermissionChangeModal({
         <>
           {/* Completion Mode */}
           <div className="flex flex-col items-center gap-[10px]">
-            <p className="font-['Noto_Sans_JP',sans-serif] font-medium text-[14px] leading-[1.3] text-black text-center m-0">
+            <p className="font-medium text-[14px] leading-[1.3] text-black text-center m-0">
               ユーザーを以下の権限へ変更しました。
             </p>
             <div className="flex items-center justify-center h-[40px]">
-              <span className="font-['Noto_Sans_JP',sans-serif] text-[14px] text-[#333]">
+              <span className="text-[14px] text-[#333]">
                 {getPermissionLabel(selectedPermission)}
               </span>
             </div>

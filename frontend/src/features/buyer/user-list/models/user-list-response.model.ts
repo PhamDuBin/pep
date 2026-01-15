@@ -3,4 +3,4 @@
 // =============================================================================
 
 // Re-export from types for backward compatibility
-export type { UserListResponse, UserActionResponse } from "../types";
+export type { UserListResponse, UserActionResponse } from "../types/types";
