@@ -25,6 +25,7 @@
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   max-height: 90vh;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 // Size variants
@@ -102,6 +103,8 @@
   gap: 10px;
   justify-content: center;
   align-items: center;
+  width: auto;
+  height: auto;
 
   &:empty {
     display: none;
