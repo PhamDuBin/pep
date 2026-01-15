@@ -1,7 +1,6 @@
 "use client";
 
 import { forwardRef, type HTMLAttributes } from "react";
-import styles from "./Loading.module.scss";
 import { LoadingSize, LoadingType } from "@/shared/types";
 
 //only used in Loading component
@@ -12,20 +11,20 @@ export interface LoadingProps extends HTMLAttributes<HTMLSpanElement> {
 }
 
 const typeClassMap: Record<LoadingType, string> = {
-  spinner: styles.spinner,
-  dots: styles.dots,
-  ring: styles.ring,
-  ball: styles.ball,
-  bars: styles.bars,
-  infinity: styles.infinity,
+  spinner: "loading-spinner",
+  dots: "loading-dots",
+  ring: "loading-ring",
+  ball: "loading-ball",
+  bars: "loading-bars",
+  infinity: "loading-infinity",
 };
 
 const sizeClassMap: Record<LoadingSize, string> = {
-  xs: styles.xs,
-  sm: styles.sm,
-  md: styles.md,
-  lg: styles.lg,
-  xl: styles.xl,
+  xs: "loading-xs",
+  sm: "loading-sm",
+  md: "loading-md",
+  lg: "loading-lg",
+  xl: "loading-xl",
 };
 
 export const Loading = forwardRef<HTMLSpanElement, LoadingProps>(
@@ -34,7 +33,7 @@ export const Loading = forwardRef<HTMLSpanElement, LoadingProps>(
     ref
   ) => {
     const classes = [
-      styles.loading,
+      "loading",
       typeClassMap[type],
       sizeClassMap[size],
       className,

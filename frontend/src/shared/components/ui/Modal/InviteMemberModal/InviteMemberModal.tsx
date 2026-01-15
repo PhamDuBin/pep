@@ -2,7 +2,6 @@
 
 import { useState, useCallback, useEffect } from "react";
 import { Modal } from "../Modal";
-import styles from "./InviteMemberModal.module.scss";
 import { InviteMemberModalState } from "@/shared/types";
 
 interface EmailEntry {
@@ -126,21 +125,23 @@ export function InviteMemberModal({
       onClose={onClose}
       title="新しいメンバーを招待"
       size="md"
-      customClass={`${styles.inviteMemberModal} ${modalState === "complete" ? styles.completeState : ""}`}
+      customClass={`min-w-[520px] max-w-[520px] [&_.modal-title]:text-[20px] [&_.modal-title]:font-normal [&_.modal-title]:text-[#066a9e] ${
+        modalState === "complete" ? "w-[340px] min-w-[340px] max-w-[340px] h-[174px]" : ""
+      }`}
       isLoading={isSaving}
       actions={
         modalState === "form" ? (
-          <div className={styles.actionButtons}>
+          <div className="flex gap-[10px] justify-center items-center">
             <button
               type="button"
-              className={styles.btnCancel}
+              className="py-[10px] px-[15px] bg-[#e1e1e1] border-none rounded-[8px] text-[14px] font-normal text-[#333333] cursor-pointer transition-colors duration-200 hover:bg-[#d0d0d0]"
               onClick={onClose}
             >
               キャンセル
             </button>
             <button
               type="button"
-              className={styles.btnSend}
+              className="py-[10px] px-[15px] bg-[#333333] border-none rounded-[8px] text-[14px] font-normal text-white cursor-pointer transition-colors duration-200 flex items-center justify-center gap-[8px] min-w-[130px] hover:enabled:bg-[#444444] disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={isSaving || !hasValidEmails()}
               onClick={handleSendInvitation}
             >
@@ -152,10 +153,10 @@ export function InviteMemberModal({
             </button>
           </div>
         ) : (
-          <div className={styles.actionButtons}>
+          <div className="flex gap-[10px] justify-center items-center">
             <button
               type="button"
-              className={styles.btnCancel}
+              className="py-[10px] px-[15px] bg-[#e1e1e1] border-none rounded-[8px] text-[14px] font-normal text-[#333333] cursor-pointer transition-colors duration-200 hover:bg-[#d0d0d0]"
               onClick={onClose}
             >
               閉じる
@@ -165,26 +166,24 @@ export function InviteMemberModal({
       }
     >
       {modalState === "form" ? (
-        <div className={styles.inviteFormContent}>
+        <div className="flex flex-col items-center gap-[25px] w-full px-[35px]">
           {/* Description text */}
-          <div className={styles.descriptionText}>
+          <div className="text-center text-[14px] font-medium leading-[24px] text-[#333333] [&_p]:m-0">
             <p>追加したいメンバーのメールアドレスを入力してください。</p>
             <p>入力したメールアドレス宛に招待メールを送信します。</p>
-            <p className={styles.note}>※ 招待メールの有効期限は10日間です。</p>
+            <p className="text-[#333333]">※ 招待メールの有効期限は10日間です。</p>
           </div>
 
           {/* Email inputs */}
-          <div className={styles.emailInputsContainer}>
+          <div className="flex flex-col gap-[10px] w-full">
             {emails.map((email, index) => {
               const isLast = index === emails.length - 1;
               return (
-                <div key={index} className={styles.emailFieldWrapper}>
-                  <div className={styles.emailInputRow}>
+                <div key={index} className="flex flex-col gap-[3px] w-full">
+                  <div className="flex items-center gap-[10px] w-full">
                     <input
                       type="email"
-                      className={`${styles.emailInput} ${
-                        email.error ? styles.hasError : ""
-                      }`}
+                      className="flex-1 h-[35px] py-[3px] px-[10px] border border-[#b9b9b9] rounded-[4px] text-[16px] font-normal text-[#333333] bg-white outline-none transition-colors duration-200 placeholder:text-[#b9b9b9] focus:border-[#066a9e]"
                       placeholder="email@address.com"
                       value={email.value}
                       onChange={(e) => handleEmailChange(index, e.target.value)}
@@ -192,8 +191,8 @@ export function InviteMemberModal({
                     {isLast ? (
                       <button
                         type="button"
-                        className={`${styles.addBtn} ${
-                          canAddMore() ? styles.active : ""
+                        className={`w-[35px] h-[35px] flex-shrink-0 flex items-center justify-center bg-transparent border-none cursor-pointer p-0 transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-50 hover:enabled:text-[#066a9e] ${
+                          canAddMore() ? "text-[#066a9e]" : "text-[#b9b9b9]"
                         }`}
                         disabled={!canAddMore()}
                         onClick={addEmailField}
@@ -221,11 +220,11 @@ export function InviteMemberModal({
                         </svg>
                       </button>
                     ) : (
-                      <div className={styles.addBtnSpacer}></div>
+                      <div className="w-[35px] h-[35px] flex-shrink-0"></div>
                     )}
                   </div>
                   {email.error && (
-                    <span className={styles.errorMessage}>{email.error}</span>
+                    <span className="text-[12px] font-normal text-[#c10000] leading-normal">{email.error}</span>
                   )}
                 </div>
               );
@@ -233,8 +232,8 @@ export function InviteMemberModal({
           </div>
         </div>
       ) : (
-        <div className={styles.completeContent}>
-          <p className={styles.completeMessage}>招待メールを送信しました。</p>
+        <div className="flex flex-col items-center px-[35px]">
+          <p className="text-[14px] font-medium text-[#333333] text-center leading-[1.3] m-0">招待メールを送信しました。</p>
         </div>
       )}
     </Modal>
