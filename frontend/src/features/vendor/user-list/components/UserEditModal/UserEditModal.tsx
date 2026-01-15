@@ -3,7 +3,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { Modal } from "@/shared/components";
 import { PermissionOption } from "../../types";
-import styles from "./UserEditModal.module.scss";
 
 interface UserEditModalProps {
   isOpen: boolean;
@@ -52,21 +51,23 @@ export function UserEditModal({
       title="ユーザー情報の変更"
       size="sm"
     >
-      <div className={styles.content}>
-        <div className={styles.formGroup}>
-          <label>氏名</label>
+      <div className="flex flex-col gap-[20px] py-[10px] w-full">
+        <div className="flex flex-col gap-[8px]">
+          <label className="font-noto-jp text-[14px] text-[#333333]">氏名</label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="氏名を入力"
+            className="py-[10px] px-[12px] border border-[#b9b9b9] rounded font-noto-jp text-[14px] text-[#333333] outline-none focus:border-[#066a9e] placeholder:text-[#808080]"
           />
         </div>
-        <div className={styles.formGroup}>
-          <label>権限</label>
+        <div className="flex flex-col gap-[8px]">
+          <label className="font-noto-jp text-[14px] text-[#333333]">権限</label>
           <select
             value={permission}
             onChange={(e) => setPermission(e.target.value)}
+            className="py-[10px] px-[12px] border border-[#b9b9b9] rounded font-noto-jp text-[14px] text-[#333333] outline-none focus:border-[#066a9e]"
           >
             {permissionOptions.map((option) => (
               <option key={option.value} value={option.value}>
@@ -76,7 +77,7 @@ export function UserEditModal({
           </select>
         </div>
       </div>
-      <div className={styles.actions}>
+      <div className="flex justify-center gap-[10px] pt-[20px] w-full">
         <button
           type="button"
           className="modal-btn-secondary"

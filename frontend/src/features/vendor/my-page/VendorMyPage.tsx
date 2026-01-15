@@ -4,7 +4,6 @@ import Image from "next/image";
 import { EmailChangeModal, AvatarChangeModal, PageTransition } from "@/shared/components";
 import { InfoModal } from "@/features/vendor/shared/components";
 import { useVendorMyPage } from "./hooks";
-import styles from "./VendorMyPage.module.scss";
 
 export function VendorMyPage() {
   const {
@@ -37,8 +36,8 @@ export function VendorMyPage() {
   if (isLoading || !userProfile || !paymentInfo) {
     return (
       <PageTransition>
-        <div className={styles.container}>
-          <div className={styles.loading}>Loading...</div>
+        <div className="flex flex-col items-center py-[25px] px-[50px] gap-[50px] w-full min-h-screen">
+          <div className="text-center">Loading...</div>
         </div>
       </PageTransition>
     );
@@ -46,256 +45,381 @@ export function VendorMyPage() {
 
   return (
     <PageTransition>
-      <div className={styles.container}>
-      {/* Section 1: User Information */}
-      <section className={styles.section}>
-        <div className={styles.sectionHeader}>
-          <h2 className={styles.sectionTitle}>ユーザー情報</h2>
-        </div>
-
-        <div className={styles.sectionContent}>
-          {/* User Info Content */}
-          <div className={styles.userInfoContent}>
-            {/* Avatar Section - Horizontal Layout like Angular */}
-            <div className={styles.avatarSection}>
-              <div
-                className={styles.userAvatar}
-                style={{ backgroundColor: userProfile.avatarColor }}
-              >
-                {userProfile.avatarUrl ? (
-                  <Image
-                    src={userProfile.avatarUrl}
-                    alt={userProfile.name}
-                    width={70}
-                    height={70}
-                    className={styles.avatarImage}
-                  />
-                ) : (
-                  <span>{userProfile.initials}</span>
-                )}
-              </div>
-              <button
-                type="button"
-                className={styles.uploadButton}
-                onClick={handleAvatarUpload}
-              >
-                画像を選択
-              </button>
-            </div>
-
-            {/* Form Fields */}
-            <div className={styles.formFields}>
-              {/* Name Field */}
-              <div className={styles.formRow}>
-                <span className={styles.label}>氏名</span>
-                <span className={styles.value}>{userProfile.name}</span>
-              </div>
-
-              {/* Email Field */}
-              <div className={styles.formRow}>
-                <span className={styles.label}>メールアドレス</span>
-                <div className={styles.emailValue}>
-                  <span>{userProfile.email}</span>
-                  <button
-                    type="button"
-                    className={styles.linkButton}
-                    onClick={handleEmailChange}
-                  >
-                    メールアドレスを変更
-                  </button>
-                </div>
-              </div>
-
-              {/* Current Password */}
-              <div className={styles.formRow}>
-                <span className={styles.label}>現在のパスワード</span>
-                <input
-                  type="password"
-                  readOnly
-                  placeholder="**********"
-                  className={styles.readonlyInput}
-                />
-              </div>
-
-              {/* New Password */}
-              <div className={styles.formRow}>
-                <span className={styles.label}>新しいパスワード</span>
-                <div className={styles.passwordInput}>
-                  <input
-                    type={showNewPassword ? "text" : "password"}
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    placeholder="●●●●●●●●●●"
-                  />
-                  <button
-                    type="button"
-                    className={styles.togglePassword}
-                    onClick={() => setShowNewPassword(!showNewPassword)}
-                  >
-                    <svg
-                      className={styles.eyeIcon}
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-
-              {/* Confirm Password */}
-              <div className={styles.formRow}>
-                <span className={styles.label}>新しいパスワード（確認）</span>
-                <div className={styles.passwordInput}>
-                  <input
-                    type={showConfirmPassword ? "text" : "password"}
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="●●●●●●●●●●"
-                  />
-                  <button
-                    type="button"
-                    className={styles.togglePassword}
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  >
-                    <svg
-                      className={styles.eyeIcon}
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
+      <div className="flex flex-col items-center py-[25px] px-[50px] gap-[50px] w-full min-h-screen">
+        {/* Section 1: User Information */}
+        <div className="flex flex-col items-start gap-[25px] w-full">
+          {/* Full-width header with border */}
+          <div className="flex flex-row items-center py-0 px-0 pb-[10px] gap-[10px] w-full h-[37px] border-b border-[#CFCFCF]">
+            <h2 className="font-noto font-[700] text-[20px] leading-[27px] text-[#333333]">
+              ユーザー情報
+            </h2>
           </div>
 
-          {/* Save Button - Centered */}
-          <div className={styles.saveButtonWrapper}>
-            <button
-              type="button"
-              className={styles.saveButton}
-              onClick={handleSaveChanges}
-            >
-              変更を保存
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* Section 2: Payment Information */}
-      <section className={styles.section}>
-        <div className={styles.sectionHeaderNoBorder}>
-          <h2 className={styles.sectionTitle}>決済情報</h2>
-        </div>
-
-        <div className={styles.paymentContent}>
-          <div className={styles.paymentInfo}>
-            {/* Next Payment Date */}
-            <div className={styles.paymentRow}>
-              <span className={styles.paymentLabel}>次回の請求日</span>
-              <span className={styles.paymentValue}>
-                {paymentInfo.nextPaymentDate}
-              </span>
-            </div>
-
-            {/* Amount */}
-            <div className={styles.paymentRow}>
-              <span className={styles.paymentLabel}>請求金額</span>
-              <span className={styles.paymentValue}>
-                {paymentInfo.amount.toLocaleString()}円（税込）
-              </span>
-            </div>
-
-            {/* Payment Method */}
-            <div className={styles.paymentMethodSection}>
-              <span className={styles.paymentLabel}>支払い方法</span>
-              <div className={styles.paymentMethodRow}>
-                <Image
-                  src="/assets/pictures/visa.png"
-                  alt="Visa"
-                  width={70}
-                  height={43}
-                  className={styles.cardIcon}
-                  onError={(e) => {
-                    e.currentTarget.style.display = "none";
-                  }}
-                />
-                <span className={styles.cardNumber}>
-                  Visa **** **** {paymentInfo.paymentMethod.lastFourDigits}
-                </span>
-              </div>
-              <button type="button" className={styles.addPaymentButton}>
-                支払い方法を追加
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Section 3: Payment History */}
-      <section className={styles.section}>
-        <div className={styles.sectionHeaderNoBorder}>
-          <h2 className={styles.sectionTitle}>お支払い履歴</h2>
-        </div>
-
-        <div className={styles.tableContainer}>
-          <table className={styles.paymentTable}>
-            <thead>
-              <tr>
-                <th>支払日</th>
-                <th>請求金額(税込)</th>
-                <th>利用年月</th>
-                <th>ステータス</th>
-                <th>請求書</th>
-              </tr>
-            </thead>
-            <tbody>
-              {paymentHistory.map((payment) => (
-                <tr key={payment.id}>
-                  <td>{payment.paymentDate}</td>
-                  <td>{payment.amount.toLocaleString()}円</td>
-                  <td>{payment.billingPeriod}</td>
-                  <td>{payment.status}</td>
-                  <td>
+          {/* Content with max-width */}
+          <div className="flex flex-col justify-center items-center gap-[25px] w-full max-w-[1008px]">
+            {/* User Info Content */}
+            <div className="flex flex-col justify-center items-start gap-[25px] w-full">
+              {/* Avatar Section - Horizontal Layout */}
+              <div className="flex flex-row items-center gap-[25px] w-full h-[70px]">
+                <div className="flex flex-row items-center gap-[25px] w-[195px] h-[70px]">
+                  <div
+                    className="w-[70px] h-[70px] rounded-full flex items-center justify-center"
+                    style={{ backgroundColor: userProfile.avatarColor }}
+                  >
+                    {userProfile.avatarUrl ? (
+                      <Image
+                        src={userProfile.avatarUrl}
+                        alt={userProfile.name}
+                        width={70}
+                        height={70}
+                        className="rounded-full"
+                      />
+                    ) : (
+                      <span className="font-noto font-[400] text-[13px] text-white">{userProfile.initials}</span>
+                    )}
+                  </div>
+                  <div className="flex flex-row items-center gap-[10px] w-[100px] h-[39px]">
                     <button
                       type="button"
-                      className={styles.downloadLink}
-                      onClick={() => handleDownloadInvoice(payment.invoiceUrl)}
+                      className="flex flex-row items-center py-[10px] px-[15px] gap-[10px] w-[100px] h-[39px] bg-[#E1E1E1] rounded-[8px] border-none cursor-pointer transition-colors duration-200 hover:bg-[#d0d0d0]"
+                      onClick={handleAvatarUpload}
                     >
-                      Download
+                      <span className="font-noto font-[400] text-[14px] leading-[19px] text-[#333333] w-[70px] h-[19px]">
+                        画像を選択
+                      </span>
                     </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                  </div>
+                </div>
+              </div>
+
+              {/* Form Fields */}
+              <div className="flex flex-col items-start gap-[10px] w-[539px]">
+                {/* Name Field */}
+                <div className="flex flex-row items-center gap-[10px] w-[510px] h-[35px]">
+                  <div className="flex flex-row items-center gap-[10px] w-[200px] h-[22px]">
+                    <span className="font-noto font-[400] text-[16px] leading-[22px] text-[#333333] w-[32px] h-[22px]">
+                      氏名
+                    </span>
+                  </div>
+                  <div className="flex flex-row items-center py-[3px] px-[10px] gap-[10px] w-[300px] h-[35px] bg-white rounded-[4px]">
+                    <span className="font-noto font-[400] text-[16px] leading-[22px] text-[#333333]">
+                      {userProfile.name}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Email Field */}
+                <div className="flex flex-row items-center gap-[10px] w-full h-[35px]">
+                  <div className="flex flex-row items-center gap-[10px] w-[200px] h-[22px]">
+                    <span className="font-noto font-[400] text-[16px] leading-[22px] text-[#333333] w-[112px] h-[22px]">
+                      メールアドレス
+                    </span>
+                  </div>
+                  <div className="flex flex-row items-center gap-[25px]">
+                    <span className="font-noto font-[400] text-[16px] leading-[22px] text-[#333333]">
+                      {userProfile.email}
+                    </span>
+                    <button
+                      type="button"
+                      className="font-noto font-[400] text-[16px] leading-[22px] text-[#066A9E] underline bg-transparent border-none cursor-pointer whitespace-nowrap"
+                      onClick={handleEmailChange}
+                    >
+                      メールアドレスを変更
+                    </button>
+                  </div>
+                </div>
+
+                {/* Current Password */}
+                <div className="flex flex-row items-center gap-[10px] w-[510px] h-[35px]">
+                  <div className="flex flex-row items-center gap-[10px] w-[200px] h-[22px]">
+                    <span className="font-noto font-[400] text-[16px] leading-[22px] text-[#333333] w-[128px] h-[22px]">
+                      現在のパスワード
+                    </span>
+                  </div>
+                  <div className="flex flex-row items-center py-[3px] px-[10px] gap-[10px] w-[300px] h-[35px] bg-white rounded-[4px]">
+                    <span className="font-noto font-[400] text-[16px] leading-[22px] text-[#333333]">
+                      **********
+                    </span>
+                  </div>
+                </div>
+
+                {/* New Password */}
+                <div className="flex flex-row items-center gap-[10px] w-[510px] h-[35px]">
+                  <div className="flex flex-row items-center gap-[10px] w-[200px] h-[22px]">
+                    <span className="font-noto font-[400] text-[16px] leading-[22px] text-[#333333] w-[128px] h-[22px]">
+                      新しいパスワード
+                    </span>
+                  </div>
+                  <div className="flex flex-row justify-between items-center py-[3px] px-[10px] gap-[10px] w-[300px] h-[35px] bg-white border border-[#B9B9B9] rounded-[4px]">
+                    <input
+                      type={showNewPassword ? "text" : "password"}
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      placeholder="●●●●●●●●●●"
+                      className="flex-1 font-noto font-[400] text-[16px] leading-[22px] text-[#333333] bg-transparent border-none outline-none text-center"
+                    />
+                    <button
+                      type="button"
+                      className="w-[24px] h-[24px] bg-transparent border-none cursor-pointer p-0"
+                      onClick={() => setShowNewPassword(!showNewPassword)}
+                    >
+                      <svg
+                        className="w-[24px] h-[24px]"
+                        fill="#808080"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Confirm Password */}
+                <div className="flex flex-row items-center gap-[10px] w-[510px] h-[35px]">
+                  <div className="flex flex-row items-center gap-[10px] w-[200px] h-[22px]">
+                    <span className="font-noto font-[400] text-[16px] leading-[22px] text-[#333333] w-[192px] h-[22px]">
+                      新しいパスワード（確認）
+                    </span>
+                  </div>
+                  <div className="flex flex-row justify-between items-center py-[3px] px-[10px] gap-[10px] w-[300px] h-[35px] bg-white border border-[#B9B9B9] rounded-[4px]">
+                    <input
+                      type={showConfirmPassword ? "text" : "password"}
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder="●●●●●●●●●●"
+                      className="flex-1 font-noto font-[400] text-[16px] leading-[22px] text-[#333333] bg-transparent border-none outline-none text-center"
+                    />
+                    <button
+                      type="button"
+                      className="w-[24px] h-[24px] bg-transparent border-none cursor-pointer p-0"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    >
+                      <svg
+                        className="w-[24px] h-[24px]"
+                        fill="#808080"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Save Button - Right aligned */}
+            <div className="flex flex-row justify-end items-center w-full">
+              <button
+                type="button"
+                className="flex flex-row items-center justify-center py-[10px] px-[15px] gap-[10px] w-[100px] h-[39px] bg-[#066A9E] rounded-[8px] border-none cursor-pointer transition-colors duration-200 hover:bg-[#055580]"
+                onClick={handleSaveChanges}
+              >
+                <span className="font-noto font-[400] text-[14px] leading-[19px] text-white w-[70px] h-[19px]">
+                  変更を保存
+                </span>
+              </button>
+            </div>
+          </div>
         </div>
-      </section>
 
-      {/* Email Change Modal */}
-      <EmailChangeModal
-        isOpen={showEmailModal}
-        onClose={() => setShowEmailModal(false)}
-        onSend={handleEmailSent}
-      />
+        {/* Section 2: Payment Information */}
+        <div className="flex flex-col items-start gap-[25px] w-full">
+          {/* Full-width header with border */}
+          <div className="flex flex-row items-center gap-[10px] w-full h-[27px]">
+            <h2 className="font-noto font-[700] text-[20px] leading-[27px] text-[#333333]">
+              決済情報
+            </h2>
+          </div>
 
-      {/* Email Success Modal */}
-      <InfoModal
-        isOpen={showEmailSuccessModal}
-        onClose={() => setShowEmailSuccessModal(false)}
-        title="メールアドレスを変更"
-        message={"ご入力いただいたメールアドレスへ再設定用URLを送信しました。\nメール内のURLをクリックすると、\nメールアドレス変更が完了いたします。"}
-      />
+          {/* Content with max-width */}
+          <div className="flex flex-col justify-center items-start gap-[35px] w-full max-w-[1008px]">
+            <div className="flex flex-col justify-center items-center gap-[25px] w-[410px]">
+              <div className="flex flex-col items-start gap-[10px] w-[410px]">
+                {/* Next Payment Date */}
+                <div className="flex flex-row items-center gap-[10px] w-[410px] h-[33px]">
+                  <div className="flex flex-row items-center gap-[10px] w-[200px] h-[22px]">
+                    <span className="font-noto font-[400] text-[16px] leading-[22px] text-[#333333] w-[96px] h-[22px]">
+                      次回の請求日
+                    </span>
+                  </div>
+                  <div className="flex flex-row items-center py-[3px] px-0 gap-[10px] w-[200px] h-[33px]">
+                    <span className="font-noto font-[400] text-[20px] leading-[27px] text-[#333333] w-[129px] h-[27px]">
+                      {paymentInfo.nextPaymentDate}
+                    </span>
+                  </div>
+                </div>
 
-      {/* Avatar Change Modal */}
-      <AvatarChangeModal
-        isOpen={showAvatarModal}
-        onClose={() => setShowAvatarModal(false)}
-        onSave={handleAvatarColorChange}
-        currentColor={userProfile.avatarColor}
-      />
+                {/* Amount */}
+                <div className="flex flex-row items-center gap-[10px] w-[410px] h-[33px]">
+                  <div className="flex flex-row items-center gap-[10px] w-[200px] h-[22px]">
+                    <span className="font-noto font-[400] text-[16px] leading-[22px] text-[#333333] w-[64px] h-[22px]">
+                      請求金額
+                    </span>
+                  </div>
+                  <div className="flex flex-row items-center py-[3px] px-0 gap-[10px] w-[200px] h-[33px]">
+                    <span className="font-noto font-[400] text-[20px] leading-[27px] text-[#333333] w-[175px] h-[27px]">
+                      {paymentInfo.amount.toLocaleString()}円（税込）
+                    </span>
+                  </div>
+                </div>
+
+                {/* Payment Method */}
+                <div className="flex flex-col justify-center items-start gap-[5px] w-[410px] h-[114px]">
+                  <div className="flex flex-row items-center gap-[10px] w-[410px] h-[22px]">
+                    <span className="font-noto font-[400] text-[16px] leading-[22px] text-[#333333] w-[80px] h-[22px]">
+                      支払い方法
+                    </span>
+                  </div>
+                  <div className="flex flex-row items-center gap-[10px] w-[410px] h-[43px]">
+                    <Image
+                      src="/assets/pictures/visa.png"
+                      alt="Visa"
+                      width={70}
+                      height={43}
+                      className="w-[70px] h-[43px]"
+                      onError={(e) => {
+                        e.currentTarget.style.display = "none";
+                      }}
+                    />
+                    <span className="font-noto font-[400] text-[16px] leading-[22px] text-[#808080] w-[155px] h-[22px]">
+                      Visa **** **** {paymentInfo.paymentMethod.lastFourDigits}
+                    </span>
+                    <button
+                      type="button"
+                      className="flex flex-row items-center py-[10px] px-[15px] gap-[10px] w-[142px] h-[39px] bg-[#E1E1E1] rounded-[8px] border-none cursor-pointer transition-colors duration-200 hover:bg-[#d0d0d0]"
+                    >
+                      <span className="font-noto font-[400] text-[14px] leading-[19px] text-[#333333] w-[112px] h-[19px]">
+                        支払い方法を追加
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Section 3: Payment History */}
+        <div className="flex flex-col items-start gap-[25px] w-full">
+          {/* Full-width header with border */}
+          <div className="flex flex-row items-center gap-[10px] w-full h-[27px]">
+            <h2 className="font-noto font-[700] text-[20px] leading-[27px] text-[#333333]">
+              お支払い履歴
+            </h2>
+          </div>
+
+          {/* Content with max-width */}
+          <div className="flex flex-col items-start w-full max-w-[1008px]">
+            <div className="flex flex-col items-start w-full bg-white border border-[#D4D4D4] rounded-[4px]">
+              {/* Table Header */}
+              <div className="flex flex-row items-start w-full h-[50px]">
+                <div className="flex flex-col justify-center items-start w-[130px] h-[50px] bg-[#F5F5F5] border-t border-l border-[#D4D4D4]">
+                  <div className="flex flex-row justify-center items-center py-[15px] px-[12px] w-[130px] h-[48px]">
+                    <span className="font-inter font-[600] text-[14px] leading-[130%] text-center text-[#333333] w-[96px] h-[18px]">
+                      支払日
+                    </span>
+                  </div>
+                </div>
+                <div className="flex flex-col justify-center items-start flex-1 h-[50px] bg-[#F5F5F5] border-t border-[#D4D4D4]">
+                  <div className="flex flex-row items-start py-[15px] px-[12px] w-full h-[48px]">
+                    <span className="font-inter font-[600] text-[14px] leading-[130%] text-center text-[#333333] flex-1">
+                      請求金額(税込)
+                    </span>
+                  </div>
+                </div>
+                <div className="flex flex-col justify-center items-start w-[120px] h-[50px] bg-[#F5F5F5] border-t border-[#D4D4D4]">
+                  <div className="flex flex-row items-start py-[15px] px-[12px] w-[120px] h-[48px]">
+                    <span className="font-inter font-[600] text-[14px] leading-[130%] text-center text-[#333333] w-[96px] h-[18px]">
+                      利用年月
+                    </span>
+                  </div>
+                </div>
+                <div className="flex flex-col justify-center items-start flex-1 h-[50px] bg-[#F5F5F5] border-t border-[#D4D4D4]">
+                  <div className="flex flex-row items-start py-[15px] px-[12px] w-full h-[48px]">
+                    <span className="font-inter font-[600] text-[14px] leading-[130%] text-center text-[#333333] flex-1">
+                      ステータス
+                    </span>
+                  </div>
+                </div>
+                <div className="flex flex-col justify-center items-start flex-1 h-[50px] bg-[#F5F5F5] border-t border-[#D4D4D4]">
+                  <div className="flex flex-row items-start py-[15px] px-[12px] w-full h-[48px]">
+                    <span className="font-inter font-[600] text-[14px] leading-[130%] text-center text-[#333333] flex-1">
+                      請求書
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Table Body */}
+              {paymentHistory.map((payment) => (
+                <div key={payment.id} className="flex flex-row justify-center items-center w-full h-[48px]">
+                  <div className="flex flex-col justify-center items-center w-[130px] h-[48px] bg-white/[0.002] border-t border-l border-[#D4D4D4]">
+                    <div className="flex flex-row items-start py-[15px] px-[12px] w-[99px] h-[48px]">
+                      <span className="font-noto-jp font-[500] text-[14px] leading-[130%] text-right text-[#333333] w-[75px] h-[18px]">
+                        {payment.paymentDate}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col justify-center items-center flex-1 h-[48px] bg-white/[0.002] border-t border-[#D4D4D4]">
+                    <div className="flex flex-row justify-center items-center py-[15px] px-[12px] w-full h-[48px]">
+                      <span className="font-noto-jp font-[500] text-[14px] leading-[130%] text-center text-[#333333] flex-1">
+                        {payment.amount.toLocaleString()}円
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col justify-center items-start w-[120px] h-[48px] bg-white/[0.002] border-t border-[#D4D4D4]">
+                    <div className="flex flex-row justify-center items-center py-[15px] px-[12px] w-[120px] h-[48px]">
+                      <span className="font-noto-jp font-[500] text-[14px] leading-[130%] text-center text-[#333333] w-[112px] h-[18px]">
+                        {payment.billingPeriod}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col justify-center items-start flex-1 h-[48px] bg-white/[0.002] border-t border-[#D4D4D4]">
+                    <div className="flex flex-row justify-center items-center py-[15px] px-[12px] w-full h-[46px]">
+                      <span className="font-noto-jp font-[500] text-[12px] leading-[130%] text-center text-[#333333] flex-1">
+                        {payment.status}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col justify-center items-start flex-1 h-[48px] bg-white/[0.002] border-t border-[#D4D4D4]">
+                    <div className="flex flex-row justify-center items-center py-[15px] px-[12px] w-full h-[46px]">
+                      <button
+                        type="button"
+                        className="font-noto-jp font-[500] text-[12px] leading-[130%] text-center text-[#066A9E] bg-transparent border-none cursor-pointer flex-1"
+                        onClick={() => handleDownloadInvoice(payment.invoiceUrl)}
+                      >
+                        Download
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Email Change Modal */}
+        <EmailChangeModal
+          isOpen={showEmailModal}
+          onClose={() => setShowEmailModal(false)}
+          onSend={handleEmailSent}
+        />
+
+        {/* Email Success Modal */}
+        <InfoModal
+          isOpen={showEmailSuccessModal}
+          onClose={() => setShowEmailSuccessModal(false)}
+          title="メールアドレスを変更"
+          message={"ご入力いただいたメールアドレスへ再設定用URLを送信しました。\nメール内のURLをクリックすると、\nメールアドレス変更が完了いたします。"}
+        />
+
+        {/* Avatar Change Modal */}
+        <AvatarChangeModal
+          isOpen={showAvatarModal}
+          onClose={() => setShowAvatarModal(false)}
+          onSave={handleAvatarColorChange}
+          currentColor={userProfile.avatarColor}
+        />
       </div>
     </PageTransition>
   );

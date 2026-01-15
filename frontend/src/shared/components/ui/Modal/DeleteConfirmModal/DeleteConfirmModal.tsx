@@ -26,7 +26,6 @@ export function DeleteConfirmModal({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="メンバー削除"
       size={modalState === "complete" ? "sm" : "md"}
       customClass={`p-[20px_35px] gap-[25px] ${
         modalState === "complete" ? "w-[500px] max-w-[500px] h-[174px]" : ""
@@ -68,6 +67,9 @@ export function DeleteConfirmModal({
         )
       }
     >
+      <div className="font-noto font-[400] text-[20px] leading-[100%] text-[#066A9E] text-center w-full mb-[25px]">
+        メンバー削除
+      </div>
       {modalState === "confirm" ? (
         <div className="text-center flex flex-col items-center justify-center w-full m-0 p-0">
           <p className="font-medium text-[14px] leading-[1.3] text-[#333333] text-center m-0 w-full p-0">選択したメンバーを削除します。</p>
