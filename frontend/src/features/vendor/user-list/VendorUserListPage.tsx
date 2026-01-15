@@ -1,6 +1,10 @@
 "use client";
 
-import { InviteMemberModal, DeleteConfirmModal, PageTransition } from "@/shared/components";
+import {
+  InviteMemberModal,
+  DeleteConfirmModal,
+  PageTransition,
+} from "@/shared/components";
 import { ChangePermissionModal } from "./components";
 import { InfoModal } from "@/features/vendor/shared/components";
 import { UserEditModal } from "./components";
@@ -51,10 +55,12 @@ export function VendorUserListPage() {
   return (
     <PageTransition>
       <div className="flex flex-col items-center py-[25px] px-[50px] gap-[50px] w-full min-h-[calc(100vh-89px)] bg-white">
-        <div className="flex flex-col items-start gap-[25px] w-[1008px]">
+        <div className="flex flex-col items-start gap-[25px]  w-full">
           {/* Header */}
           <div className="flex flex-row items-center px-0 pb-[10px] gap-[10px] w-full h-[37px] border-b border-[#CFCFCF]">
-            <h2 className="font-noto font-bold text-[20px] leading-[27px] text-[#333333] w-[120px]">ユーザー一覧</h2>
+            <h2 className="font-noto font-bold text-[20px] leading-[27px] text-[#333333] w-[120px]">
+              ユーザー一覧
+            </h2>
           </div>
 
           {/* Invite Button */}
@@ -63,7 +69,9 @@ export function VendorUserListPage() {
             className="flex flex-row items-center justify-center px-[15px] py-[10px] gap-[10px] w-[128px] h-[39px] bg-[#066A9E] rounded-[8px] border-none cursor-pointer hover:bg-[#055580] transition-colors"
             onClick={handleInviteMember}
           >
-            <span className="font-noto font-[400] text-[14px] leading-[19px] text-[#FFFFFF]">メンバーを招待</span>
+            <span className="font-noto font-[400] text-[14px] leading-[19px] text-[#FFFFFF]">
+              メンバーを招待
+            </span>
           </button>
 
           {/* Table */}
@@ -71,7 +79,7 @@ export function VendorUserListPage() {
             <table className="w-full border-collapse min-w-[600px]">
               <thead>
                 <tr>
-                  <th className="w-[44px] py-0 px-0 border-t border-[#d4d4d4] border-l border-[#cfcfcf] h-[50px] bg-[#f5f5f5] align-middle">
+                  <th className="w-[44px] py-0 px-0 border-t border-[#d4d4d4] border-l h-[50px] bg-[#f5f5f5] align-middle">
                     <div className="flex items-center justify-center w-full h-full">
                       <input
                         type="checkbox"
@@ -82,8 +90,12 @@ export function VendorUserListPage() {
                       />
                     </div>
                   </th>
-                  <th className="w-[422px] border-t border-[#d4d4d4] h-[50px] bg-[#f5f5f5] text-center px-3 font-inter font-[600] text-[14px] leading-[130%] text-[#000000]">ユーザー</th>
-                  <th className="w-[120px] py-[15px] px-3 text-center border-t border-[#d4d4d4] h-[50px] bg-[#f5f5f5] font-inter font-[600] text-[14px] leading-[130%] text-[#000000]">権限</th>
+                  <th className="w-[422px] border-t border-[#d4d4d4] h-[50px] bg-[#f5f5f5] text-center px-3 font-inter font-[600] text-[14px] leading-[130%] text-[#000000]">
+                    ユーザー
+                  </th>
+                  <th className="w-[120px] py-[15px] px-3 text-center border-t border-[#d4d4d4] h-[50px] bg-[#f5f5f5] font-inter font-[600] text-[14px] leading-[130%] text-[#000000]">
+                    権限
+                  </th>
                   <th className="w-[422px] border-t border-[#d4d4d4] h-[50px] bg-[#f5f5f5]"></th>
                 </tr>
               </thead>
@@ -113,12 +125,16 @@ export function VendorUserListPage() {
                           style={{ backgroundColor: user.avatarColor }}
                         />
                         <div className="flex flex-col gap-0.5">
-                          <span className="font-noto-jp font-[500] text-[14px] leading-[130%] text-[#333333]">{user.name}</span>
+                          <span className="font-noto-jp font-[500] text-[14px] leading-[130%] text-[#333333]">
+                            {user.name}
+                          </span>
                         </div>
                       </div>
                     </td>
                     <td className="w-[120px] py-[15px] px-3 text-center h-[70px] bg-[rgba(255,255,255,0.002)] border-t border-[#d4d4d4] max-md:hidden">
-                      <span className="font-noto-jp font-[500] text-[14px] leading-[130%] text-[#333333]">{user.role}</span>
+                      <span className="font-noto-jp font-[500] text-[14px] leading-[130%] text-[#333333]">
+                        {user.role}
+                      </span>
                     </td>
                     <td className="w-[422px] h-[70px] bg-[rgba(255,255,255,0.002)] border-t border-[#d4d4d4]">
                       <div className="flex justify-center items-center py-2.5 px-3 gap-[15px]">
