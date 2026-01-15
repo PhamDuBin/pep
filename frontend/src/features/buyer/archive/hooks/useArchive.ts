@@ -120,6 +120,11 @@ export function useArchive() {
     setOpenContextMenuId(null);
   }, []);
 
+  const handleProjectClick = useCallback((projectId: string) => {
+    // Navigate to the project plan page
+    window.location.href = `/buyer/project/${projectId}/plan`;
+  }, []);
+
   const changePage = useCallback((page: number) => {
     setCurrentPage(page);
   }, []);
@@ -155,6 +160,7 @@ export function useArchive() {
     toggleContextMenu,
     closeContextMenu,
     handleContextAction,
+    handleProjectClick,
     changePage,
     toggleFilterDropdown,
     toggleSortDropdown,

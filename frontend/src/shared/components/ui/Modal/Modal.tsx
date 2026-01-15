@@ -9,7 +9,6 @@ import {
   useRef,
 } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import styles from "./Modal.module.scss";
 
 export type ModalSize = "sm" | "md" | "lg" | "xl";
 
@@ -24,13 +23,14 @@ export interface ModalProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"
   customClass?: string;
   children: ReactNode;
   actions?: ReactNode;
+  allowOverflow?: boolean;
 }
 
 const sizeClassMap: Record<ModalSize, string> = {
-  sm: styles.sizeSm,
-  md: styles.sizeMd,
-  lg: styles.sizeLg,
-  xl: styles.sizeXl,
+  sm: "min-w-[400px] max-w-[400px]",
+  md: "min-w-[500px] max-w-[500px]",
+  lg: "min-w-[700px] max-w-[700px]",
+  xl: "min-w-[800px] max-w-[800px]",
 };
 
 // Animation variants
@@ -79,6 +79,7 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(
       customClass = "",
       children,
       actions,
+      allowOverflow = false,
       className = "",
       ...props
     },
@@ -124,7 +125,20 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(
         {isOpen && (
           <motion.div
             ref={resolvedRef}
-            className={`${styles.modalBackdrop} ${className}`}
+            className={className}
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+              backdropFilter: "blur(2px)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              zIndex: 1000,
+            }}
             onClick={handleBackdropClick}
             role="dialog"
             aria-modal="true"
@@ -137,7 +151,20 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(
             {...props}
           >
             <motion.div
-              className={`${styles.modalContainer} ${sizeClassMap[size]} ${customClass}`}
+              className={`${sizeClassMap[size]} ${customClass}`}
+              style={{
+                position: "relative",
+                backgroundColor: "#ffffff",
+                borderRadius: "12px",
+                padding: "24px",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "20px",
+                boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+                maxHeight: "90vh",
+                overflow: allowOverflow ? "visible" : "auto",
+              }}
               variants={modalVariants}
               initial="hidden"
               animate="visible"
@@ -147,11 +174,26 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(
               {/* Close button */}
               {showCloseButton && (
                 <motion.button
-                  className={styles.closeBtn}
+                  style={{
+                    position: "absolute",
+                    top: "10px",
+                    right: "10px",
+                    width: "24px",
+                    height: "24px",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: 0,
+                    color: "#808080",
+                    borderRadius: "4px",
+                  }}
                   onClick={onClose}
                   type="button"
                   aria-label="Close modal"
-                  whileHover={{ scale: 1.1 }}
+                  whileHover={{ scale: 1.1, color: "#333333" }}
                   whileTap={{ scale: 0.95 }}
                 >
                   <svg
@@ -173,22 +215,68 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(
 
               {/* Modal Title */}
               {title && (
-                <h2 id="modal-title" className={styles.modalTitle}>
+                <h2
+                  id="modal-title"
+                  className="modal-title"
+                  style={{
+                    fontWeight: 400,
+                    fontSize: "16px",
+                    lineHeight: "normal",
+                    color: "#066a9e",
+                    margin: 0,
+                    textAlign: "center",
+                    paddingRight: "24px",
+                  }}
+                >
                   {title}
                 </h2>
               )}
 
               {/* Modal Body */}
-              <div className={styles.modalBody}>{children}</div>
+              <div
+                className="modal-body"
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  width: "100%",
+                }}
+              >
+                {children}
+              </div>
 
               {/* Modal Actions */}
-              {actions && <div className={styles.modalActions}>{actions}</div>}
+              {actions && (
+                <div
+                  className="modal-actions"
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    gap: "10px",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  {actions}
+                </div>
+              )}
 
               {/* Loading Overlay */}
               <AnimatePresence>
                 {isLoading && (
                   <motion.div
-                    className={styles.modalLoadingOverlay}
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      backgroundColor: "rgba(255, 255, 255, 0.8)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      borderRadius: "12px",
+                    }}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}

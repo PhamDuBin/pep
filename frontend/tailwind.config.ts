@@ -16,6 +16,7 @@ type ConfigWithDaisyUI = Config & {
 };
 
 const config: ConfigWithDaisyUI = {
+  important: true,
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -36,6 +37,7 @@ const config: ConfigWithDaisyUI = {
         "avatar-bg": "#8EC5D0",
       },
       fontFamily: {
+        sans: ["Noto Sans", "Noto Sans JP", "sans-serif"],
         noto: ["Noto Sans", "sans-serif"],
         "noto-jp": ["Noto Sans JP", "sans-serif"],
         inter: ["Inter", "sans-serif"],
@@ -45,6 +47,50 @@ const config: ConfigWithDaisyUI = {
         tab: "0px 4px 10px rgba(0, 0, 0, 0.05)",
         sidebar: "0px 4px 15px rgba(0, 0, 0, 0.1)",
         input: "0px 4px 15px rgba(0, 0, 0, 0.05)",
+      },
+      keyframes: {
+        fadeInUp: {
+          from: {
+            opacity: "0",
+            transform: "translateY(10px)",
+          },
+          to: {
+            opacity: "1",
+            transform: "translateY(0)",
+          },
+        },
+        slideIn: {
+          from: {
+            opacity: "0",
+            transform: "translateY(10px)",
+          },
+          to: {
+            opacity: "1",
+            transform: "translateY(0)",
+          },
+        },
+        fadeIn: {
+          from: {
+            opacity: "0",
+          },
+          to: {
+            opacity: "1",
+          },
+        },
+        blink: {
+          "0%, 50%": {
+            opacity: "1",
+          },
+          "51%, 100%": {
+            opacity: "0",
+          },
+        },
+      },
+      animation: {
+        "fade-in-up": "fadeInUp 0.3s ease-out",
+        "slide-in": "slideIn 0.3s ease-out",
+        "fade-in": "fadeIn 0.3s ease-out",
+        blink: "blink 1s infinite",
       },
     },
   },

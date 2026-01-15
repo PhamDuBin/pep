@@ -12,7 +12,6 @@ import {
 import { useAiChat } from "../hooks";
 import { AI_CHAT_TABS } from "../mock";
 import { Tab } from "../types";
-import styles from "../AiChatPage.module.scss";
 
 export function AiChatContent() {
   const router = useRouter();
@@ -43,12 +42,12 @@ export function AiChatContent() {
 
   return (
     <PageTransition>
-      <div className={styles.container}>
+      <div className="flex flex-col h-full bg-white">
         <TabNavigation tabs={AI_CHAT_TABS} onTabChange={handleTabChange} />
 
-        <div className={styles.chatContent}>
-          <div className={styles.messagesArea}>
-            <div className={styles.messagesWrapper}>
+        <div className="flex flex-col h-[calc(100vh-89px-94px)] bg-white py-[50px] px-[75px]">
+          <div className="flex-1 flex flex-col gap-[25px] items-center overflow-hidden">
+            <div className="w-full max-w-[800px] flex-1 overflow-hidden">
               <ChatMessageList
                 messages={messages}
                 isLoading={isLoading}
@@ -58,7 +57,7 @@ export function AiChatContent() {
             </div>
           </div>
 
-          <div className={styles.bottomSection}>
+          <div className="flex flex-col gap-[20px] items-center justify-center w-full max-w-[800px] mx-auto pt-[20px]">
             <ProjectPlanModeButton />
             <ChatInputBox
               onMessageSent={sendMessage}

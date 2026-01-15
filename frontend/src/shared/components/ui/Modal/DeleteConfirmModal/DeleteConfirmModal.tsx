@@ -3,7 +3,6 @@
 import { Modal } from "../Modal";
 import { DeleteConfirmModalState } from "@/shared/types";
 
-
 interface DeleteConfirmModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -28,25 +27,23 @@ export function DeleteConfirmModal({
       isOpen={isOpen}
       onClose={onClose}
       size={modalState === "complete" ? "sm" : "md"}
-      customClass={
-        modalState === "complete"
-          ? "!w-[500px] !max-w-[500px] !h-[174px] !py-[20px] !px-[35px] !gap-[25px] !rounded-xl !overflow-hidden"
-          : "!py-[20px] !px-[35px] !gap-[25px]"
-      }
+      customClass={`p-[20px_35px] gap-[25px] ${
+        modalState === "complete" ? "w-[500px] max-w-[500px] h-[174px]" : ""
+      }`}
       isLoading={isDeleting}
       actions={
         modalState === "confirm" ? (
           <div className="flex flex-row gap-[10px] justify-center items-center">
             <button
               type="button"
-              className="flex justify-center items-center py-[10px] px-[15px] gap-[10px] min-w-[72px] h-[39px] bg-[#e1e1e1] rounded-[8px] border-none cursor-pointer transition-colors duration-200 font-noto font-[400] text-[14px] leading-[19px] text-[#333333] hover:bg-[#d0d0d0]"
+              className="py-[10px] px-[15px] bg-[#e1e1e1] border-none rounded-[8px] font-normal text-[14px] leading-[19px] text-[#333333] cursor-pointer transition-colors duration-200 min-w-[72px] h-[39px] flex items-center justify-center hover:bg-[#d0d0d0]"
               onClick={onClose}
             >
               キャンセル
             </button>
             <button
               type="button"
-              className="flex justify-center items-center py-[10px] px-[15px] gap-[10px] min-w-[80px] h-[39px] bg-[#333333] rounded-[8px] border-none cursor-pointer transition-colors duration-200 font-noto font-[400] text-[14px] leading-[19px] text-[#FFFFFF] hover:bg-[#444444] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="py-[10px] px-[15px] bg-[#333333] border-none rounded-[8px] font-normal text-[14px] leading-[19px] text-white cursor-pointer transition-colors duration-200 min-w-[80px] h-[39px] flex items-center justify-center hover:enabled:bg-[#444444] disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={isDeleting}
               onClick={onConfirm}
             >
@@ -61,7 +58,7 @@ export function DeleteConfirmModal({
           <div className="flex flex-row gap-[10px] justify-center items-center">
             <button
               type="button"
-              className="flex justify-center items-center py-[10px] px-[15px] gap-[10px] min-w-[72px] h-[39px] bg-[#e1e1e1] rounded-[8px] border-none cursor-pointer transition-colors duration-200 font-noto font-[400] text-[14px] leading-[19px] text-[#333333] hover:bg-[#d0d0d0]"
+              className="py-[10px] px-[15px] bg-[#e1e1e1] border-none rounded-[8px] font-normal text-[14px] leading-[19px] text-[#333333] cursor-pointer transition-colors duration-200 min-w-[72px] h-[39px] flex items-center justify-center hover:bg-[#d0d0d0]"
               onClick={onClose}
             >
               閉じる
@@ -74,18 +71,12 @@ export function DeleteConfirmModal({
         メンバー削除
       </div>
       {modalState === "confirm" ? (
-        <div className="flex flex-col items-center justify-center w-full m-0 p-0 text-center">
-          <p className="font-noto-jp font-[500] text-[14px] leading-[130%] text-[#333333] text-center m-0 w-full p-0">
-            選択したメンバーを削除します。
-          </p>
-          <p className="font-noto-jp font-[500] text-[14px] leading-[130%] text-[#333333] text-center m-0 w-full p-0">
-            よろしいですか？
-          </p>
+        <div className="text-center flex flex-col items-center justify-center w-full m-0 p-0">
+          <p className="font-medium text-[14px] leading-[1.3] text-[#333333] text-center m-0 w-full p-0">選択したメンバーを削除します。</p>
+          <p className="font-medium text-[14px] leading-[1.3] text-[#333333] text-center m-0 w-full p-0">よろしいですか？</p>
         </div>
       ) : (
-        <p className="font-noto-jp font-[500] text-[14px] leading-[130%] text-[#333333] text-center m-0 w-full p-0">
-          削除完了しました。
-        </p>
+        <p className="font-medium text-[14px] leading-[1.3] text-[#333333] text-center m-0 w-full p-0">選択したメンバーを削除しました。</p>
       )}
     </Modal>
   );
