@@ -8,7 +8,6 @@ import {
   PageTransition,
 } from "@/shared/components";
 import { useMyPage } from "./hooks";
-import styles from "./MyPage.module.scss";
 
 export function MyPage() {
   const {
@@ -50,36 +49,36 @@ export function MyPage() {
 
   return (
     <PageTransition>
-      <div className={styles.contentWrapper}>
+      <div className="flex flex-col gap-[25px] w-full px-[50px] py-[25px]">
         {isLoading || !user ? (
-          <div className={styles.loadingState}>
+          <div className="flex items-center justify-center min-h-[200px]">
             <Loading type="spinner" size="lg" />
           </div>
         ) : (
-          <div className={styles.pageContent}>
+          <div className="flex flex-col gap-[35px]">
             {/* User Info Section */}
-            <div className={styles.userInfoSection}>
+            <div className="flex flex-col gap-[25px] w-full">
               {/* Section Header */}
-              <div className={styles.sectionHeader}>
-                <h2 className={styles.sectionTitle}>ユーザー情報</h2>
+              <div className="flex items-center pb-[10px] border-b border-[#cfcfcf]">
+                <h2 className="font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-bold text-[20px] leading-normal text-[#333] m-0">ユーザー情報</h2>
               </div>
 
               {/* Section Content */}
-              <div className={styles.sectionContent}>
+              <div className="flex flex-col gap-[25px] items-center justify-center w-full">
                 {/* Avatar Row */}
-                <div className={styles.avatarRow}>
+                <div className="flex items-center gap-[25px] w-full">
                   <div
-                    className={styles.avatar}
+                    className="w-[70px] h-[70px] rounded-full flex items-center justify-center cursor-pointer transition-opacity duration-200 hover:opacity-80"
                     style={{ backgroundColor: user.avatarColor || "#8ec5d0" }}
                     onClick={handleAvatarClick}
                   >
-                    <span className={styles.avatarInitials}>
+                    <span className="font-['Noto_Sans',sans-serif] font-normal text-[24px] text-white">
                       {user.initials}
                     </span>
                   </div>
                   <button
                     type="button"
-                    className={styles.btnSelectImage}
+                    className="flex items-center px-[15px] py-[10px] bg-[#e1e1e1] border-none rounded-[8px] font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[14px] text-[#333] cursor-pointer transition-colors duration-200 hover:bg-[#d1d1d1]"
                     onClick={handleAvatarClick}
                   >
                     画像を選択
@@ -88,31 +87,31 @@ export function MyPage() {
 
                 {/* Success Message */}
                 {showAvatarSaveSuccess && (
-                  <div className={styles.successMessage}>
-                    <span className={styles.successText}>
+                  <div className="flex items-center justify-center px-[20px] py-[10px] bg-[#e6f3f5] rounded-[4px] self-start">
+                    <span className="font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-semibold text-[14px] leading-normal text-[#066a9e]">
                       変更を保存しました。
                     </span>
                   </div>
                 )}
 
                 {/* Form Fields */}
-                <div className={styles.formFields}>
+                <div className="flex flex-col gap-[10px] items-start w-full">
                   {/* Name Field */}
-                  <div className={styles.formRow}>
-                    <label className={styles.formLabel}>氏名</label>
-                    <div className={styles.formValue}>
-                      <span className={styles.valueText}>{user.name}</span>
+                  <div className="flex items-center gap-[10px]">
+                    <label className="w-[200px] font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[16px] text-black">氏名</label>
+                    <div className="flex items-center h-[35px] px-[10px] py-[3px] bg-white rounded-[4px] w-[300px]">
+                      <span className="font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[16px] text-black">{user.name}</span>
                     </div>
                   </div>
 
                   {/* Email Field */}
-                  <div className={styles.formRow}>
-                    <label className={styles.formLabel}>メールアドレス</label>
-                    <div className={`${styles.formValue} ${styles.emailField}`}>
-                      <span className={styles.valueText}>{user.email}</span>
+                  <div className="flex items-center gap-[10px]">
+                    <label className="w-[200px] font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[16px] text-black">メールアドレス</label>
+                    <div className="flex items-center h-[35px] px-[10px] py-[3px] bg-white rounded-[4px] w-auto gap-[25px]">
+                      <span className="font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[16px] text-black">{user.email}</span>
                       <button
                         type="button"
-                        className={styles.btnLink}
+                        className="bg-transparent border-none font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[16px] text-[#066a9e] underline cursor-pointer p-0 hover:opacity-80"
                         onClick={handleEmailChangeClick}
                       >
                         メールアドレスを変更
@@ -121,27 +120,27 @@ export function MyPage() {
                   </div>
 
                   {/* Current Password Field */}
-                  <div className={styles.formRow}>
-                    <label className={styles.formLabel}>現在のパスワード</label>
-                    <div className={styles.formValue}>
-                      <span className={styles.valueText}>**********</span>
+                  <div className="flex items-center gap-[10px]">
+                    <label className="w-[200px] font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[16px] text-black">現在のパスワード</label>
+                    <div className="flex items-center h-[35px] px-[10px] py-[3px] bg-white rounded-[4px] w-[300px]">
+                      <span className="font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[16px] text-black">**********</span>
                     </div>
                   </div>
 
                   {/* New Password Field */}
-                  <div className={styles.formRow}>
-                    <label className={styles.formLabel}>新しいパスワード</label>
-                    <div className={styles.formInputWrapper}>
+                  <div className="flex items-center gap-[10px]">
+                    <label className="w-[200px] font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[16px] text-black">新しいパスワード</label>
+                    <div className="flex items-center justify-between h-[35px] px-[10px] py-[3px] bg-white border border-[#b9b9b9] rounded-[4px] w-[300px] box-border">
                       <input
                         type={showPassword ? "text" : "password"}
-                        className={styles.formInput}
+                        className="flex-1 border-none outline-none font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[16px] text-black bg-transparent placeholder:text-[#808080]"
                         placeholder="8〜16文字の英数字で入力"
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
                       />
                       <button
                         type="button"
-                        className={styles.btnToggleVisibility}
+                        className="flex items-center justify-center bg-transparent border-none p-0 cursor-pointer shrink-0 hover:opacity-70"
                         onClick={() => setShowPassword(!showPassword)}
                       >
                         <svg
@@ -161,21 +160,21 @@ export function MyPage() {
                   </div>
 
                   {/* Confirm Password Field */}
-                  <div className={styles.formRow}>
-                    <label className={styles.formLabel}>
+                  <div className="flex items-center gap-[10px]">
+                    <label className="w-[200px] font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[16px] text-black">
                       新しいパスワード（確認）
                     </label>
-                    <div className={styles.formInputWrapper}>
+                    <div className="flex items-center justify-between h-[35px] px-[10px] py-[3px] bg-white border border-[#b9b9b9] rounded-[4px] w-[300px] box-border">
                       <input
                         type={showConfirmPassword ? "text" : "password"}
-                        className={styles.formInput}
+                        className="flex-1 border-none outline-none font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[16px] text-black bg-transparent placeholder:text-[#808080]"
                         placeholder="8〜16文字の英数字で入力"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                       />
                       <button
                         type="button"
-                        className={styles.btnToggleVisibility}
+                        className="flex items-center justify-center bg-transparent border-none p-0 cursor-pointer shrink-0 hover:opacity-70"
                         onClick={() =>
                           setShowConfirmPassword(!showConfirmPassword)
                         }
@@ -198,10 +197,10 @@ export function MyPage() {
                 </div>
 
                 {/* Save Button */}
-                <div className={styles.saveButtonWrapper}>
+                <div className="flex justify-center w-full">
                   <button
                     type="button"
-                    className={styles.btnSave}
+                    className="flex items-center px-[15px] py-[10px] bg-[#066a9e] border-none rounded-[8px] font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[14px] text-white cursor-pointer transition-colors duration-200 hover:enabled:bg-[#055a84] disabled:opacity-60 disabled:cursor-not-allowed"
                     disabled={isSaving}
                     onClick={handleSavePassword}
                   >
@@ -215,24 +214,24 @@ export function MyPage() {
             {user.role === "admin" && paymentInfo && (
               <>
                 {/* Payment Info Section */}
-                <div className={styles.paymentInfoSection}>
-                  <div className={styles.sectionHeader}>
-                    <h2 className={styles.sectionTitle}>決済情報</h2>
+                <div className="flex flex-col gap-[25px] w-full">
+                  <div className="flex items-center pb-[10px] border-b border-[#cfcfcf]">
+                    <h2 className="font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-bold text-[20px] leading-normal text-[#333] m-0">決済情報</h2>
                   </div>
-                  <div className={styles.paymentContent}>
-                    <div className={styles.infoFields}>
+                  <div className="flex flex-col items-start justify-center w-full">
+                    <div className="flex flex-col gap-[10px] items-start">
                       {/* Next Billing Date */}
-                      <div className={styles.infoRow}>
-                        <span className={styles.infoLabel}>次回の請求日</span>
-                        <span className={`${styles.infoValue} ${styles.large}`}>
+                      <div className="flex items-center gap-[10px]">
+                        <span className="w-[200px] font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[16px] text-black">次回の請求日</span>
+                        <span className="font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[20px] text-black py-[3px]">
                           {paymentInfo.nextBillingDate}
                         </span>
                       </div>
 
                       {/* Billing Amount */}
-                      <div className={styles.infoRow}>
-                        <span className={styles.infoLabel}>請求金額</span>
-                        <span className={`${styles.infoValue} ${styles.large}`}>
+                      <div className="flex items-center gap-[10px]">
+                        <span className="w-[200px] font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[16px] text-black">請求金額</span>
+                        <span className="font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[20px] text-black py-[3px]">
                           {formatAmount(
                             paymentInfo.billingAmount,
                             paymentInfo.taxIncluded
@@ -241,19 +240,19 @@ export function MyPage() {
                       </div>
 
                       {/* Payment Method */}
-                      <div className={styles.paymentMethodSection}>
-                        <span className={styles.infoLabel}>支払い方法</span>
+                      <div className="flex flex-col gap-[5px] items-start justify-center w-full">
+                        <span className="w-[200px] font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[16px] text-black">支払い方法</span>
 
                         {paymentInfo.paymentMethod && (
-                          <div className={styles.paymentMethodRow}>
+                          <div className="flex items-center gap-[10px] w-full">
                             <img
                               src="/assets/pictures/visa.png"
                               alt="Visa"
-                              className={styles.cardLogo}
+                              className="object-cover"
                               width={70}
                               height={43}
                             />
-                            <span className={styles.paymentMethodText}>
+                            <span className="font-['Noto_Sans',sans-serif] font-normal text-[16px] text-[#808080]">
                               {getPaymentMethodDisplay()}
                             </span>
                           </div>
@@ -261,7 +260,7 @@ export function MyPage() {
 
                         <button
                           type="button"
-                          className={styles.btnAddPayment}
+                          className="flex items-center px-[15px] py-[10px] bg-[#e1e1e1] border-none rounded-[8px] font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-normal text-[14px] text-[#333] cursor-pointer transition-colors duration-200 hover:bg-[#d1d1d1]"
                           onClick={handleAddPaymentMethod}
                         >
                           支払い方法を追加
@@ -273,40 +272,40 @@ export function MyPage() {
 
                 {/* Payment History Section */}
                 {paymentHistory.length > 0 && (
-                  <div className={styles.paymentHistorySection}>
-                    <div className={styles.sectionHeader}>
-                      <h2 className={styles.sectionTitle}>お支払い履歴</h2>
+                  <div className="flex flex-col gap-[25px] items-center justify-center w-full">
+                    <div className="flex items-center pb-[10px] border-b border-[#cfcfcf] w-full">
+                      <h2 className="font-['Noto_Sans','Noto_Sans_JP',sans-serif] font-bold text-[20px] leading-normal text-[#333] m-0">お支払い履歴</h2>
                     </div>
-                    <div className={styles.tableContainer}>
-                      <table className={styles.paymentTable}>
+                    <div className="w-full overflow-x-auto border border-[#d4d4d4]">
+                      <table className="w-full border-collapse bg-white border border-[#d4d4d4] rounded-[4px] overflow-hidden">
                         <thead>
-                          <tr>
-                            <th className={styles.colDate}>支払日</th>
-                            <th className={styles.colAmount}>請求金額(税込)</th>
-                            <th className={styles.colPeriod}>利用年月</th>
-                            <th className={styles.colStatus}>ステータス</th>
-                            <th className={styles.colInvoice}>請求書</th>
+                          <tr className="bg-[#f5f5f5]">
+                            <th className="w-[130px] border-l border-t border-[#d4d4d4] font-['Inter','Noto_Sans_JP',sans-serif] font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">支払日</th>
+                            <th className="flex-1 border-t border-[#d4d4d4] font-['Inter','Noto_Sans_JP',sans-serif] font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">請求金額(税込)</th>
+                            <th className="w-[179px] border-t border-[#d4d4d4] font-['Inter','Noto_Sans_JP',sans-serif] font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">利用年月</th>
+                            <th className="flex-1 border-t border-[#d4d4d4] font-['Inter','Noto_Sans_JP',sans-serif] font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">ステータス</th>
+                            <th className="flex-1 border-t border-[#d4d4d4] font-['Inter','Noto_Sans_JP',sans-serif] font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">請求書</th>
                           </tr>
                         </thead>
                         <tbody>
                           {paymentHistory.map((record) => (
                             <tr key={record.id}>
-                              <td className={styles.colDate}>
+                              <td className="w-[130px] border-l border-t border-[#d4d4d4] font-['Noto_Sans_JP',sans-serif] font-medium text-[14px] text-black text-center px-[12px] py-[15px]">
                                 {record.paymentDate}
                               </td>
-                              <td className={styles.colAmount}>
+                              <td className="flex-1 border-t border-[#d4d4d4] font-['Noto_Sans_JP',sans-serif] font-medium text-[14px] text-black text-center px-[12px] py-[15px]">
                                 {formatAmount(record.amount)}
                               </td>
-                              <td className={styles.colPeriod}>
+                              <td className="w-[179px] border-t border-[#d4d4d4] font-['Noto_Sans_JP',sans-serif] font-medium text-[14px] text-black text-center px-[12px] py-[15px]">
                                 {record.usagePeriod}
                               </td>
-                              <td className={styles.colStatus}>
+                              <td className="flex-1 border-t border-[#d4d4d4] font-['Noto_Sans_JP',sans-serif] font-medium text-[12px] text-black text-center px-[12px] py-[15px]">
                                 {getStatusLabel(record.status)}
                               </td>
-                              <td className={styles.colInvoice}>
+                              <td className="flex-1 border-t border-[#d4d4d4] font-['Noto_Sans_JP',sans-serif] font-medium text-[14px] text-black text-center px-[12px] py-[15px]">
                                 <button
                                   type="button"
-                                  className={styles.btnDownload}
+                                  className="bg-transparent border-none font-['Noto_Sans_JP',sans-serif] font-medium text-[12px] text-[#066a9e] cursor-pointer p-0 hover:underline"
                                   onClick={() =>
                                     handleDownloadInvoice(record.id)
                                   }

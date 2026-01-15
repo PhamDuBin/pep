@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { ChatMessage as ChatMessageType } from "@/shared/types";
-import styles from "./ChatMessage.module.scss";
 import { ChatMessageVariant } from "../../types";
 
 interface ChatMessageProps {
@@ -92,27 +91,25 @@ export function ChatMessage({
   if (variant === "minimal") {
     return (
       <div
-        className={`${styles.messageContainer} ${
-          isUserMessage ? styles.userMessage : styles.aiMessage
-        } ${message.isNew ? styles.animated : ""}`}
+        className={`flex w-full ${isUserMessage ? "justify-end" : "justify-start"} ${message.isNew ? "animate-[slideIn_0.3s_ease-out]" : ""}`}
       >
         {isUserMessage ? (
-          <div className={styles.userBubble}>
-            <p className={styles.messageText}>{displayedContent}</p>
+          <div className="max-w-[70%] bg-[#066a9e] text-[#ffffff] p-[10px] rounded-tl-[12px] rounded-tr-[12px] rounded-bl-[12px] shadow-[0_4px_6px_-1px_rgb(0_0_0/0.1),0_2px_4px_-2px_rgb(0_0_0/0.1)]">
+            <p className="text-[14px] font-normal leading-[1.5] whitespace-pre-wrap">{displayedContent}</p>
           </div>
         ) : (
-          <div className={styles.aiBubble} onClick={skipTyping}>
-            <div className={styles.aiMessageContent}>
+          <div className="max-w-[600px] relative cursor-pointer" onClick={skipTyping}>
+            <div className="text-[14px] text-[#333333] font-normal leading-[1.5] whitespace-pre-wrap">
               <span>{displayedContent}</span>
-              {isTyping && <span className={styles.typingCursor}>|</span>}
+              {isTyping && <span className="animate-[blink_1s_infinite]">|</span>}
             </div>
             {hasHighlight && !isTyping && (
-              <div className={styles.highlight}>
-                <p>{message.highlightedText}</p>
+              <div className="mt-[8px] bg-[#fef3c7] px-[8px] py-[4px] rounded-[4px] animate-[fadeIn_0.3s_ease-out]">
+                <p className="text-[14px] text-[#333333] whitespace-pre-wrap">{message.highlightedText}</p>
               </div>
             )}
             {isTyping && showSkipHint && (
-              <p className={styles.skipHint}>クリックでスキップ</p>
+              <p className="text-[11px] text-[#808080] mt-[8px] opacity-60">クリックでスキップ</p>
             )}
           </div>
         )}
@@ -123,12 +120,10 @@ export function ChatMessage({
   // With-avatar variant
   return (
     <div
-      className={`${styles.messageContainerWithAvatar} ${
-        isUserMessage ? styles.userMessageWithAvatar : ""
-      }`}
+      className={`flex gap-[12px] w-full animate-[slideIn_0.3s_ease-out] ${isUserMessage ? "justify-end" : ""}`}
     >
       {!isUserMessage && (
-        <div className={styles.aiAvatar}>
+        <div className="w-[40px] h-[40px] rounded-full flex items-center justify-center flex-shrink-0 bg-[#066a9e]">
           <svg
             width="20"
             height="20"
@@ -154,19 +149,15 @@ export function ChatMessage({
       )}
 
       <div
-        className={`${styles.messageBubbleWithAvatar} ${
-          isUserMessage
-            ? styles.userBubbleWithAvatar
-            : styles.aiBubbleWithAvatar
-        }`}
+        className={`max-w-[70%] px-[16px] py-[12px] rounded-[16px] cursor-pointer text-[14px] leading-[1.625] whitespace-pre-wrap ${isUserMessage ? "bg-[#066a9e] text-[#ffffff] rounded-br-none" : "bg-[#f9fafb] rounded-bl-none"}`}
         onClick={skipTyping}
       >
         <span>{displayedContent}</span>
-        {isTyping && <span className={styles.typingCursor}>|</span>}
+        {isTyping && <span className="animate-[blink_1s_infinite]">|</span>}
       </div>
 
       {isUserMessage && (
-        <div className={styles.userAvatar}>
+        <div className="w-[40px] h-[40px] rounded-full flex items-center justify-center flex-shrink-0 bg-[#d1d5db]">
           <svg
             width="20"
             height="20"

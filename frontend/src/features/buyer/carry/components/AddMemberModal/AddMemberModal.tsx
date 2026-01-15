@@ -3,7 +3,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { Modal } from "@/shared/components";
 import { SearchableUser, ChatMember, AddMemberModalState } from "../../types";
-import styles from "./AddMemberModal.module.scss";
 
 interface AddMemberModalProps {
   isOpen: boolean;
@@ -109,22 +108,22 @@ export function AddMemberModal({
       onClose={onClose}
       title="メンバーを追加"
       size="md"
-      customClass={styles.addMemberModal}
+      customClass="min-w-[500px] max-w-[500px] overflow-visible [&_.modal-title]:text-[20px] [&_.modal-title]:font-normal [&_.modal-title]:text-[#066a9e] [&_.modal-body]:overflow-visible"
       isLoading={isLoading}
       showCloseButton={true}
       actions={
         modalState === "search" ? (
-          <div className={styles.actionButtons}>
+          <div className="flex gap-[10px] justify-center items-center">
             <button
               type="button"
-              className={styles.btnCancel}
+              className="py-[10px] px-[15px] bg-[#e1e1e1] border-none rounded-[8px] font-['Noto_Sans_JP'] text-[14px] font-normal text-[#333] cursor-pointer transition-colors duration-200 hover:bg-[#d0d0d0]"
               onClick={onClose}
             >
               キャンセル
             </button>
             <button
               type="button"
-              className={styles.btnAdd}
+              className="py-[10px] px-[25px] bg-[#333] border-none rounded-[8px] font-['Noto_Sans_JP'] text-[14px] font-normal text-white cursor-pointer transition-colors duration-200 flex items-center justify-center gap-[8px] min-w-[80px] hover:enabled:bg-[#444] disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={isLoading || !canAddMembers}
               onClick={handleAddMembers}
             >
@@ -136,10 +135,10 @@ export function AddMemberModal({
             </button>
           </div>
         ) : (
-          <div className={styles.actionButtons}>
+          <div className="flex gap-[10px] justify-center items-center">
             <button
               type="button"
-              className={styles.btnCancel}
+              className="py-[10px] px-[15px] bg-[#e1e1e1] border-none rounded-[8px] font-['Noto_Sans_JP'] text-[14px] font-normal text-[#333] cursor-pointer transition-colors duration-200 hover:bg-[#d0d0d0]"
               onClick={onClose}
             >
               閉じる
@@ -149,32 +148,41 @@ export function AddMemberModal({
       }
     >
       {modalState === "search" ? (
-        <div className={styles.modalContent}>
+        <div className="flex flex-col gap-[25px] w-full px-[35px] overflow-visible">
           {/* Project and Vendor Info */}
-          <div className={styles.infoSection}>
-            <div className={styles.infoRow}>
-              <span className={styles.infoLabel}>
+          <div className="flex flex-col gap-[10px]">
+            <div className="flex justify-center gap-[15px]">
+              <span className="font-['Noto_Sans_JP'] text-[14px] font-medium min-w-[80px] text-[#000000]">
                 プロジェクト名：{projectName}
               </span>
             </div>
-            <div className={styles.infoRow}>
-              <span className={styles.infoLabel}>ベンダー：{vendorName}</span>
+            <div className="flex justify-center gap-[15px]">
+              <span className="font-['Noto_Sans_JP'] text-[14px] font-medium min-w-[80px] text-[#000000]">
+                ベンダー：{vendorName}
+              </span>
             </div>
           </div>
 
           {/* Search Input with Tags Inside */}
-          <div className={styles.searchSection}>
-            <div className={styles.searchInputContainer}>
+          <div className="relative overflow-visible">
+            <div className="flex flex-wrap items-center gap-[10px] min-h-[50px] p-[3px_10px] border border-[#b9b9b9] rounded-[4px] bg-white transition-colors duration-200 focus-within:border-[#066a9e]">
               {/* Selected Members Tags (inside input) */}
               {selectedMembers.map((member) => (
-                <div key={member.id} className={styles.memberTagInline}>
-                  <div className={styles.tagAvatar}>
-                    <span>{member.initials}</span>
+                <div
+                  key={member.id}
+                  className="flex items-center gap-[5px] pr-[10px] bg-transparent border border-[#e1e1e1] rounded-full flex-shrink-0"
+                >
+                  <div className="w-[30px] h-[30px] rounded-full bg-[#8ec5d0] flex items-center justify-center flex-shrink-0">
+                    <span className="font-['Noto_Sans'] font-normal text-[13px] text-white">
+                      {member.initials}
+                    </span>
                   </div>
-                  <span className={styles.tagName}>{member.name}</span>
+                  <span className="font-['Noto_Sans_JP'] text-[14px] font-normal text-[#333] whitespace-nowrap">
+                    {member.name}
+                  </span>
                   <button
                     type="button"
-                    className={styles.tagRemove}
+                    className="flex items-center justify-center w-[24px] h-[24px] p-0 bg-transparent border-none cursor-pointer text-[#808080] transition-colors duration-200 hover:text-[#333]"
                     onClick={() => removeMember(member)}
                   >
                     <svg
@@ -197,7 +205,7 @@ export function AddMemberModal({
               {/* Input field */}
               <input
                 type="text"
-                className={styles.searchInputInline}
+                className="flex-1 min-w-[100px] h-[40px] border-none outline-none bg-transparent font-['Noto_Sans'] text-[16px] font-normal text-[#333] placeholder:text-[#b9b9b9]"
                 placeholder={
                   selectedMembers.length === 0
                     ? "名前またはメールアドレスで検索"
@@ -212,19 +220,23 @@ export function AddMemberModal({
 
             {/* Search Suggestions Dropdown */}
             {showSuggestions && filteredSearchResults.length > 0 && (
-              <div className={styles.suggestionsDropdown}>
+              <div className="absolute top-[calc(100%+4px)] left-0 right-0 bg-white border border-[#cfcfcf] rounded-[4px] shadow-[0px_4px_20px_rgba(0,0,0,0.15)] z-[9999] max-h-[200px] overflow-y-auto">
                 {filteredSearchResults.map((user) => (
                   <button
                     key={user.id}
                     type="button"
-                    className={styles.suggestionItem}
+                    className="flex items-center gap-[10px] w-full py-[6px] px-[20px] bg-transparent border-none cursor-pointer text-left hover:bg-[#f5f5f5] first:rounded-t-[4px] last:rounded-b-[4px]"
                     onMouseDown={() => selectMember(user)}
                   >
-                    <div className={styles.userAvatar}>
-                      <span>{user.initials}</span>
+                    <div className="w-[30px] h-[30px] rounded-full bg-[#8ec5d0] flex items-center justify-center flex-shrink-0">
+                      <span className="font-['Noto_Sans'] font-normal text-[13px] text-white">
+                        {user.initials}
+                      </span>
                     </div>
-                    <div className={styles.userInfo}>
-                      <span className={styles.userName}>{user.name}</span>
+                    <div className="flex flex-col gap-[2px] min-w-0">
+                      <span className="font-['Noto_Sans_JP'] text-[14px] font-medium text-[#333]">
+                        {user.name}
+                      </span>
                     </div>
                   </button>
                 ))}
@@ -233,15 +245,17 @@ export function AddMemberModal({
 
             {/* Loading indicator */}
             {isSearching && (
-              <div className={styles.searchLoading}>
+              <div className="absolute right-[12px] top-1/2 -translate-y-1/2">
                 <span className="loading loading-spinner loading-sm"></span>
               </div>
             )}
           </div>
         </div>
       ) : (
-        <div className={styles.completeContent}>
-          <p className={styles.completeMessage}>メンバーを追加しました。</p>
+        <div className="flex flex-col items-center px-[35px]">
+          <p className="font-['Noto_Sans_JP'] text-[14px] font-medium text-[#333] text-center leading-[1.3] m-0">
+            メンバーを追加しました。
+          </p>
         </div>
       )}
     </Modal>

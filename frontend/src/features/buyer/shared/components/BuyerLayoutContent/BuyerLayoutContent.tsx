@@ -1,18 +1,17 @@
 import { Header, SideMenu } from "@/shared/components";
 import { useSideMenu } from "../../contexts";
 import { BuyerLayoutContentProps } from "../../types";
-import styles from "./BuyerLayout.module.scss";
 
 export function BuyerLayoutContent({ children }: BuyerLayoutContentProps) {
   const { isCollapsed } = useSideMenu();
 
   return (
-    <div className={styles.buyerLayout}>
+    <div className="flex flex-col min-h-screen bg-[#ffffff]">
       <Header />
       <SideMenu />
       <main
-        className={`${styles.mainContent} ${
-          isCollapsed ? styles.menuCollapsed : styles.menuExpanded
+        className={`mt-[90px] min-h-[calc(100vh-90px)] transition-[margin-left] duration-300 ease-[cubic-bezier(0.25,0.8,0.25,1)] ${
+          isCollapsed ? "ml-[60px]" : "ml-[200px]"
         }`}
       >
         {children}
