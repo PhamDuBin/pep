@@ -108,9 +108,10 @@ export function AddMemberModal({
       onClose={onClose}
       title="メンバーを追加"
       size="md"
-      customClass="min-w-[500px] max-w-[500px] overflow-visible [&_.modal-title]:text-[20px] [&_.modal-title]:font-normal [&_.modal-title]:text-[#066a9e] [&_.modal-body]:overflow-visible"
+      customClass="min-w-[500px] max-w-[500px] [&_.modal-title]:text-[20px] [&_.modal-title]:font-normal [&_.modal-title]:text-[#066a9e]"
       isLoading={isLoading}
       showCloseButton={true}
+      allowOverflow={true}
       actions={
         modalState === "search" ? (
           <div className="flex gap-[10px] justify-center items-center">

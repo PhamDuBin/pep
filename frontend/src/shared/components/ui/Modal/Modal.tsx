@@ -23,6 +23,7 @@ export interface ModalProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"
   customClass?: string;
   children: ReactNode;
   actions?: ReactNode;
+  allowOverflow?: boolean;
 }
 
 const sizeClassMap: Record<ModalSize, string> = {
@@ -78,6 +79,7 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(
       customClass = "",
       children,
       actions,
+      allowOverflow = false,
       className = "",
       ...props
     },
@@ -161,7 +163,7 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(
                 gap: "20px",
                 boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
                 maxHeight: "90vh",
-                overflowY: "auto",
+                overflow: allowOverflow ? "visible" : "auto",
               }}
               variants={modalVariants}
               initial="hidden"

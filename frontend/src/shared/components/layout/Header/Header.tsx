@@ -4,13 +4,29 @@ import Image from "next/image";
 
 export function Header() {
   return (
-    <header className="fixed top-0 left-0 right-0 h-[89px] bg-white border-b border-[#e1e1e1] flex items-center justify-center z-50 shadow-[0px_4px_15px_rgba(0,0,0,0.05)]">
+    <header
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        width: "100%",
+        height: "89px",
+        backgroundColor: "#ffffff",
+        borderBottom: "1px solid #e1e1e1",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 50,
+        boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.05)",
+      }}
+    >
       <Image
         src="/assets/icons/logo-pep.svg"
         alt="PEP"
         width={100}
         height={50}
-        className="h-[50px] w-auto"
+        style={{ height: "50px", width: "auto" }}
         priority
       />
     </header>
