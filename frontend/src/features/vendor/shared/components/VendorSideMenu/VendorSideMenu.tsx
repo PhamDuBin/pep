@@ -91,7 +91,7 @@ export function VendorSideMenu() {
 
   const handleSelectCompany = (companyId: string) => {
     selectCompany(companyId);
-    router.push("/vender/home");
+    router.push("/vender");
   };
 
   const navigateToMyPage = () => {

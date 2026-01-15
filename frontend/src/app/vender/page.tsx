@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
+import { VendorHomePage } from "@/features/vendor/home";
 
 export default function Page() {
-  redirect("/vender/home");
+  return <VendorHomePage />;
 }
