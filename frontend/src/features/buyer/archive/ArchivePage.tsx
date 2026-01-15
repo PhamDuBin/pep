@@ -11,6 +11,7 @@ import {
 } from "@/shared/components";
 import { useArchive } from "./hooks";
 import { MENU_ITEMS } from "./constants/menu.constants";
+import { ProjectPlanModal } from "./components";
 
 export function ArchivePage() {
   const {
@@ -30,6 +31,8 @@ export function ArchivePage() {
     sortRef,
     filterOptions,
     sortOptions,
+    showPlanModal,
+    selectedProject,
     toggleViewMode,
     selectFilter,
     selectSort,
@@ -37,6 +40,7 @@ export function ArchivePage() {
     closeContextMenu,
     handleContextAction,
     handleProjectClick,
+    closePlanModal,
     changePage,
     toggleFilterDropdown,
     toggleSortDropdown,
@@ -504,6 +508,13 @@ export function ArchivePage() {
           )}
         </div>
       </div>
+
+      {/* Project Plan Modal */}
+      <ProjectPlanModal
+        isOpen={showPlanModal}
+        onClose={closePlanModal}
+        project={selectedProject}
+      />
     </PageTransition>
   );
 }
