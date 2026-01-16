@@ -6,66 +6,34 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { VendorContact, VendorChatMessage, Tab, ChatMember, SearchableUser, AddMemberModalState } from "../types";
+import {
+  VendorContact,
+  VendorChatMessage,
+  Tab,
+  ChatMember,
+  SearchableUser,
+  AddMemberModalState,
+  UseCarryReturn,
+} from "../types";
 import {
   getVendorContacts,
   getVendorMessages,
   sendMessage as sendMessageService,
 } from "../services/carry.service";
-import { MEMBERS_MOCK, SEARCHABLE_USERS_MOCK, CURRENT_PROJECT_NAME_MOCK } from "../mock";
-
-export interface UseCarryReturn {
-  // State
-  vendors: VendorContact[];
-  selectedVendor: VendorContact | null;
-  messages: VendorChatMessage[];
-  newMessage: string;
-  showProjectPlanModal: boolean;
-  searchQuery: string;
-  hoveredVendorId: string | null;
-  showVendorMenu: string | null;
-  showMemberDropdown: boolean;
-  filteredVendors: VendorContact[];
-  messagesEndRef: React.RefObject<HTMLDivElement | null>;
-
-  // Add Member Modal State
-  showAddMemberModal: boolean;
-  addMemberModalState: AddMemberModalState;
-  chatMembers: ChatMember[];
-  searchResults: SearchableUser[];
-  isAddingMembers: boolean;
-  isSearchingMembers: boolean;
-  projectName: string;
-
-  // Setters
-  setNewMessage: (value: string) => void;
-  setShowProjectPlanModal: (value: boolean) => void;
-  setSearchQuery: (value: string) => void;
-  setHoveredVendorId: (value: string | null) => void;
-  setShowVendorMenu: (value: string | null) => void;
-  setShowMemberDropdown: (value: boolean) => void;
-
-  // Handlers
-  handleTabChange: (tab: Tab) => void;
-  handleVendorSelect: (vendor: VendorContact) => void;
-  handleSendMessage: () => void;
-  handleKeyDown: (e: React.KeyboardEvent) => void;
-  toggleVendorMenu: (e: React.MouseEvent, vendorId: string) => void;
-  handleVendorExit: (e: React.MouseEvent, vendorId: string) => void;
-
-  // Add Member Modal Handlers
-  handleOpenAddMemberModal: () => void;
-  handleCloseAddMemberModal: () => void;
-  handleSearchMembers: (query: string) => void;
-  handleAddMembers: (members: SearchableUser[]) => void;
-}
+import {
+  MEMBERS_MOCK,
+  SEARCHABLE_USERS_MOCK,
+  CURRENT_PROJECT_NAME_MOCK,
+} from "../mock";
 
 export function useCarry(): UseCarryReturn {
   const router = useRouter();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const [vendors, setVendors] = useState<VendorContact[]>([]);
-  const [selectedVendor, setSelectedVendor] = useState<VendorContact | null>(null);
+  const [selectedVendor, setSelectedVendor] = useState<VendorContact | null>(
+    null
+  );
   const [messages, setMessages] = useState<VendorChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [showProjectPlanModal, setShowProjectPlanModal] = useState(false);
@@ -76,7 +44,8 @@ export function useCarry(): UseCarryReturn {
 
   // Add Member Modal State
   const [showAddMemberModal, setShowAddMemberModal] = useState(false);
-  const [addMemberModalState, setAddMemberModalState] = useState<AddMemberModalState>("search");
+  const [addMemberModalState, setAddMemberModalState] =
+    useState<AddMemberModalState>("search");
   const [chatMembers, setChatMembers] = useState<ChatMember[]>(MEMBERS_MOCK);
   const [searchResults, setSearchResults] = useState<SearchableUser[]>([]);
   const [isAddingMembers, setIsAddingMembers] = useState(false);
@@ -153,16 +122,22 @@ export function useCarry(): UseCarryReturn {
     [handleSendMessage]
   );
 
-  const toggleVendorMenu = useCallback((e: React.MouseEvent, vendorId: string) => {
-    e.stopPropagation();
-    setShowVendorMenu((prev) => (prev === vendorId ? null : vendorId));
-  }, []);
+  const toggleVendorMenu = useCallback(
+    (e: React.MouseEvent, vendorId: string) => {
+      e.stopPropagation();
+      setShowVendorMenu((prev) => (prev === vendorId ? null : vendorId));
+    },
+    []
+  );
 
-  const handleVendorExit = useCallback((e: React.MouseEvent, vendorId: string) => {
-    e.stopPropagation();
-    console.log("Exit vendor:", vendorId);
-    setShowVendorMenu(null);
-  }, []);
+  const handleVendorExit = useCallback(
+    (e: React.MouseEvent, vendorId: string) => {
+      e.stopPropagation();
+      console.log("Exit vendor:", vendorId);
+      setShowVendorMenu(null);
+    },
+    []
+  );
 
   // Add Member Modal Handlers
   const handleOpenAddMemberModal = useCallback(() => {

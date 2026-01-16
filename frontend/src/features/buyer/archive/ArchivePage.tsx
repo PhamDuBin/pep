@@ -262,7 +262,6 @@ export function ArchivePage() {
               {paginatedProjects.map((project) => (
                 <AnimatedListItem
                   key={project.id}
-                  // SỬA LỖI Ở ĐÂY: Thêm z-index động. Nếu menu đang mở, thẻ này sẽ có z-index cao (50), ngược lại là 0.
                   className={`relative ${
                     openContextMenuId === project.id ? "z-[50]" : "z-0"
                   }`}
@@ -284,7 +283,6 @@ export function ArchivePage() {
                       <div className="flex items-start justify-between w-full px-[2px]">
                         <div className="flex flex-col gap-[2px] min-w-0 flex-1">
                           <div className="flex items-center gap-[5px]">
-                            {/* ... (Giữ nguyên icon user) ... */}
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               width="12"
@@ -314,7 +312,9 @@ export function ArchivePage() {
                             viewBox="0 0 24 24"
                             fill="none"
                             className={`cursor-pointer transition-opacity duration-200 ${
-                              project.isFavorite ? "opacity-100" : "opacity-0 group-hover/card:opacity-100"
+                              project.isFavorite
+                                ? "opacity-100"
+                                : "opacity-0 group-hover/card:opacity-100"
                             }`}
                           >
                             <path
@@ -379,7 +379,6 @@ export function ArchivePage() {
             </AnimatedList>
           ) : (
             <div className="flex flex-col gap-[25px]">
-              {/* ... (Giữ nguyên phần Header của List view) ... */}
               <div className="flex items-center gap-[25px] py-[10px] border-b border-[#c3c3c3]">
                 <span className="flex-1 font-normal text-[14px] text-[#333333]">
                   プロジェクト名
@@ -423,7 +422,6 @@ export function ArchivePage() {
                         </div>
                         <div className="flex-1 flex items-center min-w-0">
                           <div className="flex-1 flex items-center min-w-0">
-                            {/* ... Tác giả ... */}
                             <div className="flex-1 flex items-center gap-[5px] min-w-0">
                               <svg
                                 width="12"
@@ -437,14 +435,12 @@ export function ArchivePage() {
                                 {project.authorName}
                               </span>
                             </div>
-                            {/* ... Ngày tháng ... */}
                             <div className="flex items-center justify-center w-[150px] px-[12px] flex-shrink-0">
                               <span className="font-normal text-[12px] text-[#808080]">
                                 {project.createdAt}
                               </span>
                             </div>
                           </div>
-                          {/* ... Nút 3 chấm ... */}
                           <button
                             className="flex items-center justify-center w-[36.5px] h-[20.5px] p-0 bg-transparent border-none cursor-pointer flex-shrink-0 hover:opacity-70"
                             onClick={() => toggleContextMenu(project.id)}
