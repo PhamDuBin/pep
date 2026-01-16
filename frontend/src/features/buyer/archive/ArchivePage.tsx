@@ -44,6 +44,7 @@ export function ArchivePage() {
     changePage,
     toggleFilterDropdown,
     toggleSortDropdown,
+    toggleFavorite,
   } = useArchive();
 
   return (
@@ -311,11 +312,15 @@ export function ArchivePage() {
                             height="24"
                             viewBox="0 0 24 24"
                             fill="none"
-                            className={`cursor-pointer transition-opacity duration-200 ${
+                            className={`cursor-pointer transition-all duration-200 hover:scale-110 ${
                               project.isFavorite
                                 ? "opacity-100"
                                 : "opacity-0 group-hover/card:opacity-100"
                             }`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleFavorite(project.id);
+                            }}
                           >
                             <path
                               d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.62L12 2L9.19 8.62L2 9.24L7.45 13.97L5.82 21L12 17.27Z"
@@ -441,6 +446,24 @@ export function ArchivePage() {
                               </span>
                             </div>
                           </div>
+                          {/* Favorite star */}
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            className="cursor-pointer transition-all duration-200 hover:scale-110 flex-shrink-0"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleFavorite(project.id);
+                            }}
+                          >
+                            <path
+                              d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.62L12 2L9.19 8.62L2 9.24L7.45 13.97L5.82 21L12 17.27Z"
+                              fill={project.isFavorite ? "#066A9E" : "#b9b9b9"}
+                            />
+                          </svg>
                           <button
                             className="flex items-center justify-center w-[36.5px] h-[20.5px] p-0 bg-transparent border-none cursor-pointer flex-shrink-0 hover:opacity-70"
                             onClick={() => toggleContextMenu(project.id)}

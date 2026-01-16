@@ -10,6 +10,7 @@ import {
   getArchiveProjects,
   getProjectFilterOptions,
   getSortOptions,
+  toggleProjectFavorite,
 } from "../services/archive.service";
 
 export function useArchive() {
@@ -140,6 +141,21 @@ export function useArchive() {
     setSelectedProject(null);
   }, []);
 
+  const toggleFavorite = useCallback(async (projectId: string) => {
+    try {
+      const result = await toggleProjectFavorite(projectId);
+      if (result.success) {
+        setProjects((prev) =>
+          prev.map((p) =>
+            p.id === projectId ? { ...p, isFavorite: !p.isFavorite } : p
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Failed to toggle favorite:", error);
+    }
+  }, []);
+
   const changePage = useCallback((page: number) => {
     setCurrentPage(page);
   }, []);
@@ -182,5 +198,6 @@ export function useArchive() {
     changePage,
     toggleFilterDropdown,
     toggleSortDropdown,
+    toggleFavorite,
   };
 }
