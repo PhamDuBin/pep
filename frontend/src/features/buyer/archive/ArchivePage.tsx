@@ -88,7 +88,7 @@ export function ArchivePage() {
                 </button>
 
                 <AnimatedDropdown isOpen={showFilterDropdown}>
-                  <div className="absolute top-[calc(100%+4px)] left-0 flex flex-col gap-[8px] py-[14px] px-[20px] bg-[#ffffff] border border-[#cfcfcf] rounded-[4px] z-[200] min-w-full shadow-[0_2px_8px_rgba(0,0,0,0.1)] min-w-[180px]">
+                  <div className="absolute top-[calc(100%+4px)] left-0 flex flex-col gap-[8px] py-[14px] px-[20px] bg-[#ffffff] border border-[#cfcfcf] rounded-[4px] z-[200] shadow-[0_2px_8px_rgba(0,0,0,0.1)] min-w-[180px]">
                     {filterOptions.map((option) => (
                       <button
                         key={option.id}
@@ -159,7 +159,7 @@ export function ArchivePage() {
                 </button>
 
                 <AnimatedDropdown isOpen={showSortDropdown}>
-                  <div className="absolute top-[calc(100%+4px)] left-0 flex flex-col gap-[8px] py-[14px] px-[20px] bg-[#ffffff] border border-[#cfcfcf] rounded-[4px] z-[200] min-w-full shadow-[0_2px_8px_rgba(0,0,0,0.1)] min-w-[100px]">
+                  <div className="absolute top-[calc(100%+4px)] left-0 flex flex-col gap-[8px] py-[14px] px-[20px] bg-[#ffffff] border border-[#cfcfcf] rounded-[4px] z-[200] shadow-[0_2px_8px_rgba(0,0,0,0.1)] min-w-[100px]">
                     {sortOptions.map((option) => (
                       <button
                         key={option.value}

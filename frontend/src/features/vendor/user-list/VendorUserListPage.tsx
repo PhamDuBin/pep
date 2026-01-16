@@ -106,7 +106,7 @@ export function VendorUserListPage() {
                     onClick={() => toggleUserSelection(user)}
                     className="h-[70px] hover:bg-gray-50 transition-colors cursor-pointer"
                   >
-                    <td className="w-[44px] py-0 px-0 h-[70px] bg-[rgba(255,255,255,0.002)] border-t border-[#d4d4d4] border-l border-[#cfcfcf] align-middle">
+                    <td className="w-[44px] py-0 px-0 h-[70px] bg-[rgba(255,255,255,0.002)] border-t border-[#d4d4d4] border-l align-middle">
                       <div className="flex items-center justify-center w-full h-full">
                         <input
                           type="checkbox"
