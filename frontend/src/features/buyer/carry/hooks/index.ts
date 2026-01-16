@@ -3,4 +3,3 @@
 // =============================================================================
 
 export { useCarry } from "./useCarry";
-export type { UseCarryReturn } from "./useCarry";

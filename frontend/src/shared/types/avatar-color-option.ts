@@ -1,11 +1,6 @@
 // =============================================================================
-// SHARED MY-PAGE TYPES
+// AVATAR COLOR OPTION TYPES
 // =============================================================================
-// Types used by shared components (e.g., AvatarChangeModal)
 
-export interface AvatarColorOption {
-  id: string;
-  color: string;
-  borderColor: string;
-  isSelected: boolean;
-}
+// Re-export models
+export * from "../models/avatar-color-option.model";

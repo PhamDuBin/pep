@@ -1,6 +1,6 @@
 // =============================================================================
-// BUYER LAYOUT TYPES
+// BUYER SHARED MODELS - RE-EXPORTS
 // =============================================================================
 
-// Re-export models
-export * from "../models/buyer-layout.model";
+export * from "./buyer-layout.model";
+export * from "./chat.model";

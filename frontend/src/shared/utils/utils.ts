@@ -1,4 +1,5 @@
-import { ApiError } from "../types";
+import { ApiError } from "../errors/ApiError";
+import { HTTP_STATUS } from "../constants/http-status-code";
 
 /**
  * Create a timeout promise
@@ -6,7 +7,7 @@ import { ApiError } from "../types";
 export function createTimeout(ms: number): Promise<never> {
   return new Promise((_, reject) => {
     setTimeout(() => {
-      reject(new ApiError("Request timeout", 408));
+      reject(new ApiError("Request timeout", HTTP_STATUS.REQUEST_TIMEOUT));
     }, ms);
   });
 }

@@ -1,6 +1,6 @@
 // =============================================================================
-// BUYER LAYOUT TYPES
+// BUYER CARRY FEATURE TYPES
 // =============================================================================
 
-// Re-export models
-export * from "../models/buyer-layout.model";
+// Re-export UseCarryReturn from models
+export type { UseCarryReturn } from "../models";

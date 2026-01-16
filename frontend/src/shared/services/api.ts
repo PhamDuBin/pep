@@ -6,11 +6,11 @@
 
 import { API_CONFIG, HTTP_STATUS } from "@/shared/constants";
 import {
-  ApiError,
   type ApiResponse,
   type ErrorResponse,
   type RequestOptions,
 } from "@/shared/types";
+import { ApiError } from "../errors/ApiError";
 import { createTimeout } from "../utils/utils";
 
 /**

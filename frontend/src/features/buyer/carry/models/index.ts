@@ -8,3 +8,4 @@ export * from "./vendor-conversation.model";
 export * from "./chat-member.model";
 export * from "./tab.model";
 export * from "./carry-response.model";
+export * from "./use-carry-return.model";

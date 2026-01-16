@@ -1,6 +1,9 @@
 // =============================================================================
-// BUYER LAYOUT TYPES
+// BUYER LAYOUT MODEL
 // =============================================================================
 
-// Re-export models
-export * from "../models/buyer-layout.model";
+import { ReactNode } from "react";
+
+export interface BuyerLayoutContentProps {
+  children: ReactNode;
+}

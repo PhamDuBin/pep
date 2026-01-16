@@ -1,7 +1,8 @@
 // =============================================================================
-// MODELS INDEX
+// SHARED MODELS - RE-EXPORTS
 // =============================================================================
-// Central export for all data models.
-// Add model exports here as they are created.
 
-export {};
+export * from "./api.model";
+export * from "./avatar-color-option.model";
+export * from "./project.model";
+export * from "./tab.model";

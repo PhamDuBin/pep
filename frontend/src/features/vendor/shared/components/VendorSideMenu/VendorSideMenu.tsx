@@ -5,7 +5,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useVendor } from "@/shared/contexts";
 import { MOCK_VENDOR_CURRENT_USER } from "@/features/vendor/shared/mocks";
-import styles from "./VendorSideMenu.module.scss";
 
 // Animation variants - width values must match _tokens.scss
 const SIDEBAR_WIDTH = 172; // $sidebar-width in _tokens.scss
@@ -104,19 +103,23 @@ export function VendorSideMenu() {
 
   return (
     <motion.aside
-      className={`${styles.sidebar} ${isCollapsed ? styles.collapsed : styles.expanded}`}
+      className={`fixed left-0 top-[89px] bottom-0 h-[calc(100vh-89px)] bg-white flex flex-col justify-between items-start py-[15px] px-[10px] pb-[25px] z-40 transition-[width] duration-300 ease-[cubic-bezier(0.25,0.8,0.25,1)] shadow-[0px_4px_15px_rgba(0,0,0,0.1)] ${
+        isCollapsed ? "w-[60px]" : "w-[172px]"
+      }`}
       variants={sidebarVariants}
       animate={isCollapsed ? "collapsed" : "expanded"}
       initial={false}
     >
       {/* Top Section */}
-      <div className={styles.topSection}>
+      <div className="flex flex-col items-start gap-[25px] self-stretch overflow-hidden">
         {/* Menu Toggle */}
         <div
-          className={`${styles.menuToggle} ${isCollapsed ? styles.centered : ""}`}
+          className={`flex flex-col gap-[3px] w-full ${
+            isCollapsed ? "items-center" : ""
+          }`}
         >
           <motion.button
-            className={styles.toggleButton}
+            className="bg-transparent border-none p-0 cursor-pointer transition-opacity duration-200 hover:opacity-70"
             onClick={handleToggleMenu}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
@@ -138,7 +141,9 @@ export function VendorSideMenu() {
 
         {/* COMPANY Section */}
         <div
-          className={`${styles.section} ${isCollapsed ? styles.centered : ""}`}
+          className={`flex flex-col gap-[5px] w-full ${
+            isCollapsed ? "items-center" : ""
+          }`}
         >
           <AnimatePresence mode="wait">
             {!isCollapsed && (
@@ -148,14 +153,18 @@ export function VendorSideMenu() {
                 animate="visible"
                 exit="hidden"
               >
-                <span className={styles.sectionLabel}>COMPANY</span>
+                <span className="text-[14px] text-[#333333] font-normal leading-[19px] px-[10px]">
+                  COMPANY
+                </span>
               </motion.div>
             )}
           </AnimatePresence>
 
           {/* Company Search */}
           <motion.div
-            className={`${styles.searchItem} ${isCollapsed ? styles.centered : ""}`}
+            className={`flex items-center gap-[7px] py-[5px] px-[10px] h-[34px] cursor-pointer rounded transition-colors duration-200 mx-[-10px] w-[calc(100%+20px)] hover:bg-[#f9fafb] ${
+              isCollapsed ? "justify-center mx-0 px-[5px] w-full" : ""
+            }`}
             whileHover={{ scale: 1.02, x: isCollapsed ? 0 : 3 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -168,7 +177,7 @@ export function VendorSideMenu() {
             <AnimatePresence mode="wait">
               {!isCollapsed && (
                 <motion.span
-                  className={styles.menuItemText}
+                  className="text-[13px] text-[#333333]"
                   variants={textVariants}
                   initial="hidden"
                   animate="visible"
@@ -184,7 +193,7 @@ export function VendorSideMenu() {
           <AnimatePresence mode="wait">
             {!isCollapsed && (
               <motion.div
-                className={styles.companyList}
+                className="flex flex-col items-start gap-[5px] w-full"
                 variants={menuItemVariants}
                 initial="hidden"
                 animate="visible"
@@ -193,7 +202,11 @@ export function VendorSideMenu() {
                 {companies.map((company, index) => (
                   <motion.div
                     key={company.id}
-                    className={`${styles.companyItem} ${company.isSelected ? styles.selected : ""}`}
+                    className={`flex items-center py-[5px] px-[10px] min-h-[29px] rounded cursor-pointer transition-colors duration-200 mx-[-10px] w-[calc(100%+20px)] ${
+                      company.isSelected
+                        ? "bg-[#e6f3f5]"
+                        : "hover:bg-[#f9fafb]"
+                    }`}
                     onClick={() => handleSelectCompany(company.id)}
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -202,7 +215,9 @@ export function VendorSideMenu() {
                     whileTap={{ scale: 0.98 }}
                   >
                     <span
-                      className={`${styles.companyName} ${company.isSelected ? styles.selected : ""}`}
+                      className={`text-[14px] font-normal leading-[19px] break-words ${
+                        company.isSelected ? "text-[#066a9e]" : "text-[#333333]"
+                      }`}
                     >
                       {company.name}
                     </span>
@@ -216,11 +231,15 @@ export function VendorSideMenu() {
 
       {/* Bottom Section */}
       <div
-        className={`${styles.bottomSection} ${isCollapsed ? styles.centered : ""}`}
+        className={`flex flex-col justify-center gap-[10px] w-full self-stretch ${
+          isCollapsed ? "items-center" : ""
+        }`}
       >
         {/* User List */}
         <motion.div
-          className={`${styles.userListItem} ${isCollapsed ? styles.centered : ""} ${isUserListActive ? styles.active : ""}`}
+          className={`flex items-center py-[8px] px-[10px] h-[32px] cursor-pointer rounded transition-colors duration-200 gap-[7px] mx-[-10px] w-[calc(100%+20px)] ${
+            isUserListActive ? "bg-[#f0f0f0]" : "hover:bg-[#f9fafb]"
+          } ${isCollapsed ? "justify-center mx-0 w-full px-[5px]" : ""}`}
           onClick={navigateToUserList}
           whileHover={{ scale: 1.02, x: isCollapsed ? 0 : 3 }}
           whileTap={{ scale: 0.98 }}
@@ -234,7 +253,9 @@ export function VendorSideMenu() {
           <AnimatePresence mode="wait">
             {!isCollapsed && (
               <motion.span
-                className={`${styles.userListText} ${isUserListActive ? styles.active : ""}`}
+                className={`text-[13px] ${
+                  isUserListActive ? "text-[#066a9e]" : "text-[#333333]"
+                }`}
                 variants={textVariants}
                 initial="hidden"
                 animate="visible"
@@ -248,20 +269,27 @@ export function VendorSideMenu() {
 
         {/* User Profile */}
         <motion.div
-          className={`${styles.userProfileItem} ${isCollapsed ? styles.centered : ""} ${isMyPageActive ? styles.active : ""}`}
+          className={`flex items-center py-[5px] px-[10px] h-[40px] cursor-pointer rounded transition-colors duration-200 gap-[7px] mx-[-10px] w-[calc(100%+20px)] ${
+            isMyPageActive ? "bg-[#f0f0f0]" : "hover:bg-[#f9fafb]"
+          } ${isCollapsed ? "justify-center mx-0 w-full px-[5px]" : ""}`}
           onClick={navigateToMyPage}
           whileHover={{ scale: 1.02, x: isCollapsed ? 0 : 3 }}
           whileTap={{ scale: 0.98 }}
         >
-          <motion.div className={styles.avatar} whileHover={{ scale: 1.1 }}>
-            <span className={styles.avatarText}>
+          <motion.div
+            className="w-[30px] h-[30px] bg-[#8ec5d0] rounded-full flex items-center justify-center flex-shrink-0"
+            whileHover={{ scale: 1.1 }}
+          >
+            <span className="text-[13px] text-white">
               {MOCK_VENDOR_CURRENT_USER.initials}
             </span>
           </motion.div>
           <AnimatePresence mode="wait">
             {!isCollapsed && (
               <motion.span
-                className={`${styles.userName} ${isMyPageActive ? styles.active : ""}`}
+                className={`text-[13px] ${
+                  isMyPageActive ? "text-[#066a9e]" : "text-[#333333]"
+                }`}
                 variants={textVariants}
                 initial="hidden"
                 animate="visible"

@@ -19,6 +19,7 @@ import {
 export interface UseVendorMyPageReturn {
   // Loading state
   isLoading: boolean;
+  isSaving: boolean;
 
   // User data
   userProfile: VendorUserProfile | null;
@@ -30,6 +31,7 @@ export interface UseVendorMyPageReturn {
   confirmPassword: string;
   showNewPassword: boolean;
   showConfirmPassword: boolean;
+  showPasswordSaveSuccess: boolean;
 
   // Modal state
   showEmailModal: boolean;
@@ -72,6 +74,10 @@ export function useVendorMyPage(): UseVendorMyPageReturn {
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [showEmailSuccessModal, setShowEmailSuccessModal] = useState(false);
   const [showAvatarModal, setShowAvatarModal] = useState(false);
+
+  // Save success states
+  const [showPasswordSaveSuccess, setShowPasswordSaveSuccess] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   // Load data on mount
   useEffect(() => {
@@ -131,17 +137,22 @@ export function useVendorMyPage(): UseVendorMyPageReturn {
       return;
     }
 
+    setIsSaving(true);
     try {
       const result = await changeVendorPassword(newPassword, confirmPassword);
       if (result.success) {
-        alert("変更を保存しました");
         setNewPassword("");
         setConfirmPassword("");
+        setShowPasswordSaveSuccess(true);
+        // Hide success message after 3 seconds
+        setTimeout(() => setShowPasswordSaveSuccess(false), 3000);
       } else {
         alert(result.message || "変更に失敗しました");
       }
     } catch (error) {
       console.error("Failed to save changes:", error);
+    } finally {
+      setIsSaving(false);
     }
   }, [newPassword, confirmPassword]);
 
@@ -157,6 +168,7 @@ export function useVendorMyPage(): UseVendorMyPageReturn {
   return {
     // Loading state
     isLoading,
+    isSaving,
 
     // User data
     userProfile,
@@ -168,6 +180,7 @@ export function useVendorMyPage(): UseVendorMyPageReturn {
     confirmPassword,
     showNewPassword,
     showConfirmPassword,
+    showPasswordSaveSuccess,
 
     // Modal state
     showEmailModal,
