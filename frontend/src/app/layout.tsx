@@ -34,6 +34,11 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  icons: {
+    icon: "/assets/icons/favicon.png",
+    shortcut: "/assets/icons/favicon.png",
+    apple: "/assets/icons/favicon.png",
+  },
 };
 
 export const viewport: Viewport = {
@@ -53,7 +58,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" data-theme="light" suppressHydrationWarning>
-      <body className={`${notoSans.variable} ${notoSansJP.variable} ${inter.variable} font-noto`}>
+      <body
+        className={`${notoSans.variable} ${notoSansJP.variable} ${inter.variable} font-noto`}
+      >
         <div id="app-root">{children}</div>
       </body>
     </html>
