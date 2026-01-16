@@ -1,7 +1,6 @@
 "use client";
 
 import { Modal } from "@/shared/components";
-import styles from "./InfoModal.module.scss";
 
 interface InfoModalProps {
   isOpen: boolean;
@@ -20,14 +19,16 @@ export function InfoModal({
 }: InfoModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={title} size="sm">
-      <div className={styles.content}>
+      <div className="flex flex-col gap-[12px] py-[10px] w-full">
         {typeof message === "string" ? (
-          <p className={styles.message}>{message}</p>
+          <p className="font-noto-jp text-[14px] text-[#333333] m-0 leading-[1.6] whitespace-pre-line text-center">
+            {message}
+          </p>
         ) : (
           message
         )}
       </div>
-      <div className={styles.actions}>
+      <div className="flex justify-center gap-[10px] pt-[20px] w-full">
         <button
           type="button"
           className="modal-btn-secondary"
