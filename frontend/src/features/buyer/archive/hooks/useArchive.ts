@@ -26,6 +26,10 @@ export function useArchive() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
+  // Project Plan Modal state
+  const [showPlanModal, setShowPlanModal] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<ArchiveProject | null>(null);
+
   const filterRef = useRef<HTMLDivElement>(null);
   const sortRef = useRef<HTMLDivElement>(null);
 
@@ -120,6 +124,22 @@ export function useArchive() {
     setOpenContextMenuId(null);
   }, []);
 
+  const handleProjectClick = useCallback(
+    (projectId: string) => {
+      const project = projects.find((p) => p.id === projectId);
+      if (project) {
+        setSelectedProject(project);
+        setShowPlanModal(true);
+      }
+    },
+    [projects]
+  );
+
+  const closePlanModal = useCallback(() => {
+    setShowPlanModal(false);
+    setSelectedProject(null);
+  }, []);
+
   const changePage = useCallback((page: number) => {
     setCurrentPage(page);
   }, []);
@@ -149,12 +169,16 @@ export function useArchive() {
     sortRef,
     filterOptions,
     sortOptions,
+    showPlanModal,
+    selectedProject,
     toggleViewMode,
     selectFilter,
     selectSort,
     toggleContextMenu,
     closeContextMenu,
     handleContextAction,
+    handleProjectClick,
+    closePlanModal,
     changePage,
     toggleFilterDropdown,
     toggleSortDropdown,

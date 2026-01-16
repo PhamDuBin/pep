@@ -2,8 +2,8 @@
 
 import { useRef, useEffect, useCallback, useState } from "react";
 import { ChatMessage as ChatMessageType } from "@/shared/types";
-import { ChatMessage, ChatMessageVariant } from "../ChatMessage";
-import styles from "./ChatMessageList.module.scss";
+import { ChatMessage } from "../ChatMessage";
+import { ChatMessageVariant } from "../../types";
 
 interface ChatMessageListProps {
   messages: ChatMessageType[];
@@ -84,8 +84,10 @@ export function ChatMessageList({
   return (
     <div
       ref={containerRef}
-      className={`${styles.messageContainer} ${
-        useInternalScroll ? styles.scrollable : ""
+      className={`flex flex-col gap-[20px] w-full ${
+        useInternalScroll
+          ? "h-full overflow-y-auto pr-[8px] overscroll-contain will-change-scroll [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#d1d5db] [&::-webkit-scrollbar-thumb]:rounded-[3px] [&::-webkit-scrollbar-thumb:hover]:bg-[#9ca3af]"
+          : ""
       }`}
       onScroll={handleScroll}
     >
@@ -101,9 +103,9 @@ export function ChatMessageList({
       ))}
 
       {isLoading && (
-        <div className={styles.loadingContainer}>
+        <div className="flex justify-start animate-[fadeIn_0.3s_ease-out_forwards]">
           {messageVariant === "with-avatar" && (
-            <div className={styles.loadingAvatar}>
+            <div className="w-[40px] h-[40px] rounded-full bg-[#066a9e] flex items-center justify-center shrink-0 mr-[12px]">
               <svg
                 width="20"
                 height="20"
@@ -127,13 +129,13 @@ export function ChatMessageList({
               </svg>
             </div>
           )}
-          <div className={styles.loadingBubble}>
-            <div className={styles.typingIndicator}>
+          <div className="flex items-center gap-[12px] px-[16px] py-[12px] bg-[#f9fafb] rounded-[8px]">
+            <div className="flex items-center gap-[4px] [&>span]:w-[8px] [&>span]:h-[8px] [&>span]:bg-[#066a9e] [&>span]:rounded-full [&>span]:animate-[bounce_1.4s_infinite_ease-in-out_both] [&>span:nth-child(1)]:[-animation-delay:0.32s] [&>span:nth-child(2)]:[-animation-delay:0.16s] [&>span:nth-child(3)]:[-animation-delay:0s]">
               <span></span>
               <span></span>
               <span></span>
             </div>
-            <span className={styles.loadingText}>{loadingText}</span>
+            <span className="text-[14px] text-[#808080]">{loadingText}</span>
           </div>
         </div>
       )}

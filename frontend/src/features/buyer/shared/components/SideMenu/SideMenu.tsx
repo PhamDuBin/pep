@@ -5,11 +5,10 @@ import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSideMenu, useProjects } from "@/shared/contexts";
 import { Project } from "@/shared/types";
-import styles from "./SideMenu.module.scss";
 
 // Animation variants - width values must match _tokens.scss
-const SIDEBAR_WIDTH = 197; // $sidebar-width in _tokens.scss
-const SIDEBAR_COLLAPSED_WIDTH = 50; // $sidebar-collapsed-width in _tokens.scss
+const SIDEBAR_WIDTH = 200; // $sidebar-width in _tokens.scss
+const SIDEBAR_COLLAPSED_WIDTH = 60; // $sidebar-collapsed-width in _tokens.scss
 
 const sidebarVariants = {
   expanded: {
@@ -118,17 +117,17 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
 
   return (
     <motion.aside
-      className={`${styles.sidebar} ${isCollapsed ? styles.collapsed : styles.expanded}`}
+      className="fixed left-0 top-[89px] bottom-0 h-[calc(100vh-89px)] bg-[#ffffff] flex flex-col justify-between items-start p-[15px_10px_25px] z-40 shadow-[0px_4px_15px_rgba(0,0,0,0.1)]"
       variants={sidebarVariants}
       animate={isCollapsed ? "collapsed" : "expanded"}
       initial={false}
     >
       {/* Top Section (Frame 14) */}
-      <div className={styles.topSection}>
+      <div className="flex flex-col items-start gap-[25px] self-stretch overflow-hidden">
         {/* Menu Toggle */}
-        <div className={`${styles.menuToggle} ${isCollapsed ? styles.centered : ""}`}>
+        <div className={`flex flex-col gap-[3px] w-full ${isCollapsed ? "items-center" : ""}`}>
           <motion.button
-            className={styles.toggleButton}
+            className="bg-transparent border-none p-0 cursor-pointer transition-opacity duration-200 hover:opacity-70"
             onClick={handleToggleMenu}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
@@ -149,20 +148,20 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
         </div>
 
         {/* New Project Button */}
-        <div className={styles.newProjectWrapper}>
+        <div className="flex flex-col gap-[3px] w-full">
           <motion.button
-            className={`${styles.newProjectButton} ${isCollapsed ? styles.centered : ""}`}
+            className={`flex flex-row items-center p-[3px_0] gap-[7px] w-full h-[26px] rounded-[4px] cursor-pointer bg-transparent border-none transition-colors duration-200 hover:bg-[#f0f0f0] active:bg-[#f0f0f0] ${isCollapsed ? "justify-center" : ""}`}
             onClick={navigateToNewProject}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            <div className={styles.plusIcon}>
+            <div className="w-[20px] h-[20px] bg-[#066a9e] rounded-full flex items-center justify-center flex-shrink-0">
               <Image src="/assets/icons/plus.svg" alt="Plus" width={10} height={10} />
             </div>
             <AnimatePresence mode="wait">
               {!isCollapsed && (
                 <motion.span
-                  className={styles.newProjectText}
+                  className="text-[13px] text-[#333333] whitespace-nowrap"
                   variants={textVariants}
                   initial="hidden"
                   animate="visible"
@@ -176,10 +175,10 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
         </div>
 
         {/* Separator Line */}
-        <div className={styles.separator} />
+        <div className="w-full h-[1px] bg-[#e5e7eb]" />
 
         {/* RFP Section */}
-        <div className={`${styles.section} ${isCollapsed ? styles.centered : ""}`}>
+        <div className={`flex flex-col gap-[3px] w-full ${isCollapsed ? "items-center" : ""}`}>
           <AnimatePresence mode="wait">
             {!isCollapsed && (
               <motion.div
@@ -188,12 +187,16 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
                 animate="visible"
                 exit="hidden"
               >
-                <span className={styles.sectionLabel}>RFP</span>
+                <span className="text-[14px] text-[#808080]">RFP</span>
               </motion.div>
             )}
           </AnimatePresence>
           <motion.div
-            className={`${styles.archiveMenuItem} ${isCollapsed ? styles.centered : ""} ${isArchiveActive ? styles.active : ""}`}
+            className={`flex items-center gap-[7px] p-[5px_10px] cursor-pointer rounded-[4px] transition-colors duration-200 ${
+              isCollapsed
+                ? "justify-center m-0 w-full p-[5px]"
+                : "m-[0_-10px] w-[calc(100%+20px)]"
+            } ${isArchiveActive ? "bg-[#f0f0f0]" : "hover:bg-[#f9fafb]"}`}
             onClick={navigateToArchive}
             whileHover={{ scale: 1.02, x: isCollapsed ? 0 : 3 }}
             whileTap={{ scale: 0.98 }}
@@ -207,7 +210,7 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
             <AnimatePresence mode="wait">
               {!isCollapsed && (
                 <motion.span
-                  className={styles.menuItemText}
+                  className="text-[13px] text-[#333333]"
                   variants={textVariants}
                   initial="hidden"
                   animate="visible"
@@ -221,7 +224,7 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
         </div>
 
         {/* PROJECT Section */}
-        <div className={`${styles.projectSection} ${isCollapsed ? styles.centered : ""}`}>
+        <div className={`flex flex-col gap-[5px] ${isCollapsed ? "items-center w-full" : ""}`}>
           <AnimatePresence mode="wait">
             {!isCollapsed && (
               <motion.div
@@ -230,14 +233,16 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
                 animate="visible"
                 exit="hidden"
               >
-                <span className={styles.sectionLabel}>PROJECT</span>
+                <span className="text-[14px] text-[#808080]">PROJECT</span>
               </motion.div>
             )}
           </AnimatePresence>
 
           {/* Search */}
           <motion.div
-            className={`${styles.searchItem} ${isCollapsed ? styles.centered : ""}`}
+            className={`flex items-center gap-[7px] p-[7px_10px] cursor-pointer rounded-[4px] transition-colors duration-200 hover:bg-[#f9fafb] ${
+              isCollapsed ? "justify-center m-0 p-[7px] w-full" : "m-[0_-10px]"
+            }`}
             whileHover={{ scale: 1.02, x: isCollapsed ? 0 : 3 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -250,7 +255,7 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
             <AnimatePresence mode="wait">
               {!isCollapsed && (
                 <motion.span
-                  className={styles.menuItemText}
+                  className="text-[13px] text-[#333333]"
                   variants={textVariants}
                   initial="hidden"
                   animate="visible"
@@ -266,7 +271,7 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
           <AnimatePresence mode="wait">
             {!isCollapsed && (
               <motion.div
-                className={styles.projectList}
+                className="flex flex-col gap-[5px]"
                 variants={menuItemVariants}
                 initial="hidden"
                 animate="visible"
@@ -275,7 +280,11 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
                 {projects.map((project, index) => (
                   <motion.div
                     key={project.id}
-                    className={`${styles.projectItem} ${project.isSelected ? styles.selected : ""}`}
+                    className={`flex items-center gap-[3px] p-[5px_10px] rounded-[4px] cursor-pointer transition-colors duration-200 m-[0_-10px] ${
+                      project.isSelected
+                        ? "bg-[#e6f3f5]"
+                        : "hover:bg-[#f9fafb]"
+                    }`}
                     onClick={() => handleSelectProject(project)}
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -292,10 +301,12 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
                       alt="Project"
                       width={10}
                       height={12}
-                      className={styles.projectIcon}
+                      className="flex-shrink-0"
                     />
                     <span
-                      className={`${styles.projectName} ${project.isSelected ? styles.selected : ""}`}
+                      className={`text-[14px] flex-1 overflow-hidden text-ellipsis whitespace-nowrap font-normal ${
+                        project.isSelected ? "text-[#066a9e]" : "text-[#333333]"
+                      }`}
                     >
                       {project.name}
                     </span>
@@ -305,7 +316,7 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
                         alt="More"
                         width={16}
                         height={16}
-                        className={styles.moreIcon}
+                        className="flex-shrink-0 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
                       />
                     )}
                   </motion.div>
@@ -317,10 +328,14 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
       </div>
 
       {/* Bottom Section (Frame 15) */}
-      <div className={`${styles.bottomSection} ${isCollapsed ? styles.centered : ""}`}>
+      <div className={`flex flex-col justify-center gap-[5px] w-full self-stretch ${isCollapsed ? "items-center" : ""}`}>
         {/* User List */}
         <motion.div
-          className={`${styles.userListItem} ${isCollapsed ? styles.centered : ""} ${isUserListActive ? styles.active : ""}`}
+          className={`flex items-center p-[7px_10px] cursor-pointer rounded-[4px] transition-colors duration-200 gap-[7px] ${
+            isCollapsed
+              ? "justify-center m-0 w-full p-[7px_5px]"
+              : "m-[0_-10px] w-[calc(100%+20px)]"
+          } ${isUserListActive ? "bg-[#f0f0f0]" : "hover:bg-[#f9fafb]"}`}
           onClick={navigateToUserList}
           whileHover={{ scale: 1.02, x: isCollapsed ? 0 : 3 }}
           whileTap={{ scale: 0.98 }}
@@ -342,7 +357,7 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
           <AnimatePresence mode="wait">
             {!isCollapsed && (
               <motion.span
-                className={`${styles.userListText} ${isUserListActive ? styles.active : ""}`}
+                className={`text-[13px] ${isUserListActive ? "text-[#066a9e]" : "text-[#333333]"}`}
                 variants={textVariants}
                 initial="hidden"
                 animate="visible"
@@ -356,21 +371,25 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
 
         {/* User Profile */}
         <motion.div
-          className={`${styles.userProfileItem} ${isCollapsed ? styles.centered : ""} ${isMyPageActive ? styles.active : ""}`}
+          className={`flex items-center p-[5px_10px] cursor-pointer rounded-[4px] transition-colors duration-200 gap-[7px] ${
+            isCollapsed
+              ? "justify-center m-0 w-full p-[5px]"
+              : "m-[0_-10px] w-[calc(100%+20px)]"
+          } ${isMyPageActive ? "bg-[#f0f0f0]" : "hover:bg-[#f9fafb]"}`}
           onClick={navigateToMyPage}
           whileHover={{ scale: 1.02, x: isCollapsed ? 0 : 3 }}
           whileTap={{ scale: 0.98 }}
         >
           <motion.div
-            className={styles.avatar}
+            className="w-[30px] h-[30px] bg-[#8ec5d0] rounded-full flex items-center justify-center flex-shrink-0"
             whileHover={{ scale: 1.1 }}
           >
-            <span className={styles.avatarText}>TY</span>
+            <span className="text-[13px] text-[#ffffff]">TY</span>
           </motion.div>
           <AnimatePresence mode="wait">
             {!isCollapsed && (
               <motion.span
-                className={`${styles.userName} ${isMyPageActive ? styles.active : ""}`}
+                className={`text-[13px] ${isMyPageActive ? "text-[#066a9e]" : "text-[#333333]"}`}
                 variants={textVariants}
                 initial="hidden"
                 animate="visible"

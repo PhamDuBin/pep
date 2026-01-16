@@ -11,7 +11,7 @@ import {
   requestEmailChange,
   downloadInvoice as downloadInvoiceService,
 } from "../services/my-page.service";
-import type { EmailChangeModalState } from "@/shared/components/ui/Modal/EmailChangeModal/EmailChangeModal";
+import { EmailChangeModalState } from "@/shared/types";
 
 export interface UseMyPageReturn {
   // Loading state
@@ -29,6 +29,7 @@ export interface UseMyPageReturn {
   showPassword: boolean;
   showConfirmPassword: boolean;
   showAvatarSaveSuccess: boolean;
+  showPasswordSaveSuccess: boolean;
 
   // Pagination state
   currentPage: number;
@@ -81,6 +82,7 @@ export function useMyPage(): UseMyPageReturn {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showAvatarSaveSuccess, setShowAvatarSaveSuccess] = useState(false);
+  const [showPasswordSaveSuccess, setShowPasswordSaveSuccess] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
   // Pagination state
@@ -151,9 +153,10 @@ export function useMyPage(): UseMyPageReturn {
     try {
       const result = await changePasswordService(newPassword, confirmPassword);
       if (result.success) {
-        alert("変更を保存しました");
         setNewPassword("");
         setConfirmPassword("");
+        setShowPasswordSaveSuccess(true);
+        setTimeout(() => setShowPasswordSaveSuccess(false), 3000);
       } else {
         alert(result.message || "変更に失敗しました");
       }
@@ -231,6 +234,7 @@ export function useMyPage(): UseMyPageReturn {
     showPassword,
     showConfirmPassword,
     showAvatarSaveSuccess,
+    showPasswordSaveSuccess,
 
     // Pagination state
     currentPage,

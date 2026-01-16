@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useMemo, useEffect } from "react";
 import { VendorUser, PermissionOption } from "../types";
+import { ChangePermissionModalState } from "../components/ChangePermissionModal/ChangePermissionModal";
 import {
   getVendorUsers,
   getVendorPermissionOptions,
@@ -17,16 +18,16 @@ export function useVendorUserList() {
 
   // Modal states
   const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState(false);
-  const [showDeleteSuccessModal, setShowDeleteSuccessModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [showEditSuccessModal, setShowEditSuccessModal] = useState(false);
+  const [deleteModalState, setDeleteModalState] = useState<"confirm" | "complete">("confirm");
   const [showInviteModal, setShowInviteModal] = useState(false);
-  const [showInviteSuccessModal, setShowInviteSuccessModal] = useState(false);
+  const [inviteModalState, setInviteModalState] = useState<"form" | "complete">("form");
+  const [showChangePermissionModal, setShowChangePermissionModal] = useState(false);
+  const [changePermissionModalState, setChangePermissionModalState] = useState<ChangePermissionModalState>("select");
 
-  // Edit state
-  const [selectedUserForEdit, setSelectedUserForEdit] = useState<VendorUser | null>(null);
-  const [lastEditedUserName, setLastEditedUserName] = useState("");
-  const [lastEditedUserRole, setLastEditedUserRole] = useState("");
+  // Permission state
+  const [selectedUserForPermission, setSelectedUserForPermission] = useState<VendorUser | null>(null);
+  const [lastChangedPermissionUserName, setLastChangedPermissionUserName] = useState("");
+  const [lastChangedPermissionRole, setLastChangedPermissionRole] = useState("");
 
   // Load data on mount
   useEffect(() => {
@@ -79,8 +80,7 @@ export function useVendorUserList() {
           setUsers((prev) => [...prev, result.user!]);
         }
       }
-      setShowInviteModal(false);
-      setShowInviteSuccessModal(true);
+      setInviteModalState("complete");
     } catch (error) {
       console.error("Failed to invite user:", error);
     }
@@ -88,45 +88,7 @@ export function useVendorUserList() {
 
   const handleCloseInviteModal = useCallback(() => {
     setShowInviteModal(false);
-  }, []);
-
-  const handleCloseInviteSuccessModal = useCallback(() => {
-    setShowInviteSuccessModal(false);
-  }, []);
-
-  // Edit handlers
-  const handleEditUser = useCallback((user: VendorUser) => {
-    setSelectedUserForEdit(user);
-    setShowEditModal(true);
-  }, []);
-
-  const handleEditSave = useCallback(async (name: string, role: string) => {
-    if (!selectedUserForEdit) return;
-
-    try {
-      await updateVendorUser(selectedUserForEdit.id, name, role);
-      setUsers((prev) =>
-        prev.map((u) =>
-          u.id === selectedUserForEdit.id ? { ...u, name, role } : u
-        )
-      );
-      setLastEditedUserName(name);
-      setLastEditedUserRole(role);
-      setShowEditModal(false);
-      setShowEditSuccessModal(true);
-      setSelectedUserForEdit(null);
-    } catch (error) {
-      console.error("Failed to update user:", error);
-    }
-  }, [selectedUserForEdit]);
-
-  const handleCloseEditModal = useCallback(() => {
-    setShowEditModal(false);
-    setSelectedUserForEdit(null);
-  }, []);
-
-  const handleCloseEditSuccessModal = useCallback(() => {
-    setShowEditSuccessModal(false);
+    setInviteModalState("form");
   }, []);
 
   // Delete handlers
@@ -140,8 +102,7 @@ export function useVendorUserList() {
       const userIdsToDelete = users.filter((u) => u.selected).map((u) => u.id);
       await deleteVendorUsers(userIdsToDelete);
       setUsers((prev) => prev.filter((u) => !u.selected));
-      setShowDeleteConfirmModal(false);
-      setShowDeleteSuccessModal(true);
+      setDeleteModalState("complete");
     } catch (error) {
       console.error("Failed to delete users:", error);
     }
@@ -149,10 +110,50 @@ export function useVendorUserList() {
 
   const handleCloseDeleteConfirmModal = useCallback(() => {
     setShowDeleteConfirmModal(false);
+    setDeleteModalState("confirm");
   }, []);
 
   const handleCloseDeleteSuccessModal = useCallback(() => {
-    setShowDeleteSuccessModal(false);
+    setShowDeleteConfirmModal(false);
+    setDeleteModalState("confirm");
+  }, []);
+
+  // Change permission handlers
+  const handleChangePermission = useCallback((user: VendorUser) => {
+    setSelectedUserForPermission(user);
+    setChangePermissionModalState("select");
+    setShowChangePermissionModal(true);
+  }, []);
+
+  const handleChangePermissionSave = useCallback(
+    async (newRole: string) => {
+      if (!selectedUserForPermission) return;
+
+      try {
+        await updateVendorUser(
+          selectedUserForPermission.id,
+          selectedUserForPermission.name,
+          newRole
+        );
+        setUsers((prev) =>
+          prev.map((u) =>
+            u.id === selectedUserForPermission.id ? { ...u, role: newRole } : u
+          )
+        );
+        setLastChangedPermissionUserName(selectedUserForPermission.name);
+        setLastChangedPermissionRole(newRole);
+        setChangePermissionModalState("complete");
+      } catch (error) {
+        console.error("Failed to change user permission:", error);
+      }
+    },
+    [selectedUserForPermission]
+  );
+
+  const handleCloseChangePermissionModal = useCallback(() => {
+    setShowChangePermissionModal(false);
+    setChangePermissionModalState("select");
+    setSelectedUserForPermission(null);
   }, []);
 
   return {
@@ -161,17 +162,17 @@ export function useVendorUserList() {
     users,
     selectedUsers,
     allSelected,
-    selectedUserForEdit,
-    lastEditedUserName,
-    lastEditedUserRole,
+    selectedUserForPermission,
+    lastChangedPermissionUserName,
+    lastChangedPermissionRole,
 
     // Modal states
     showDeleteConfirmModal,
-    showDeleteSuccessModal,
-    showEditModal,
-    showEditSuccessModal,
+    deleteModalState,
     showInviteModal,
-    showInviteSuccessModal,
+    inviteModalState,
+    showChangePermissionModal,
+    changePermissionModalState,
 
     // Selection handlers
     toggleUserSelection,
@@ -181,19 +182,17 @@ export function useVendorUserList() {
     handleInviteMember,
     handleInviteConfirm,
     handleCloseInviteModal,
-    handleCloseInviteSuccessModal,
-
-    // Edit handlers
-    handleEditUser,
-    handleEditSave,
-    handleCloseEditModal,
-    handleCloseEditSuccessModal,
 
     // Delete handlers
     handleDeleteMembers,
     handleDeleteConfirm,
     handleCloseDeleteConfirmModal,
     handleCloseDeleteSuccessModal,
+
+    // Change permission handlers
+    handleChangePermission,
+    handleChangePermissionSave,
+    handleCloseChangePermissionModal,
 
     // Constants
     permissionOptions,

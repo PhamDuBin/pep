@@ -4,6 +4,8 @@
 
 import { VendorUser, PermissionOption } from "../types";
 
+export type VendorUserPermission = "管理者" | "メンバー";
+
 export const VENDOR_USERS_MOCK: VendorUser[] = [
   {
     id: "u1",
@@ -38,3 +40,8 @@ export const VENDOR_PERMISSION_OPTIONS_MOCK: PermissionOption[] = [
   { value: "管理者", label: "管理者" },
   { value: "メンバー", label: "メンバー" },
 ];
+
+export const VENDOR_PERMISSION_LABELS_MOCK: Record<VendorUserPermission, string> = {
+  "管理者": "管理者",
+  "メンバー": "メンバー",
+};

@@ -30,3 +30,6 @@ export interface UserListResponse {
   success: boolean;
   message?: string;
 }
+
+// Modal state types
+export type PermissionChangeModalState = "select" | "complete";

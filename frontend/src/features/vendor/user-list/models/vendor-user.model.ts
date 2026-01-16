@@ -2,17 +2,10 @@
 // VENDOR USER MODEL
 // =============================================================================
 
-export interface VendorUser {
-  id: string;
-  name: string;
-  initials: string;
-  email?: string;
-  avatarColor: string;
-  avatarUrl?: string;
-  role?: string;
-  selected?: boolean;
-}
+// Re-export from shared types (single source of truth)
+export type { VendorUser } from "../../shared/types/vendor";
 
+// PermissionOption is specific to user-list feature
 export interface PermissionOption {
   value: string;
   label: string;

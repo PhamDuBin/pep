@@ -3,3 +3,4 @@
 // =============================================================================
 
 export { UserEditModal } from "./UserEditModal";
+export { ChangePermissionModal } from "./ChangePermissionModal";

@@ -5,7 +5,6 @@ import { useCallback } from "react";
 import { TabNavigation, ChatInput, ProjectPlanModeButton } from "@/shared/components";
 import { HOME_TABS } from "./mock";
 import { Tab } from "./types";
-import styles from "./BuyerHomePage.module.scss";
 
 export function BuyerHomePage() {
   const router = useRouter();
@@ -27,10 +26,10 @@ export function BuyerHomePage() {
   );
 
   return (
-    <div className={styles.container}>
+    <div className="flex flex-col h-full bg-white">
       <TabNavigation tabs={HOME_TABS} onTabChange={handleTabChange} />
-      <div className={styles.content}>
-        <div className={styles.centerContent}>
+      <div className="flex-1 flex flex-col justify-between items-center py-[10px] px-[25px] min-h-[calc(100vh-89px-94px)]">
+        <div className="flex flex-col items-center justify-center flex-1 gap-[20px] w-full max-w-[800px] mx-auto">
           <ProjectPlanModeButton />
           <ChatInput onMessageSent={handleMessageSent} />
         </div>

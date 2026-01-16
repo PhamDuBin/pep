@@ -8,8 +8,8 @@
 }
 
 .mainContent {
-  margin-top: 90px;
-  min-height: calc(100vh - 90px);
+  margin-top: $header-height;
+  min-height: calc(100vh - #{$header-height});
   transition: margin-left $transition-slow $transition-timing;
 
   &.menuExpanded {

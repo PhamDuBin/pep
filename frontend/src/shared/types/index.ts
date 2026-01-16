@@ -8,6 +8,8 @@ export * from "./api";
 export * from "./project";
 export * from "./avatar-color-option";
 export * from "./tab";
+export * from "./modal";
+export * from "./loading";
 // =============================================================================
 // RE-EXPORTS FOR BACKWARD COMPATIBILITY
 // =============================================================================

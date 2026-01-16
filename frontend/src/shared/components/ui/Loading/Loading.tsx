@@ -1,11 +1,9 @@
 "use client";
 
 import { forwardRef, type HTMLAttributes } from "react";
-import styles from "./Loading.module.scss";
+import { LoadingSize, LoadingType } from "@/shared/types";
 
-export type LoadingType = "spinner" | "dots" | "ring" | "ball" | "bars" | "infinity";
-export type LoadingSize = "xs" | "sm" | "md" | "lg" | "xl";
-
+//only used in Loading component
 export interface LoadingProps extends HTMLAttributes<HTMLSpanElement> {
   type?: LoadingType;
   size?: LoadingSize;
@@ -13,26 +11,29 @@ export interface LoadingProps extends HTMLAttributes<HTMLSpanElement> {
 }
 
 const typeClassMap: Record<LoadingType, string> = {
-  spinner: styles.spinner,
-  dots: styles.dots,
-  ring: styles.ring,
-  ball: styles.ball,
-  bars: styles.bars,
-  infinity: styles.infinity,
+  spinner: "loading-spinner",
+  dots: "loading-dots",
+  ring: "loading-ring",
+  ball: "loading-ball",
+  bars: "loading-bars",
+  infinity: "loading-infinity",
 };
 
 const sizeClassMap: Record<LoadingSize, string> = {
-  xs: styles.xs,
-  sm: styles.sm,
-  md: styles.md,
-  lg: styles.lg,
-  xl: styles.xl,
+  xs: "loading-xs",
+  sm: "loading-sm",
+  md: "loading-md",
+  lg: "loading-lg",
+  xl: "loading-xl",
 };
 
 export const Loading = forwardRef<HTMLSpanElement, LoadingProps>(
-  ({ type = "spinner", size = "md", color, className = "", style, ...props }, ref) => {
+  (
+    { type = "spinner", size = "md", color, className = "", style, ...props },
+    ref
+  ) => {
     const classes = [
-      styles.loading,
+      "loading",
       typeClassMap[type],
       sizeClassMap[size],
       className,

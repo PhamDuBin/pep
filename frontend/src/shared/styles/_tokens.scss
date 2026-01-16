@@ -123,8 +123,8 @@ $spacing-12: 50px;
 // =============================================================================
 
 $header-height: 89px;
-$sidebar-width: 197px;
-$sidebar-collapsed-width: 50px;
+$sidebar-width: 172px;
+$sidebar-collapsed-width: 60px;
 
 // =============================================================================
 // BORDERS
@@ -161,7 +161,7 @@ $transition-duration-fast: $transition-fast;
 $transition-duration-default: $transition-default;
 $transition-duration-slow: $transition-slow;
 
-$transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
+$transition-timing: cubic-bezier(0.25, 0.8, 0.25, 1);
 $transition-timing-default: $transition-timing;
 
 // =============================================================================
