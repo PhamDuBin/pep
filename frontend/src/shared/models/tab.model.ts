@@ -1,6 +1,12 @@
 // =============================================================================
-// BUYER LAYOUT TYPES
+// TAB MODEL
 // =============================================================================
 
-// Re-export models
-export * from "../models/buyer-layout.model";
+export interface Tab {
+  id: string;
+  label: string;
+  subLabel: string;
+  icon: string;
+  isActive: boolean;
+  isDisabled: boolean;
+}

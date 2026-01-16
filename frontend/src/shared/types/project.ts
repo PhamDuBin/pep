@@ -1,9 +1,6 @@
-// Project related types
+// =============================================================================
+// PROJECT TYPES
+// =============================================================================
 
-export interface Project {
-  id: string;
-  name: string;
-  description?: string;
-  isSelected: boolean;
-  createdAt?: Date;
-}
+// Re-export models
+export * from "../models/project.model";

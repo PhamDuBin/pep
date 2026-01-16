@@ -1,6 +1,11 @@
 // =============================================================================
-// BUYER LAYOUT TYPES
+// PROJECT MODEL
 // =============================================================================
 
-// Re-export models
-export * from "../models/buyer-layout.model";
+export interface Project {
+  id: string;
+  name: string;
+  description?: string;
+  isSelected: boolean;
+  createdAt?: Date;
+}

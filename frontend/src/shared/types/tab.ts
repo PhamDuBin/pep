@@ -1,8 +1,6 @@
-export interface Tab {
-  id: string;
-  label: string;
-  subLabel: string;
-  icon: string;
-  isActive: boolean;
-  isDisabled: boolean;
-}
+// =============================================================================
+// TAB TYPES
+// =============================================================================
+
+// Re-export models
+export * from "../models/tab.model";

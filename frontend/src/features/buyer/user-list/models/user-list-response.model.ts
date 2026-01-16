@@ -2,5 +2,16 @@
 // USER LIST RESPONSE MODELS
 // =============================================================================
 
-// Re-export from types for backward compatibility
-export type { UserListResponse, UserActionResponse } from "../types/types";
+import { User } from "./user.model";
+
+export interface UserActionResponse {
+  success: boolean;
+  message?: string;
+}
+
+export interface UserListResponse {
+  users: User[];
+  totalCount: number;
+  success: boolean;
+  message?: string;
+}

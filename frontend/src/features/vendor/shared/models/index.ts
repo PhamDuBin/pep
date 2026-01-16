@@ -1,6 +1,5 @@
 // =============================================================================
-// BUYER LAYOUT TYPES
+// VENDOR SHARED MODELS - RE-EXPORTS
 // =============================================================================
 
-// Re-export models
-export * from "../models/buyer-layout.model";
+export * from "./vendor.model";

@@ -1,6 +1,10 @@
 // =============================================================================
-// BUYER LAYOUT TYPES
+// AVATAR COLOR OPTION MODEL
 // =============================================================================
 
-// Re-export models
-export * from "../models/buyer-layout.model";
+export interface AvatarColorOption {
+  id: string;
+  color: string;
+  borderColor: string;
+  isSelected: boolean;
+}
