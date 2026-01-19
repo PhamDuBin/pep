@@ -71,9 +71,9 @@ export function MyPage() {
               setConfirmPassword={setConfirmPassword}
               setShowPassword={setShowPassword}
               setShowConfirmPassword={setShowConfirmPassword}
-              handleAvatarClick={handleAvatarClick}
-              handleEmailChangeClick={handleEmailChangeClick}
-              handleSavePassword={handleSavePassword}
+              onAvatarClick={handleAvatarClick}
+              onEmailChangeClick={handleEmailChangeClick}
+              onSaveClick={handleSavePassword}
             />
 
             {/* Payment Info Section (Admin Only) */}
@@ -83,9 +83,9 @@ export function MyPage() {
                 paymentHistory={paymentHistory}
                 currentPage={currentPage}
                 totalPages={totalPages}
-                handlePageChange={handlePageChange}
-                handleDownloadInvoice={handleDownloadInvoice}
-                handleAddPaymentMethod={handleAddPaymentMethod}
+                onPageChange={handlePageChange}
+                onDownloadClick={handleDownloadInvoice}
+                onAddClick={handleAddPaymentMethod}
                 formatAmount={formatAmount}
                 getPaymentMethodDisplay={getPaymentMethodDisplay}
                 getStatusLabel={getStatusLabel}

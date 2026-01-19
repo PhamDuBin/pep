@@ -14,7 +14,7 @@ export function ChatInput({
 }: ChatInputProps) {
   const [message, setMessage] = useState("");
 
-  const sendMessage = useCallback(() => {
+  const handleMessageSend = useCallback(() => {
     if (message.trim()) {
       onMessageSent?.(message.trim());
       setMessage("");
@@ -24,10 +24,10 @@ export function ChatInput({
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.key === "Enter") {
-        sendMessage();
+        handleMessageSend();
       }
     },
-    [sendMessage]
+    [handleMessageSend]
   );
 
   return (
@@ -53,7 +53,7 @@ export function ChatInput({
       <button
         type="button"
         className="transition-opacity duration-200 ease-[cubic-bezier(0.25,0.8,0.25,1)] hover:opacity-90"
-        onClick={sendMessage}
+        onClick={handleMessageSend}
       >
         <Image src="/assets/icons/send.svg" alt="Send" width={40} height={40} />
       </button>

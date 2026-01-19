@@ -21,7 +21,7 @@ export function useAiChat() {
     loadMessages();
   }, []);
 
-  const sendMessage = useCallback(async (message: string) => {
+  const handleMessageSend = useCallback(async (message: string) => {
     // Add user message
     const userMessage: ChatMessage = {
       id: `user-${Date.now()}`,
@@ -55,6 +55,6 @@ export function useAiChat() {
   return {
     messages,
     isLoading,
-    sendMessage,
+    handleMessageSend,
   };
 }

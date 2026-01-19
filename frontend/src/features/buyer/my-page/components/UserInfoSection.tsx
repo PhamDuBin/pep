@@ -16,9 +16,9 @@ interface UserInfoSectionProps {
   setConfirmPassword: (value: string) => void;
   setShowPassword: (value: boolean) => void;
   setShowConfirmPassword: (value: boolean) => void;
-  handleAvatarClick: () => void;
-  handleEmailChangeClick: () => void;
-  handleSavePassword: () => void;
+  onAvatarClick: () => void;
+  onEmailChangeClick: () => void;
+  onSaveClick: () => void;
 }
 
 export function UserInfoSection({
@@ -34,9 +34,9 @@ export function UserInfoSection({
   setConfirmPassword,
   setShowPassword,
   setShowConfirmPassword,
-  handleAvatarClick,
-  handleEmailChangeClick,
-  handleSavePassword,
+  onAvatarClick,
+  onEmailChangeClick,
+  onSaveClick,
 }: UserInfoSectionProps) {
   return (
     <div className="flex flex-col gap-[25px] w-full">
@@ -54,7 +54,7 @@ export function UserInfoSection({
           <div
             className="w-[70px] h-[70px] rounded-full flex items-center justify-center cursor-pointer transition-opacity duration-200 hover:opacity-80"
             style={{ backgroundColor: user.avatarColor || "#8ec5d0" }}
-            onClick={handleAvatarClick}
+            onClick={onAvatarClick}
           >
             <span className="font-normal text-[24px] text-white">
               {user.initials}
@@ -63,7 +63,7 @@ export function UserInfoSection({
           <button
             type="button"
             className="flex items-center px-[15px] py-[10px] bg-[#e1e1e1] border-none rounded-[8px] font-normal text-[14px] text-[#333] cursor-pointer transition-colors duration-200 hover:bg-[#d1d1d1]"
-            onClick={handleAvatarClick}
+            onClick={onAvatarClick}
           >
             画像を選択
           </button>
@@ -104,7 +104,7 @@ export function UserInfoSection({
               <button
                 type="button"
                 className="bg-transparent border-none font-normal text-[16px] text-[#066a9e] underline cursor-pointer p-0 hover:opacity-80"
-                onClick={handleEmailChangeClick}
+                onClick={onEmailChangeClick}
               >
                 メールアドレスを変更
               </button>
@@ -204,7 +204,7 @@ export function UserInfoSection({
             type="button"
             className="flex items-center px-[15px] py-[10px] bg-[#066a9e] border-none rounded-[8px] font-normal text-[14px] text-white cursor-pointer transition-colors duration-200 hover:enabled:bg-[#055a84] disabled:opacity-60 disabled:cursor-not-allowed"
             disabled={isSaving}
-            onClick={handleSavePassword}
+            onClick={onSaveClick}
           >
             {isSaving ? "保存中..." : "変更を保存"}
           </button>

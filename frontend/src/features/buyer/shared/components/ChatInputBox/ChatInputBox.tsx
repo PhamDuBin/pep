@@ -18,7 +18,7 @@ export function ChatInputBox({
 }: ChatInputBoxProps) {
   const [message, setMessage] = useState("");
 
-  const sendMessage = useCallback(() => {
+  const handleMessageSend = useCallback(() => {
     if (message.trim() && !disabled) {
       onMessageSent?.(message.trim());
       setMessage("");
@@ -29,10 +29,10 @@ export function ChatInputBox({
     (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
-        sendMessage();
+        handleMessageSend();
       }
     },
-    [sendMessage]
+    [handleMessageSend]
   );
 
   const hasMessage = message.trim().length > 0;
@@ -82,7 +82,7 @@ export function ChatInputBox({
             ? "opacity-50 cursor-not-allowed"
             : "hover:scale-105 hover:shadow-[0_4px_12px_rgba(6,106,158,0.3)] active:scale-95"
         }`}
-        onClick={sendMessage}
+        onClick={handleMessageSend}
         disabled={!hasMessage || disabled}
         aria-label="送信"
       >

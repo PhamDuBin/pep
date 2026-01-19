@@ -34,18 +34,18 @@ export function ArchivePage() {
     sortOptions,
     showPlanModal,
     selectedProject,
-    toggleViewMode,
-    selectFilter,
-    selectSort,
-    toggleContextMenu,
-    closeContextMenu,
+    handleViewModeToggle,
+    handleFilterSelect,
+    handleSortSelect,
+    handleContextMenuToggle,
+    handleContextMenuClose,
     handleContextAction,
     handleProjectClick,
-    closePlanModal,
-    changePage,
-    toggleFilterDropdown,
-    toggleSortDropdown,
-    toggleFavorite,
+    handlePlanModalClose,
+    handlePageChange,
+    handleFilterDropdownToggle,
+    handleSortDropdownToggle,
+    handleFavoriteToggle,
   } = useArchive();
 
   return (
@@ -63,7 +63,7 @@ export function ArchivePage() {
               <div className="relative" ref={filterRef}>
                 <button
                   className="flex items-center gap-[8px] py-[7px] px-[20px] bg-white border border-[#d1d5db] rounded-[4px] cursor-pointer transition-[border-color] duration-200 hover:border-[#9ca3af]"
-                  onClick={toggleFilterDropdown}
+                  onClick={handleFilterDropdownToggle}
                   type="button"
                 >
                   <span className="font-normal text-[14px] leading-normal text-[#374151] whitespace-nowrap">
@@ -88,7 +88,7 @@ export function ArchivePage() {
                             : "text-black"
                         }`}
                         type="button"
-                        onClick={() => selectFilter(option.id)}
+                        onClick={() => handleFilterSelect(option.id)}
                       >
                         {option.id === selectedFilter && (
                           <Image
@@ -114,7 +114,7 @@ export function ArchivePage() {
               <div className="relative" ref={sortRef}>
                 <button
                   className="flex items-center gap-[8px] py-[7px] px-[20px] bg-white border border-[#d1d5db] rounded-[4px] cursor-pointer transition-[border-color] duration-200 hover:border-[#9ca3af]"
-                  onClick={toggleSortDropdown}
+                  onClick={handleSortDropdownToggle}
                   type="button"
                 >
                   <span className="font-normal text-[14px] leading-normal text-[#374151] whitespace-nowrap">
@@ -139,7 +139,7 @@ export function ArchivePage() {
                             : "text-black"
                         }`}
                         type="button"
-                        onClick={() => selectSort(option.value)}
+                        onClick={() => handleSortSelect(option.value)}
                       >
                         {option.value === sortOrder && (
                           <Image
@@ -165,7 +165,7 @@ export function ArchivePage() {
 
             <button
               className="flex items-center justify-center w-[24px] h-[22px] p-0 bg-transparent border-none cursor-pointer transition-all duration-150 hover:opacity-70 hover:scale-110 active:scale-95"
-              onClick={toggleViewMode}
+              onClick={handleViewModeToggle}
               type="button"
             >
               {viewMode === "grid" ? (
@@ -255,7 +255,7 @@ export function ArchivePage() {
                             }`}
                             onClick={(e) => {
                               e.stopPropagation();
-                              toggleFavorite(project.id);
+                              handleFavoriteToggle(project.id);
                             }}
                           >
                             <path
@@ -265,7 +265,7 @@ export function ArchivePage() {
                           </svg>
                           <button
                             className="flex items-center justify-center w-[20px] h-[20px] p-0 bg-transparent border-none cursor-pointer flex-shrink-0 hover:opacity-70"
-                            onClick={() => toggleContextMenu(project.id)}
+                            onClick={() => handleContextMenuToggle(project.id)}
                             type="button"
                           >
                             <svg
@@ -289,7 +289,7 @@ export function ArchivePage() {
                         <>
                           <div
                             className="fixed top-0 left-0 right-0 bottom-0 z-[99]"
-                            onClick={closeContextMenu}
+                            onClick={handleContextMenuClose}
                           />
                           <motion.div
                             className="absolute top-full right-0 flex flex-col gap-[8px] py-[14px] px-[20px] bg-[#ffffff] border border-[#cfcfcf] rounded-[4px] z-[100] min-w-[120px] shadow-[0_2px_8px_rgba(0,0,0,0.1)]"
@@ -389,7 +389,7 @@ export function ArchivePage() {
                             className="cursor-pointer transition-all duration-200 hover:scale-110 flex-shrink-0"
                             onClick={(e) => {
                               e.stopPropagation();
-                              toggleFavorite(project.id);
+                              handleFavoriteToggle(project.id);
                             }}
                           >
                             <path
@@ -399,7 +399,7 @@ export function ArchivePage() {
                           </svg>
                           <button
                             className="flex items-center justify-center w-[36.5px] h-[20.5px] p-0 bg-transparent border-none cursor-pointer flex-shrink-0 hover:opacity-70"
-                            onClick={() => toggleContextMenu(project.id)}
+                            onClick={() => handleContextMenuToggle(project.id)}
                             type="button"
                           >
                             <Image
@@ -417,7 +417,7 @@ export function ArchivePage() {
                           <>
                             <div
                               className="fixed top-0 left-0 right-0 bottom-0 z-[99]"
-                              onClick={closeContextMenu}
+                              onClick={handleContextMenuClose}
                             />
                             <motion.div
                               className="absolute top-[calc(100%+5px)] right-[36px] flex flex-col gap-[8px] py-[14px] px-[20px] bg-[#ffffff] border border-[#cfcfcf] rounded-[4px] z-[150] min-w-[120px] shadow-[0_2px_8px_rgba(0,0,0,0.1)]"
@@ -450,7 +450,7 @@ export function ArchivePage() {
               <Pagination
                 currentPage={currentPage}
                 totalPages={totalPages}
-                onPageChange={changePage}
+                onPageChange={handlePageChange}
               />
             </div>
           )}
@@ -460,7 +460,7 @@ export function ArchivePage() {
       {/* Project Plan Modal */}
       <ProjectPlanModal
         isOpen={showPlanModal}
-        onClose={closePlanModal}
+        onClose={handlePlanModalClose}
         project={selectedProject}
       />
     </PageTransition>

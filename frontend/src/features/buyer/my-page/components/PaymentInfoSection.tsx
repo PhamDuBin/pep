@@ -8,9 +8,9 @@ interface PaymentInfoSectionProps {
   paymentHistory: PaymentHistoryRecord[];
   currentPage: number;
   totalPages: number;
-  handlePageChange: (page: number) => void;
-  handleDownloadInvoice: (id: string) => void;
-  handleAddPaymentMethod: () => void;
+  onPageChange: (page: number) => void;
+  onDownloadClick: (id: string) => void;
+  onAddClick: () => void;
   formatAmount: (amount: number, taxIncluded?: boolean) => string;
   getPaymentMethodDisplay: () => string;
   getStatusLabel: (status: string) => React.ReactNode;
@@ -21,9 +21,9 @@ export function PaymentInfoSection({
   paymentHistory,
   currentPage,
   totalPages,
-  handlePageChange,
-  handleDownloadInvoice,
-  handleAddPaymentMethod,
+  onPageChange,
+  onDownloadClick,
+  onAddClick,
   formatAmount,
   getPaymentMethodDisplay,
   getStatusLabel,
@@ -86,7 +86,7 @@ export function PaymentInfoSection({
               <button
                 type="button"
                 className="flex items-center px-[15px] py-[10px] bg-[#e1e1e1] border-none rounded-[8px] font-normal text-[14px] text-[#333] cursor-pointer transition-colors duration-200 hover:bg-[#d1d1d1]"
-                onClick={handleAddPaymentMethod}
+                onClick={onAddClick}
               >
                 支払い方法を追加
               </button>
@@ -143,7 +143,7 @@ export function PaymentInfoSection({
                       <button
                         type="button"
                         className="bg-transparent border-none font-medium text-[12px] text-[#066a9e] cursor-pointer p-0 hover:underline"
-                        onClick={() => handleDownloadInvoice(record.id)}
+                        onClick={() => onDownloadClick(record.id)}
                       >
                         Download
                       </button>
@@ -156,7 +156,7 @@ export function PaymentInfoSection({
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
-            onPageChange={handlePageChange}
+            onPageChange={onPageChange}
           />
         </div>
       )}
