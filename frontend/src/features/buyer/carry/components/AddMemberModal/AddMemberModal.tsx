@@ -189,7 +189,7 @@ export function AddMemberModal({
                   >
                     {/* Remove Member Icon */}
                     <Image
-                      src="/assets/icons/bitcoin-icons-cross-outline.svg"
+                      src="/assets/icons/cross.svg"
                       alt="Delete Member"
                       width={24}
                       height={24}

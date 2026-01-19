@@ -70,7 +70,7 @@ export function ArchivePage() {
                     {selectedFilterLabel}
                   </span>
                   <Image
-                    src="/assets/icons/teenyicons-down-solid.svg"
+                    src="/assets/icons/chevron-down.svg"
                     alt="Arrow Down"
                     width={10}
                     height={10}
@@ -82,17 +82,16 @@ export function ArchivePage() {
                     {filterOptions.map((option) => (
                       <button
                         key={option.id}
-                        className={`flex items-center gap-[5px] py-[6px] bg-[#ffffff] hover:bg-[#f5f5f5] border-none font-normal text-[14px] leading-[18px] cursor-pointer text-left whitespace-nowrap transition-all duration-150 hover:text-primary hover:translate-x-[2px] ${
-                          option.id === selectedFilter
+                        className={`flex items-center gap-[5px] py-[6px] bg-[#ffffff] hover:bg-[#f5f5f5] border-none font-normal text-[14px] leading-[18px] cursor-pointer text-left whitespace-nowrap transition-all duration-150 hover:text-primary hover:translate-x-[2px] ${option.id === selectedFilter
                             ? "text-primary"
                             : "text-black"
-                        }`}
+                          }`}
                         type="button"
                         onClick={() => selectFilter(option.id)}
                       >
                         {option.id === selectedFilter && (
                           <Image
-                            src="/assets/icons/material-symbols-check-rounded.svg"
+                            src="/assets/icons/check-rounded.svg"
                             alt="Checkmark"
                             width={13}
                             height={13}
@@ -121,7 +120,7 @@ export function ArchivePage() {
                     作成日
                   </span>
                   <Image
-                    src="/assets/icons/teenyicons-down-solid.svg"
+                    src="/assets/icons/chevron-down.svg"
                     alt="Arrow Down"
                     width={10}
                     height={10}
@@ -133,17 +132,16 @@ export function ArchivePage() {
                     {sortOptions.map((option) => (
                       <button
                         key={option.value}
-                        className={`flex items-center gap-[5px] py-[6px] bg-[#ffffff] hover:bg-[#f5f5f5] border-none font-normal text-[14px] leading-[18px] cursor-pointer text-left whitespace-nowrap transition-all duration-150 hover:text-primary hover:translate-x-[2px] ${
-                          option.value === sortOrder
+                        className={`flex items-center gap-[5px] py-[6px] bg-[#ffffff] hover:bg-[#f5f5f5] border-none font-normal text-[14px] leading-[18px] cursor-pointer text-left whitespace-nowrap transition-all duration-150 hover:text-primary hover:translate-x-[2px] ${option.value === sortOrder
                             ? "text-primary"
                             : "text-black"
-                        }`}
+                          }`}
                         type="button"
                         onClick={() => selectSort(option.value)}
                       >
                         {option.value === sortOrder && (
                           <Image
-                            src="/assets/icons/material-symbols-check-rounded.svg"
+                            src="/assets/icons/check-rounded.svg"
                             alt="Checkmark"
                             width={13}
                             height={13}
@@ -204,9 +202,8 @@ export function ArchivePage() {
               {paginatedProjects.map((project) => (
                 <AnimatedListItem
                   key={project.id}
-                  className={`relative ${
-                    openContextMenuId === project.id ? "z-[50]" : "z-0"
-                  }`}
+                  className={`relative ${openContextMenuId === project.id ? "z-[50]" : "z-0"
+                    }`}
                 >
                   <motion.div
                     onClick={(e) => e.stopPropagation()}
@@ -248,11 +245,10 @@ export function ArchivePage() {
                             height="24"
                             viewBox="0 0 24 24"
                             fill="none"
-                            className={`cursor-pointer transition-all duration-200 hover:scale-110 ${
-                              project.isFavorite
+                            className={`cursor-pointer transition-all duration-200 hover:scale-110 ${project.isFavorite
                                 ? "opacity-100"
                                 : "opacity-0 group-hover/card:opacity-100"
-                            }`}
+                              }`}
                             onClick={(e) => {
                               e.stopPropagation();
                               toggleFavorite(project.id);
@@ -342,9 +338,8 @@ export function ArchivePage() {
                 {paginatedProjects.map((project) => (
                   <AnimatedListItem
                     key={project.id}
-                    className={`relative ${
-                      openContextMenuId === project.id ? "z-[50]" : "z-0"
-                    }`}
+                    className={`relative ${openContextMenuId === project.id ? "z-[50]" : "z-0"
+                      }`}
                   >
                     <motion.div
                       onClick={(e) => e.stopPropagation()}
@@ -403,7 +398,7 @@ export function ArchivePage() {
                             type="button"
                           >
                             <Image
-                              src="/assets/icons/dots-black.svg"
+                              src="/assets/icons/dots.svg"
                               alt="More Options"
                               width={12}
                               height={2}

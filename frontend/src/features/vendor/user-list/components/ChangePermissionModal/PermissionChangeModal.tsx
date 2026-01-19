@@ -150,11 +150,10 @@ export function PermissionChangeModal({
                     />
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
                       <div
-                        className={`w-[16px] h-[16px] bg-[#1f2937] rounded-full transition-opacity ${
-                          selectedPermission === option.value
+                        className={`w-[16px] h-[16px] bg-[#1f2937] rounded-full transition-opacity ${selectedPermission === option.value
                             ? "opacity-100"
                             : "opacity-0"
-                        }`}
+                          }`}
                       ></div>
                     </div>
                   </div>
@@ -227,7 +226,7 @@ export function PermissionChangeModal({
                       >
                         {row.adminCheck && (
                           <Image
-                            src="/assets/icons/light-check.svg"
+                            src="/assets/icons/check-light.svg"
                             alt="Project Plan"
                             width={24}
                             height={24}
@@ -252,7 +251,7 @@ export function PermissionChangeModal({
                       >
                         {row.memberCheck && (
                           <Image
-                            src="/assets/icons/light-check.svg"
+                            src="/assets/icons/check-light.svg"
                             alt="Project Plan"
                             width={24}
                             height={24}

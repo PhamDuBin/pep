@@ -66,7 +66,7 @@ export function CarryPage() {
                 onClick={() => setShowProjectPlanModal(true)}
               >
                 <Image
-                  src="/assets/icons/docutment-stack.svg"
+                  src="/assets/icons/document-stack.svg"
                   alt="Project Plan"
                   width={30}
                   height={30}
@@ -85,7 +85,7 @@ export function CarryPage() {
               <div className="px-[15px] w-full box-border flex-shrink-0">
                 <div className="flex items-center p-[7px_15px] bg-white border border-[#8ec0d0] rounded-[1000px] w-full box-border">
                   <Image
-                    src="/assets/icons/find-blue.svg"
+                    src="/assets/icons/search-blue.svg"
                     alt="Project Plan"
                     width={20}
                     height={20}
@@ -104,9 +104,8 @@ export function CarryPage() {
                 {filteredVendors.map((vendor) => (
                   <div
                     key={vendor.id}
-                    className={`w-full flex gap-[10px] items-start justify-end p-[15px] border-b border-[#e1e1e1] bg-transparent cursor-pointer text-left transition-colors duration-150 hover:bg-[rgba(230,243,245,0.5)] ${
-                      selectedVendor?.id === vendor.id ? "bg-white" : ""
-                    }`}
+                    className={`w-full flex gap-[10px] items-start justify-end p-[15px] border-b border-[#e1e1e1] bg-transparent cursor-pointer text-left transition-colors duration-150 hover:bg-[rgba(230,243,245,0.5)] ${selectedVendor?.id === vendor.id ? "bg-white" : ""
+                      }`}
                     onClick={() => handleVendorSelect(vendor)}
                     onMouseEnter={() => setHoveredVendorId(vendor.id)}
                     onMouseLeave={() => {
@@ -134,42 +133,41 @@ export function CarryPage() {
                       )}
                       {(hoveredVendorId === vendor.id ||
                         showVendorMenu === vendor.id) && (
-                        <div className="relative">
-                          <button
-                            type="button"
-                            className={`flex items-center justify-center w-[20px] h-[20px] bg-transparent border-none cursor-pointer p-0 rounded-[4px] transition-colors duration-150 hover:bg-[rgba(0,0,0,0.05)] ${
-                              showVendorMenu === vendor.id
+                          <div className="relative">
+                            <button
+                              type="button"
+                              className={`flex items-center justify-center w-[20px] h-[20px] bg-transparent border-none cursor-pointer p-0 rounded-[4px] transition-colors duration-150 hover:bg-[rgba(0,0,0,0.05)] ${showVendorMenu === vendor.id
                                 ? "bg-[rgba(0,0,0,0.05)]"
                                 : ""
-                            }`}
-                            onClick={(e) => toggleVendorMenu(e, vendor.id)}
-                          >
-                            <Image
-                              src="/assets/icons/dots-black.svg"
-                              alt="Project Plan"
-                              width={15}
-                              height={2}
-                            />
-                          </button>
-                          {showVendorMenu === vendor.id && (
-                            <div className="absolute top-[calc(100%+5px)] right-full mr-[-20px] bg-[#ffffff] rounded-[8px] shadow-[0px_4px_20px_rgba(0,0,0,0.15)] z-[100] overflow-hidden min-w-[100px]">
-                              <button
-                                type="button"
-                                className="flex items-center gap-[8px] p-[10px_15px] bg-transparent border-none cursor-pointer font-normal text-[14px] text-[#333333] text-left w-full whitespace-nowrap hover:bg-[#f5f5f5] [&_svg]:flex-shrink-0"
-                                onClick={(e) => handleVendorExit(e, vendor.id)}
-                              >
-                                <Image
-                                  src="/assets/icons/bitcoin-icons-exit-outline.svg"
-                                  alt="Exit"
-                                  width={25}
-                                  height={25}
-                                />
-                                <span className="text-[#066a9e]">退出</span>
-                              </button>
-                            </div>
-                          )}
-                        </div>
-                      )}
+                                }`}
+                              onClick={(e) => toggleVendorMenu(e, vendor.id)}
+                            >
+                              <Image
+                                src="/assets/icons/dots.svg"
+                                alt="Project Plan"
+                                width={15}
+                                height={2}
+                              />
+                            </button>
+                            {showVendorMenu === vendor.id && (
+                              <div className="absolute top-[calc(100%+5px)] right-full mr-[-20px] bg-[#ffffff] rounded-[8px] shadow-[0px_4px_20px_rgba(0,0,0,0.15)] z-[100] overflow-hidden min-w-[100px]">
+                                <button
+                                  type="button"
+                                  className="flex items-center gap-[8px] p-[10px_15px] bg-transparent border-none cursor-pointer font-normal text-[14px] text-[#333333] text-left w-full whitespace-nowrap hover:bg-[#f5f5f5] [&_svg]:flex-shrink-0"
+                                  onClick={(e) => handleVendorExit(e, vendor.id)}
+                                >
+                                  <Image
+                                    src="/assets/icons/exit.svg"
+                                    alt="Exit"
+                                    width={25}
+                                    height={25}
+                                  />
+                                  <span className="text-[#066a9e]">退出</span>
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        )}
                     </div>
                   </div>
                 ))}
@@ -199,9 +197,8 @@ export function CarryPage() {
                     <div className="relative">
                       <button
                         type="button"
-                        className={`flex items-center justify-center bg-transparent border-none cursor-pointer p-0 hover:opacity-80 ${
-                          showMemberDropdown ? "opacity-80" : ""
-                        }`}
+                        className={`flex items-center justify-center bg-transparent border-none cursor-pointer p-0 hover:opacity-80 ${showMemberDropdown ? "opacity-80" : ""
+                          }`}
                         onClick={() =>
                           setShowMemberDropdown(!showMemberDropdown)
                         }
@@ -223,7 +220,7 @@ export function CarryPage() {
                               onClick={handleOpenAddMemberModal}
                             >
                               <Image
-                                src="/assets/icons/ei-plus.svg"
+                                src="/assets/icons/plus-circle.svg"
                                 alt="Add member"
                                 width={25}
                                 height={25}
@@ -240,7 +237,7 @@ export function CarryPage() {
                               }}
                             >
                               <Image
-                                src="/assets/icons/bitcoin-icons-exit-outline.svg"
+                                src="/assets/icons/exit.svg"
                                 alt="Exit"
                                 width={25}
                                 height={25}
@@ -283,19 +280,17 @@ export function CarryPage() {
                     {messages.map((msg) => (
                       <div
                         key={msg.id}
-                        className={`flex gap-[10px] w-full ${
-                          msg.sender === "buyer"
-                            ? "justify-end"
-                            : "justify-start"
-                        }`}
+                        className={`flex gap-[10px] w-full ${msg.sender === "buyer"
+                          ? "justify-end"
+                          : "justify-start"
+                          }`}
                       >
                         {msg.sender === "vendor" && (
                           <div className="w-[25px] h-[25px] rounded-full bg-[#cccccc] flex-shrink-0"></div>
                         )}
                         <div
-                          className={`flex flex-col gap-[2px] max-w-[60%] min-w-[200px] ${
-                            msg.sender === "buyer" ? "items-end" : ""
-                          }`}
+                          className={`flex flex-col gap-[2px] max-w-[60%] min-w-[200px] ${msg.sender === "buyer" ? "items-end" : ""
+                            }`}
                         >
                           {msg.sender === "vendor" && (
                             <p className="font-bold text-[10px] leading-[19px] text-[#333333] m-0">
@@ -303,11 +298,10 @@ export function CarryPage() {
                             </p>
                           )}
                           <div
-                            className={`flex items-center justify-center p-[7px] rounded-[4px] w-full box-border border border-[#8ec0d0] ${
-                              msg.sender === "buyer"
-                                ? "bg-[#e6f3f5]"
-                                : "bg-white"
-                            }`}
+                            className={`flex items-center justify-center p-[7px] rounded-[4px] w-full box-border border border-[#8ec0d0] ${msg.sender === "buyer"
+                              ? "bg-[#e6f3f5]"
+                              : "bg-white"
+                              }`}
                           >
                             <p className="flex-1 font-normal text-[13px] leading-normal text-[#333333] m-0 whitespace-pre-wrap break-words">
                               {msg.content}
@@ -341,7 +335,7 @@ export function CarryPage() {
                       disabled={!newMessage.trim()}
                     >
                       <Image
-                        src="/assets/icons/vendor-send.svg"
+                        src="/assets/icons/send.svg"
                         alt="Exit"
                         width={25}
                         height={25}

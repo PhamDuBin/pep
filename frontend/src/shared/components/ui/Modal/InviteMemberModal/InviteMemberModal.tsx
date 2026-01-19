@@ -155,11 +155,10 @@ export function InviteMemberModal({
       isOpen={isOpen}
       onClose={onClose}
       size="md"
-      customClass={`min-w-[520px] max-w-[520px] [&_.modal-title]:text-[20px] [&_.modal-title]:font-normal [&_.modal-title]:text-[#066a9e] ${
-        modalState === "complete"
+      customClass={`min-w-[520px] max-w-[520px] [&_.modal-title]:text-[20px] [&_.modal-title]:font-normal [&_.modal-title]:text-[#066a9e] ${modalState === "complete"
           ? "w-[340px] min-w-[340px] max-w-[340px] h-[174px]"
           : ""
-      }`}
+        }`}
       isLoading={isSaving}
       actions={
         modalState === "form" ? (
@@ -233,15 +232,14 @@ export function InviteMemberModal({
                     {isLast ? (
                       <button
                         type="button"
-                        className={`w-[35px] h-[35px] flex-shrink-0 flex items-center justify-center bg-transparent border-none cursor-pointer p-0 transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-50 hover:enabled:text-[#066a9e] ${
-                          canAddMore() ? "text-[#066a9e]" : "text-[#b9b9b9]"
-                        }`}
+                        className={`w-[35px] h-[35px] flex-shrink-0 flex items-center justify-center bg-transparent border-none cursor-pointer p-0 transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-50 hover:enabled:text-[#066a9e] ${canAddMore() ? "text-[#066a9e]" : "text-[#b9b9b9]"
+                          }`}
                         disabled={!canAddMore()}
                         onClick={addEmailField}
                         aria-label="Add email field"
                       >
                         <Image
-                          src="/assets/icons/ei-plus.svg"
+                          src="/assets/icons/plus-circle.svg"
                           alt="Add"
                           width={30}
                           height={30}
