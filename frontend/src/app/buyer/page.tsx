@@ -1,5 +1,5 @@
-import { BuyerHomePage } from "@/features/buyer/home";
+import { HomePage } from "@/features/buyer/home";
 
 export default function Page() {
-  return <BuyerHomePage />;
+  return <HomePage />;
 }
