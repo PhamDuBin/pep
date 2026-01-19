@@ -1,5 +1,8 @@
 // Components
-export { VendorHomePage } from "./VendorHomePage";
+export { HomePage } from "./HomePage";
+
+// Backward compatibility alias
+export { HomePage as VendorHomePage } from "./HomePage";
 
 // Hooks
 export { useVendorHome } from "./hooks";

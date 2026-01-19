@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { Modal } from "@/shared/components";
 import { SearchableUser, ChatMember, AddMemberModalState } from "../../types";
+import Image from "next/image";
 
 interface AddMemberModalProps {
   isOpen: boolean;
@@ -186,20 +187,13 @@ export function AddMemberModal({
                     className="flex items-center justify-center w-[24px] h-[24px] p-0 bg-transparent border-none cursor-pointer text-[#808080] transition-colors duration-200 hover:text-[#333]"
                     onClick={() => removeMember(member)}
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 20 20"
-                      fill="none"
-                    >
-                      <path
-                        d="M15 5L5 15M5 5L15 15"
-                        stroke="#808080"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                      />
-                    </svg>
+                    {/* Remove Member Icon */}
+                    <Image
+                      src="/assets/icons/bitcoin-icons-cross-outline.svg"
+                      alt="Delete Member"
+                      width={24}
+                      height={24}
+                    />
                   </button>
                 </div>
               ))}

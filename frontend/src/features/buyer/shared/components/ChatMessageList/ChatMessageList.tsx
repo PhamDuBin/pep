@@ -105,29 +105,7 @@ export function ChatMessageList({
       {isLoading && (
         <div className="flex justify-start animate-[fadeIn_0.3s_ease-out_forwards]">
           {messageVariant === "with-avatar" && (
-            <div className="w-[40px] h-[40px] rounded-full bg-[#066a9e] flex items-center justify-center shrink-0 mr-[12px]">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2Z"
-                  stroke="white"
-                  strokeWidth="2"
-                />
-                <path
-                  d="M8 14C8 14 9.5 16 12 16C14.5 16 16 14 16 14"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-                <circle cx="9" cy="9" r="1.5" fill="white" />
-                <circle cx="15" cy="9" r="1.5" fill="white" />
-              </svg>
-            </div>
+            <div className="w-[40px] h-[40px] rounded-full bg-[#066a9e] flex items-center justify-center shrink-0 mr-[12px]"></div>
           )}
           <div className="flex items-center gap-[12px] px-[16px] py-[12px] bg-[#f9fafb] rounded-[8px]">
             <div className="flex items-center gap-[4px] [&>span]:w-[8px] [&>span]:h-[8px] [&>span]:bg-[#066a9e] [&>span]:rounded-full [&>span]:animate-[bounce_1.4s_infinite_ease-in-out_both] [&>span:nth-child(1)]:[-animation-delay:0.32s] [&>span:nth-child(2)]:[-animation-delay:0.16s] [&>span:nth-child(3)]:[-animation-delay:0s]">

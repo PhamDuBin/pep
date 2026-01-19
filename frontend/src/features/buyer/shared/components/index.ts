@@ -7,3 +7,4 @@ export * from "./ChatMessageList";
 export * from "./ProjectPlanModeButton";
 export * from "./PageTransition";
 export * from "./SideMenu";
+export * from "./LayoutContent";

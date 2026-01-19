@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useMemo, useEffect } from "react";
 import { VendorUser, PermissionOption } from "../types";
-import { ChangePermissionModalState } from "../components/ChangePermissionModal/ChangePermissionModal";
+import { ChangePermissionModalState } from "../components/ChangePermissionModal/PermissionChangeModal";
 import {
   getVendorUsers,
   getVendorPermissionOptions,
@@ -14,20 +14,31 @@ import {
 export function useVendorUserList() {
   const [isLoading, setIsLoading] = useState(true);
   const [users, setUsers] = useState<VendorUser[]>([]);
-  const [permissionOptions, setPermissionOptions] = useState<PermissionOption[]>([]);
+  const [permissionOptions, setPermissionOptions] = useState<
+    PermissionOption[]
+  >([]);
 
   // Modal states
   const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState(false);
-  const [deleteModalState, setDeleteModalState] = useState<"confirm" | "complete">("confirm");
+  const [deleteModalState, setDeleteModalState] = useState<
+    "confirm" | "complete"
+  >("confirm");
   const [showInviteModal, setShowInviteModal] = useState(false);
-  const [inviteModalState, setInviteModalState] = useState<"form" | "complete">("form");
-  const [showChangePermissionModal, setShowChangePermissionModal] = useState(false);
-  const [changePermissionModalState, setChangePermissionModalState] = useState<ChangePermissionModalState>("select");
+  const [inviteModalState, setInviteModalState] = useState<"form" | "complete">(
+    "form"
+  );
+  const [showChangePermissionModal, setShowChangePermissionModal] =
+    useState(false);
+  const [changePermissionModalState, setChangePermissionModalState] =
+    useState<ChangePermissionModalState>("select");
 
   // Permission state
-  const [selectedUserForPermission, setSelectedUserForPermission] = useState<VendorUser | null>(null);
-  const [lastChangedPermissionUserName, setLastChangedPermissionUserName] = useState("");
-  const [lastChangedPermissionRole, setLastChangedPermissionRole] = useState("");
+  const [selectedUserForPermission, setSelectedUserForPermission] =
+    useState<VendorUser | null>(null);
+  const [lastChangedPermissionUserName, setLastChangedPermissionUserName] =
+    useState("");
+  const [lastChangedPermissionRole, setLastChangedPermissionRole] =
+    useState("");
 
   // Load data on mount
   useEffect(() => {

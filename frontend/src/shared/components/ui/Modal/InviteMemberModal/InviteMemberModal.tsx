@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
+import Image from "next/image";
 import { Modal } from "../Modal";
 import { InviteMemberModalState } from "@/shared/types";
 
@@ -239,26 +240,12 @@ export function InviteMemberModal({
                         onClick={addEmailField}
                         aria-label="Add email field"
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="35"
-                          height="35"
-                          viewBox="0 0 35 35"
-                          fill="none"
-                        >
-                          <path
-                            d="M17.4996 29.4001C10.9196 29.4001 5.59961 24.0801 5.59961 17.5001C5.59961 10.9201 10.9196 5.6001 17.4996 5.6001C24.0796 5.6001 29.3996 10.9201 29.3996 17.5001C29.3996 24.0801 24.0796 29.4001 17.4996 29.4001ZM17.4996 7.0001C11.6896 7.0001 6.99961 11.6901 6.99961 17.5001C6.99961 23.3101 11.6896 28.0001 17.4996 28.0001C23.3096 28.0001 27.9996 23.3101 27.9996 17.5001C27.9996 11.6901 23.3096 7.0001 17.4996 7.0001Z"
-                            fill="currentColor"
-                          />
-                          <path
-                            d="M11.2002 16.7998H23.8002V18.1998H11.2002V16.7998Z"
-                            fill="currentColor"
-                          />
-                          <path
-                            d="M16.7998 11.2002H18.1998V23.8002H16.7998V11.2002Z"
-                            fill="currentColor"
-                          />
-                        </svg>
+                        <Image
+                          src="/assets/icons/ei-plus.svg"
+                          alt="Add"
+                          width={30}
+                          height={30}
+                        />
                       </button>
                     ) : (
                       <div className="w-[35px] h-[35px] flex-shrink-0"></div>

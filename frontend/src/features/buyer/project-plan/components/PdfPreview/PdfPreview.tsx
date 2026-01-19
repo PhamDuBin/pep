@@ -1,6 +1,7 @@
 "use client";
 
 import { PdfPage } from "../../types";
+import Image from "next/image";
 
 interface PdfPreviewProps {
   pages: PdfPage[];
@@ -39,9 +40,7 @@ export function PdfPreview({
             {/* Thumbnail */}
             <div className="w-[80px] h-[100px] border border-[#b9b9b9] rounded-[4px] bg-[#f9fafb] flex items-center justify-center mb-[8px]">
               <div className="w-[60px] h-[80px] bg-white border border-[#e5e7eb] rounded-[4px] shadow-[0_1px_2px_rgba(0,0,0,0.05)] flex items-center justify-center">
-                <span className="text-[10px] text-[#808080]">
-                  PDF
-                </span>
+                <span className="text-[10px] text-[#808080]">PDF</span>
               </div>
             </div>
             {/* Page Title */}
@@ -62,27 +61,13 @@ export function PdfPreview({
           className="flex items-center gap-[8px] py-[8px] px-[16px] bg-white border border-[#b9b9b9] rounded-[8px] text-[14px] text-[#333] cursor-pointer transition-colors duration-200 hover:bg-[#f9fafb]"
           onClick={onDownload}
         >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 16 16"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M8 12L3 7H6V2H10V7H13L8 12Z"
-              stroke="#333"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M2 14H14"
-              stroke="#333"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-            />
-          </svg>
+          {/* Download Icon */}
+          <Image
+            src="/assets/icons/download.svg"
+            alt="Project Plan"
+            width={18}
+            height={18}
+          />
           <span>プロジェクト計画書をダウンロード</span>
         </button>
 

@@ -1,5 +1,8 @@
 // Components
-export { VendorUserListPage } from "./VendorUserListPage";
+export { UserListPage } from "./UserListPage";
+
+// Backward compatibility alias
+export { UserListPage as VendorUserListPage } from "./UserListPage";
 
 // Hooks
 export { useVendorUserList } from "./hooks";

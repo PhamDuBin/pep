@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect } from "react";
 import { Modal } from "@/shared/components";
 import { UserPermission, PermissionChangeModalState } from "../../types/types";
 import { PERMISSION_OPTIONS, PERMISSION_LABELS } from "../../mock";
+import Image from "next/image";
 
 interface PermissionTableRow {
   feature: string;
@@ -64,21 +65,6 @@ const PERMISSION_TABLE_DATA: PermissionTableRow[] = [
     adminNote: "(Stripe手続)",
   },
 ];
-
-const CheckIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-  >
-    <path
-      d="M9.55008 17.3081L4.58008 12.3381L5.29408 11.6251L9.55008 15.8811L18.7061 6.7251L19.4191 7.4391L9.55008 17.3081Z"
-      fill="#066A9E"
-    />
-  </svg>
-);
 
 export function PermissionChangeModal({
   isOpen,
@@ -225,7 +211,12 @@ export function PermissionChangeModal({
                     >
                       {row.adminCheck ? (
                         <div className="flex flex-col items-center justify-center">
-                          <CheckIcon />
+                          <Image
+                            src="/assets/icons/light-check.svg"
+                            alt="Project Plan"
+                            width={24}
+                            height={24}
+                          />
                           {row.adminNote && (
                             <span className="text-[14px] font-medium text-[#333]">
                               {row.adminNote}
@@ -247,7 +238,12 @@ export function PermissionChangeModal({
                     >
                       {row.memberCheck ? (
                         <div className="flex flex-col items-center justify-center">
-                          <CheckIcon />
+                          <Image
+                            src="/assets/icons/light-check.svg"
+                            alt="Project Plan"
+                            width={24}
+                            height={24}
+                          />
                           {row.memberNote && (
                             <span className="text-[14px] font-medium text-[#333]">
                               {row.memberNote}

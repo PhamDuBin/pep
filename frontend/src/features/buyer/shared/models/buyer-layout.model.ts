@@ -1,9 +1,12 @@
 // =============================================================================
-// BUYER LAYOUT MODEL
+// LAYOUT MODEL
 // =============================================================================
 
 import { ReactNode } from "react";
 
-export interface BuyerLayoutContentProps {
+export interface LayoutContentProps {
   children: ReactNode;
 }
+
+// Backward compatibility alias
+export type BuyerLayoutContentProps = LayoutContentProps;
