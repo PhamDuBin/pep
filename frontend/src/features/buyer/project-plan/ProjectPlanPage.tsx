@@ -23,6 +23,7 @@ import {
   CHAT_INPUT_PLACEHOLDER,
 } from "./mock";
 import { Tab } from "./types";
+import Image from "next/image";
 
 export function ProjectPlanPage() {
   const router = useRouter();
@@ -145,18 +146,17 @@ export function ProjectPlanPage() {
               onClick={handleBackToBuyerHome}
             >
               <svg
-                width="12"
-                height="15"
-                viewBox="0 0 12 15"
-                fill="none"
                 xmlns="http://www.w3.org/2000/svg"
+                width="13"
+                height="16"
+                viewBox="0 0 13 16"
+                fill="none"
               >
                 <path
-                  d="M1 14V1M1 1H9.5L7.5 4.5L9.5 8H1V1Z"
+                  d="M0.375 8.8964V1.00775C0.375 0.665466 0.375 0.494865 0.48391 0.413884C0.59282 0.332903 0.749902 0.38689 1.06407 0.494865L11.4514 4.0656C12.0671 4.27723 12.375 4.38304 12.375 4.5774C12.375 4.77175 12.0671 4.87757 11.4514 5.0892L0.375 8.8964ZM0.375 8.8964V15.3749"
                   stroke="white"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+                  stroke-width="0.75"
+                  stroke-linecap="round"
                 />
               </svg>
               <span>プロジェクト計画書作成モード ON</span>

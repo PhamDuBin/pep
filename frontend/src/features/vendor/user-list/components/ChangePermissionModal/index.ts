@@ -1,1 +1,1 @@
-export { ChangePermissionModal } from "./ChangePermissionModal";
+export { PermissionChangeModal as ChangePermissionModal } from "./PermissionChangeModal";

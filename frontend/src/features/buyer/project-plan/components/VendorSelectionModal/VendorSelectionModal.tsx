@@ -1,6 +1,7 @@
 "use client";
 
 import { Modal } from "@/shared/components";
+import Image from "next/image";
 
 interface Vendor {
   id: string;
@@ -40,18 +41,12 @@ export function VendorSelectionModal({
     >
       <div className="relative w-full mb-[8px]">
         <div className="absolute left-[16px] top-1/2 -translate-y-1/2 text-[#808080] flex items-center justify-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 20 20"
-            fill="none"
-          >
-            <path
-              d="M19.0337 19.8332C19.5512 20.3478 20.3498 19.5535 19.8324 19.0501L15.6139 14.8441C17.094 13.2162 17.9121 11.0989 17.9088 8.90424C17.9088 3.99348 13.8928 0 8.95438 0C4.01597 0 0 3.99348 0 8.90424C0 13.815 4.01597 17.8085 8.95438 17.8085C11.1817 17.8085 13.2403 16.9919 14.8152 15.6383L19.0337 19.8332ZM1.1238 8.90424C1.1238 4.60873 4.6448 1.11862 8.95326 1.11862C13.273 1.11862 16.7827 4.60873 16.7827 8.90424C16.7827 13.1998 13.273 16.6899 8.95326 16.6899C4.6448 16.6899 1.1238 13.1998 1.1238 8.90424Z"
-              fill="#066A9E"
-            />
-          </svg>
+          <Image
+            src="/assets/icons/find-blue.svg"
+            alt="Project Plan"
+            width={19}
+            height={19}
+          />
         </div>
         <input
           type="text"
