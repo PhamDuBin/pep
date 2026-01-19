@@ -146,11 +146,10 @@ export function PermissionChangeModal({
                   className="flex items-center gap-[5px] cursor-pointer rounded-[4px]"
                 >
                   <div
-                    className={`w-[18px] h-[18px] border-2 rounded-full bg-white flex items-center justify-center transition-all duration-200 shrink-0 hover:border-[#333333] ${
-                      selectedPermission === option.value
+                    className={`w-[18px] h-[18px] border-2 rounded-full bg-white flex items-center justify-center transition-all duration-200 shrink-0 hover:border-[#333333] ${selectedPermission === option.value
                         ? "border-[#333333]"
                         : "border-[#b9b9b9]"
-                    }`}
+                      }`}
                   >
                     {selectedPermission === option.value && (
                       <div className="w-[10px] h-[10px] rounded-full bg-[#333333]"></div>
@@ -194,25 +193,23 @@ export function PermissionChangeModal({
                 {PERMISSION_TABLE_DATA.map((row, index) => (
                   <tr key={index}>
                     <td
-                      className={`px-[12px] py-[10px] font-medium text-[14px] leading-[1.3] text-[#333] text-center align-middle min-h-[44px] ${
-                        index !== PERMISSION_TABLE_DATA.length - 1
+                      className={`px-[12px] py-[10px] font-medium text-[14px] leading-[1.3] text-[#333] text-center align-middle min-h-[44px] ${index !== PERMISSION_TABLE_DATA.length - 1
                           ? "border-b border-[#d4d4d4]"
                           : ""
-                      }`}
+                        }`}
                     >
                       {row.feature}
                     </td>
                     <td
-                      className={`px-[12px] py-[10px] font-medium text-[14px] leading-[1.3] text-[#333] text-center align-middle min-h-[44px] ${
-                        index !== PERMISSION_TABLE_DATA.length - 1
+                      className={`px-[12px] py-[10px] font-medium text-[14px] leading-[1.3] text-[#333] text-center align-middle min-h-[44px] ${index !== PERMISSION_TABLE_DATA.length - 1
                           ? "border-b border-[#d4d4d4]"
                           : ""
-                      }`}
+                        }`}
                     >
                       {row.adminCheck ? (
                         <div className="flex flex-col items-center justify-center">
                           <Image
-                            src="/assets/icons/light-check.svg"
+                            src="/assets/icons/check-light.svg"
                             alt="Project Plan"
                             width={24}
                             height={24}
@@ -230,16 +227,15 @@ export function PermissionChangeModal({
                       ) : null}
                     </td>
                     <td
-                      className={`px-[12px] py-[10px] font-medium text-[14px] leading-[1.3] text-[#333] text-center align-middle min-h-[44px] ${
-                        index !== PERMISSION_TABLE_DATA.length - 1
+                      className={`px-[12px] py-[10px] font-medium text-[14px] leading-[1.3] text-[#333] text-center align-middle min-h-[44px] ${index !== PERMISSION_TABLE_DATA.length - 1
                           ? "border-b border-[#d4d4d4]"
                           : ""
-                      }`}
+                        }`}
                     >
                       {row.memberCheck ? (
                         <div className="flex flex-col items-center justify-center">
                           <Image
-                            src="/assets/icons/light-check.svg"
+                            src="/assets/icons/check-light.svg"
                             alt="Project Plan"
                             width={24}
                             height={24}

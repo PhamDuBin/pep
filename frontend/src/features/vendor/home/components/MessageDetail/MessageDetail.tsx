@@ -51,7 +51,7 @@ export function MessageDetail({
         </div>
         <div className="flex items-center p-[3px]">
           <Image
-            src="/assets/icons/vendor-docutment-stack.svg"
+            src="/assets/icons/document-stack.svg"
             alt="Documents"
             width={29}
             height={30}
@@ -69,24 +69,21 @@ export function MessageDetail({
           {threadMessages.map((msg) => (
             <div
               key={msg.id}
-              className={`flex ${
-                msg.isFromUser ? "justify-end" : "items-start gap-[10px]"
-              }`}
+              className={`flex ${msg.isFromUser ? "justify-end" : "items-start gap-[10px]"
+                }`}
             >
               {!msg.isFromUser && (
                 <div className="w-[25px] h-[25px] bg-[#808080] rounded-full flex-shrink-0" />
               )}
               <div
-                className={`flex flex-col gap-[2px] w-full max-w-[301px] ${
-                  msg.isFromUser ? "items-end" : "items-start"
-                }`}
+                className={`flex flex-col gap-[2px] w-full max-w-[301px] ${msg.isFromUser ? "items-end" : "items-start"
+                  }`}
               >
                 <div
-                  className={`flex justify-center items-center p-[7px] w-full rounded ${
-                    msg.isFromUser
-                      ? "bg-[#e6f3f5] border border-[#8ec0d0]"
-                      : "bg-white border border-[#8ec0d0]"
-                  }`}
+                  className={`flex justify-center items-center p-[7px] w-full rounded ${msg.isFromUser
+                    ? "bg-[#e6f3f5] border border-[#8ec0d0]"
+                    : "bg-white border border-[#8ec0d0]"
+                    }`}
                 >
                   <p className="flex-1 font-normal text-[13px] leading-normal text-[#333333] m-0 whitespace-pre-wrap">
                     {msg.content}
@@ -117,7 +114,7 @@ export function MessageDetail({
               onClick={onSendMessage}
             >
               <Image
-                src="/assets/icons/vendor-send.svg"
+                src="/assets/icons/send.svg"
                 alt="Send"
                 width={20}
                 height={20}

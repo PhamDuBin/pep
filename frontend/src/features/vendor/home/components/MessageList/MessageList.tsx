@@ -31,7 +31,7 @@ export function MessageList({
       <div className="flex flex-col items-start px-[15px] gap-[10px] w-[357px] h-[40px]">
         <div className="box-border flex items-center py-[10px] px-[15px] gap-[10px] w-[327px] h-[40px] bg-white border border-[#8ec0d0] rounded-full cursor-pointer transition-colors duration-200 hover:border-[#066a9e]">
           <Image
-            src="/assets/icons/find-blue.svg"
+            src="/assets/icons/search-blue.svg"
             alt="Project Plan"
             width={24}
             height={24}
@@ -51,9 +51,8 @@ export function MessageList({
         {messages.map((message) => (
           <div
             key={message.id}
-            className={`box-border flex justify-end items-start p-[15px] gap-[10px] w-[357px] min-h-[87px] border-b border-[#e1e1e1] cursor-pointer transition-colors duration-200 ${
-              message.id === selectedMessageId ? "bg-white" : "hover:bg-white"
-            }`}
+            className={`box-border flex justify-end items-start p-[15px] gap-[10px] w-[357px] min-h-[87px] border-b border-[#e1e1e1] cursor-pointer transition-colors duration-200 ${message.id === selectedMessageId ? "bg-white" : "hover:bg-white"
+              }`}
             onClick={() => onSelectMessage(message.id)}
           >
             <div className="flex flex-col items-start gap-[3px] flex-1 min-w-0">
