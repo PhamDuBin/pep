@@ -42,7 +42,7 @@ export function VendorSelectionModal({
       <div className="relative w-full mb-[8px]">
         <div className="absolute left-[16px] top-1/2 -translate-y-1/2 text-[#808080] flex items-center justify-center">
           <Image
-            src="/assets/icons/find-blue.svg"
+            src="/assets/icons/search-blue.svg"
             alt="Project Plan"
             width={19}
             height={19}
@@ -62,9 +62,8 @@ export function VendorSelectionModal({
           {vendors.map((vendor) => (
             <label
               key={vendor.id}
-              className={`flex items-center gap-[8px] py-[8px] cursor-pointer transition-colors duration-200 ease-[cubic-bezier(0.25,0.8,0.25,1)] rounded-[4px] hover:bg-[#f9fafb] [&>span]:text-[14px] [&>span]:text-[#333333] ${
-                vendor.isSelected ? "bg-[rgba(51,51,51,0.05)]" : ""
-              }`}
+              className={`flex items-center gap-[8px] py-[8px] cursor-pointer transition-colors duration-200 ease-[cubic-bezier(0.25,0.8,0.25,1)] rounded-[4px] hover:bg-[#f9fafb] [&>span]:text-[14px] [&>span]:text-[#333333] ${vendor.isSelected ? "bg-[rgba(51,51,51,0.05)]" : ""
+                }`}
             >
               <input
                 type="checkbox"

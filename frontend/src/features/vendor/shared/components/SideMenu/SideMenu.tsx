@@ -93,19 +93,18 @@ export function SideMenu() {
     router.push("/vendor");
   };
 
-  const navigateToMyPage = () => {
+  const handleMyPageClick = () => {
     router.push("/vendor/my-page");
   };
 
-  const navigateToUserList = () => {
+  const handleUserListClick = () => {
     router.push("/vendor/user-list");
   };
 
   return (
     <motion.aside
-      className={`fixed left-0 top-[89px] bottom-0 h-[calc(100vh-89px)] bg-white flex flex-col justify-between items-start py-[15px] px-[10px] pb-[25px] z-40 transition-[width] duration-300 ease-[cubic-bezier(0.25,0.8,0.25,1)] shadow-[0px_4px_15px_rgba(0,0,0,0.1)] ${
-        isCollapsed ? "w-[60px]" : "w-[172px]"
-      }`}
+      className={`fixed left-0 top-[89px] bottom-0 h-[calc(100vh-89px)] bg-white flex flex-col justify-between items-start py-[15px] px-[10px] pb-[25px] z-40 transition-[width] duration-300 ease-[cubic-bezier(0.25,0.8,0.25,1)] shadow-[0px_4px_15px_rgba(0,0,0,0.1)] ${isCollapsed ? "w-[60px]" : "w-[172px]"
+        }`}
       variants={sidebarVariants}
       animate={isCollapsed ? "collapsed" : "expanded"}
       initial={false}
@@ -114,9 +113,8 @@ export function SideMenu() {
       <div className="flex flex-col items-start gap-[25px] self-stretch overflow-hidden">
         {/* Menu Toggle */}
         <div
-          className={`flex flex-col gap-[3px] w-full ${
-            isCollapsed ? "items-center" : ""
-          }`}
+          className={`flex flex-col gap-[3px] w-full ${isCollapsed ? "items-center" : ""
+            }`}
         >
           <motion.button
             className="bg-transparent border-none p-0 cursor-pointer transition-opacity duration-200 hover:opacity-70"
@@ -141,9 +139,8 @@ export function SideMenu() {
 
         {/* COMPANY Section */}
         <div
-          className={`flex flex-col gap-[5px] w-full ${
-            isCollapsed ? "items-center" : ""
-          }`}
+          className={`flex flex-col gap-[5px] w-full ${isCollapsed ? "items-center" : ""
+            }`}
         >
           <AnimatePresence mode="wait">
             {!isCollapsed && (
@@ -162,9 +159,8 @@ export function SideMenu() {
 
           {/* Company Search */}
           <motion.div
-            className={`flex items-center gap-[7px] py-[5px] px-[10px] h-[34px] cursor-pointer rounded transition-colors duration-200 mx-[-10px] w-[calc(100%+20px)] hover:bg-[#f9fafb] ${
-              isCollapsed ? "justify-center mx-0 px-[5px] w-full" : ""
-            }`}
+            className={`flex items-center gap-[7px] py-[5px] px-[10px] h-[34px] cursor-pointer rounded transition-colors duration-200 mx-[-10px] w-[calc(100%+20px)] hover:bg-[#f9fafb] ${isCollapsed ? "justify-center mx-0 px-[5px] w-full" : ""
+              }`}
             whileHover={{ scale: 1.02, x: isCollapsed ? 0 : 3 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -202,11 +198,10 @@ export function SideMenu() {
                 {companies.map((company, index) => (
                   <motion.div
                     key={company.id}
-                    className={`flex items-center py-[5px] px-[10px] min-h-[29px] rounded cursor-pointer transition-colors duration-200 mx-[-10px] w-[calc(100%+20px)] ${
-                      company.isSelected
+                    className={`flex items-center py-[5px] px-[10px] min-h-[29px] rounded cursor-pointer transition-colors duration-200 mx-[-10px] w-[calc(100%+20px)] ${company.isSelected
                         ? "bg-[#e6f3f5]"
                         : "hover:bg-[#f9fafb]"
-                    }`}
+                      }`}
                     onClick={() => handleSelectCompany(company.id)}
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -215,9 +210,8 @@ export function SideMenu() {
                     whileTap={{ scale: 0.98 }}
                   >
                     <span
-                      className={`text-[14px] font-normal leading-[19px] break-words ${
-                        company.isSelected ? "text-[#066a9e]" : "text-[#333333]"
-                      }`}
+                      className={`text-[14px] font-normal leading-[19px] break-words ${company.isSelected ? "text-[#066a9e]" : "text-[#333333]"
+                        }`}
                     >
                       {company.name}
                     </span>
@@ -231,16 +225,14 @@ export function SideMenu() {
 
       {/* Bottom Section */}
       <div
-        className={`flex flex-col justify-center gap-[10px] w-full self-stretch ${
-          isCollapsed ? "items-center" : ""
-        }`}
+        className={`flex flex-col justify-center gap-[10px] w-full self-stretch ${isCollapsed ? "items-center" : ""
+          }`}
       >
         {/* User List */}
         <motion.div
-          className={`flex items-center py-[8px] px-[10px] h-[32px] cursor-pointer rounded transition-colors duration-200 gap-[7px] mx-[-10px] w-[calc(100%+20px)] ${
-            isUserListActive ? "bg-[#f0f0f0]" : "hover:bg-[#f9fafb]"
-          } ${isCollapsed ? "justify-center mx-0 w-full px-[5px]" : ""}`}
-          onClick={navigateToUserList}
+          className={`flex items-center py-[8px] px-[10px] h-[32px] cursor-pointer rounded transition-colors duration-200 gap-[7px] mx-[-10px] w-[calc(100%+20px)] ${isUserListActive ? "bg-[#f0f0f0]" : "hover:bg-[#f9fafb]"
+            } ${isCollapsed ? "justify-center mx-0 w-full px-[5px]" : ""}`}
+          onClick={handleUserListClick}
           whileHover={{ scale: 1.02, x: isCollapsed ? 0 : 3 }}
           whileTap={{ scale: 0.98 }}
         >
@@ -253,9 +245,8 @@ export function SideMenu() {
           <AnimatePresence mode="wait">
             {!isCollapsed && (
               <motion.span
-                className={`text-[13px] ${
-                  isUserListActive ? "text-[#066a9e]" : "text-[#333333]"
-                }`}
+                className={`text-[13px] ${isUserListActive ? "text-[#066a9e]" : "text-[#333333]"
+                  }`}
                 variants={textVariants}
                 initial="hidden"
                 animate="visible"
@@ -269,10 +260,9 @@ export function SideMenu() {
 
         {/* User Profile */}
         <motion.div
-          className={`flex items-center py-[5px] px-[10px] h-[40px] cursor-pointer rounded transition-colors duration-200 gap-[7px] mx-[-10px] w-[calc(100%+20px)] ${
-            isMyPageActive ? "bg-[#f0f0f0]" : "hover:bg-[#f9fafb]"
-          } ${isCollapsed ? "justify-center mx-0 w-full px-[5px]" : ""}`}
-          onClick={navigateToMyPage}
+          className={`flex items-center py-[5px] px-[10px] h-[40px] cursor-pointer rounded transition-colors duration-200 gap-[7px] mx-[-10px] w-[calc(100%+20px)] ${isMyPageActive ? "bg-[#f0f0f0]" : "hover:bg-[#f9fafb]"
+            } ${isCollapsed ? "justify-center mx-0 w-full px-[5px]" : ""}`}
+          onClick={handleMyPageClick}
           whileHover={{ scale: 1.02, x: isCollapsed ? 0 : 3 }}
           whileTap={{ scale: 0.98 }}
         >
@@ -287,9 +277,8 @@ export function SideMenu() {
           <AnimatePresence mode="wait">
             {!isCollapsed && (
               <motion.span
-                className={`text-[13px] ${
-                  isMyPageActive ? "text-[#066a9e]" : "text-[#333333]"
-                }`}
+                className={`text-[13px] ${isMyPageActive ? "text-[#066a9e]" : "text-[#333333]"
+                  }`}
                 variants={textVariants}
                 initial="hidden"
                 animate="visible"

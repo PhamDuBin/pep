@@ -87,7 +87,7 @@ export function ChatInputBox({
         aria-label="送信"
       >
         <Image
-          src="/assets/icons/send.svg"
+          src="/assets/icons/ai-chat-send.svg"
           alt="Send Icon"
           width={27}
           height={27}

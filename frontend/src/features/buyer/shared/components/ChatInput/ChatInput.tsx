@@ -55,7 +55,7 @@ export function ChatInput({
         className="transition-opacity duration-200 ease-[cubic-bezier(0.25,0.8,0.25,1)] hover:opacity-90"
         onClick={handleMessageSend}
       >
-        <Image src="/assets/icons/send.svg" alt="Send" width={40} height={40} />
+        <Image src="/assets/icons/ai-chat-send.svg" alt="Send" width={40} height={40} />
       </button>
     </div>
   );

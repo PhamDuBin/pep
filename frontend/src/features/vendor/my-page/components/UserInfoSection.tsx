@@ -158,7 +158,7 @@ export function UserInfoSection({
                   />
                 ) : (
                   <Image
-                    src="/assets/icons/mdi-eye.svg"
+                    src="/assets/icons/eye.svg"
                     alt="Eye Icon"
                     width={24}
                     height={24}
@@ -195,7 +195,7 @@ export function UserInfoSection({
                   />
                 ) : (
                   <Image
-                    src="/assets/icons/mdi-eye.svg"
+                    src="/assets/icons/eye.svg"
                     alt="Eye Icon"
                     width={24}
                     height={24}

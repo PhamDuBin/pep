@@ -7,7 +7,7 @@ import { AVATAR_COLOR_OPTIONS } from "@/shared/mocks";
 interface AvatarChangeModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (color: string) => void;
+  onAvatarSaveClick: (color: string) => void;
   currentColor?: string;
   isSaving?: boolean;
 }
@@ -15,7 +15,7 @@ interface AvatarChangeModalProps {
 export function AvatarChangeModal({
   isOpen,
   onClose,
-  onSave,
+  onAvatarSaveClick,
   currentColor = "#8ec5d0",
   isSaving = false,
 }: AvatarChangeModalProps) {
@@ -28,8 +28,8 @@ export function AvatarChangeModal({
   }, [isOpen, currentColor]);
 
   const handleSave = useCallback(() => {
-    onSave(selectedColor);
-  }, [selectedColor, onSave]);
+    onAvatarSaveClick(selectedColor);
+  }, [selectedColor, onAvatarSaveClick]);
 
   return (
     <Modal
@@ -69,11 +69,10 @@ export function AvatarChangeModal({
           <button
             key={option.id}
             type="button"
-            className={`w-[70px] h-[70px] rounded-full border-[3px] cursor-pointer transition-all duration-200 p-0 hover:scale-105 ${
-              selectedColor === option.color
-                ? "border-[#066a9e]"
-                : "border-transparent"
-            }`}
+            className={`w-[70px] h-[70px] rounded-full border-[3px] cursor-pointer transition-all duration-200 p-0 hover:scale-105 ${selectedColor === option.color
+              ? "border-[#066a9e]"
+              : "border-transparent"
+              }`}
             style={{
               backgroundColor: option.color,
             }}

@@ -78,11 +78,11 @@ export function useVendorUserList() {
   }, [allSelected]);
 
   // Invite handlers
-  const handleInviteMember = useCallback(() => {
+  const handleOpenInviteModal = useCallback(() => {
     setShowInviteModal(true);
   }, []);
 
-  const handleInviteConfirm = useCallback(async (emails: string[]) => {
+  const handleInviteMember = useCallback(async (emails: string[]) => {
     try {
       // Invite each email with default role
       for (const email of emails) {
@@ -186,26 +186,28 @@ export function useVendorUserList() {
     changePermissionModalState,
 
     // Selection handlers
-    toggleUserSelection,
-    toggleAllSelection,
+    handleUserSelect: toggleUserSelection,
+    handleAllSelect: toggleAllSelection,
 
     // Invite handlers
-    handleInviteMember,
-    handleInviteConfirm,
+    handleInviteMemberClick: handleInviteMember,
+
     handleCloseInviteModal,
 
     // Delete handlers
     handleDeleteMembers,
-    handleDeleteConfirm,
+    handleDeleteConfirmClick: handleDeleteConfirm,
     handleCloseDeleteConfirmModal,
     handleCloseDeleteSuccessModal,
 
     // Change permission handlers
     handleChangePermission,
-    handleChangePermissionSave,
+    handlePermissionSaveClick: handleChangePermissionSave,
     handleCloseChangePermissionModal,
 
     // Constants
+    // Link to UI
+    handleOpenInviteModal,
     permissionOptions,
   };
 }

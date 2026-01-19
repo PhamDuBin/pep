@@ -6,7 +6,7 @@ import { DeleteConfirmModalState } from "@/shared/types";
 interface DeleteConfirmModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: () => void;
+  onDeleteConfirmClick: () => void;
   selectedCount?: number;
   message?: string;
   isDeleting?: boolean;
@@ -16,7 +16,7 @@ interface DeleteConfirmModalProps {
 export function DeleteConfirmModal({
   isOpen,
   onClose,
-  onConfirm,
+  onDeleteConfirmClick,
   selectedCount = 0,
   message,
   isDeleting = false,
@@ -27,9 +27,8 @@ export function DeleteConfirmModal({
       isOpen={isOpen}
       onClose={onClose}
       size={modalState === "complete" ? "sm" : "md"}
-      customClass={`p-[20px_35px] gap-[25px] ${
-        modalState === "complete" ? "w-[500px] max-w-[500px] h-[174px]" : ""
-      }`}
+      customClass={`p-[20px_35px] gap-[25px] ${modalState === "complete" ? "w-[500px] max-w-[500px] h-[174px]" : ""
+        }`}
       isLoading={isDeleting}
       actions={
         modalState === "confirm" ? (
@@ -45,7 +44,7 @@ export function DeleteConfirmModal({
               type="button"
               className="py-[10px] px-[15px] bg-[#333333] border-none rounded-[8px] font-normal text-[14px] leading-[19px] text-white cursor-pointer transition-colors duration-200 min-w-[80px] h-[39px] flex items-center justify-center hover:enabled:bg-[#444444] disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={isDeleting}
-              onClick={onConfirm}
+              onClick={onDeleteConfirmClick}
             >
               {isDeleting ? (
                 <span className="loading loading-spinner loading-sm"></span>
