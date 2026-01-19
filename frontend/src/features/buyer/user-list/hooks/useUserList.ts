@@ -107,7 +107,7 @@ export function useUserList() {
     setPermissionModalState("select");
   }, []);
 
-  const handleConfirmPermissionChange = useCallback(
+  const handlePermissionSaveClick = useCallback(
     async (newPermission: UserPermission) => {
       if (selectedUserId) {
         setIsSavingPermission(true);
@@ -136,7 +136,7 @@ export function useUserList() {
     }
   }, [selectedCount]);
 
-  const handleConfirmDelete = useCallback(async () => {
+  const handleDeleteConfirmClick = useCallback(async () => {
     setIsDeleting(true);
     try {
       const userIdsToDelete = users
@@ -167,7 +167,7 @@ export function useUserList() {
     setInviteModalState("form");
   }, []);
 
-  const handleInvite = useCallback(async (emails: string[]) => {
+  const handleInviteMemberClick = useCallback(async (emails: string[]) => {
     setIsInviting(true);
     try {
       // For now, just invite the first email (can be expanded to handle multiple)
@@ -218,13 +218,13 @@ export function useUserList() {
     handleToggleAllSelection,
     handleOpenPermissionModal,
     handleClosePermissionModal,
-    handleConfirmPermissionChange,
+    handlePermissionSaveClick,
     handleDeleteMembers,
-    handleConfirmDelete,
+    handleDeleteConfirmClick,
     handleCloseDeleteModal,
     handleOpenInviteModal,
     handleCloseInviteModal,
-    handleInvite,
+    handleInviteMemberClick,
     getPermissionLabel,
   };
 }

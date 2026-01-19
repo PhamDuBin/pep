@@ -32,13 +32,13 @@ export function UserListPage() {
     handleToggleAllSelection,
     handleOpenPermissionModal,
     handleClosePermissionModal,
-    handleConfirmPermissionChange,
+    handlePermissionSaveClick,
     handleDeleteMembers,
-    handleConfirmDelete,
+    handleDeleteConfirmClick,
     handleCloseDeleteModal,
     handleOpenInviteModal,
     handleCloseInviteModal,
-    handleInvite,
+    handleInviteMemberClick,
     getPermissionLabel,
   } = useUserList();
 
@@ -83,16 +83,15 @@ export function UserListPage() {
                           className="absolute opacity-0 cursor-pointer h-0 w-0"
                         />
                         <span
-                          className={`w-[20px] h-[20px] border rounded-[4px] flex items-center justify-center transition-all duration-200 ${
-                            isAllSelected
-                              ? "border-[#066a9e]"
-                              : "bg-[#ffffff] border-[#cfcfcf]"
-                          }`}
+                          className={`w-[20px] h-[20px] border rounded-[4px] flex items-center justify-center transition-all duration-200 ${isAllSelected
+                            ? "border-[#066a9e]"
+                            : "bg-[#ffffff] border-[#cfcfcf]"
+                            }`}
                           style={{ backgroundColor: isAllSelected ? "#066a9e" : "#ffffff" }}
                         >
                           {isAllSelected && (
                             <svg width="12" height="10" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M1 5L4.5 8.5L11 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                              <path d="M1 5L4.5 8.5L11 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                           )}
                         </span>
@@ -122,16 +121,15 @@ export function UserListPage() {
                             className="absolute opacity-0 cursor-pointer h-0 w-0"
                           />
                           <span
-                            className={`w-[20px] h-[20px] border rounded-[4px] flex items-center justify-center transition-all duration-200 ${
-                              user.isSelected
-                                ? "border-[#066a9e]"
-                                : "bg-[#ffffff] border-[#cfcfcf]"
-                            }`}
+                            className={`w-[20px] h-[20px] border rounded-[4px] flex items-center justify-center transition-all duration-200 ${user.isSelected
+                              ? "border-[#066a9e]"
+                              : "bg-[#ffffff] border-[#cfcfcf]"
+                              }`}
                             style={{ backgroundColor: user.isSelected ? "#066a9e" : "#ffffff" }}
                           >
                             {user.isSelected && (
                               <svg width="12" height="10" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M1 5L4.5 8.5L11 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                <path d="M1 5L4.5 8.5L11 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                               </svg>
                             )}
                           </span>
@@ -190,7 +188,7 @@ export function UserListPage() {
         <InviteMemberModal
           isOpen={showInviteModal}
           onClose={handleCloseInviteModal}
-          onInvite={handleInvite}
+          onInviteMemberClick={handleInviteMemberClick}
           isSaving={isInviting}
           modalState={inviteModalState}
         />
@@ -199,7 +197,7 @@ export function UserListPage() {
         <PermissionChangeModal
           isOpen={showPermissionModal}
           onClose={handleClosePermissionModal}
-          onConfirm={handleConfirmPermissionChange}
+          onPermissionSaveClick={handlePermissionSaveClick}
           currentPermission={selectedUser?.permission}
           userName={selectedUser?.name}
           isSaving={isSavingPermission}
@@ -210,7 +208,7 @@ export function UserListPage() {
         <DeleteConfirmModal
           isOpen={showDeleteModal}
           onClose={handleCloseDeleteModal}
-          onConfirm={handleConfirmDelete}
+          onDeleteConfirmClick={handleDeleteConfirmClick}
           selectedCount={selectedCount}
           isDeleting={isDeleting}
           modalState={deleteModalState}

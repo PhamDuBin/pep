@@ -59,6 +59,14 @@ export function useVendorHome() {
     }
   }, [newMessage, selectedMessageId]);
 
+  const handleSearchChange = useCallback((value: string) => {
+    setSearchQuery(value);
+  }, [setSearchQuery]);
+
+  const handleNewMessageChange = useCallback((value: string) => {
+    setNewMessage(value);
+  }, []);
+
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
       if (e.key === "Enter" && !e.shiftKey) {
@@ -81,7 +89,8 @@ export function useVendorHome() {
     messageContainerRef,
     // Actions
     setSearchQuery,
-    setNewMessage,
+    handleSearchChange,
+    handleNewMessageChange,
     handleSelectMessage,
     handleSendMessage,
     handleKeyDown,

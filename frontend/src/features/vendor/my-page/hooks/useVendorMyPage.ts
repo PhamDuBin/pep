@@ -50,10 +50,10 @@ export interface UseVendorMyPageReturn {
   setShowAvatarModal: (show: boolean) => void;
 
   // Action handlers
-  handleEmailChange: () => void;
-  handleEmailSent: (newEmail: string, confirmEmail: string) => void;
-  handleAvatarUpload: () => void;
-  handleAvatarColorChange: (color: string) => void;
+  handleEmailChangeClick: () => void;
+  handleEmailSendClick: (newEmail: string, confirmEmail: string) => void;
+  handleAvatarClick: () => void;
+  handleAvatarSaveClick: (color: string) => void;
   handleSaveChanges: () => void;
   handleDownloadInvoice: (invoiceUrl: string) => void;
 }
@@ -101,11 +101,11 @@ export function useVendorMyPage(): UseVendorMyPageReturn {
     loadData();
   }, []);
 
-  const handleEmailChange = useCallback(() => {
+  const handleEmailChangeClick = useCallback(() => {
     setShowEmailModal(true);
   }, []);
 
-  const handleEmailSent = useCallback(async (newEmail: string, confirmEmail: string) => {
+  const handleEmailSendClick = useCallback(async (newEmail: string, confirmEmail: string) => {
     try {
       const result = await requestVendorEmailChange(newEmail);
       if (result.success) {
@@ -117,11 +117,11 @@ export function useVendorMyPage(): UseVendorMyPageReturn {
     }
   }, []);
 
-  const handleAvatarUpload = useCallback(() => {
+  const handleAvatarClick = useCallback(() => {
     setShowAvatarModal(true);
   }, []);
 
-  const handleAvatarColorChange = useCallback(async (color: string) => {
+  const handleAvatarSaveClick = useCallback(async (color: string) => {
     try {
       await updateVendorAvatarColor(color);
       setUserProfile((prev) => prev ? { ...prev, avatarColor: color } : null);
@@ -199,11 +199,11 @@ export function useVendorMyPage(): UseVendorMyPageReturn {
     setShowAvatarModal,
 
     // Action handlers
-    handleEmailChange,
-    handleEmailSent,
-    handleAvatarUpload,
-    handleAvatarColorChange,
+    handleEmailChangeClick,
+    handleEmailSendClick,
+    handleAvatarClick,
+    handleAvatarSaveClick,
     handleSaveChanges,
     handleDownloadInvoice,
   };
-}
+} 

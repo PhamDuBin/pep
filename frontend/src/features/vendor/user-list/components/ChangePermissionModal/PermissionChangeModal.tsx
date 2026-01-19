@@ -14,7 +14,7 @@ export type ChangePermissionModalState = "select" | "complete";
 interface ChangePermissionModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (permission: VendorUserPermission) => void;
+  onPermissionSaveClick: (permission: VendorUserPermission) => void;
   currentPermission?: VendorUserPermission;
   isSaving?: boolean;
 }
@@ -51,7 +51,7 @@ const PERMISSION_TABLE_DATA: PermissionTableRow[] = [
 export function PermissionChangeModal({
   isOpen,
   onClose,
-  onSave,
+  onPermissionSaveClick,
   currentPermission,
   isSaving = false,
 }: ChangePermissionModalProps) {
@@ -67,10 +67,10 @@ export function PermissionChangeModal({
     }
   }, [isOpen, currentPermission]);
 
-  const handleConfirm = useCallback(() => {
-    onSave(selectedPermission);
+  const handleSaveClick = useCallback(() => {
+    onPermissionSaveClick(selectedPermission);
     setModalState("complete");
-  }, [selectedPermission, onSave]);
+  }, [selectedPermission, onPermissionSaveClick]);
 
   const getPermissionLabel = (permission: VendorUserPermission) => {
     return VENDOR_PERMISSION_LABELS_MOCK[permission] || permission;
@@ -94,7 +94,7 @@ export function PermissionChangeModal({
               type="button"
               className="flex flex-row items-center justify-center py-[10px] px-[15px] gap-[10px] w-[58px] h-[39px] bg-[#066A9E] rounded-[8px] border-none font-noto font-[400] text-[14px] leading-[19px] text-[#FFFFFF] cursor-pointer transition-colors duration-200 hover:bg-[#055580] disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={isSaving || selectedPermission === currentPermission}
-              onClick={handleConfirm}
+              onClick={handleSaveClick}
             >
               {isSaving ? (
                 <span className="loading loading-spinner loading-sm"></span>
@@ -151,8 +151,8 @@ export function PermissionChangeModal({
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
                       <div
                         className={`w-[16px] h-[16px] bg-[#1f2937] rounded-full transition-opacity ${selectedPermission === option.value
-                            ? "opacity-100"
-                            : "opacity-0"
+                          ? "opacity-100"
+                          : "opacity-0"
                           }`}
                       ></div>
                     </div>

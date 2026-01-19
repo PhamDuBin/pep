@@ -7,7 +7,7 @@ import { PermissionOption } from "../../types";
 interface UserEditModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (name: string, permission: string) => void;
+  onSaveUser: (name: string, permission: string) => void;
   currentName?: string;
   currentPermission?: string;
   permissionOptions?: PermissionOption[];
@@ -22,7 +22,7 @@ const DEFAULT_PERMISSION_OPTIONS: PermissionOption[] = [
 export function UserEditModal({
   isOpen,
   onClose,
-  onSave,
+  onSaveUser,
   currentName = "",
   currentPermission = "",
   permissionOptions = DEFAULT_PERMISSION_OPTIONS,
@@ -40,9 +40,9 @@ export function UserEditModal({
     }
   }, [isOpen, currentName, currentPermission, permissionOptions]);
 
-  const handleSave = useCallback(() => {
-    onSave(name, permission);
-  }, [name, permission, onSave]);
+  const handleSaveUser = useCallback(() => {
+    onSaveUser(name, permission);
+  }, [name, permission, onSaveUser]);
 
   return (
     <Modal
@@ -89,7 +89,7 @@ export function UserEditModal({
         <button
           type="button"
           className="modal-btn-primary-color"
-          onClick={handleSave}
+          onClick={handleSaveUser}
           disabled={isSaving || !name.trim()}
         >
           {isSaving ? "保存中..." : "保存"}

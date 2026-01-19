@@ -19,7 +19,7 @@ interface PermissionTableRow {
 interface PermissionChangeModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: (permission: UserPermission) => void;
+  onPermissionSaveClick: (permission: UserPermission) => void;
   currentPermission?: UserPermission;
   userName?: string;
   isSaving?: boolean;
@@ -69,7 +69,7 @@ const PERMISSION_TABLE_DATA: PermissionTableRow[] = [
 export function PermissionChangeModal({
   isOpen,
   onClose,
-  onConfirm,
+  onPermissionSaveClick,
   currentPermission = "member",
   userName = "",
   isSaving = false,
@@ -85,8 +85,8 @@ export function PermissionChangeModal({
   }, [isOpen, currentPermission, modalState]);
 
   const handleConfirm = useCallback(() => {
-    onConfirm(selectedPermission);
-  }, [selectedPermission, onConfirm]);
+    onPermissionSaveClick(selectedPermission);
+  }, [selectedPermission, onPermissionSaveClick]);
 
   const getPermissionLabel = (permission: UserPermission | null): string => {
     if (!permission) return "";
@@ -147,8 +147,8 @@ export function PermissionChangeModal({
                 >
                   <div
                     className={`w-[18px] h-[18px] border-2 rounded-full bg-white flex items-center justify-center transition-all duration-200 shrink-0 hover:border-[#333333] ${selectedPermission === option.value
-                        ? "border-[#333333]"
-                        : "border-[#b9b9b9]"
+                      ? "border-[#333333]"
+                      : "border-[#b9b9b9]"
                       }`}
                   >
                     {selectedPermission === option.value && (
@@ -194,16 +194,16 @@ export function PermissionChangeModal({
                   <tr key={index}>
                     <td
                       className={`px-[12px] py-[10px] font-medium text-[14px] leading-[1.3] text-[#333] text-center align-middle min-h-[44px] ${index !== PERMISSION_TABLE_DATA.length - 1
-                          ? "border-b border-[#d4d4d4]"
-                          : ""
+                        ? "border-b border-[#d4d4d4]"
+                        : ""
                         }`}
                     >
                       {row.feature}
                     </td>
                     <td
                       className={`px-[12px] py-[10px] font-medium text-[14px] leading-[1.3] text-[#333] text-center align-middle min-h-[44px] ${index !== PERMISSION_TABLE_DATA.length - 1
-                          ? "border-b border-[#d4d4d4]"
-                          : ""
+                        ? "border-b border-[#d4d4d4]"
+                        : ""
                         }`}
                     >
                       {row.adminCheck ? (
@@ -228,8 +228,8 @@ export function PermissionChangeModal({
                     </td>
                     <td
                       className={`px-[12px] py-[10px] font-medium text-[14px] leading-[1.3] text-[#333] text-center align-middle min-h-[44px] ${index !== PERMISSION_TABLE_DATA.length - 1
-                          ? "border-b border-[#d4d4d4]"
-                          : ""
+                        ? "border-b border-[#d4d4d4]"
+                        : ""
                         }`}
                     >
                       {row.memberCheck ? (

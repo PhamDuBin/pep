@@ -54,12 +54,12 @@ export interface UseMyPageReturn {
   // Action handlers
   handleAvatarClick: () => void;
   handleEmailChangeClick: () => void;
-  handleSaveAvatar: (color: string) => void;
+  handleAvatarSaveClick: (color: string) => void;
   handleSavePassword: () => Promise<void>;
   handlePageChange: (page: number) => void;
   handleDownloadInvoice: (recordId: string) => void;
   handleAddPaymentMethod: () => void;
-  handleSendEmailChange: (newEmail: string, confirmEmail: string) => void;
+  handleEmailSendClick: (newEmail: string, confirmEmail: string) => void;
   handleCloseEmailModal: () => void;
 
   // Utility functions
@@ -132,7 +132,7 @@ export function useMyPage(): UseMyPageReturn {
     setEmailModalState("email-change");
   }, []);
 
-  const handleSaveAvatar = useCallback(async (color: string) => {
+  const handleAvatarSaveClick = useCallback(async (color: string) => {
     try {
       await updateAvatarColor(color);
       setUser((prev) => (prev ? { ...prev, avatarColor: color } : null));
@@ -201,7 +201,7 @@ export function useMyPage(): UseMyPageReturn {
     return status === "paid" ? "支払い済み" : "未払い";
   }, []);
 
-  const handleSendEmailChange = useCallback(
+  const handleEmailSendClick = useCallback(
     async (newEmail: string, confirmEmail: string) => {
       setIsSendingEmail(true);
       try {
@@ -259,12 +259,12 @@ export function useMyPage(): UseMyPageReturn {
     // Action handlers
     handleAvatarClick,
     handleEmailChangeClick,
-    handleSaveAvatar,
+    handleAvatarSaveClick,
     handleSavePassword,
     handlePageChange,
     handleDownloadInvoice,
     handleAddPaymentMethod,
-    handleSendEmailChange,
+    handleEmailSendClick,
     handleCloseEmailModal,
 
     // Utility functions

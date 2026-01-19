@@ -27,10 +27,10 @@ export function MyPage() {
     setShowEmailModal,
     setShowEmailSuccessModal,
     setShowAvatarModal,
-    handleEmailChange,
-    handleEmailSent,
-    handleAvatarUpload,
-    handleAvatarColorChange,
+    handleEmailChangeClick,
+    handleEmailSendClick,
+    handleAvatarClick,
+    handleAvatarSaveClick,
     handleSaveChanges,
     handleDownloadInvoice,
   } = useVendorMyPage();
@@ -57,8 +57,8 @@ export function MyPage() {
               setConfirmPassword={setConfirmPassword}
               setShowNewPassword={setShowNewPassword}
               setShowConfirmPassword={setShowConfirmPassword}
-              onAvatarClick={handleAvatarUpload}
-              onEmailChangeClick={handleEmailChange}
+              onAvatarClick={handleAvatarClick}
+              onEmailChangeClick={handleEmailChangeClick}
               onSaveChanges={handleSaveChanges}
             />
 
@@ -77,7 +77,7 @@ export function MyPage() {
         <EmailChangeModal
           isOpen={showEmailModal}
           onClose={() => setShowEmailModal(false)}
-          onSend={handleEmailSent}
+          onEmailSendClick={handleEmailSendClick}
         />
 
         {/* Email Success Modal */}
@@ -92,7 +92,7 @@ export function MyPage() {
         <AvatarChangeModal
           isOpen={showAvatarModal}
           onClose={() => setShowAvatarModal(false)}
-          onSave={handleAvatarColorChange}
+          onAvatarSaveClick={handleAvatarSaveClick}
           currentColor={userProfile?.avatarColor || "#8ec5d0"}
         />
       </div>

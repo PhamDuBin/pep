@@ -7,7 +7,7 @@ import { EmailChangeModalState } from "@/shared/types";
 interface EmailChangeModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSend: (newEmail: string, confirmEmail: string) => void;
+  onEmailSendClick: (newEmail: string, confirmEmail: string) => void;
   isSaving?: boolean;
   modalState?: EmailChangeModalState;
 }
@@ -15,7 +15,7 @@ interface EmailChangeModalProps {
 export function EmailChangeModal({
   isOpen,
   onClose,
-  onSend,
+  onEmailSendClick,
   isSaving = false,
   modalState = "email-change",
 }: EmailChangeModalProps) {
@@ -38,9 +38,9 @@ export function EmailChangeModal({
 
   const handleSend = useCallback(() => {
     if (newEmail.trim() && confirmEmail.trim() && newEmail === confirmEmail) {
-      onSend(newEmail.trim(), confirmEmail.trim());
+      onEmailSendClick(newEmail.trim(), confirmEmail.trim());
     }
-  }, [newEmail, confirmEmail, onSend]);
+  }, [newEmail, confirmEmail, onEmailSendClick]);
 
   const isValid =
     newEmail.trim() !== "" &&
