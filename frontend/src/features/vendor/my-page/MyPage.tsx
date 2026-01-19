@@ -1,57 +1,44 @@
 "use client";
 
-import {
-  EmailChangeModal,
-  AvatarChangeModal,
-  Loading,
-  PageTransition,
-} from "@/shared/components";
-import { useMyPage } from "./hooks";
+import { EmailChangeModal, AvatarChangeModal, Loading, PageTransition } from "@/shared/components";
+import { InfoModal } from "@/features/vendor/shared/components";
+import { useVendorMyPage } from "./hooks";
 import { UserInfoSection, PaymentInfoSection } from "./components";
 
 export function MyPage() {
   const {
     isLoading,
     isSaving,
-    user,
+    userProfile,
     paymentInfo,
     paymentHistory,
     newPassword,
     confirmPassword,
-    showPassword,
+    showNewPassword,
     showConfirmPassword,
-    showAvatarSaveSuccess,
     showPasswordSaveSuccess,
-    currentPage,
-    totalPages,
     showEmailModal,
+    showEmailSuccessModal,
     showAvatarModal,
-    emailModalState,
-    isSendingEmail,
     setNewPassword,
     setConfirmPassword,
-    setShowPassword,
+    setShowNewPassword,
     setShowConfirmPassword,
     setShowEmailModal,
+    setShowEmailSuccessModal,
     setShowAvatarModal,
-    handleAvatarClick,
-    handleEmailChangeClick,
-    handleSaveAvatar,
-    handleSavePassword,
-    handlePageChange,
+    handleEmailChange,
+    handleEmailSent,
+    handleAvatarUpload,
+    handleAvatarColorChange,
+    handleSaveChanges,
     handleDownloadInvoice,
-    handleAddPaymentMethod,
-    handleSendEmailChange,
-    handleCloseEmailModal,
-    formatAmount,
-    getPaymentMethodDisplay,
-    getStatusLabel,
-  } = useMyPage();
+  } = useVendorMyPage();
 
   return (
     <PageTransition>
       <div className="flex flex-col gap-[25px] w-full px-[50px] py-[25px]">
-        {isLoading || !user ? (
+        {isLoading || !userProfile ? (
           <div className="flex items-center justify-center min-h-[200px]">
             <Loading type="spinner" size="lg" />
           </div>
@@ -59,36 +46,28 @@ export function MyPage() {
           <div className="flex flex-col gap-[35px]">
             {/* User Info Section */}
             <UserInfoSection
-              user={user}
+              userProfile={userProfile}
               newPassword={newPassword}
               confirmPassword={confirmPassword}
-              showPassword={showPassword}
+              showNewPassword={showNewPassword}
               showConfirmPassword={showConfirmPassword}
-              showAvatarSaveSuccess={showAvatarSaveSuccess}
               showPasswordSaveSuccess={showPasswordSaveSuccess}
               isSaving={isSaving}
               setNewPassword={setNewPassword}
               setConfirmPassword={setConfirmPassword}
-              setShowPassword={setShowPassword}
+              setShowNewPassword={setShowNewPassword}
               setShowConfirmPassword={setShowConfirmPassword}
-              handleAvatarClick={handleAvatarClick}
-              handleEmailChangeClick={handleEmailChangeClick}
-              handleSavePassword={handleSavePassword}
+              onAvatarClick={handleAvatarUpload}
+              onEmailChangeClick={handleEmailChange}
+              onSaveChanges={handleSaveChanges}
             />
 
-            {/* Payment Info Section (Admin Only) */}
-            {user.role === "admin" && paymentInfo && (
+            {/* Payment Info Section */}
+            {paymentInfo && (
               <PaymentInfoSection
                 paymentInfo={paymentInfo}
                 paymentHistory={paymentHistory}
-                currentPage={currentPage}
-                totalPages={totalPages}
-                handlePageChange={handlePageChange}
-                handleDownloadInvoice={handleDownloadInvoice}
-                handleAddPaymentMethod={handleAddPaymentMethod}
-                formatAmount={formatAmount}
-                getPaymentMethodDisplay={getPaymentMethodDisplay}
-                getStatusLabel={getStatusLabel}
+                onDownloadInvoice={handleDownloadInvoice}
               />
             )}
           </div>
@@ -97,18 +76,24 @@ export function MyPage() {
         {/* Email Change Modal */}
         <EmailChangeModal
           isOpen={showEmailModal}
-          onClose={handleCloseEmailModal}
-          onSend={handleSendEmailChange}
-          modalState={emailModalState}
-          isSaving={isSendingEmail}
+          onClose={() => setShowEmailModal(false)}
+          onSend={handleEmailSent}
+        />
+
+        {/* Email Success Modal */}
+        <InfoModal
+          isOpen={showEmailSuccessModal}
+          onClose={() => setShowEmailSuccessModal(false)}
+          title="メールアドレスを変更"
+          message={"ご入力いただいたメールアドレスへ再設定用URLを送信しました。\nメール内のURLをクリックすると、\nメールアドレス変更が完了いたします。"}
         />
 
         {/* Avatar Change Modal */}
         <AvatarChangeModal
           isOpen={showAvatarModal}
           onClose={() => setShowAvatarModal(false)}
-          onSave={handleSaveAvatar}
-          currentColor={user?.avatarColor || "#8ec5d0"}
+          onSave={handleAvatarColorChange}
+          currentColor={userProfile?.avatarColor || "#8ec5d0"}
         />
       </div>
     </PageTransition>

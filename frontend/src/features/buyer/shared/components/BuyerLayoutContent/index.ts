@@ -1,1 +1,0 @@
-export { BuyerLayoutContent } from "./BuyerLayoutContent";

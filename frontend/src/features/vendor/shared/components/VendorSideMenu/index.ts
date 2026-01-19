@@ -1,1 +1,0 @@
-export { VendorSideMenu } from "./VendorSideMenu";

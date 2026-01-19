@@ -1,5 +1,8 @@
 // Components
-export { VendorMyPage } from "./VendorMyPage";
+export { MyPage } from "./MyPage";
+
+// Backward compatibility alias
+export { MyPage as VendorMyPage } from "./MyPage";
 
 // Hooks
 export { useVendorMyPage } from "./hooks";
