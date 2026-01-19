@@ -35,9 +35,9 @@ export const metadata: Metadata = {
     follow: true,
   },
   icons: {
-    icon: "/assets/icons/favicon.png",
-    shortcut: "/assets/icons/favicon.png",
-    apple: "/assets/icons/favicon.png",
+    icon: "favicon.ico",
+    shortcut: "favicon.ico",
+    apple: "favicon.ico",
   },
 };
 
@@ -57,7 +57,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-theme="light" suppressHydrationWarning>
+    <html lang="jp" data-theme="light" suppressHydrationWarning>
       <body
         className={`${notoSans.variable} ${notoSansJP.variable} ${inter.variable} font-noto`}
       >
