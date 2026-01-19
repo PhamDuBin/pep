@@ -29,23 +29,23 @@ export function UserListPage() {
     changePermissionModalState,
 
     // Selection handlers
-    toggleUserSelection,
-    toggleAllSelection,
+    handleUserSelect,
+    handleAllSelect,
 
     // Invite handlers
-    handleInviteMember,
-    handleInviteConfirm,
+    handleInviteMemberClick,
+    handleOpenInviteModal,
     handleCloseInviteModal,
 
     // Delete handlers
     handleDeleteMembers,
-    handleDeleteConfirm,
+    handleDeleteConfirmClick,
     handleCloseDeleteConfirmModal,
     handleCloseDeleteSuccessModal,
 
     // Change permission handlers
     handleChangePermission,
-    handleChangePermissionSave,
+    handlePermissionSaveClick,
     handleCloseChangePermissionModal,
 
     // Constants
@@ -67,7 +67,7 @@ export function UserListPage() {
           <button
             type="button"
             className="flex flex-row items-center justify-center px-[15px] py-[10px] gap-[10px] w-[128px] h-[39px] bg-[#066A9E] rounded-[8px] border-none cursor-pointer hover:bg-[#055580] transition-colors"
-            onClick={handleInviteMember}
+            onClick={handleOpenInviteModal}
           >
             <span className="font-noto font-[400] text-[14px] leading-[19px] text-[#FFFFFF]">
               メンバーを招待
@@ -84,7 +84,7 @@ export function UserListPage() {
                       <input
                         type="checkbox"
                         checked={allSelected}
-                        onChange={toggleAllSelection}
+                        onChange={handleAllSelect}
                         className="appearance-none w-[20px] h-[20px] bg-[#FFFFFF] border border-[#cfcfcf] rounded-[8px] cursor-pointer relative checked:!bg-[#333333] checked:!border-[#333333]
                         after:content-[''] after:absolute after:left-[7px] after:top-[3px] after:w-[6px] after:h-[10px] after:border-[#FFFFFF] after:border-r-2 after:border-b-2 after:rotate-45 after:hidden checked:after:block"
                       />
@@ -103,7 +103,7 @@ export function UserListPage() {
                 {users.map((user) => (
                   <tr
                     key={user.id}
-                    onClick={() => toggleUserSelection(user)}
+                    onClick={() => handleUserSelect(user)}
                     className="h-[70px] hover:bg-gray-50 transition-colors cursor-pointer"
                   >
                     <td className="w-[44px] py-0 px-0 h-[70px] bg-[rgba(255,255,255,0.002)] border-t border-[#d4d4d4] border-l align-middle">
@@ -111,7 +111,7 @@ export function UserListPage() {
                         <input
                           type="checkbox"
                           checked={user.selected}
-                          onChange={() => toggleUserSelection(user)}
+                          onChange={() => handleUserSelect(user)}
                           onClick={(e) => e.stopPropagation()}
                           className="appearance-none w-[20px] h-[20px] bg-[#FFFFFF] border border-[#cfcfcf] rounded-[8px] cursor-pointer relative checked:!bg-[#333333] checked:!border-[#333333]
                           after:content-[''] after:absolute after:left-[7px] after:top-[3px] after:w-[6px] after:h-[10px] after:border-[#FFFFFF] after:border-r-2 after:border-b-2 after:rotate-45 after:hidden checked:after:block"
@@ -173,7 +173,7 @@ export function UserListPage() {
         <InviteMemberModal
           isOpen={showInviteModal}
           onClose={handleCloseInviteModal}
-          onInvite={handleInviteConfirm}
+          onInviteMemberClick={handleInviteMemberClick}
           modalState={inviteModalState}
         />
 
@@ -181,7 +181,7 @@ export function UserListPage() {
         <DeleteConfirmModal
           isOpen={showDeleteConfirmModal}
           onClose={handleCloseDeleteConfirmModal}
-          onConfirm={handleDeleteConfirm}
+          onDeleteConfirmClick={handleDeleteConfirmClick}
           modalState={deleteModalState}
         />
 
@@ -189,7 +189,7 @@ export function UserListPage() {
         <ChangePermissionModal
           isOpen={showChangePermissionModal}
           onClose={handleCloseChangePermissionModal}
-          onSave={handleChangePermissionSave}
+          onPermissionSaveClick={handlePermissionSaveClick}
           currentPermission={selectedUserForPermission?.role as any}
         />
       </div>

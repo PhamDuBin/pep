@@ -13,7 +13,7 @@ interface EmailEntry {
 interface InviteMemberModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onInvite: (emails: string[]) => void;
+  onInviteMemberClick: (emails: string[]) => void;
   existingEmails?: string[];
   isSaving?: boolean;
   modalState?: InviteMemberModalState;
@@ -24,7 +24,7 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export function InviteMemberModal({
   isOpen,
   onClose,
-  onInvite,
+  onInviteMemberClick,
   existingEmails = [],
   isSaving = false,
   modalState = "form",
@@ -146,9 +146,9 @@ export function InviteMemberModal({
       .map((e) => e.value.trim());
 
     if (validEmails.length > 0) {
-      onInvite(validEmails);
+      onInviteMemberClick(validEmails);
     }
-  }, [emails, validateAllEmails, onInvite]);
+  }, [emails, validateAllEmails, onInviteMemberClick]);
 
   return (
     <Modal
@@ -156,8 +156,8 @@ export function InviteMemberModal({
       onClose={onClose}
       size="md"
       customClass={`min-w-[520px] max-w-[520px] [&_.modal-title]:text-[20px] [&_.modal-title]:font-normal [&_.modal-title]:text-[#066a9e] ${modalState === "complete"
-          ? "w-[340px] min-w-[340px] max-w-[340px] h-[174px]"
-          : ""
+        ? "w-[340px] min-w-[340px] max-w-[340px] h-[174px]"
+        : ""
         }`}
       isLoading={isSaving}
       actions={

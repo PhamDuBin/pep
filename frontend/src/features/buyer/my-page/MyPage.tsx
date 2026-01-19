@@ -36,12 +36,12 @@ export function MyPage() {
     setShowAvatarModal,
     handleAvatarClick,
     handleEmailChangeClick,
-    handleSaveAvatar,
+    handleAvatarSaveClick,
     handleSavePassword,
     handlePageChange,
     handleDownloadInvoice,
     handleAddPaymentMethod,
-    handleSendEmailChange,
+    handleEmailSendClick,
     handleCloseEmailModal,
     formatAmount,
     getPaymentMethodDisplay,
@@ -98,7 +98,7 @@ export function MyPage() {
         <EmailChangeModal
           isOpen={showEmailModal}
           onClose={handleCloseEmailModal}
-          onSend={handleSendEmailChange}
+          onEmailSendClick={handleEmailSendClick}
           modalState={emailModalState}
           isSaving={isSendingEmail}
         />
@@ -107,7 +107,7 @@ export function MyPage() {
         <AvatarChangeModal
           isOpen={showAvatarModal}
           onClose={() => setShowAvatarModal(false)}
-          onSave={handleSaveAvatar}
+          onAvatarSaveClick={handleAvatarSaveClick}
           currentColor={user?.avatarColor || "#8ec5d0"}
         />
       </div>

@@ -18,6 +18,14 @@ export function MessageList({
   onSearchChange,
   onSelectMessage,
 }: MessageListProps) {
+  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onSearchChange(e.target.value);
+  };
+
+  const handleMessageClick = (messageId: string) => {
+    onSelectMessage(messageId);
+  };
+
   return (
     <div className="flex flex-col items-center py-[25px] gap-[10px] w-[357px] h-full bg-[#f5f5f5] border-r border-[#e1e1e1] flex-shrink-0">
       {/* Header */}
@@ -39,7 +47,7 @@ export function MessageList({
           <input
             type="text"
             value={searchQuery}
-            onChange={(e) => onSearchChange(e.target.value)}
+            onChange={handleSearchInputChange}
             className="flex-1 outline-none border-none bg-transparent text-[13px] text-[#333333] placeholder:text-[#808080]"
             placeholder="検索..."
           />
@@ -53,7 +61,7 @@ export function MessageList({
             key={message.id}
             className={`box-border flex justify-end items-start p-[15px] gap-[10px] w-[357px] min-h-[87px] border-b border-[#e1e1e1] cursor-pointer transition-colors duration-200 ${message.id === selectedMessageId ? "bg-white" : "hover:bg-white"
               }`}
-            onClick={() => onSelectMessage(message.id)}
+            onClick={() => handleMessageClick(message.id)}
           >
             <div className="flex flex-col items-start gap-[3px] flex-1 min-w-0">
               <div className="font-bold text-[13px] leading-normal text-[#333333]">

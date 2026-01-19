@@ -14,6 +14,10 @@ export function PaymentInfoSection({
   paymentHistory,
   onDownloadInvoice,
 }: PaymentInfoSectionProps) {
+  const handleDownloadClick = (invoiceUrl: string) => {
+    onDownloadInvoice(invoiceUrl);
+  };
+
   return (
     <>
       {/* Payment Info Section */}
@@ -125,7 +129,7 @@ export function PaymentInfoSection({
                       <button
                         type="button"
                         className="bg-transparent border-none font-medium text-[12px] text-[#066a9e] cursor-pointer p-0 hover:underline"
-                        onClick={() => onDownloadInvoice(record.invoiceUrl)}
+                        onClick={() => handleDownloadClick(record.invoiceUrl)}
                       >
                         Download
                       </button>
