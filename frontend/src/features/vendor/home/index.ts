@@ -1,9 +1,5 @@
 // Components
 export { HomePage } from "./HomePage";
-
-// Backward compatibility alias
-export { HomePage as VendorHomePage } from "./HomePage";
-
 // Hooks
 export { useVendorHome } from "./hooks";
 
@@ -15,7 +11,4 @@ export type {
 } from "./models";
 
 // Mock data
-export {
-  MOCK_VENDOR_MESSAGES,
-  MOCK_VENDOR_MESSAGE_THREADS,
-} from "./mock";
+export { MOCK_VENDOR_MESSAGES, MOCK_VENDOR_MESSAGE_THREADS } from "./mock";

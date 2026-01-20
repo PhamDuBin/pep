@@ -98,26 +98,26 @@ export function useArchive() {
     return Math.ceil(filteredProjects.length / itemsPerPage);
   }, [filteredProjects.length, itemsPerPage]);
 
-  const toggleViewMode = useCallback(() => {
+  const handleViewModeToggle = useCallback(() => {
     setViewMode((prev) => (prev === "grid" ? "list" : "grid"));
     setCurrentPage(1);
   }, []);
 
-  const selectFilter = useCallback((filterId: string) => {
+  const handleFilterSelect = useCallback((filterId: string) => {
     setSelectedFilter(filterId);
     setShowFilterDropdown(false);
   }, []);
 
-  const selectSort = useCallback((value: SortOrder) => {
+  const handleSortSelect = useCallback((value: SortOrder) => {
     setSortOrder(value);
     setShowSortDropdown(false);
   }, []);
 
-  const toggleContextMenu = useCallback((projectId: string) => {
+  const handleContextMenuToggle = useCallback((projectId: string) => {
     setOpenContextMenuId((prev) => (prev === projectId ? null : projectId));
   }, []);
 
-  const closeContextMenu = useCallback(() => {
+  const handleContextMenuClose = useCallback(() => {
     setOpenContextMenuId(null);
   }, []);
 
@@ -137,12 +137,12 @@ export function useArchive() {
     [projects]
   );
 
-  const closePlanModal = useCallback(() => {
+  const handlePlanModalClose = useCallback(() => {
     setShowPlanModal(false);
     setSelectedProject(null);
   }, []);
 
-  const toggleFavorite = useCallback(async (projectId: string) => {
+  const handleFavoriteToggle = useCallback(async (projectId: string) => {
     try {
       const result = await toggleProjectFavorite(projectId);
       if (result.success) {
@@ -157,15 +157,15 @@ export function useArchive() {
     }
   }, []);
 
-  const changePage = useCallback((page: number) => {
+  const handlePageChange = useCallback((page: number) => {
     setCurrentPage(page);
   }, []);
 
-  const toggleFilterDropdown = useCallback(() => {
+  const handleFilterDropdownToggle = useCallback(() => {
     setShowFilterDropdown((prev) => !prev);
   }, []);
 
-  const toggleSortDropdown = useCallback(() => {
+  const handleSortDropdownToggle = useCallback(() => {
     setShowSortDropdown((prev) => !prev);
   }, []);
 
@@ -188,17 +188,17 @@ export function useArchive() {
     sortOptions,
     showPlanModal,
     selectedProject,
-    toggleViewMode,
-    selectFilter,
-    selectSort,
-    toggleContextMenu,
-    closeContextMenu,
+    handleViewModeToggle,
+    handleFilterSelect,
+    handleSortSelect,
+    handleContextMenuToggle,
+    handleContextMenuClose,
     handleContextAction,
     handleProjectClick,
-    closePlanModal,
-    changePage,
-    toggleFilterDropdown,
-    toggleSortDropdown,
-    toggleFavorite,
+    handlePlanModalClose,
+    handlePageChange,
+    handleFilterDropdownToggle,
+    handleSortDropdownToggle,
+    handleFavoriteToggle,
   };
 }
