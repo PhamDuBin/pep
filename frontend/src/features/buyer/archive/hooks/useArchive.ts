@@ -5,7 +5,8 @@
 // =============================================================================
 
 import { useState, useCallback, useMemo, useEffect, useRef } from "react";
-import { ArchiveProject, SortOrder, ViewMode, ProjectFilterOption, SortOption } from "../types";
+import { ArchiveProject, ProjectFilterOption, SortOption } from "../models";
+import { SortOrder, ViewMode } from "../types";
 import {
   getArchiveProjects,
   getProjectFilterOptions,

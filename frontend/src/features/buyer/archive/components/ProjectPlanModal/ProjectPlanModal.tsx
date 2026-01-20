@@ -1,7 +1,7 @@
 "use client";
 
 import { Modal } from "@/shared/components";
-import { ArchiveProject } from "../../types";
+import { ArchiveProject } from "../../models";
 
 interface ProjectPlanModalProps {
   isOpen: boolean;

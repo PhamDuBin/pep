@@ -8,7 +8,7 @@ import {
   PaymentHistoryRecord,
   AvatarColorOption,
   ActionResponse,
-} from "../types";
+} from "../models";
 import {
   ADMIN_USER_MOCK,
   PAYMENT_INFO_MOCK,

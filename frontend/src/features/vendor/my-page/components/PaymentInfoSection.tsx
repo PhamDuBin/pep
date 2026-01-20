@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { VendorPaymentInfo, VendorPaymentHistory } from "../types";
+import { VendorPaymentInfo, VendorPaymentHistory } from "../models";
 
 interface PaymentInfoSectionProps {
   paymentInfo: VendorPaymentInfo;

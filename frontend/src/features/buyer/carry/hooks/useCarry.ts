@@ -11,10 +11,11 @@ import {
   VendorChatMessage,
   Tab,
   ChatMember,
-  SearchableUser,
-  AddMemberModalState,
   UseCarryReturn,
-} from "../types";
+  SearchableUser,
+} from "../models";
+import { VendorConversation } from "../models/vendor-conversation.model";
+import { AddMemberModalState } from "../types";
 import {
   getVendorContacts,
   getVendorMessages,

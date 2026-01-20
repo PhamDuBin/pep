@@ -2,7 +2,7 @@
 // AI CHAT SERVICE
 // =============================================================================
 
-import { ChatMessage, Tab } from "../types";
+import { ChatMessage, Tab } from "../models";
 import {
   AI_CHAT_TABS_MOCK,
   CHAT_MESSAGES_MOCK,

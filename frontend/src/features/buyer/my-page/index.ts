@@ -8,21 +8,24 @@ export type { UseMyPageReturn } from "./hooks";
 // Types
 export type {
   UserRole,
+  PaymentMethodType,
+  PaymentStatus,
+  MyPageModalType,
+} from "./types";
+
+export type {
   UserProfile,
   AvatarColorOption,
-  PaymentMethodType,
   PaymentMethod,
   PaymentInfo,
-  PaymentStatus,
   PaymentHistoryRecord,
   PasswordChangeData,
   EmailChangeData,
-  MyPageModalType,
   UserProfileResponse,
   PaymentInfoResponse,
   PaymentHistoryResponse,
   ActionResponse,
-} from "./types";
+} from "./models";
 
 // Mock data
 export {

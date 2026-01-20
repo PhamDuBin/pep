@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 import { TabNavigation, ChatInput, ProjectPlanModeButton } from "@/shared/components";
 import { HOME_TABS } from "./mock";
-import { Tab } from "./types";
+import { Tab } from "./models";
 
 export function HomePage() {
   const router = useRouter();

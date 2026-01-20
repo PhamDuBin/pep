@@ -7,10 +7,9 @@
 import { useState, useCallback, useMemo, useEffect } from "react";
 import {
   User,
-  UserPermission,
   PermissionOption,
-  PermissionChangeModalState,
-} from "../types/types";
+} from "../models";
+import { UserPermission, PermissionChangeModalState } from "../types/types";
 import {
   getUsers,
   getPermissionOptions,

@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import { useVendor } from "@/shared/contexts";
-import { VendorThreadMessage } from "../types";
+import { VendorThreadMessage } from "../models";
 import { sendThreadMessage } from "../services/vendor-home.service";
 
 export function useVendorHome() {

@@ -5,7 +5,7 @@
 // =============================================================================
 
 import { useState, useCallback, useEffect } from "react";
-import { ChatMessage } from "../types";
+import { ChatMessage } from "../models";
 import { getChatMessages, sendMessageToAi } from "../services/ai-chat.service";
 
 export function useAiChat() {

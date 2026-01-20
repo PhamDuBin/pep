@@ -1,6 +1,6 @@
 "use client";
 
-import { VendorMessage } from "../../types";
+import { VendorMessage } from "../../models";
 import Image from "next/image";
 
 interface MessageListProps {

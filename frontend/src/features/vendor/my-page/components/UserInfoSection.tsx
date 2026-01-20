@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { VendorUserProfile } from "../types";
+import { VendorUserProfile } from "../models";
 
 interface UserInfoSectionProps {
   userProfile: VendorUserProfile;

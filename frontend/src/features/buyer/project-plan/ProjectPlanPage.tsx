@@ -22,7 +22,7 @@ import {
   MODE_DESCRIPTION,
   CHAT_INPUT_PLACEHOLDER,
 } from "./mock";
-import { Tab } from "./types";
+import { Tab } from "./models";
 import Image from "next/image";
 
 export function ProjectPlanPage() {

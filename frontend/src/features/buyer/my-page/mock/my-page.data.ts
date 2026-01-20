@@ -7,7 +7,7 @@ import {
   PaymentInfo,
   PaymentHistoryRecord,
   AvatarColorOption,
-} from "../types";
+} from "../models";
 
 export const ADMIN_USER_MOCK: UserProfile = {
   id: "user-admin-1",

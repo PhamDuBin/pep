@@ -2,7 +2,8 @@
 
 import { useState, useCallback, useEffect } from "react";
 import { Modal } from "@/shared/components";
-import { SearchableUser, ChatMember, AddMemberModalState } from "../../types";
+import { SearchableUser, ChatMember } from "../../models";
+import { AddMemberModalState } from "../../types";
 import Image from "next/image";
 
 interface AddMemberModalProps {

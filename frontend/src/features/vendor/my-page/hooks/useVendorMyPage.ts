@@ -5,7 +5,7 @@ import {
   VendorUserProfile,
   VendorPaymentInfo,
   VendorPaymentHistory,
-} from "../types";
+} from "../models";
 import {
   getVendorUserProfile,
   getVendorPaymentInfo,
