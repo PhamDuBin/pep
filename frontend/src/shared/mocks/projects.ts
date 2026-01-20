@@ -1,4 +1,4 @@
-import { Project } from "@/shared/types";
+import { Project } from "@/shared/models";
 
 export const INITIAL_PROJECTS: Project[] = [
   { id: "1", name: "SNSショート動画...", isSelected: true },

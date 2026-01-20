@@ -8,7 +8,7 @@ export { UserListPage as VendorUserListPage } from "./UserListPage";
 export { useVendorUserList } from "./hooks";
 
 // Types
-export type { VendorUser, PermissionOption } from "./types";
+export type { VendorUser, PermissionOption } from "./models";
 
 // Mock data
 export { MOCK_VENDOR_USERS } from "./mock";

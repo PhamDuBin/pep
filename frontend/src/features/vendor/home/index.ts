@@ -12,7 +12,7 @@ export type {
   VendorMessage,
   VendorThreadMessage,
   VendorMessageThread,
-} from "./types";
+} from "./models";
 
 // Mock data
 export {
