@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect } from "react";
 import { Modal } from "@/shared/components";
-import { PermissionOption } from "../../types";
+import { PermissionOption } from "../../models";
 
 interface UserEditModalProps {
   isOpen: boolean;

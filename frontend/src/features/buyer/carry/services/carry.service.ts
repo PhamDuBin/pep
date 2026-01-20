@@ -8,7 +8,7 @@ import {
   VendorConversation,
   ChatMember,
   SendMessageResponse,
-} from "../types";
+} from "../models";
 import {
   VENDOR_CONTACTS_MOCK,
   VENDOR_CHAT_MESSAGES_MOCK,

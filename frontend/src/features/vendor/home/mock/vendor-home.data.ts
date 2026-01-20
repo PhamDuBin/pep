@@ -2,7 +2,7 @@
 // VENDOR HOME MOCK DATA
 // =============================================================================
 
-import { VendorMessage, VendorMessageThread } from "../types";
+import { VendorMessage, VendorMessageThread } from "../models";
 
 export const VENDOR_MESSAGES_MOCK: VendorMessage[] = [
   {

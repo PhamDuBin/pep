@@ -6,7 +6,7 @@ import {
   VendorUserProfile,
   VendorPaymentInfo,
   VendorPaymentHistory,
-} from "../types";
+} from "../models";
 import {
   VENDOR_USER_PROFILE_MOCK,
   VENDOR_PAYMENT_INFO_MOCK,

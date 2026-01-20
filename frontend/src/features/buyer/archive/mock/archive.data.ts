@@ -7,7 +7,7 @@ import {
   ProjectFilterOption,
   SortOption,
   ContextMenuItem,
-} from "../types";
+} from "../models";
 
 export const ARCHIVE_PROJECTS_MOCK: ArchiveProject[] = [
   {

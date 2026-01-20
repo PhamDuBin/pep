@@ -2,7 +2,7 @@
 // PROJECT PLAN MOCK DATA
 // =============================================================================
 
-import { Tab, PdfPage, Vendor, ProjectPlanContent, ProjectPlan } from "../types";
+import { PdfPage, Vendor, ProjectPlanContent, ProjectPlan, Tab } from "../models";
 
 export const PROJECT_PLAN_TABS_MOCK: Tab[] = [
   {

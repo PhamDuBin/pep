@@ -1,4 +1,4 @@
-import { Tab } from "../types";
+import { Tab } from "../models";
 
 export const HOME_TABS: Tab[] = [
   {

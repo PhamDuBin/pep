@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useCallback, useState } from "react";
-import { ChatMessage as ChatMessageType } from "@/shared/types";
+import { ChatMessageData as ChatMessageType } from "@/features/buyer/shared/models";
 import { ChatMessage } from "../ChatMessage";
 import { ChatMessageVariant } from "../../types";
 
@@ -84,11 +84,10 @@ export function ChatMessageList({
   return (
     <div
       ref={containerRef}
-      className={`flex flex-col gap-[20px] w-full ${
-        useInternalScroll
-          ? "h-full overflow-y-auto pr-[8px] overscroll-contain will-change-scroll [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#d1d5db] [&::-webkit-scrollbar-thumb]:rounded-[3px] [&::-webkit-scrollbar-thumb:hover]:bg-[#9ca3af]"
-          : ""
-      }`}
+      className={`flex flex-col gap-[20px] w-full ${useInternalScroll
+        ? "h-full overflow-y-auto pr-[8px] overscroll-contain will-change-scroll [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#d1d5db] [&::-webkit-scrollbar-thumb]:rounded-[3px] [&::-webkit-scrollbar-thumb:hover]:bg-[#9ca3af]"
+        : ""
+        }`}
       onScroll={handleScroll}
     >
       {messages.map((message) => (

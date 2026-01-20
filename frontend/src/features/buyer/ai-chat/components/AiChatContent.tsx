@@ -11,7 +11,7 @@ import {
 } from "@/shared/components";
 import { useAiChat } from "../hooks";
 import { AI_CHAT_TABS } from "../mock";
-import { Tab } from "../types";
+import { Tab } from "../models";
 
 export function AiChatContent() {
   const router = useRouter();

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useMemo, useEffect } from "react";
-import { VendorUser, PermissionOption } from "../types";
+import { VendorUser, PermissionOption } from "../models";
 import { ChangePermissionModalState } from "../components/ChangePermissionModal/PermissionChangeModal";
 import {
   getVendorUsers,

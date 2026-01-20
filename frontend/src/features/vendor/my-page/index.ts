@@ -14,7 +14,7 @@ export type {
   VendorPaymentMethod,
   VendorPaymentInfo,
   VendorPaymentHistory,
-} from "./types";
+} from "./models";
 
 // Mock data
 export {

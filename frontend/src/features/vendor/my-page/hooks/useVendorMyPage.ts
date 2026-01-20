@@ -5,7 +5,7 @@ import {
   VendorUserProfile,
   VendorPaymentInfo,
   VendorPaymentHistory,
-} from "../types";
+} from "../models";
 import {
   getVendorUserProfile,
   getVendorPaymentInfo,
@@ -25,6 +25,10 @@ export interface UseVendorMyPageReturn {
   userProfile: VendorUserProfile | null;
   paymentInfo: VendorPaymentInfo | null;
   paymentHistory: VendorPaymentHistory[];
+
+  // Pagination state
+  currentPage: number;
+  totalPages: number;
 
   // Password state
   newPassword: string;
@@ -55,7 +59,12 @@ export interface UseVendorMyPageReturn {
   handleAvatarClick: () => void;
   handleAvatarSaveClick: (color: string) => void;
   handleSaveChanges: () => void;
+  handlePageChange: (page: number) => void;
   handleDownloadInvoice: (invoiceUrl: string) => void;
+  handleAddPaymentMethod: () => void;
+  formatAmount: (amount: number, taxIncluded?: boolean) => string;
+  getPaymentMethodDisplay: () => string;
+  getStatusLabel: (status: string) => string;
 }
 
 export function useVendorMyPage(): UseVendorMyPageReturn {
@@ -69,6 +78,11 @@ export function useVendorMyPage(): UseVendorMyPageReturn {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const PAYMENT_HISTORY_PAGE_SIZE = 10;
+  const totalPages = Math.ceil(paymentHistory.length / PAYMENT_HISTORY_PAGE_SIZE);
 
   // Modal states
   const [showEmailModal, setShowEmailModal] = useState(false);
@@ -165,6 +179,38 @@ export function useVendorMyPage(): UseVendorMyPageReturn {
     }
   }, []);
 
+  const handlePageChange = useCallback((page: number) => {
+    setCurrentPage(page);
+  }, []);
+
+  const handleAddPaymentMethod = useCallback(() => {
+    // TODO: Implement add payment method modal
+    console.log("Add payment method clicked");
+  }, []);
+
+  const formatAmount = useCallback((amount: number, taxIncluded?: boolean) => {
+    return `¥${amount.toLocaleString("ja-JP")}${taxIncluded ? " (税込)" : ""}`;
+  }, []);
+
+  const getPaymentMethodDisplay = useCallback(() => {
+    if (!paymentInfo?.paymentMethod) return "";
+    const { type, lastFourDigits } = paymentInfo.paymentMethod;
+    return `${type.toUpperCase()} ****${lastFourDigits}`;
+  }, [paymentInfo]);
+
+  const getStatusLabel = useCallback((status: string) => {
+    switch (status) {
+      case "paid":
+        return "支払い済み";
+      case "pending":
+        return "保留中";
+      case "failed":
+        return "失敗";
+      default:
+        return status;
+    }
+  }, []);
+
   return {
     // Loading state
     isLoading,
@@ -174,6 +220,10 @@ export function useVendorMyPage(): UseVendorMyPageReturn {
     userProfile,
     paymentInfo,
     paymentHistory,
+
+    // Pagination state
+    currentPage,
+    totalPages,
 
     // Password state
     newPassword,
@@ -204,6 +254,11 @@ export function useVendorMyPage(): UseVendorMyPageReturn {
     handleAvatarClick,
     handleAvatarSaveClick,
     handleSaveChanges,
+    handlePageChange,
     handleDownloadInvoice,
+    handleAddPaymentMethod,
+    formatAmount,
+    getPaymentMethodDisplay,
+    getStatusLabel,
   };
 } 

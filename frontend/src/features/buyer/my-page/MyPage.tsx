@@ -61,10 +61,12 @@ export function MyPage() {
             {/* User Info Section */}
             <UserInfoSection
               user={{
+                id: user.id,
                 name: user.name,
                 email: user.email,
                 initials: user.initials,
                 avatarColor: user.avatarColor,
+                role: user.role,
               }}
               newPassword={newPassword}
               confirmPassword={confirmPassword}
@@ -90,27 +92,27 @@ export function MyPage() {
                   taxIncluded: paymentInfo.taxIncluded,
                   paymentMethod: paymentInfo.paymentMethod
                     ? {
+                        id: paymentInfo.paymentMethod.id || "default",
                         type: paymentInfo.paymentMethod.type,
                         lastFourDigits: paymentInfo.paymentMethod.lastFourDigits,
                       }
-                    : undefined,
+                    : null,
                 }}
                 paymentHistory={paymentHistory.map((record) => ({
                   id: record.id,
                   paymentDate: record.paymentDate,
                   amount: record.amount,
                   usagePeriod: record.usagePeriod,
-                  status: record.status,
+                  status: record.status as any,
                 }))}
                 currentPage={currentPage}
                 totalPages={totalPages}
-                onPageChange={handlePageChange}
-                onDownloadClick={handleDownloadInvoice}
-                onAddPaymentMethodClick={handleAddPaymentMethod}
+                handlePageChange={handlePageChange}
+                handleDownloadInvoice={handleDownloadInvoice}
+                handleAddPaymentMethod={handleAddPaymentMethod}
                 formatAmount={formatAmount}
                 getPaymentMethodDisplay={getPaymentMethodDisplay}
-                renderStatus={getStatusLabel}
-                PaginationComponent={Pagination}
+                getStatusLabel={getStatusLabel}
               />
             )}
           </div>
