@@ -2,7 +2,7 @@
 // VENDOR HOME SERVICE
 // =============================================================================
 
-import { VendorMessage, VendorMessageThread, VendorThreadMessage } from "../types";
+import { VendorMessage, VendorMessageThread, VendorThreadMessage } from "../models";
 import {
   VENDOR_MESSAGES_MOCK,
   VENDOR_MESSAGE_THREADS_MOCK,

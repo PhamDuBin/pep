@@ -2,7 +2,7 @@
 // AI CHAT MOCK DATA
 // =============================================================================
 
-import { ChatMessage, Tab } from "../types";
+import { ChatMessage, Tab } from "../models";
 
 export const AI_CHAT_TABS_MOCK: Tab[] = [
   {

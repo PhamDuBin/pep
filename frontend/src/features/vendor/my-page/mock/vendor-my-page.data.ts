@@ -6,7 +6,7 @@ import {
   VendorUserProfile,
   VendorPaymentInfo,
   VendorPaymentHistory,
-} from "../types";
+} from "../models";
 
 export const VENDOR_USER_PROFILE_MOCK: VendorUserProfile = {
   id: "1",

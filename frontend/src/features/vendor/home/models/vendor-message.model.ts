@@ -7,4 +7,4 @@ export type {
   VendorMessage,
   VendorThreadMessage,
   VendorMessageThread,
-} from "../../shared/types/vendor";
+} from "../../shared/models";

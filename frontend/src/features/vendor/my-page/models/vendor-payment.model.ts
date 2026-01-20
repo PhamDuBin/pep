@@ -7,4 +7,4 @@ export type {
   VendorPaymentMethod,
   VendorPaymentInfo,
   VendorPaymentHistory,
-} from "../../shared/types/vendor";
+} from "../../shared/models";

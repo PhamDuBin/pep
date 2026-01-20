@@ -1,6 +1,6 @@
 "use client";
 
-import { UserListItem } from "@/shared/types";
+import { UserListItem } from "@/shared/types/user-list";
 
 // =============================================================================
 // USER LIST TABLE COMPONENT

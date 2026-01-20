@@ -17,8 +17,8 @@ export function DeleteConfirmModal({
   isOpen,
   onClose,
   onDeleteConfirmClick,
-  selectedCount = 0,
-  message,
+  selectedCount: _selectedCount = 0,
+  message: _message,
   isDeleting = false,
   modalState = "confirm",
 }: DeleteConfirmModalProps) {

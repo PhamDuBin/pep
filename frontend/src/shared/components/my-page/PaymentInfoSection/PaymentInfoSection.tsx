@@ -1,52 +1,33 @@
 "use client";
 
-import Image from "next/image";
-import { PaymentInfo, PaymentHistoryRecord } from "@/shared/types/my-page";
+import { Pagination } from "@/shared/components";
+import { PaymentInfo, PaymentHistoryRecord } from "@/features/buyer/my-page/models";
 
 interface PaymentInfoSectionProps {
   paymentInfo: PaymentInfo;
   paymentHistory: PaymentHistoryRecord[];
-  onDownloadClick: (id: string) => void;
-  onAddPaymentMethodClick?: () => void;
-  formatAmount?: (amount: number, taxIncluded?: boolean) => string;
-  getPaymentMethodDisplay?: () => string;
-  renderStatus?: (status: string) => React.ReactNode;
-  // Pagination props (optional)
-  currentPage?: number;
-  totalPages?: number;
-  onPageChange?: (page: number) => void;
-  PaginationComponent?: React.ComponentType<{
-    currentPage: number;
-    totalPages: number;
-    onPageChange: (page: number) => void;
-  }>;
+  currentPage: number;
+  totalPages: number;
+  handlePageChange: (page: number) => void;
+  handleDownloadInvoice: (id: string) => void;
+  handleAddPaymentMethod: () => void;
+  formatAmount: (amount: number, taxIncluded?: boolean) => string;
+  getPaymentMethodDisplay: () => string;
+  getStatusLabel: (status: string) => React.ReactNode;
 }
 
 export function PaymentInfoSection({
   paymentInfo,
   paymentHistory,
-  onDownloadClick,
-  onAddPaymentMethodClick,
-  formatAmount,
-  getPaymentMethodDisplay,
-  renderStatus,
   currentPage,
   totalPages,
-  onPageChange,
-  PaginationComponent,
+  handlePageChange,
+  handleDownloadInvoice,
+  handleAddPaymentMethod,
+  formatAmount,
+  getPaymentMethodDisplay,
+  getStatusLabel,
 }: PaymentInfoSectionProps) {
-  const defaultFormatAmount = (amount: number, taxIncluded?: boolean) => {
-    return `${amount.toLocaleString()}円${taxIncluded ? "（税込）" : ""}`;
-  };
-
-  const defaultGetPaymentMethodDisplay = () => {
-    if (!paymentInfo.paymentMethod) return "";
-    return `Visa **** **** ${paymentInfo.paymentMethod.lastFourDigits}`;
-  };
-
-  const displayAmount = formatAmount || defaultFormatAmount;
-  const displayPaymentMethod = getPaymentMethodDisplay || defaultGetPaymentMethodDisplay;
-
   return (
     <>
       {/* Payment Info Section */}
@@ -65,6 +46,7 @@ export function PaymentInfoSection({
               </span>
               <span className="font-normal text-[20px] text-black py-[3px]">
                 {paymentInfo.nextBillingDate}
+                {paymentInfo.nextBillingDate}
               </span>
             </div>
 
@@ -74,7 +56,10 @@ export function PaymentInfoSection({
                 請求金額
               </span>
               <span className="font-normal text-[20px] text-black py-[3px]">
-                {displayAmount(paymentInfo.billingAmount, paymentInfo.taxIncluded)}
+                {formatAmount(
+                  paymentInfo.billingAmount,
+                  paymentInfo.taxIncluded
+                )}
               </span>
             </div>
 
@@ -86,15 +71,15 @@ export function PaymentInfoSection({
 
               {paymentInfo.paymentMethod && (
                 <div className="flex items-center gap-[10px] w-full">
-                  <Image
+                  <img
                     src="/assets/pictures/visa.png"
                     alt="Visa"
+                    className="object-cover"
                     width={70}
                     height={43}
-                    className="object-cover"
                   />
                   <span className="font-normal text-[16px] text-[#808080]">
-                    {displayPaymentMethod()}
+                    {getPaymentMethodDisplay()}
                   </span>
                 </div>
               )}
@@ -102,7 +87,7 @@ export function PaymentInfoSection({
               <button
                 type="button"
                 className="flex items-center px-[15px] py-[10px] bg-[#e1e1e1] border-none rounded-[8px] font-normal text-[14px] text-[#333] cursor-pointer transition-colors duration-200 hover:bg-[#d1d1d1]"
-                onClick={onAddPaymentMethodClick}
+                onClick={handleAddPaymentMethod}
               >
                 支払い方法を追加
               </button>
@@ -147,19 +132,20 @@ export function PaymentInfoSection({
                       {record.paymentDate}
                     </td>
                     <td className="flex-1 border-t border-[#d4d4d4] font-medium text-[14px] text-black text-center px-[12px] py-[15px]">
-                      {displayAmount(record.amount)}
+                      {formatAmount(record.amount)}
                     </td>
                     <td className="w-[179px] border-t border-[#d4d4d4] font-medium text-[14px] text-black text-center px-[12px] py-[15px]">
                       {record.usagePeriod}
+                      {record.usagePeriod}
                     </td>
                     <td className="flex-1 border-t border-[#d4d4d4] font-medium text-[12px] text-black text-center px-[12px] py-[15px]">
-                      {renderStatus ? renderStatus(record.status) : record.status}
+                      {getStatusLabel(record.status)}
                     </td>
                     <td className="flex-1 border-t border-[#d4d4d4] font-medium text-[14px] text-black text-center px-[12px] py-[15px]">
                       <button
                         type="button"
                         className="bg-transparent border-none font-medium text-[12px] text-[#066a9e] cursor-pointer p-0 hover:underline"
-                        onClick={() => onDownloadClick(record.id)}
+                        onClick={() => handleDownloadInvoice(record.id)}
                       >
                         Download
                       </button>
@@ -169,13 +155,11 @@ export function PaymentInfoSection({
               </tbody>
             </table>
           </div>
-          {PaginationComponent && currentPage && totalPages && onPageChange && (
-            <PaginationComponent
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={onPageChange}
-            />
-          )}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
         </div>
       )}
     </>

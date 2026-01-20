@@ -3,7 +3,7 @@
 // =============================================================================
 // Mocks used by shared components (e.g., AvatarChangeModal)
 
-import { AvatarColorOption } from "@/shared/types";
+import { AvatarColorOption } from "@/shared/models";
 
 export const AVATAR_COLOR_OPTIONS: AvatarColorOption[] = [
   {

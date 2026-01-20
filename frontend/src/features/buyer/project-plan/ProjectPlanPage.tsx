@@ -22,8 +22,7 @@ import {
   MODE_DESCRIPTION,
   CHAT_INPUT_PLACEHOLDER,
 } from "./mock";
-import { Tab } from "./types";
-import Image from "next/image";
+import { Tab } from "./models";
 
 export function ProjectPlanPage() {
   const router = useRouter();

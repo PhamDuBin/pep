@@ -4,6 +4,7 @@ import { TabNavigation, PageTransition } from "@/shared/components";
 import { useCarry } from "./hooks";
 import { AddMemberModal, ProjectPlanModal } from "./components";
 import { CARRY_TABS, MESSAGE_INPUT_PLACEHOLDER } from "./mock";
+import { VendorContact } from "./models/vendor-contact.model";
 import Image from "next/image";
 
 export function CarryPage() {
@@ -101,7 +102,7 @@ export function CarryPage() {
 
               {/* Vendor List */}
               <div className="flex-1 overflow-y-auto overflow-x-hidden flex flex-col min-h-0 [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#d1d5db] [&::-webkit-scrollbar-thumb]:rounded-[3px] [&::-webkit-scrollbar-thumb:hover]:bg-[#9ca3af]">
-                {filteredVendors.map((vendor) => (
+                {filteredVendors.map((vendor: VendorContact) => (
                   <div
                     key={vendor.id}
                     className={`w-full flex gap-[10px] items-start justify-end p-[15px] border-b border-[#e1e1e1] bg-transparent cursor-pointer text-left transition-colors duration-150 hover:bg-[rgba(230,243,245,0.5)] ${selectedVendor?.id === vendor.id ? "bg-white" : ""

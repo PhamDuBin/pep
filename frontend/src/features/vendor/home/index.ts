@@ -8,7 +8,7 @@ export type {
   VendorMessage,
   VendorThreadMessage,
   VendorMessageThread,
-} from "./types";
+} from "./models";
 
 // Mock data
 export { MOCK_VENDOR_MESSAGES, MOCK_VENDOR_MESSAGE_THREADS } from "./mock";

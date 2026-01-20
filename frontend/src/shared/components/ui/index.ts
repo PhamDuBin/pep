@@ -17,8 +17,8 @@ export { DeleteConfirmModal } from "./Modal";
 export { Loading } from "./Loading";
 export type { LoadingProps } from "./Loading";
 
-// PageTransition (moved to buyer features)
-export { PageTransition } from "@/features/buyer/shared/components";
+// PageTransition
+export { PageTransition } from "../layout/PageTransition";
 
 // =============================================================================
 // RE-EXPORTS FOR BACKWARD COMPATIBILITY
@@ -27,7 +27,7 @@ export { PageTransition } from "@/features/buyer/shared/components";
 // for backward compatibility. Consider updating imports directly to the feature.
 
 export { TabNavigation } from "@/features/buyer/shared/components";
-export { Pagination } from "@/features/buyer/shared/components";
+export { Pagination } from "../layout/Pagination";
 export { ChatInput } from "@/features/buyer/shared/components";
 export { ChatInputBox } from "@/features/buyer/shared/components";
 export { ChatMessage } from "@/features/buyer/shared/components";

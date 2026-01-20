@@ -5,7 +5,8 @@
 // =============================================================================
 
 import { useState, useCallback, useMemo, useEffect } from "react";
-import { ChatMessage, Vendor, DownloadFormat } from "../types";
+import { ChatMessage, Vendor } from "../models";
+import { DownloadFormat } from "../types";
 import {
   getVendors,
   generateProjectPlan,

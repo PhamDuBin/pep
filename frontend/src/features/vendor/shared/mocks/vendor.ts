@@ -2,7 +2,7 @@
 // VENDOR MOCKS
 // =============================================================================
 
-import { VendorCompany, VendorMessage, VendorMessageThread, VendorUser, VendorPaymentInfo, VendorPaymentHistory } from "../types/vendor";
+import { VendorCompany, VendorMessage, VendorMessageThread, VendorUser, VendorPaymentInfo, VendorPaymentHistory } from "../models";
 
 export const MOCK_VENDOR_COMPANIES: VendorCompany[] = [
   {

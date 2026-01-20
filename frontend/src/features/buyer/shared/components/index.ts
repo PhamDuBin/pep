@@ -1,10 +1,9 @@
 export * from "./TabNavigation";
-export * from "./Pagination";
 export * from "./ChatInput";
 export * from "./ChatInputBox";
 export * from "./ChatMessage";
 export * from "./ChatMessageList";
 export * from "./ProjectPlanModeButton";
-export * from "./PageTransition";
+export { PageTransition } from "@/shared/components";
 export * from "./SideMenu";
 export * from "./LayoutContent";

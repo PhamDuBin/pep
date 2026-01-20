@@ -1,6 +1,6 @@
 "use client";
 
-import { PdfPage } from "../../types";
+import { PdfPage } from "../../models";
 import Image from "next/image";
 
 interface PdfPreviewProps {

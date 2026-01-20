@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { Tab } from "@/shared/types";
-import Image from "next/image";
+import { Tab } from "@/shared/models";
 
 interface TabNavigationProps {
   tabs: Tab[];

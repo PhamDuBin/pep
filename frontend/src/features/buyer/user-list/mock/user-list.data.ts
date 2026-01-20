@@ -2,7 +2,8 @@
 // USER LIST MOCK DATA
 // =============================================================================
 
-import { User, PermissionOption, UserPermission } from "../types/types";
+import { User, PermissionOption } from "../models";
+import { UserPermission } from "../types/types";
 
 export const USERS_MOCK: User[] = [
   {

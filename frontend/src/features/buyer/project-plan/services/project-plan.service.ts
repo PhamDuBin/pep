@@ -2,7 +2,8 @@
 // PROJECT PLAN SERVICE
 // =============================================================================
 
-import { Vendor, ProjectPlan, DownloadFormat } from "../types";
+import { Vendor, ProjectPlan } from "../models";
+import { DownloadFormat } from "../types";
 import {
   VENDORS_MOCK,
   PROJECT_PLAN_MOCK,

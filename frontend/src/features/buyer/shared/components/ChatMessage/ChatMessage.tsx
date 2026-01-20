@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { ChatMessage as ChatMessageType } from "@/shared/types";
+import { ChatMessageData as ChatMessageType } from "@/features/buyer/shared/models";
 import { ChatMessageVariant } from "../../types";
 
 interface ChatMessageProps {
@@ -91,9 +91,8 @@ export function ChatMessage({
   if (variant === "minimal") {
     return (
       <div
-        className={`flex w-full ${
-          isUserMessage ? "justify-end" : "justify-start"
-        } ${message.isNew ? "animate-[slideIn_0.3s_ease-out]" : ""}`}
+        className={`flex w-full ${isUserMessage ? "justify-end" : "justify-start"
+          } ${message.isNew ? "animate-[slideIn_0.3s_ease-out]" : ""}`}
       >
         {isUserMessage ? (
           <div className="max-w-[70%] bg-[#066a9e] text-[#ffffff] p-[10px] rounded-tl-[12px] rounded-tr-[12px] rounded-bl-[12px] shadow-[0_4px_6px_-1px_rgb(0_0_0/0.1),0_2px_4px_-2px_rgb(0_0_0/0.1)]">
