@@ -2,7 +2,6 @@
 
 import { useState, useCallback } from "react";
 import { Tab } from "@/shared/types";
-import Image from "next/image";
 
 interface TabNavigationProps {
   tabs: Tab[];

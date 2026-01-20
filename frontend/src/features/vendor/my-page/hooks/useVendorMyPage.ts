@@ -105,7 +105,7 @@ export function useVendorMyPage(): UseVendorMyPageReturn {
     setShowEmailModal(true);
   }, []);
 
-  const handleEmailSendClick = useCallback(async (newEmail: string, confirmEmail: string) => {
+  const handleEmailSendClick = useCallback(async (newEmail: string, _confirmEmail: string) => {
     try {
       const result = await requestVendorEmailChange(newEmail);
       if (result.success) {

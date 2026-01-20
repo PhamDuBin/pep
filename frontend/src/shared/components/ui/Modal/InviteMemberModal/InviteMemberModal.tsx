@@ -90,7 +90,7 @@ export function InviteMemberModal({
     return lastEmail && lastEmail.value.trim().length > 0;
   }, [emails]);
 
-  const hasValidEmails = useCallback((): boolean => {
+  const _hasValidEmails = useCallback((): boolean => {
     // Check if there's at least one non-empty email with valid format
     const nonEmptyEmails = emails.filter((e) => e.value.trim());
     if (nonEmptyEmails.length === 0) return false;

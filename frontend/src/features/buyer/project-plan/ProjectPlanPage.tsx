@@ -23,7 +23,6 @@ import {
   CHAT_INPUT_PLACEHOLDER,
 } from "./mock";
 import { Tab } from "./types";
-import Image from "next/image";
 
 export function ProjectPlanPage() {
   const router = useRouter();

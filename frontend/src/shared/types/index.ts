@@ -12,6 +12,7 @@ export * from "./modal";
 export * from "./loading";
 export * from "./my-page";
 export * from "./user-list";
+export * from "./format-date";
 // =============================================================================
 // RE-EXPORTS FOR BACKWARD COMPATIBILITY
 // =============================================================================

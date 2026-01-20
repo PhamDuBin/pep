@@ -6,7 +6,6 @@ import {
   ArchiveProject,
   ProjectFilterOption,
   SortOption,
-  ArchiveProjectsResponse,
   ProjectActionResponse,
 } from "../types";
 import {
