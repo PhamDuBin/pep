@@ -1,21 +1,20 @@
 "use client";
 
-import { UserProfile } from "../models";
 import Image from "next/image";
+import { UserProfile } from "@/shared/types/my-page";
 
 interface UserInfoSectionProps {
   user: UserProfile;
   newPassword: string;
   confirmPassword: string;
-  showPassword: boolean;
+  showNewPassword: boolean;
   showConfirmPassword: boolean;
-  showAvatarSaveSuccess: boolean;
-  showPasswordSaveSuccess: boolean;
+  showSaveSuccess: boolean;
   isSaving: boolean;
-  setNewPassword: (value: string) => void;
-  setConfirmPassword: (value: string) => void;
-  setShowPassword: (value: boolean) => void;
-  setShowConfirmPassword: (value: boolean) => void;
+  onNewPasswordChange: (value: string) => void;
+  onConfirmPasswordChange: (value: string) => void;
+  onToggleNewPassword: (value: boolean) => void;
+  onToggleConfirmPassword: (value: boolean) => void;
   onAvatarClick: () => void;
   onEmailChangeClick: () => void;
   onSaveClick: () => void;
@@ -25,15 +24,14 @@ export function UserInfoSection({
   user,
   newPassword,
   confirmPassword,
-  showPassword,
+  showNewPassword,
   showConfirmPassword,
-  showAvatarSaveSuccess,
-  showPasswordSaveSuccess,
+  showSaveSuccess,
   isSaving,
-  setNewPassword,
-  setConfirmPassword,
-  setShowPassword,
-  setShowConfirmPassword,
+  onNewPasswordChange,
+  onConfirmPasswordChange,
+  onToggleNewPassword,
+  onToggleConfirmPassword,
   onAvatarClick,
   onEmailChangeClick,
   onSaveClick,
@@ -56,9 +54,19 @@ export function UserInfoSection({
             style={{ backgroundColor: user.avatarColor || "#8ec5d0" }}
             onClick={onAvatarClick}
           >
-            <span className="font-normal text-[24px] text-white">
-              {user.initials}
-            </span>
+            {user.avatarUrl ? (
+              <Image
+                src={user.avatarUrl}
+                alt={user.name}
+                width={70}
+                height={70}
+                className="rounded-full"
+              />
+            ) : (
+              <span className="font-normal text-[24px] text-white">
+                {user.initials}
+              </span>
+            )}
           </div>
           <button
             type="button"
@@ -69,8 +77,8 @@ export function UserInfoSection({
           </button>
         </div>
 
-        {/* Success Message - shows for both avatar and password save */}
-        {(showAvatarSaveSuccess || showPasswordSaveSuccess) && (
+        {/* Success Message */}
+        {showSaveSuccess && (
           <div className="flex items-center justify-center px-[20px] py-[10px] bg-[#e6f3f5] rounded-[4px] self-start">
             <span className="font-semibold text-[14px] leading-normal text-[#066a9e]">
               変更を保存しました。
@@ -130,32 +138,23 @@ export function UserInfoSection({
             </label>
             <div className="flex items-center justify-between h-[35px] px-[10px] py-[3px] bg-white border border-[#b9b9b9] rounded-[4px] w-[300px] box-border">
               <input
-                type={showPassword ? "text" : "password"}
+                type={showNewPassword ? "text" : "password"}
                 className="flex-1 border-none outline-none font-normal text-[16px] text-black bg-transparent placeholder:text-[#808080]"
                 placeholder="8〜16文字の英数字で入力"
                 value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
+                onChange={(e) => onNewPasswordChange(e.target.value)}
               />
               <button
                 type="button"
                 className="flex items-center justify-center bg-transparent border-none p-0 cursor-pointer shrink-0 hover:opacity-70"
-                onClick={() => setShowPassword(!showPassword)}
+                onClick={() => onToggleNewPassword(!showNewPassword)}
               >
-                {showPassword ? (
-                  <Image
-                    src="/assets/icons/eye-off.svg"
-                    alt="Eye Icon"
-                    width={24}
-                    height={24}
-                  />
-                ) : (
-                  <Image
-                    src="/assets/icons/eye.svg"
-                    alt="Eye Icon"
-                    width={24}
-                    height={24}
-                  />
-                )}
+                <Image
+                  src={showNewPassword ? "/assets/icons/eye-off.svg" : "/assets/icons/eye.svg"}
+                  alt="Eye Icon"
+                  width={24}
+                  height={24}
+                />
               </button>
             </div>
           </div>
@@ -171,28 +170,19 @@ export function UserInfoSection({
                 className="flex-1 border-none outline-none font-normal text-[16px] text-black bg-transparent placeholder:text-[#808080]"
                 placeholder="8〜16文字の英数字で入力"
                 value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                onChange={(e) => onConfirmPasswordChange(e.target.value)}
               />
               <button
                 type="button"
                 className="flex items-center justify-center bg-transparent border-none p-0 cursor-pointer shrink-0 hover:opacity-70"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                onClick={() => onToggleConfirmPassword(!showConfirmPassword)}
               >
-                {showConfirmPassword ? (
-                  <Image
-                    src="/assets/icons/eye-off.svg"
-                    alt="Eye Icon"
-                    width={24}
-                    height={24}
-                  />
-                ) : (
-                  <Image
-                    src="/assets/icons/eye.svg"
-                    alt="Eye Icon"
-                    width={24}
-                    height={24}
-                  />
-                )}
+                <Image
+                  src={showConfirmPassword ? "/assets/icons/eye-off.svg" : "/assets/icons/eye.svg"}
+                  alt="Eye Icon"
+                  width={24}
+                  height={24}
+                />
               </button>
             </div>
           </div>
