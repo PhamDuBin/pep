@@ -1,7 +1,7 @@
 "use client";
 
 import { Pagination } from "@/shared/components";
-import { PaymentInfo, PaymentHistoryRecord } from "../models";
+import { PaymentInfo, PaymentHistoryRecord } from "@/features/buyer/my-page/models";
 
 interface PaymentInfoSectionProps {
   paymentInfo: PaymentInfo;

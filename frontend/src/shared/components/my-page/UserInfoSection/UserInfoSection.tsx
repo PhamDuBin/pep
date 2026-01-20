@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { VendorUserProfile } from "../models";
+import { UserProfile } from "@/features/buyer/my-page/models";
 
 interface UserInfoSectionProps {
   user: UserProfile;
@@ -54,19 +54,9 @@ export function UserInfoSection({
             style={{ backgroundColor: user.avatarColor || "#8ec5d0" }}
             onClick={onAvatarClick}
           >
-            {user.avatarUrl ? (
-              <Image
-                src={user.avatarUrl}
-                alt={user.name}
-                width={70}
-                height={70}
-                className="rounded-full"
-              />
-            ) : (
-              <span className="font-normal text-[24px] text-white">
-                {user.initials}
-              </span>
-            )}
+            <span className="font-normal text-[24px] text-white">
+              {user.initials}
+            </span>
           </div>
           <button
             type="button"

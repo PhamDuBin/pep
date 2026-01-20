@@ -18,6 +18,8 @@ export function MyPage() {
     userProfile,
     paymentInfo,
     paymentHistory,
+    currentPage,
+    totalPages,
     newPassword,
     confirmPassword,
     showNewPassword,
@@ -38,7 +40,12 @@ export function MyPage() {
     handleAvatarClick,
     handleAvatarSaveClick,
     handleSaveChanges,
+    handlePageChange,
     handleDownloadInvoice,
+    handleAddPaymentMethod,
+    formatAmount,
+    getPaymentMethodDisplay,
+    getStatusLabel,
   } = useVendorMyPage();
 
   return (
@@ -53,11 +60,12 @@ export function MyPage() {
             {/* User Info Section */}
             <UserInfoSection
               user={{
+                id: userProfile.id,
                 name: userProfile.name,
                 email: userProfile.email,
                 initials: userProfile.initials,
                 avatarColor: userProfile.avatarColor,
-                avatarUrl: userProfile.avatarUrl,
+                role: "member",
               }}
               newPassword={newPassword}
               confirmPassword={confirmPassword}
@@ -83,25 +91,30 @@ export function MyPage() {
                   taxIncluded: true,
                   paymentMethod: paymentInfo.paymentMethod
                     ? {
-                        type: paymentInfo.paymentMethod.type,
+                        id: `vendor-payment-${paymentInfo.paymentMethod.lastFourDigits}`,
+                        type: paymentInfo.paymentMethod.type as any,
                         lastFourDigits: paymentInfo.paymentMethod.lastFourDigits,
                       }
-                    : undefined,
+                    : null,
                 }}
                 paymentHistory={paymentHistory.map((record) => ({
                   id: record.id,
                   paymentDate: record.paymentDate,
                   amount: record.amount,
                   usagePeriod: record.billingPeriod,
-                  status: record.status,
+                  status: record.status as any,
                   invoiceUrl: record.invoiceUrl,
                 }))}
-                onDownloadClick={(id) => {
-                  const record = paymentHistory.find((r) => r.id === id);
-                  if (record) {
-                    handleDownloadInvoice(record.invoiceUrl);
-                  }
+                currentPage={currentPage}
+                totalPages={totalPages}
+                handlePageChange={handlePageChange}
+                handleDownloadInvoice={(invoiceUrl) => {
+                  handleDownloadInvoice(invoiceUrl);
                 }}
+                handleAddPaymentMethod={handleAddPaymentMethod}
+                formatAmount={formatAmount}
+                getPaymentMethodDisplay={getPaymentMethodDisplay}
+                getStatusLabel={getStatusLabel}
               />
             )}
           </div>
