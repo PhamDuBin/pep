@@ -1,22 +1,51 @@
 "use client";
 
 import Image from "next/image";
-import { VendorPaymentInfo, VendorPaymentHistory } from "../types";
+import { PaymentInfo, PaymentHistoryRecord } from "@/shared/types/my-page";
 
 interface PaymentInfoSectionProps {
-  paymentInfo: VendorPaymentInfo;
-  paymentHistory: VendorPaymentHistory[];
-  onDownloadInvoice: (invoiceUrl: string) => void;
+  paymentInfo: PaymentInfo;
+  paymentHistory: PaymentHistoryRecord[];
+  onDownloadClick: (id: string) => void;
+  onAddPaymentMethodClick?: () => void;
+  formatAmount?: (amount: number, taxIncluded?: boolean) => string;
+  getPaymentMethodDisplay?: () => string;
+  renderStatus?: (status: string) => React.ReactNode;
+  // Pagination props (optional)
+  currentPage?: number;
+  totalPages?: number;
+  onPageChange?: (page: number) => void;
+  PaginationComponent?: React.ComponentType<{
+    currentPage: number;
+    totalPages: number;
+    onPageChange: (page: number) => void;
+  }>;
 }
 
 export function PaymentInfoSection({
   paymentInfo,
   paymentHistory,
-  onDownloadInvoice,
+  onDownloadClick,
+  onAddPaymentMethodClick,
+  formatAmount,
+  getPaymentMethodDisplay,
+  renderStatus,
+  currentPage,
+  totalPages,
+  onPageChange,
+  PaginationComponent,
 }: PaymentInfoSectionProps) {
-  const handleDownloadClick = (invoiceUrl: string) => {
-    onDownloadInvoice(invoiceUrl);
+  const defaultFormatAmount = (amount: number, taxIncluded?: boolean) => {
+    return `${amount.toLocaleString()}円${taxIncluded ? "（税込）" : ""}`;
   };
+
+  const defaultGetPaymentMethodDisplay = () => {
+    if (!paymentInfo.paymentMethod) return "";
+    return `Visa **** **** ${paymentInfo.paymentMethod.lastFourDigits}`;
+  };
+
+  const displayAmount = formatAmount || defaultFormatAmount;
+  const displayPaymentMethod = getPaymentMethodDisplay || defaultGetPaymentMethodDisplay;
 
   return (
     <>
@@ -35,7 +64,7 @@ export function PaymentInfoSection({
                 次回の請求日
               </span>
               <span className="font-normal text-[20px] text-black py-[3px]">
-                {paymentInfo.nextPaymentDate}
+                {paymentInfo.nextBillingDate}
               </span>
             </div>
 
@@ -45,7 +74,7 @@ export function PaymentInfoSection({
                 請求金額
               </span>
               <span className="font-normal text-[20px] text-black py-[3px]">
-                {paymentInfo.amount.toLocaleString()}円（税込）
+                {displayAmount(paymentInfo.billingAmount, paymentInfo.taxIncluded)}
               </span>
             </div>
 
@@ -65,7 +94,7 @@ export function PaymentInfoSection({
                     className="object-cover"
                   />
                   <span className="font-normal text-[16px] text-[#808080]">
-                    Visa **** **** {paymentInfo.paymentMethod.lastFourDigits}
+                    {displayPaymentMethod()}
                   </span>
                 </div>
               )}
@@ -73,6 +102,7 @@ export function PaymentInfoSection({
               <button
                 type="button"
                 className="flex items-center px-[15px] py-[10px] bg-[#e1e1e1] border-none rounded-[8px] font-normal text-[14px] text-[#333] cursor-pointer transition-colors duration-200 hover:bg-[#d1d1d1]"
+                onClick={onAddPaymentMethodClick}
               >
                 支払い方法を追加
               </button>
@@ -117,19 +147,19 @@ export function PaymentInfoSection({
                       {record.paymentDate}
                     </td>
                     <td className="flex-1 border-t border-[#d4d4d4] font-medium text-[14px] text-black text-center px-[12px] py-[15px]">
-                      {record.amount.toLocaleString()}円
+                      {displayAmount(record.amount)}
                     </td>
                     <td className="w-[179px] border-t border-[#d4d4d4] font-medium text-[14px] text-black text-center px-[12px] py-[15px]">
-                      {record.billingPeriod}
+                      {record.usagePeriod}
                     </td>
                     <td className="flex-1 border-t border-[#d4d4d4] font-medium text-[12px] text-black text-center px-[12px] py-[15px]">
-                      {record.status}
+                      {renderStatus ? renderStatus(record.status) : record.status}
                     </td>
                     <td className="flex-1 border-t border-[#d4d4d4] font-medium text-[14px] text-black text-center px-[12px] py-[15px]">
                       <button
                         type="button"
                         className="bg-transparent border-none font-medium text-[12px] text-[#066a9e] cursor-pointer p-0 hover:underline"
-                        onClick={() => handleDownloadClick(record.invoiceUrl)}
+                        onClick={() => onDownloadClick(record.id)}
                       >
                         Download
                       </button>
@@ -139,6 +169,13 @@ export function PaymentInfoSection({
               </tbody>
             </table>
           </div>
+          {PaginationComponent && currentPage && totalPages && onPageChange && (
+            <PaginationComponent
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={onPageChange}
+            />
+          )}
         </div>
       )}
     </>

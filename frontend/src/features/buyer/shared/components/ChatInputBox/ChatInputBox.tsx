@@ -18,7 +18,7 @@ export function ChatInputBox({
 }: ChatInputBoxProps) {
   const [message, setMessage] = useState("");
 
-  const sendMessage = useCallback(() => {
+  const handleMessageSend = useCallback(() => {
     if (message.trim() && !disabled) {
       onMessageSent?.(message.trim());
       setMessage("");
@@ -29,10 +29,10 @@ export function ChatInputBox({
     (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
-        sendMessage();
+        handleMessageSend();
       }
     },
-    [sendMessage]
+    [handleMessageSend]
   );
 
   const hasMessage = message.trim().length > 0;
@@ -41,10 +41,11 @@ export function ChatInputBox({
     <div className="flex items-center gap-[10px] w-full max-w-[710px]">
       {/* Input Container */}
       <div
-        className={`flex items-center flex-1 gap-[10px] pl-[15px] pr-[10px] py-[10px] h-[45px] bg-[#ffffff] border border-[#b9b9b9] rounded-full shadow-[0px_4px_15px_rgba(0,0,0,0.05)] transition-all duration-200 ease-[cubic-bezier(0.25,0.8,0.25,1)] hover:bg-[#f4fafb] hover:border-[#8ec5d0] focus-within:bg-[#f4fafb] focus-within:border-[#8ec5d0] ${hasMessage
+        className={`flex items-center flex-1 gap-[10px] pl-[15px] pr-[10px] py-[10px] h-[45px] bg-[#ffffff] border border-[#b9b9b9] rounded-full shadow-[0px_4px_15px_rgba(0,0,0,0.05)] transition-all duration-200 ease-[cubic-bezier(0.25,0.8,0.25,1)] hover:bg-[#f4fafb] hover:border-[#8ec5d0] focus-within:bg-[#f4fafb] focus-within:border-[#8ec5d0] ${
+          hasMessage
             ? "border-[#066a9e] shadow-[0_0_0_2px_rgba(6,106,158,0.1)]"
             : ""
-          }`}
+        }`}
       >
         <input
           type="text"
@@ -76,11 +77,12 @@ export function ChatInputBox({
       {/* Send Button */}
       <button
         type="button"
-        className={`w-[40px] h-[40px] flex items-center justify-center bg-[#066a9e] rounded-full border-none transition-all duration-200 ease-[cubic-bezier(0.25,0.8,0.25,1)] ${!hasMessage || disabled
+        className={`w-[40px] h-[40px] flex items-center justify-center bg-[#066a9e] rounded-full border-none transition-all duration-200 ease-[cubic-bezier(0.25,0.8,0.25,1)] ${
+          !hasMessage || disabled
             ? "opacity-50 cursor-not-allowed"
             : "hover:scale-105 hover:shadow-[0_4px_12px_rgba(6,106,158,0.3)] active:scale-95"
-          }`}
-        onClick={sendMessage}
+        }`}
+        onClick={handleMessageSend}
         disabled={!hasMessage || disabled}
         aria-label="送信"
       >

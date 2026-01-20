@@ -10,6 +10,8 @@ export * from "./avatar-color-option";
 export * from "./tab";
 export * from "./modal";
 export * from "./loading";
+export * from "./my-page";
+export * from "./user-list";
 // =============================================================================
 // RE-EXPORTS FOR BACKWARD COMPATIBILITY
 // =============================================================================

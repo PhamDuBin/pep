@@ -99,19 +99,19 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
     onProjectSelected?.(project);
   };
 
-  const navigateToNewProject = () => {
+  const handleNewProjectClick = () => {
     router.push("/buyer");
   };
 
-  const navigateToArchive = () => {
+  const handleArchiveClick = () => {
     router.push("/buyer/archive");
   };
 
-  const navigateToMyPage = () => {
+  const handleMyPageClick = () => {
     router.push("/buyer/my-page");
   };
 
-  const navigateToUserList = () => {
+  const handleUserListClick = () => {
     router.push("/buyer/user-list");
   };
 
@@ -151,7 +151,7 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
         <div className="flex flex-col gap-[3px] w-full">
           <motion.button
             className={`flex flex-row items-center p-[3px_0] gap-[7px] w-full h-[26px] rounded-[4px] cursor-pointer bg-transparent border-none transition-colors duration-200 hover:bg-[#f0f0f0] active:bg-[#f0f0f0] ${isCollapsed ? "justify-center" : ""}`}
-            onClick={navigateToNewProject}
+            onClick={handleNewProjectClick}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -197,7 +197,7 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
                 ? "justify-center m-0 w-full p-[5px]"
                 : "m-[0_-10px] w-[calc(100%+20px)]"
             } ${isArchiveActive ? "bg-[#f0f0f0]" : "hover:bg-[#f9fafb]"}`}
-            onClick={navigateToArchive}
+            onClick={handleArchiveClick}
             whileHover={{ scale: 1.02, x: isCollapsed ? 0 : 3 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -336,7 +336,7 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
               ? "justify-center m-0 w-full p-[7px_5px]"
               : "m-[0_-10px] w-[calc(100%+20px)]"
           } ${isUserListActive ? "bg-[#f0f0f0]" : "hover:bg-[#f9fafb]"}`}
-          onClick={navigateToUserList}
+          onClick={handleUserListClick}
           whileHover={{ scale: 1.02, x: isCollapsed ? 0 : 3 }}
           whileTap={{ scale: 0.98 }}
         >
@@ -376,7 +376,7 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
               ? "justify-center m-0 w-full p-[5px]"
               : "m-[0_-10px] w-[calc(100%+20px)]"
           } ${isMyPageActive ? "bg-[#f0f0f0]" : "hover:bg-[#f9fafb]"}`}
-          onClick={navigateToMyPage}
+          onClick={handleMyPageClick}
           whileHover={{ scale: 1.02, x: isCollapsed ? 0 : 3 }}
           whileTap={{ scale: 0.98 }}
         >

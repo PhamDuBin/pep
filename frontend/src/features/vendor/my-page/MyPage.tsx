@@ -1,9 +1,15 @@
 "use client";
 
-import { EmailChangeModal, AvatarChangeModal, Loading, PageTransition } from "@/shared/components";
+import {
+  EmailChangeModal,
+  AvatarChangeModal,
+  Loading,
+  PageTransition,
+  UserInfoSection,
+  PaymentInfoSection,
+} from "@/shared/components";
 import { InfoModal } from "@/features/vendor/shared/components";
 import { useVendorMyPage } from "./hooks";
-import { UserInfoSection, PaymentInfoSection } from "./components";
 
 export function MyPage() {
   const {
@@ -46,28 +52,56 @@ export function MyPage() {
           <div className="flex flex-col gap-[35px]">
             {/* User Info Section */}
             <UserInfoSection
-              userProfile={userProfile}
+              user={{
+                name: userProfile.name,
+                email: userProfile.email,
+                initials: userProfile.initials,
+                avatarColor: userProfile.avatarColor,
+                avatarUrl: userProfile.avatarUrl,
+              }}
               newPassword={newPassword}
               confirmPassword={confirmPassword}
               showNewPassword={showNewPassword}
               showConfirmPassword={showConfirmPassword}
-              showPasswordSaveSuccess={showPasswordSaveSuccess}
+              showSaveSuccess={showPasswordSaveSuccess}
               isSaving={isSaving}
-              setNewPassword={setNewPassword}
-              setConfirmPassword={setConfirmPassword}
-              setShowNewPassword={setShowNewPassword}
-              setShowConfirmPassword={setShowConfirmPassword}
+              onNewPasswordChange={setNewPassword}
+              onConfirmPasswordChange={setConfirmPassword}
+              onToggleNewPassword={setShowNewPassword}
+              onToggleConfirmPassword={setShowConfirmPassword}
               onAvatarClick={handleAvatarClick}
               onEmailChangeClick={handleEmailChangeClick}
-              onSaveChanges={handleSaveChanges}
+              onSaveClick={handleSaveChanges}
             />
 
             {/* Payment Info Section */}
             {paymentInfo && (
               <PaymentInfoSection
-                paymentInfo={paymentInfo}
-                paymentHistory={paymentHistory}
-                onDownloadInvoice={handleDownloadInvoice}
+                paymentInfo={{
+                  nextBillingDate: paymentInfo.nextPaymentDate,
+                  billingAmount: paymentInfo.amount,
+                  taxIncluded: true,
+                  paymentMethod: paymentInfo.paymentMethod
+                    ? {
+                        type: paymentInfo.paymentMethod.type,
+                        lastFourDigits: paymentInfo.paymentMethod.lastFourDigits,
+                      }
+                    : undefined,
+                }}
+                paymentHistory={paymentHistory.map((record) => ({
+                  id: record.id,
+                  paymentDate: record.paymentDate,
+                  amount: record.amount,
+                  usagePeriod: record.billingPeriod,
+                  status: record.status,
+                  invoiceUrl: record.invoiceUrl,
+                }))}
+                onDownloadClick={(id) => {
+                  const record = paymentHistory.find((r) => r.id === id);
+                  if (record) {
+                    handleDownloadInvoice(record.invoiceUrl);
+                  }
+                }}
               />
             )}
           </div>

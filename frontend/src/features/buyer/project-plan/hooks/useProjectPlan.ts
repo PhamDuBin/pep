@@ -54,7 +54,7 @@ export function useProjectPlan() {
     return rows;
   }, [sentVendors]);
 
-  const sendMessage = useCallback(async (message: string) => {
+  const handleMessageSend = useCallback(async (message: string) => {
     const userMessage: ChatMessage = {
       id: `user-${Date.now()}`,
       content: message,
@@ -87,11 +87,11 @@ export function useProjectPlan() {
     }
   }, []);
 
-  const openDownloadModal = useCallback(() => {
+  const handleDownloadModalOpen = useCallback(() => {
     setShowDownloadModal(true);
   }, []);
 
-  const closeDownloadModal = useCallback(() => {
+  const handleDownloadModalClose = useCallback(() => {
     setShowDownloadModal(false);
     setSelectedFormat("pdf");
   }, []);
@@ -109,26 +109,26 @@ export function useProjectPlan() {
     }
   }, [selectedFormat]);
 
-  const openRfpConfirmModal = useCallback(() => {
+  const handleRfpConfirmModalOpen = useCallback(() => {
     setShowRfpConfirmModal(true);
   }, []);
 
-  const closeRfpConfirmModal = useCallback(() => {
+  const handleRfpConfirmModalClose = useCallback(() => {
     setShowRfpConfirmModal(false);
   }, []);
 
-  const openVendorSelectionModal = useCallback(() => {
+  const handleVendorSelectionModalOpen = useCallback(() => {
     setShowRfpConfirmModal(false);
     setVendorSearchQuery("");
     setShowVendorSelectionModal(true);
   }, []);
 
-  const closeVendorSelectionModal = useCallback(() => {
+  const handleVendorSelectionModalClose = useCallback(() => {
     setShowVendorSelectionModal(false);
     setVendorSearchQuery("");
   }, []);
 
-  const toggleVendor = useCallback((vendorId: string) => {
+  const handleVendorToggle = useCallback((vendorId: string) => {
     setVendors((prev) =>
       prev.map((v) =>
         v.id === vendorId ? { ...v, isSelected: !v.isSelected } : v
@@ -136,7 +136,7 @@ export function useProjectPlan() {
     );
   }, []);
 
-  const sendRfp = useCallback(async () => {
+  const handleRfpSend = useCallback(async () => {
     setIsSendingRfp(true);
     try {
       const selectedVendorIds = vendors
@@ -157,7 +157,7 @@ export function useProjectPlan() {
     }
   }, [vendors]);
 
-  const closeRfpSentModal = useCallback(() => {
+  const handleRfpSentModalClose = useCallback(() => {
     setShowRfpSentModal(false);
   }, []);
 
@@ -178,16 +178,16 @@ export function useProjectPlan() {
     vendorSearchQuery,
     setVendorSearchQuery,
     isSendingRfp,
-    sendMessage,
-    openDownloadModal,
-    closeDownloadModal,
+    handleMessageSend,
+    handleDownloadModalOpen,
+    handleDownloadModalClose,
     handleDownload,
-    openRfpConfirmModal,
-    closeRfpConfirmModal,
-    openVendorSelectionModal,
-    closeVendorSelectionModal,
-    toggleVendor,
-    sendRfp,
-    closeRfpSentModal,
+    handleRfpConfirmModalOpen,
+    handleRfpConfirmModalClose,
+    handleVendorSelectionModalOpen,
+    handleVendorSelectionModalClose,
+    handleVendorToggle,
+    handleRfpSend,
+    handleRfpSentModalClose,
   };
 }
