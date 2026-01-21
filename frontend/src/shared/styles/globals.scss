@@ -21,6 +21,10 @@
   .font-inter {
     font-family: var(--font-inter), var(--font-noto-jp), sans-serif !important;
   }
+
+  .font-noto-jp {
+    font-family: var(--font-noto-jp), sans-serif !important;
+  }
 }
 
 // =============================================================================
@@ -33,10 +37,19 @@
   color: #ffffff !important;
 }
 
-// Force font-bold to work
+
+.font-medium {
+  font-weight: 500 !important;
+}
+
+.font-semibold {
+  font-weight: 600 !important;
+}
+
 .font-bold {
   font-weight: 700 !important;
 }
+
 
 // Force bg-white to work
 .bg-white {
