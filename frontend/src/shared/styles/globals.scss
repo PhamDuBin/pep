@@ -21,6 +21,10 @@
   .font-inter {
     font-family: var(--font-inter), var(--font-noto-jp), sans-serif !important;
   }
+
+  .font-noto-jp {
+    font-family: var(--font-noto-jp), sans-serif !important;
+  }
 }
 
 // =============================================================================
@@ -33,10 +37,19 @@
   color: #ffffff !important;
 }
 
-// Force font-bold to work
+
+.font-medium {
+  font-weight: 500 !important;
+}
+
+.font-semibold {
+  font-weight: 600 !important;
+}
+
 .font-bold {
   font-weight: 700 !important;
 }
+
 
 // Force bg-white to work
 .bg-white {
@@ -154,6 +167,7 @@ button {
   cursor: pointer;
   background: none;
   border: none;
+  font-family: inherit;
 }
 
 // =============================================================================
@@ -163,6 +177,12 @@ button {
 table {
   border-collapse: collapse;
   border-spacing: 0;
+  font-family: inherit;
+}
+
+th,
+td {
+  font-family: inherit;
 }
 
 // =============================================================================
@@ -184,6 +204,12 @@ ol {
 }
 
 // Remove focus outline for form inputs
+input,
+textarea,
+select {
+  font-family: inherit;
+}
+
 input:focus,
 input:focus-visible,
 textarea:focus,
@@ -195,6 +221,7 @@ select:focus-visible {
 
 // Reduced motion preference
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -497,6 +524,7 @@ select:focus-visible {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
