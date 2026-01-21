@@ -209,6 +209,7 @@ export function useMyPage(): UseMyPageReturn {
         const result = await requestEmailChange(newEmail);
         if (result.success) {
           setEmailModalState("email-sent");
+          setUser((prev) => (prev ? { ...prev, email: newEmail } : null));
         }
       } catch (error) {
         console.error("Failed to request email change:", error);
