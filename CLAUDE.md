@@ -16,7 +16,7 @@ PEP (Project Enhancement Platform) は、AI技術を活用してRFI（情報提�
 
 | Component | Technology | Description |
 |-----------|------------|-------------|
-| Frontend | Angular 21 | Deployed to Firebase Hosting / Firebase Hostingへデプロイ |
+| Frontend | Next.js 16+ (App Router) | Cloud Run or Vercel / Cloud Run または Vercel |
 | Backend | FastAPI | Cloud Run (Serverless) / Cloud Run (サーバーレス) |
 | Database | Supabase (PostgreSQL + pgvector) | Managed DB / マネージドDB |
 | Auth | Supabase Auth | JWT Authentication / JWT認証 |
@@ -27,11 +27,11 @@ PEP (Project Enhancement Platform) は、AI技術を活用してRFI（情報提�
 ### System Architecture / システム構成
 
 ```
-Angular (Firebase Hosting)
+Next.js (Cloud Run or Vercel) [UI/BFF only]
     ↓
     ├── Supabase Auth (Authentication / 認証)
     ├── Supabase Realtime (WebSocket)
-    └── Cloud Run (FastAPI)
+    └── Cloud Run (FastAPI) [Business Logic]
             ↓
             ├── Supabase DB (PostgreSQL)
             ├── Supabase Storage
@@ -41,13 +41,13 @@ Angular (Firebase Hosting)
 
 ## Key Commands / 主要コマンド
 
-### Frontend (Angular)
+### Frontend (Next.js)
 ```bash
 cd frontend
 npm install              # Install dependencies / 依存関係インストール
-npm start               # Start dev server at http://localhost:4200 / 開発サーバー起動
+npm run dev             # Start dev server at http://localhost:3000 / 開発サーバー起動
 npm run build           # Production build / 本番ビルド
-npm test                # Run unit tests with Vitest / ユニットテスト実行
+npm run lint            # Run ESLint / ESLint実行
 ```
 
 ### Backend (FastAPI)
@@ -60,7 +60,7 @@ uvicorn app.main:app --reload  # Start dev server at http://localhost:8000 / 開
 ### Supabase
 ```bash
 supabase db push         # Apply migrations / マイグレーション適用
-supabase gen types typescript --local > frontend/src/app/core/types/database.types.ts
+supabase gen types typescript --local > frontend/src/shared/types/database.types.ts
 ```
 
 ### Deployment / デプロイ
@@ -68,33 +68,36 @@ supabase gen types typescript --local > frontend/src/app/core/types/database.typ
 # Backend (Cloud Run)
 gcloud run deploy pep-api --source ./backend --region asia-northeast1
 
-# Frontend (Firebase Hosting)
-cd frontend && ng build --configuration production
-firebase deploy --only hosting
+# Frontend (Cloud Run or Vercel)
+cd frontend && npm run build
+# Option 1: Cloud Run
+gcloud run deploy pep-web --source ./frontend --region asia-northeast1
+# Option 2: Vercel
+vercel --prod
 ```
 
 ## Project Structure / プロジェクト構成
 
 ```
 pep/
-├── frontend/                      # Angular 21
-│   ├── src/app/
-│   │   ├── core/                  # Core services & guards / コアサービス・ガード
-│   │   │   ├── services/
-│   │   │   │   ├── supabase.service.ts
-│   │   │   │   ├── auth.service.ts
-│   │   │   │   ├── api.service.ts
-│   │   │   │   └── storage.service.ts
-│   │   │   ├── guards/
-│   │   │   └── interceptors/
-│   │   ├── features/
-│   │   │   ├── auth/              # Login, Register, Password Reset
+├── frontend/                      # Next.js 16 (App Router)
+│   ├── src/
+│   │   ├── app/                   # App Router pages / App Routerページ
+│   │   │   ├── buyer/             # Buyer pages / Buyerページ
+│   │   │   ├── vendor/            # Vendor pages / Vendorページ
+│   │   │   ├── layout.tsx         # Root layout / ルートレイアウト
+│   │   │   └── page.tsx           # Home page / ホームページ
+│   │   ├── features/              # Feature modules / 機能モジュール
 │   │   │   ├── buyer/             # Buyer features / Buyer機能
-│   │   │   ├── vendor/            # Vendor features / Vendor機能
-│   │   │   ├── chat/              # AI Chat / AIチャット
-│   │   │   └── shared/            # Shared components / 共通コンポーネント
-│   │   └── environments/
-│   └── firebase.json
+│   │   │   └── vendor/            # Vendor features / Vendor機能
+│   │   ├── shared/                # Shared code / 共通コード
+│   │   │   ├── components/        # Shared components / 共通コンポーネント
+│   │   │   ├── hooks/             # Custom hooks / カスタムフック
+│   │   │   ├── services/          # API services / APIサービス
+│   │   │   ├── types/             # TypeScript types / 型定義
+│   │   │   └── utils/             # Utility functions / ユーティリティ
+│   │   └── environments/          # Environment config / 環境設定
+│   └── next.config.ts
 │
 ├── backend/                       # FastAPI
 │   ├── app/
@@ -130,18 +133,30 @@ pep/
 
 ## Coding Conventions / コーディング規約
 
-### TypeScript / Angular
+### TypeScript / Next.js (React)
 
-1. **Standalone Components**: All components must use standalone: true / すべてのコンポーネントは standalone: true
-2. **Strict Mode**: TypeScript strict mode required / TypeScript strict mode 必須
-3. **File Structure**: Components split into .ts, .html, .scss / コンポーネントは .ts, .html, .scss に分離
-4. **Naming / 命名規則**:
-   - Components: `feature-name.component.ts`
-   - Services: `feature-name.service.ts`
-   - Guards: `feature-name.guard.ts`
-5. **Imports / インポート順序**:
-   - Angular standard → External libraries → Internal modules
-   - Angular標準 → 外部ライブラリ → 内部モジュール
+1. **Backend Location Principle (CRITICAL) / バックエンド配置原則（重要）**:
+   - **Next.js is UI/BFF ONLY** - Business logic implementation is **PROHIBITED** in API Routes and Server Actions
+   - **Next.jsはUI/BFFのみ** - API RoutesやServer Actionsでのビジネスロジック実装は**禁止**
+   - All business logic MUST be delegated to FastAPI (`backend/`)
+   - すべてのビジネスロジックは FastAPI (`backend/`) に委譲すること
+   - Allowed in Next.js: Authentication state, UI state, BFF proxying, caching
+   - Next.jsで許可: 認証状態管理、UI状態、BFFプロキシ、キャッシュ
+2. **App Router**: Use Next.js App Router with Server Components by default / Next.js App Router、デフォルトでServer Componentsを使用
+3. **Strict Mode**: TypeScript strict mode required / TypeScript strict mode 必須
+4. **File Structure / ファイル構成**:
+   - Pages in `src/app/` (App Router) / ページは `src/app/` (App Router)
+   - Feature components in `src/features/` / 機能コンポーネントは `src/features/`
+   - Shared code in `src/shared/` / 共通コードは `src/shared/`
+5. **Naming / 命名規則**:
+   - Components: `PascalCase.tsx` (e.g., `UserProfile.tsx`)
+   - Hooks: `useCamelCase.ts` (e.g., `useAuth.ts`)
+   - Services: `camelCase.service.ts` (e.g., `auth.service.ts`)
+   - Types/Models: `camelCase.model.ts` (e.g., `user.model.ts`)
+6. **Imports / インポート順序**:
+   - React/Next.js → External libraries → Internal modules
+   - React/Next.js → 外部ライブラリ → 内部モジュール
+7. **Styling**: Tailwind CSS + DaisyUI + SCSS modules / Tailwind CSS + DaisyUI + SCSSモジュール
 
 ### Python / FastAPI
 
@@ -181,14 +196,11 @@ pep/
 
 ## Environment Variables / 環境変数
 
-### Frontend (environment.ts)
-```typescript
-export const environment = {
-  production: false,
-  supabaseUrl: 'https://xxxxx.supabase.co',
-  supabaseAnonKey: 'eyJ...',
-  apiBaseUrl: 'http://localhost:8000',
-};
+### Frontend (.env.local)
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://xxxxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
+NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
 ```
 
 ### Backend (.env)
@@ -199,7 +211,7 @@ SUPABASE_JWT_SECRET=your-jwt-secret
 OPENAI_API_KEY=sk-...
 STRIPE_SECRET_KEY=sk_...
 STRIPE_WEBHOOK_SECRET=whsec_...
-FRONTEND_URL=http://localhost:4200
+FRONTEND_URL=http://localhost:3000
 ```
 
 ## API Design / API設計
