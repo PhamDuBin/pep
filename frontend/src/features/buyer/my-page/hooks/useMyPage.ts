@@ -39,6 +39,7 @@ export interface UseMyPageReturn {
   // Modal state
   showEmailModal: boolean;
   showAvatarModal: boolean;
+  showPaymentMethodModal: boolean;
   emailModalState: EmailChangeModalState;
   isSendingEmail: boolean;
 
@@ -93,6 +94,7 @@ export function useMyPage(): UseMyPageReturn {
   // Modal state
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [showAvatarModal, setShowAvatarModal] = useState(false);
+  const [showPaymentMethodModal, setShowPaymentMethodModal] = useState(false);
   const [emailModalState, setEmailModalState] =
     useState<EmailChangeModalState>("email-change");
   const [isSendingEmail, setIsSendingEmail] = useState(false);
@@ -182,7 +184,7 @@ export function useMyPage(): UseMyPageReturn {
   }, []);
 
   const handleAddPaymentMethod = useCallback(() => {
-    console.log("Add payment method");
+    setShowPaymentMethodModal(true);
   }, []);
 
   const formatAmount = useCallback((amount: number, includeTax?: boolean) => {
@@ -244,6 +246,7 @@ export function useMyPage(): UseMyPageReturn {
     // Modal state
     showEmailModal,
     showAvatarModal,
+    showPaymentMethodModal,
     emailModalState,
     isSendingEmail,
 
@@ -256,6 +259,7 @@ export function useMyPage(): UseMyPageReturn {
     // Modal handlers
     setShowEmailModal,
     setShowAvatarModal,
+    setShowPaymentMethodModal,
 
     // Action handlers
     handleAvatarClick,

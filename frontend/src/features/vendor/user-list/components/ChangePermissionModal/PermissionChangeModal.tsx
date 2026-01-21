@@ -2,10 +2,10 @@
 
 import { useState, useCallback, useEffect } from "react";
 import { Modal } from "@/shared/components";
-import { VendorUserPermission } from "../../mock";
+import { UserPermission } from "../../mock";
 import {
-  VENDOR_PERMISSION_OPTIONS_MOCK,
-  VENDOR_PERMISSION_LABELS_MOCK,
+  PERMISSION_OPTIONS_MOCK,
+  PERMISSION_LABELS_MOCK,
 } from "../../mock";
 import Image from "next/image";
 
@@ -14,8 +14,8 @@ export type ChangePermissionModalState = "select" | "complete";
 interface ChangePermissionModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onPermissionSaveClick: (permission: VendorUserPermission) => void;
-  currentPermission?: VendorUserPermission;
+  onPermissionSaveClick: (permission: UserPermission) => void;
+  currentPermission?: UserPermission;
   isSaving?: boolean;
 }
 
@@ -58,7 +58,7 @@ export function PermissionChangeModal({
   const [modalState, setModalState] =
     useState<ChangePermissionModalState>("select");
   const [selectedPermission, setSelectedPermission] =
-    useState<VendorUserPermission>(currentPermission || "メンバー");
+    useState<UserPermission>(currentPermission || "メンバー");
 
   useEffect(() => {
     if (isOpen) {
@@ -72,8 +72,8 @@ export function PermissionChangeModal({
     setModalState("complete");
   }, [selectedPermission, onPermissionSaveClick]);
 
-  const getPermissionLabel = (permission: VendorUserPermission) => {
-    return VENDOR_PERMISSION_LABELS_MOCK[permission] || permission;
+  const getPermissionLabel = (permission: UserPermission) => {
+    return PERMISSION_LABELS_MOCK[permission] || permission;
   };
 
   return (
@@ -129,7 +129,7 @@ export function PermissionChangeModal({
 
             {/* Radio Buttons (Horizontal) */}
             <div className="flex flex-row items-center justify-center p-0 gap-[25px] h-[40px]">
-              {VENDOR_PERMISSION_OPTIONS_MOCK.map((option) => (
+              {PERMISSION_OPTIONS_MOCK.map((option) => (
                 <label
                   key={option.value}
                   className="flex flex-row items-center gap-[5px] cursor-pointer"
@@ -142,7 +142,7 @@ export function PermissionChangeModal({
                       checked={selectedPermission === option.value}
                       onChange={() =>
                         setSelectedPermission(
-                          option.value as VendorUserPermission
+                          option.value as UserPermission
                         )
                       }
                       className="appearance-none w-[24px] h-[24px] bg-white border border-[#e5e7eb] rounded-full cursor-pointer

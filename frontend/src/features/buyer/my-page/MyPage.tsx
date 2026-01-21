@@ -28,6 +28,7 @@ export function MyPage() {
     totalPages,
     showEmailModal,
     showAvatarModal,
+    showPaymentMethodModal,
     emailModalState,
     isSendingEmail,
     setNewPassword,
@@ -35,6 +36,7 @@ export function MyPage() {
     setShowPassword,
     setShowConfirmPassword,
     setShowAvatarModal,
+    setShowPaymentMethodModal,
     handleAvatarClick,
     handleEmailChangeClick,
     handleAvatarSaveClick,
@@ -134,6 +136,35 @@ export function MyPage() {
           onAvatarSaveClick={handleAvatarSaveClick}
           currentColor={user?.avatarColor || "#8ec5d0"}
         />
+
+        {/* Payment Method Modal */}
+        {showPaymentMethodModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-[30px] max-w-[500px] w-full">
+              <h2 className="font-bold text-[20px] mb-[20px]">支払い方法を追加</h2>
+              <p className="text-gray-600 mb-[30px]">
+                クレジットカード情報を入力してください。
+              </p>
+              <div className="flex gap-[10px]">
+                <button
+                  onClick={() => setShowPaymentMethodModal(false)}
+                  className="flex-1 px-[15px] py-[10px] bg-gray-300 border-none rounded-[8px] font-normal text-[14px] cursor-pointer"
+                >
+                  キャンセル
+                </button>
+                <button
+                  onClick={() => {
+                    // TODO: Implement payment method addition
+                    setShowPaymentMethodModal(false);
+                  }}
+                  className="flex-1 px-[15px] py-[10px] bg-blue-500 text-white border-none rounded-[8px] font-normal text-[14px] cursor-pointer"
+                >
+                  追加
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </PageTransition>
   );

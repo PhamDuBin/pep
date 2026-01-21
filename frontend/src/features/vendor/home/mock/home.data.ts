@@ -1,10 +1,10 @@
 // =============================================================================
-// VENDOR HOME MOCK DATA
+// HOME MOCK DATA
 // =============================================================================
 
-import { VendorMessage, VendorMessageThread } from "../models";
+import { Message, MessageThread } from "../models";
 
-export const VENDOR_MESSAGES_MOCK: VendorMessage[] = [
+export const MESSAGES_MOCK: Message[] = [
   {
     id: "1",
     companyId: "1",
@@ -47,7 +47,7 @@ export const VENDOR_MESSAGES_MOCK: VendorMessage[] = [
   },
 ];
 
-export const VENDOR_MESSAGE_THREADS_MOCK: VendorMessageThread[] = [
+export const MESSAGE_THREADS_MOCK: MessageThread[] = [
   {
     id: "thread-1",
     messageId: "1",

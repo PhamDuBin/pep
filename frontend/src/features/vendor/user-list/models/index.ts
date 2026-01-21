@@ -1,5 +1,5 @@
 // =============================================================================
-// VENDOR USER LIST MODELS - RE-EXPORTS
+// USER LIST MODELS - RE-EXPORTS
 // =============================================================================
 
-export * from "./vendor-user.model";
+export * from "./user.model";

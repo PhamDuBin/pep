@@ -1,10 +1,10 @@
 // =============================================================================
-// VENDOR HOME SERVICES - RE-EXPORTS
+// HOME SERVICES - RE-EXPORTS
 // =============================================================================
 
 export {
-  getVendorMessages,
+  getMessages,
   getMessageThread,
   sendThreadMessage,
   markMessageAsRead,
-} from "./vendor-home.service";
+} from "./home.service";

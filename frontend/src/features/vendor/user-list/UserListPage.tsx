@@ -7,7 +7,7 @@ import {
   UserListTable,
 } from "@/shared/components";
 import { ChangePermissionModal } from "./components";
-import { useVendorUserList } from "./hooks";
+import { useUserList } from "./hooks";
 
 export function UserListPage() {
   const {
@@ -42,7 +42,7 @@ export function UserListPage() {
     handleChangePermission,
     handlePermissionSaveClick,
     handleCloseChangePermissionModal,
-  } = useVendorUserList();
+  } = useUserList();
 
   // Wrapper to handle selection by ID (for shared component)
   const handleToggleSelection = (userId: string) => {

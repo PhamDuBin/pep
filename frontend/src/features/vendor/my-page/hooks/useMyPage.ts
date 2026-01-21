@@ -2,29 +2,29 @@
 
 import { useState, useCallback, useEffect } from "react";
 import {
-  VendorUserProfile,
-  VendorPaymentInfo,
-  VendorPaymentHistory,
+  UserProfile,
+  PaymentInfo,
+  PaymentHistory,
 } from "../models";
 import {
-  getVendorUserProfile,
-  getVendorPaymentInfo,
-  getVendorPaymentHistory,
-  updateVendorAvatarColor,
-  changeVendorPassword,
-  requestVendorEmailChange,
-  downloadVendorInvoice,
-} from "../services/vendor-my-page.service";
+  getUserProfile,
+  getPaymentInfo,
+  getPaymentHistory,
+  updateAvatarColor,
+  changePassword,
+  requestEmailChange,
+  downloadInvoice,
+} from "../services/my-page.service";
 
-export interface UseVendorMyPageReturn {
+export interface UseMyPageReturn {
   // Loading state
   isLoading: boolean;
   isSaving: boolean;
 
   // User data
-  userProfile: VendorUserProfile | null;
-  paymentInfo: VendorPaymentInfo | null;
-  paymentHistory: VendorPaymentHistory[];
+  userProfile: UserProfile | null;
+  paymentInfo: PaymentInfo | null;
+  paymentHistory: PaymentHistory[];
 
   // Pagination state
   currentPage: number;
@@ -67,11 +67,11 @@ export interface UseVendorMyPageReturn {
   getStatusLabel: (status: string) => string;
 }
 
-export function useVendorMyPage(): UseVendorMyPageReturn {
+export function useMyPage(): UseMyPageReturn {
   const [isLoading, setIsLoading] = useState(true);
-  const [userProfile, setUserProfile] = useState<VendorUserProfile | null>(null);
-  const [paymentInfo, setPaymentInfo] = useState<VendorPaymentInfo | null>(null);
-  const [paymentHistory, setPaymentHistory] = useState<VendorPaymentHistory[]>([]);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [paymentInfo, setPaymentInfo] = useState<PaymentInfo | null>(null);
+  const [paymentHistory, setPaymentHistory] = useState<PaymentHistory[]>([]);
 
   // Password state
   const [newPassword, setNewPassword] = useState("");
@@ -99,9 +99,9 @@ export function useVendorMyPage(): UseVendorMyPageReturn {
       setIsLoading(true);
       try {
         const [profileData, paymentData, historyData] = await Promise.all([
-          getVendorUserProfile(),
-          getVendorPaymentInfo(),
-          getVendorPaymentHistory(),
+          getUserProfile(),
+          getPaymentInfo(),
+          getPaymentHistory(),
         ]);
         setUserProfile(profileData);
         setPaymentInfo(paymentData);
@@ -121,7 +121,7 @@ export function useVendorMyPage(): UseVendorMyPageReturn {
 
   const handleEmailSendClick = useCallback(async (newEmail: string, _confirmEmail: string) => {
     try {
-      const result = await requestVendorEmailChange(newEmail);
+      const result = await requestEmailChange(newEmail);
       if (result.success) {
         setShowEmailModal(false);
         setShowEmailSuccessModal(true);
@@ -137,7 +137,7 @@ export function useVendorMyPage(): UseVendorMyPageReturn {
 
   const handleAvatarSaveClick = useCallback(async (color: string) => {
     try {
-      await updateVendorAvatarColor(color);
+      await updateAvatarColor(color);
       setUserProfile((prev) => prev ? { ...prev, avatarColor: color } : null);
       setShowAvatarModal(false);
     } catch (error) {
@@ -153,7 +153,7 @@ export function useVendorMyPage(): UseVendorMyPageReturn {
 
     setIsSaving(true);
     try {
-      const result = await changeVendorPassword(newPassword, confirmPassword);
+      const result = await changePassword(newPassword, confirmPassword);
       if (result.success) {
         setNewPassword("");
         setConfirmPassword("");
@@ -172,7 +172,7 @@ export function useVendorMyPage(): UseVendorMyPageReturn {
 
   const handleDownloadInvoice = useCallback(async (invoiceUrl: string) => {
     try {
-      await downloadVendorInvoice(invoiceUrl);
+      await downloadInvoice(invoiceUrl);
       console.log("Downloading invoice:", invoiceUrl);
     } catch (error) {
       console.error("Failed to download invoice:", error);

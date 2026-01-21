@@ -2,9 +2,9 @@
 // VENDOR MOCKS
 // =============================================================================
 
-import { VendorCompany, VendorMessage, VendorMessageThread, VendorUser, VendorPaymentInfo, VendorPaymentHistory } from "../models";
+import { Company, Message, MessageThread, User, PaymentInfo, PaymentHistory } from "../models";
 
-export const MOCK_VENDOR_COMPANIES: VendorCompany[] = [
+export const MOCK_VENDOR_COMPANIES: Company[] = [
   {
     id: "1",
     name: "株式会社ソラマメ",
@@ -22,7 +22,7 @@ export const MOCK_VENDOR_COMPANIES: VendorCompany[] = [
   },
 ];
 
-export const MOCK_VENDOR_MESSAGES: VendorMessage[] = [
+export const MOCK_MESSAGES: Message[] = [
   {
     id: "1",
     companyId: "1",
@@ -65,7 +65,7 @@ export const MOCK_VENDOR_MESSAGES: VendorMessage[] = [
   },
 ];
 
-export const MOCK_VENDOR_MESSAGE_THREADS: VendorMessageThread[] = [
+export const MOCK_MESSAGE_THREADS: MessageThread[] = [
   {
     id: "thread-1",
     messageId: "1",
@@ -134,7 +134,7 @@ export const MOCK_VENDOR_MESSAGE_THREADS: VendorMessageThread[] = [
   },
 ];
 
-export const MOCK_VENDOR_CURRENT_USER: VendorUser = {
+export const MOCK_VENDOR_CURRENT_USER: User = {
   id: "1",
   name: "山口 太郎",
   initials: "山口",
@@ -152,7 +152,7 @@ export const MOCK_VENDOR_USER_PROFILE = {
   avatarUrl: undefined,
 };
 
-export const MOCK_VENDOR_PAYMENT_INFO: VendorPaymentInfo = {
+export const MOCK_VENDOR_PAYMENT_INFO: PaymentInfo = {
   nextPaymentDate: "2024年12月15日",
   amount: 30000,
   paymentMethod: {
@@ -161,7 +161,7 @@ export const MOCK_VENDOR_PAYMENT_INFO: VendorPaymentInfo = {
   },
 };
 
-export const MOCK_VENDOR_PAYMENT_HISTORY: VendorPaymentHistory[] = [
+export const MOCK_VENDOR_PAYMENT_HISTORY: PaymentHistory[] = [
   {
     id: "p1",
     paymentDate: "2024/11/15",
@@ -188,7 +188,7 @@ export const MOCK_VENDOR_PAYMENT_HISTORY: VendorPaymentHistory[] = [
   },
 ];
 
-export const MOCK_VENDOR_USERS: VendorUser[] = [
+export const MOCK_VENDOR_USERS: User[] = [
   {
     id: "u1",
     name: "山口 太郎",

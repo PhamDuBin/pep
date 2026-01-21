@@ -1,5 +1,5 @@
 // =============================================================================
-// VENDOR HOME MODELS - RE-EXPORTS
+// HOME MODELS - RE-EXPORTS
 // =============================================================================
 
-export * from "./vendor-message.model";
+export * from "./message.model";

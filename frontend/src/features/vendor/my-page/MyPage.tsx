@@ -9,7 +9,7 @@ import {
   PaymentInfoSection,
 } from "@/shared/components";
 import { InfoModal } from "@/features/vendor/shared/components";
-import { useVendorMyPage } from "./hooks";
+import { useMyPage } from "./hooks";
 
 export function MyPage() {
   const {
@@ -46,7 +46,7 @@ export function MyPage() {
     formatAmount,
     getPaymentMethodDisplay,
     getStatusLabel,
-  } = useVendorMyPage();
+  } = useMyPage();
 
   return (
     <PageTransition>
@@ -97,7 +97,7 @@ export function MyPage() {
                       }
                     : null,
                 }}
-                paymentHistory={paymentHistory.map((record) => ({
+                paymentHistory={paymentHistory.map((record: any) => ({
                   id: record.id,
                   paymentDate: record.paymentDate,
                   amount: record.amount,

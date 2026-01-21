@@ -1,17 +1,18 @@
 // =============================================================================
-// VENDOR MY PAGE SERVICE
+// MY PAGE SERVICE
 // =============================================================================
 
 import {
-  VendorUserProfile,
-  VendorPaymentInfo,
-  VendorPaymentHistory,
+  UserProfile,
+  PaymentInfo,
+  PaymentHistory,
+  PaymentFormData,
 } from "../models";
 import {
-  VENDOR_USER_PROFILE_MOCK,
-  VENDOR_PAYMENT_INFO_MOCK,
-  VENDOR_PAYMENT_HISTORY_MOCK,
-} from "../mock/vendor-my-page.data";
+  USER_PROFILE_MOCK,
+  PAYMENT_INFO_MOCK,
+  PAYMENT_HISTORY_MOCK,
+} from "../mock/my-page.data";
 
 const USE_MOCK = true;
 
@@ -21,11 +22,11 @@ interface ActionResponse {
 }
 
 /**
- * Get vendor user profile
+ * Get user profile
  */
-export async function getVendorUserProfile(): Promise<VendorUserProfile> {
+export async function getUserProfile(): Promise<UserProfile> {
   if (USE_MOCK) {
-    return VENDOR_USER_PROFILE_MOCK;
+    return USER_PROFILE_MOCK;
   }
 
   const res = await fetch("/api/vendor/profile");
@@ -35,11 +36,11 @@ export async function getVendorUserProfile(): Promise<VendorUserProfile> {
 }
 
 /**
- * Get vendor payment info
+ * Get payment info
  */
-export async function getVendorPaymentInfo(): Promise<VendorPaymentInfo> {
+export async function getPaymentInfo(): Promise<PaymentInfo> {
   if (USE_MOCK) {
-    return VENDOR_PAYMENT_INFO_MOCK;
+    return PAYMENT_INFO_MOCK;
   }
 
   const res = await fetch("/api/vendor/payment/info");
@@ -49,11 +50,11 @@ export async function getVendorPaymentInfo(): Promise<VendorPaymentInfo> {
 }
 
 /**
- * Get vendor payment history
+ * Get payment history
  */
-export async function getVendorPaymentHistory(): Promise<VendorPaymentHistory[]> {
+export async function getPaymentHistory(): Promise<PaymentHistory[]> {
   if (USE_MOCK) {
-    return VENDOR_PAYMENT_HISTORY_MOCK;
+    return PAYMENT_HISTORY_MOCK;
   }
 
   const res = await fetch("/api/vendor/payment/history");
@@ -63,9 +64,9 @@ export async function getVendorPaymentHistory(): Promise<VendorPaymentHistory[]>
 }
 
 /**
- * Update vendor avatar color
+ * Update avatar color
  */
-export async function updateVendorAvatarColor(
+export async function updateAvatarColor(
   color: string
 ): Promise<ActionResponse> {
   if (USE_MOCK) {
@@ -85,9 +86,9 @@ export async function updateVendorAvatarColor(
 }
 
 /**
- * Change vendor password
+ * Change password
  */
-export async function changeVendorPassword(
+export async function changePassword(
   newPassword: string,
   confirmPassword: string
 ): Promise<ActionResponse> {
@@ -111,9 +112,9 @@ export async function changeVendorPassword(
 }
 
 /**
- * Request vendor email change
+ * Request email change
  */
-export async function requestVendorEmailChange(
+export async function requestEmailChange(
   newEmail: string
 ): Promise<ActionResponse> {
   if (USE_MOCK) {
@@ -133,9 +134,31 @@ export async function requestVendorEmailChange(
 }
 
 /**
- * Download vendor invoice
+ * Add payment method
  */
-export async function downloadVendorInvoice(invoiceUrl: string): Promise<Blob> {
+export async function addPaymentMethod(
+  paymentData: PaymentFormData
+): Promise<ActionResponse> {
+  if (USE_MOCK) {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    return { success: true };
+  }
+
+  const res = await fetch("/api/vendor/payment/method", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(paymentData),
+  });
+
+  if (!res.ok) throw new Error("Failed to add payment method");
+
+  return res.json();
+}
+
+/**
+ * Download invoice
+ */
+export async function downloadInvoice(invoiceUrl: string): Promise<Blob> {
   if (USE_MOCK) {
     await new Promise((resolve) => setTimeout(resolve, 500));
     return new Blob(["mock invoice"], { type: "application/pdf" });
@@ -146,3 +169,4 @@ export async function downloadVendorInvoice(invoiceUrl: string): Promise<Blob> {
 
   return res.blob();
 }
+

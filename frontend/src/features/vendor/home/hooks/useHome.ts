@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
-import { useVendor } from "../../shared/contexts";
+import { useVendor } from "@/shared/contexts";
 import { ThreadMessage } from "../models";
 import { sendThreadMessage } from "../services/home.service";
 
@@ -21,7 +21,7 @@ export function useHome() {
   const messageContainerRef = useRef<HTMLDivElement>(null);
 
   // Get the selected message details
-  const selectedMessage = filteredMessages.find((m: any) => m.id === selectedMessageId);
+  const selectedMessage = filteredMessages.find((m) => m.id === selectedMessageId);
 
   // Load thread messages when selection changes
   useEffect(() => {
