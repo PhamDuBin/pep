@@ -44,7 +44,7 @@ export function MessageDetail({
             {selectedMessage.companyName}
           </h2>
           <div className="flex items-center py-[4px] px-[10px] border border-[#066a9e] rounded-full">
-            <span className="font-medium text-[14px] leading-[19px] text-[#066a9e]">
+            <span className="font-[500] text-[14px] leading-[19px] text-[#066a9e]">
               {selectedMessage.projectName}
             </span>
           </div>
