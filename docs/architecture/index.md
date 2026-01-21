@@ -25,6 +25,7 @@ This directory contains the architecture documentation for the PEP (Project Enha
 ## Technology Selection / 技術選定
 
 **Technology Selection Rationale / 技術選定の理由:**
+- **Next.js (App Router)**: React-based SSR/SSG, optimized DX, TypeScript-first / Reactベース SSR/SSG、優れたDX、TypeScriptファースト
 - **Cloud Run**: Serverless, pay-per-use, auto-scaling (0→N) / サーバーレス・従量課金・自動スケール (0→N)
 - **Supabase**: All-in-one DB/Auth/Storage/Realtime, reduced operational costs / DB/Auth/Storage/Realtimeを一括提供、運用コスト削減
 - **OpenAI**: Quality of RFI draft generation with GPT-4 / GPT-4によるRFI草案生成の品質
@@ -34,6 +35,7 @@ This directory contains the architecture documentation for the PEP (Project Enha
 ## References / 参考資料
 
 - [Use Case List / ユースケース一覧](../UC/index.md)
+- [Next.js Docs](https://nextjs.org/docs)
 - [Supabase Docs](https://supabase.com/docs)
 - [Cloud Run Docs](https://cloud.google.com/run/docs)
 - [FastAPI Docs](https://fastapi.tiangolo.com/)

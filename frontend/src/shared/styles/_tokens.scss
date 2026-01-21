@@ -1,0 +1,239 @@
+// =============================================================================
+// DESIGN TOKENS
+// =============================================================================
+// This file contains all design tokens (variables) for the application.
+// Matches the Angular frontend design system exactly.
+
+// =============================================================================
+// COLORS - BRAND
+// =============================================================================
+
+$primary: #066a9e;
+$primary-light: #e6f3f5;
+$primary-dark: #055580;
+
+// =============================================================================
+// COLORS - TEXT
+// =============================================================================
+
+$text-dark: #333333;
+$text-gray: #808080;
+$text-light: #999999;
+
+// =============================================================================
+// COLORS - BORDERS
+// =============================================================================
+
+$border-gray: #b9b9b9;
+$border-light: #e1e1e1;
+
+// =============================================================================
+// COLORS - BACKGROUNDS
+// =============================================================================
+
+$white: #ffffff;
+$bg-light: #f9fafb;
+$bg-hover: #f0f0f0;
+$avatar-bg: #8ec5d0;
+
+// =============================================================================
+// COLORS - SEMANTIC
+// =============================================================================
+
+$success: #22c55e;
+$success-light: #4ade80;
+$warning: #f59e0b;
+$warning-light: #fbbf24;
+$error: #ef4444;
+$error-light: #f87171;
+$info: #3b82f6;
+$info-light: #60a5fa;
+
+// =============================================================================
+// COLORS - NEUTRAL (Gray Scale)
+// =============================================================================
+
+$gray-50: #f9fafb;
+$gray-100: #f3f4f6;
+$gray-200: #e5e7eb;
+$gray-300: #d1d5db;
+$gray-400: #9ca3af;
+$gray-500: #6b7280;
+$gray-600: #4b5563;
+$gray-700: #374151;
+$gray-800: #1f2937;
+$gray-900: #111827;
+
+// =============================================================================
+// TYPOGRAPHY
+// =============================================================================
+
+// Font Families
+$font-noto: "Noto Sans", sans-serif;
+$font-noto-jp: "Noto Sans JP", sans-serif;
+$font-inter: "Inter", sans-serif;
+$font-family-sans: "Noto Sans", "Noto Sans JP", sans-serif;
+
+// Font Sizes
+$font-size-xs: 11px;
+$font-size-sm: 13px;
+$font-size-base: 14px;
+$font-size-lg: 16px;
+$font-size-xl: 18px;
+$font-size-2xl: 20px;
+$font-size-3xl: 24px;
+$font-size-4xl: 30px;
+$font-size-5xl: 36px;
+
+// Font Weights
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+// Line Heights
+$line-height-tight: 1.25;
+$line-height-snug: 1.375;
+$line-height-normal: 1.5;
+$line-height-relaxed: 1.625;
+
+// Letter Spacing
+$letter-spacing-tight: -0.025em;
+$letter-spacing-normal: 0;
+$letter-spacing-wide: 0.025em;
+
+// =============================================================================
+// SPACING
+// =============================================================================
+
+$spacing-0: 0;
+$spacing-1: 3px;
+$spacing-2: 5px;
+$spacing-3: 7px;
+$spacing-4: 10px;
+$spacing-5: 15px;
+$spacing-6: 20px;
+$spacing-7: 25px;
+$spacing-8: 30px;
+$spacing-10: 40px;
+$spacing-12: 50px;
+
+// =============================================================================
+// LAYOUT
+// =============================================================================
+
+$header-height: 89px;
+$sidebar-width: 172px;
+$sidebar-collapsed-width: 60px;
+
+// =============================================================================
+// BORDERS
+// =============================================================================
+
+$border-radius-sm: 2px;
+$border-radius-default: 4px;
+$border-radius-md: 6px;
+$border-radius-lg: 8px;
+$border-radius-xl: 12px;
+$border-radius-full: 9999px;
+
+// =============================================================================
+// SHADOWS
+// =============================================================================
+
+$shadow-header: 0px 4px 15px rgba(0, 0, 0, 0.05);
+$shadow-sidebar: 0px 4px 15px rgba(0, 0, 0, 0.1);
+$shadow-tab: 0px 4px 10px rgba(0, 0, 0, 0.05);
+$shadow-input: 0px 4px 15px rgba(0, 0, 0, 0.05);
+$shadow-card: 0px 4px 15px rgba(0, 0, 0, 0.08);
+$shadow-modal: 0px 4px 20px rgba(0, 0, 0, 0.15);
+
+// =============================================================================
+// TRANSITIONS
+// =============================================================================
+
+$transition-fast: 150ms;
+$transition-default: 200ms;
+$transition-slow: 300ms;
+
+// Aliases for mixins compatibility
+$transition-duration-fast: $transition-fast;
+$transition-duration-default: $transition-default;
+$transition-duration-slow: $transition-slow;
+
+$transition-timing: cubic-bezier(0.25, 0.8, 0.25, 1);
+$transition-timing-default: $transition-timing;
+
+// =============================================================================
+// Z-INDEX
+// =============================================================================
+
+$z-header: 50;
+$z-sidebar: 40;
+$z-dropdown: 100;
+$z-modal-backdrop: 200;
+$z-modal: 210;
+$z-tooltip: 300;
+$z-toast: 400;
+
+// =============================================================================
+// BREAKPOINTS
+// =============================================================================
+
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;
+$breakpoint-2xl: 1536px;
+
+// =============================================================================
+// CONTAINER SIZES
+// =============================================================================
+
+$container-sm: 640px;
+$container-md: 768px;
+$container-lg: 1024px;
+$container-xl: 1280px;
+$container-2xl: 1536px;
+
+// =============================================================================
+// ALIASES FOR BACKWARDS COMPATIBILITY
+// =============================================================================
+
+// Color aliases
+$color-primary: $primary;
+$color-primary-dark: $primary-dark;
+$color-primary-light: $primary-light;
+$color-text-primary: $text-dark;
+$color-text-secondary: $text-gray;
+$color-text-tertiary: $text-light;
+$color-text-inverse: $white;
+$color-text-disabled: $gray-400;
+$color-bg-primary: $white;
+$color-bg-secondary: $bg-light;
+
+// Neutral color aliases
+$color-neutral-100: $gray-100;
+$color-neutral-400: $gray-400;
+$color-neutral-500: $gray-500;
+
+// Border aliases
+$color-border-light: $border-light;
+$color-border-default: $border-gray;
+
+// Semantic color aliases
+$color-error: $error;
+$color-error-light: $error-light;
+$color-success: $success;
+$color-success-light: $success-light;
+$color-warning: $warning;
+$color-warning-light: $warning-light;
+$color-info: $info;
+$color-info-light: $info-light;
+
+// Shadow aliases
+$shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+$shadow-default: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+$shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+$shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+$shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);

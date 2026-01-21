@@ -1,0 +1,1 @@
+export { AvatarChangeModal } from "./AvatarChangeModal";

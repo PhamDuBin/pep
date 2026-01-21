@@ -1,0 +1,8 @@
+// =============================================================================
+// STYLES INDEX
+// =============================================================================
+// Main entry point for SCSS imports.
+// Import this file in components that need access to tokens and mixins.
+
+@forward "tokens";
+@forward "mixins";

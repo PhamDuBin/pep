@@ -1,0 +1,74 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 90px); // viewport height minus header
+  overflow: hidden;
+}
+
+// Content Area - fills remaining height after tab navigation
+.content-area {
+  display: flex;
+  flex: 1;
+  min-height: 0; // important for flex children to shrink
+  background: #ffffff;
+  overflow: hidden;
+}
+
+// Left Panel - contains project header and vendor list
+.left-panel {
+  display: flex;
+  flex-direction: column;
+  width: 350px;
+  height: 100%;
+  flex-shrink: 0;
+  border-right: 1px solid #e1e1e1;
+  overflow: hidden;
+}
+
+// Project Header - matches Figma exactly
+.project-header {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 85px;
+  padding: 10px 15px;
+  border-bottom: 1px solid #e1e1e1;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  background: #ffffff;
+}
+
+.project-name {
+  flex: 1;
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: normal;
+  color: #000000;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  white-space: pre-wrap;
+}
+
+.document-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: rgba(6, 106, 158, 0.1);
+  }
+}

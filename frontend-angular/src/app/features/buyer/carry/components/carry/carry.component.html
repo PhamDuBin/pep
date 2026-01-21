@@ -1,0 +1,72 @@
+<!-- Carry page content matching Figma design exactly -->
+<!-- Tab Navigation -->
+<app-tab-navigation [tabs]="tabs" (tabChange)="onTabChange($event)"></app-tab-navigation>
+
+<!-- Content Area -->
+<div class="content-area">
+  <!-- Left Panel: Project Header + Vendor Message List -->
+  <div class="left-panel">
+    <!-- Project Header -->
+    <div class="project-header">
+      <p class="project-name">{{ projectName() }}</p>
+      <!-- Document Stack Icon -->
+      <button type="button" class="document-icon" (click)="onProjectPlanClick()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="none">
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M25 20.7144V6.42868C25 5.67091 24.699 4.94419 24.1632 4.40837C23.6274 3.87255 22.9007 3.57153 22.1429 3.57153H10.7143C9.95656 3.57153 9.22983 3.87255 8.69402 4.40837C8.1582 4.94419 7.85718 5.67091 7.85718 6.42868V20.7144C7.85718 21.4722 8.1582 22.1989 8.69402 22.7347C9.22983 23.2705 9.95656 23.5715 10.7143 23.5715H22.1429C22.9007 23.5715 23.6274 23.2705 24.1632 22.7347C24.699 22.1989 25 21.4722 25 20.7144Z"
+            stroke="#066A9E"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M7.5786 7.05005L4.71574 8.09291C4.00391 8.35218 3.4242 8.88354 3.10406 9.57015C2.78393 10.2568 2.74959 11.0424 3.0086 11.7543L7.89431 25.1786C8.02268 25.5313 8.21926 25.8551 8.47283 26.1318C8.72639 26.4084 9.03197 26.6324 9.37211 26.7909C9.71225 26.9495 10.0803 27.0394 10.4552 27.0557C10.8301 27.072 11.2046 27.0142 11.5572 26.8858L19.5115 23.7458M12.1429 10.7143H19.2857M12.1429 13.5715H20.7143M12.1429 16.4286H16.4286"
+            stroke="#066A9E"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Vendor Message List -->
+    <app-vendor-message-list
+      [vendors]="vendors()"
+      [selectedVendorId]="selectedVendor()?.id ?? null"
+      (vendorSelected)="onVendorSelected($event)"
+      (vendorExitClicked)="onVendorExitClicked($event)"
+    ></app-vendor-message-list>
+  </div>
+
+  <!-- Right Panel: Chat Area -->
+  <app-vendor-chat
+    [conversation]="currentConversation()"
+    [isLoading]="isSending()"
+    [members]="chatMembers()"
+    (messageSent)="onMessageSent($event)"
+    (addMemberClicked)="onAddMemberClicked()"
+    (exitChatClicked)="onExitChatClicked()"
+  ></app-vendor-chat>
+</div>
+
+<!-- Add Member Modal -->
+<app-add-member-modal
+  [isOpen]="isAddMemberModalOpen"
+  [projectName]="projectName()"
+  [vendorName]="currentConversation()?.vendorName ?? ''"
+  [existingMembers]="chatMembers()"
+  [searchResults]="searchResults()"
+  [isLoading]="isAddingMembers"
+  [isSearching]="isSearching()"
+  [modalState]="addMemberModalState"
+  (close)="onCloseAddMemberModal()"
+  (search)="onSearchMembers($event)"
+  (addMembers)="onAddMembers($event)"
+></app-add-member-modal>
+
+<!-- Project Plan Modal -->
+<app-project-plan-modal
+  [isOpen]="isProjectPlanModalOpen"
+  (close)="onCloseProjectPlanModal()"
+></app-project-plan-modal>

@@ -1,0 +1,17 @@
+// Custom styles for rfp confirm modal to match original design
+:host ::ng-deep {
+  .rfp-confirm-modal {
+    padding: 32px;
+    max-height: 80vh;
+    overflow-y: auto;
+
+    .modal-title {
+      font-size: 18px;
+      margin-bottom: 24px;
+    }
+
+    .modal-body {
+      margin-bottom: 24px;
+    }
+  }
+}

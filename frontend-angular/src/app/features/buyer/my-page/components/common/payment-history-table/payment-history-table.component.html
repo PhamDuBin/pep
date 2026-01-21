@@ -1,0 +1,48 @@
+<!-- Payment History Table matching Figma G-01 design -->
+<div class="payment-history-section">
+  <!-- Section Header -->
+  <div class="section-header">
+    <h2 class="section-title">お支払い履歴</h2>
+  </div>
+
+  <!-- Table -->
+  <div class="table-container">
+    <table class="payment-table">
+      <thead>
+        <tr>
+          <th class="col-date">支払日</th>
+          <th class="col-amount">請求金額(税込)</th>
+          <th class="col-period">利用年月</th>
+          <th class="col-status">ステータス</th>
+          <th class="col-invoice">請求書</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (record of records; track record.id) {
+        <tr>
+          <td class="col-date">{{ record.paymentDate }}</td>
+          <td class="col-amount">{{ formatAmount(record.amount) }}</td>
+          <td class="col-period">{{ record.usagePeriod }}</td>
+          <td class="col-status">{{ getStatusLabel(record.status) }}</td>
+          <td class="col-invoice">
+            <button
+              class="btn-download"
+              type="button"
+              (click)="onDownload(record.id)"
+            >
+              Download
+            </button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <app-pagination
+    [currentPage]="currentPage"
+    [totalPages]="totalPages"
+    (pageChange)="onPageChange($event)"
+  ></app-pagination>
+</div>

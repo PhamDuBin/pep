@@ -1,0 +1,11 @@
+:host {
+  display: contents;
+}
+
+// Custom styles for rfp-sent-modal to match original design
+:host ::ng-deep {
+  .rfp-sent-modal {
+    min-width: 450px;
+    max-width: 500px;
+  }
+}

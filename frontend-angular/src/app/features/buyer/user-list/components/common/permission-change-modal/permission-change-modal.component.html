@@ -1,0 +1,136 @@
+<app-modal
+  [isOpen]="isOpen"
+  title="権限変更"
+  size="lg"
+  customClass="permission-change-modal"
+  (closed)="onClose()"
+>
+  @if (modalType === 'select') {
+  <ng-container>
+    <!-- Permission Selection Mode -->
+    <div class="flex flex-col items-center gap-[10px]">
+      <p class="modal-text">このユーザーを以下の権限へ変更します。</p>
+
+      <!-- Radio Buttons (Horizontal) -->
+      <div class="flex items-center gap-[25px] h-[40px]">
+        @for (option of permissionOptions; track option.value) {
+        <label class="flex items-center gap-[5px] cursor-pointer rounded">
+          <div class="radio-circle" [class.selected]="selectedPermission === option.value">
+            @if (selectedPermission === option.value) {
+            <div class="radio-dot"></div>
+            }
+          </div>
+          <input
+            type="radio"
+            name="permission"
+            [value]="option.value"
+            [checked]="selectedPermission === option.value"
+            (change)="onSelectPermission(option.value)"
+            class="hidden"
+          />
+          <span class="text-[14px] text-[#333] font-normal leading-[18px]">{{ option.label }}</span>
+        </label>
+        }
+      </div>
+    </div>
+
+    <!-- Permissions Table -->
+    <div class="permission-table-container">
+      <table class="permission-table">
+        <thead>
+          <tr>
+            <th class="text-center">機能</th>
+            <th class="text-center w-56">管理者</th>
+            <th class="text-center">メンバー</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of permissionTableData; track row.feature) {
+          <tr>
+            <td class="text-center">{{ row.feature }}</td>
+            <td class="text-center">
+              @if (row.adminCheck) {
+              <div class="flex flex-col items-center justify-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
+                  <path
+                    d="M9.55008 17.3081L4.58008 12.3381L5.29408 11.6251L9.55008 15.8811L18.7061 6.7251L19.4191 7.4391L9.55008 17.3081Z"
+                    fill="#066A9E"
+                  />
+                </svg>
+                @if (row.adminNote) {
+                <span class="text-[14px] text-[#333] font-medium">{{ row.adminNote }}</span>
+                }
+              </div>
+              } @else if (row.adminText) {
+              <span class="text-[14px] text-[#333] font-medium">{{ row.adminText }}</span>
+              }
+            </td>
+            <td class="text-center">
+              @if (row.memberCheck) {
+              <div class="flex flex-col items-center justify-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
+                  <path
+                    d="M9.55008 17.3081L4.58008 12.3381L5.29408 11.6251L9.55008 15.8811L18.7061 6.7251L19.4191 7.4391L9.55008 17.3081Z"
+                    fill="#066A9E"
+                  />
+                </svg>
+                @if (row.memberNote) {
+                <span class="text-[14px] text-[#333] font-medium">{{ row.memberNote }}</span>
+                }
+              </div>
+              } @else if (row.memberText) {
+              <span class="text-[14px] text-[#333] font-medium">{{ row.memberText }}</span>
+              }
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Save Button -->
+    <div modal-actions class="flex flex-row gap-[10px] justify-center items-center">
+      <button
+        class="px-[15px] py-[10px] bg-[#066a9e] text-white rounded-lg text-[14px] min-w-[80px] hover:bg-[#055a85] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+        [disabled]="isSaving || !selectedPermission"
+        (click)="onConfirm()"
+      >
+        @if (isSaving) {
+        <span class="loading loading-spinner loading-sm"></span>
+        } @else { 保存 }
+      </button>
+    </div>
+  </ng-container>
+  } @else {
+  <ng-container>
+    <!-- Completion Mode -->
+    <div class="flex flex-col items-center gap-[10px]">
+      <p class="modal-text">ユーザーを以下の権限へ変更しました。</p>
+      <div class="flex items-center justify-center h-[40px]">
+        <span class="text-[14px] text-[#333]">{{ getPermissionLabel(selectedPermission) }}</span>
+      </div>
+    </div>
+
+    <div modal-actions class="flex flex-row gap-[10px] justify-center items-center">
+      <button
+        class="px-[15px] py-[10px] bg-[#E1E1E1] text-black rounded-lg text-[14px] min-w-[80px] hover:bg-[#999797] flex items-center justify-center"
+        (click)="onClose()"
+      >
+        閉じる
+      </button>
+    </div>
+  </ng-container>
+  }
+</app-modal>

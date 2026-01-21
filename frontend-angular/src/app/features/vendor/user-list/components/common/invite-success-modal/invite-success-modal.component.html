@@ -1,0 +1,24 @@
+@if (isOpen) {
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/10" (click)="onBackdropClick($event)">
+    <!-- Modal Content -->
+    <div
+        class="relative bg-white rounded-[12px] shadow-xl w-[340px] h-[174px] p-[20px_35px] flex flex-col items-center gap-[25px]">
+
+        <!-- Title -->
+        <h2 class="font-noto font-normal text-[20px] leading-[27px] text-[#066A9E] w-[200px] text-center">
+            新しいメンバーを招待
+        </h2>
+
+        <!-- Message -->
+        <p class="font-noto-jp font-medium text-[14px] leading-[130%] text-center text-[#333333] w-[182px]">
+            招待メールを送信しました。
+        </p>
+
+        <!-- Close Button -->
+        <button type="button" (click)="onClose()"
+            class="px-[15px] py-[10px] h-[39px] bg-[#E1E1E1] rounded-[8px] font-noto text-[14px] leading-[19px] text-[#333333] hover:bg-[#D1D1D1] transition-colors">
+            閉じる
+        </button>
+    </div>
+</div>
+}

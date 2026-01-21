@@ -1,0 +1,36 @@
+<app-modal
+  [isOpen]="isOpen"
+  title="以下のベンダーへRFPを送信しました"
+  size="md"
+  customClass="rfp-sent-modal"
+  (closed)="onClose()"
+>
+  <!-- Vendor List -->
+  <div class="text-center space-y-2">
+    @for (row of getVendorRows(); track $index) {
+    <div class="flex justify-center gap-4">
+      @for (vendor of row; track vendor.id) {
+      <span class="text-[14px] text-text-dark">{{ vendor.name }}</span>
+      }
+    </div>
+    }
+  </div>
+
+  <!-- Action Buttons -->
+  <div modal-actions class="flex flex-row gap-[10px] justify-center items-center">
+    <button
+      type="button"
+      class="px-6 py-2 bg-primary text-white rounded-lg text-[14px] hover:opacity-90 transition-opacity"
+      (click)="onVendorChat()"
+    >
+      ベンダチャット
+    </button>
+    <button
+      type="button"
+      class="px-6 py-2 border bg-[#E1E1E1] border-border-gray rounded-lg text-[14px] text-text-dark hover:bg-gray-50 transition-colors"
+      (click)="onClose()"
+    >
+      閉じる
+    </button>
+  </div>
+</app-modal>

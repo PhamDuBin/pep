@@ -1,0 +1,73 @@
+<aside class="h-full w-full bg-white flex flex-col justify-between py-[15px] pb-[25px]">
+    <!-- Top Section -->
+    <div class="flex flex-col gap-[25px] w-full">
+        <!-- Menu Toggle -->
+        <!-- Expanded: pl-[10px] (10px padding) -->
+        <!-- Collapsed: Centered in 60px. Icon is 20px. (60-20)/2 = 20px padding. -->
+        <div class="flex items-center w-full sidebar-item"
+            [style.padding-left]="isCollapsed() ? 'calc(50% - 10px)' : '10px'">
+            <button
+                class="hover:opacity-70 transition-opacity p-0 bg-transparent border-none cursor-pointer flex items-center justify-center w-[20px] h-[13px]"
+                (click)="toggleSidebar()">
+                <img src="assets/icons/menu-toggle.svg" alt="Menu" class="w-[20px] h-[13px]" />
+            </button>
+        </div>
+
+        <!-- COMPANY Section -->
+        <div class="flex flex-col gap-[5px] w-full">
+            <!-- COMPANY Label -->
+            <div class="px-[10px] overflow-hidden whitespace-nowrap sidebar-text">
+                <span class="text-[14px] text-dark font-normal leading-[19px]">COMPANY</span>
+            </div>
+
+            <!-- Company Search -->
+            <!-- Center of 24px icon: calc(50% - 12px) -->
+            <div class="flex items-center gap-[7px] h-[34px] cursor-pointer rounded hover:bg-[#F0F0F0] transition-colors sidebar-item"
+                [style.padding-left]="isCollapsed() ? 'calc(50% - 12px)' : '10px'" style="width: 100%;">
+                <!-- Icon is 24px. Center of 60px is 30px. Icon half is 12px. Start is 18px. -->
+                <img src="assets/icons/search.svg" alt="Search" class="w-[24px] h-[24px] flex-shrink-0" />
+                <span class="text-[13px] text-text-dark font-normal leading-[18px] sidebar-text">会社検索</span>
+            </div>
+
+            <!-- Company List -->
+            <div class="flex flex-col items-start gap-[5px] w-full sidebar-text">
+                @for (company of companies(); track company.id) {
+                <div class="flex items-center py-[5px] min-h-[29px] rounded cursor-pointer transition-colors px-[10px] w-full"
+                    [class.bg-primary-light]="company.isSelected" [class.hover:bg-[#F0F0F0]]="!company.isSelected"
+                    (click)="selectCompany(company.id)">
+                    <span class="text-[14px] font-normal leading-[19px] break-words"
+                        [class.text-primary]="company.isSelected" [class.text-text-dark]="!company.isSelected">
+                        {{ company.name }}
+                    </span>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Section (User) -->
+    <div class="flex flex-col gap-[10px] w-full">
+        <!-- User List -->
+        <!-- Center of 29px icon: calc(50% - 14.5px) -->
+        <div class="flex items-center gap-[7px] h-[32px] cursor-pointer rounded hover:bg-[#F0F0F0] transition-colors sidebar-item"
+            [style.padding-left]="isCollapsed() ? 'calc(50% - 14.5px)' : '10px'" (click)="navigateToUserList()">
+            <!-- Icon is 29px. Center of 60px is 30px. Icon half is 14.5px. Start is 15.5px. -->
+            <img src="assets/icons/users.svg" alt="Users" class="w-[29px] h-[16px] flex-shrink-0" />
+            <span class="text-[13px] text-text-dark font-normal leading-[18px] sidebar-text">ユーザ一覧</span>
+        </div>
+
+        <!-- User Profile -->
+        <!-- Center of 30px icon: calc(50% - 15px) -->
+        <div class="flex items-center gap-[7px] h-[40px] cursor-pointer rounded hover:bg-[#F0F0F0] transition-colors sidebar-item"
+            [style.padding-left]="isCollapsed() ? 'calc(50% - 15px)' : '10px'" (click)="navigateToMyPage()">
+            <!-- Avatar is 30px. Center of 60px is 30px. Half is 15. Start is 15px. -->
+            <div
+                class="flex flex-col justify-center items-center w-[30px] h-[30px] bg-avatar-bg rounded-full flex-shrink-0">
+                <span class="text-[13px] text-white font-normal leading-[18px] text-center">{{ currentUser.initials
+                    }}</span>
+            </div>
+            <span class="text-[13px] text-text-dark font-normal leading-[18px] sidebar-text">{{ currentUser.name
+                }}</span>
+        </div>
+    </div>
+</aside>

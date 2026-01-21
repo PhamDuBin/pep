@@ -1,0 +1,22 @@
+<!-- Frame 200: Avatar Section with Horizontal Layout -->
+<div class="flex flex-row items-center gap-[25px] w-[195px] h-[70px]">
+    <!-- Avatar Circle (Ellipse 2) - Dynamic color based on avatarColor -->
+    <div class="flex flex-col justify-center items-center w-[70px] h-[70px] rounded-full flex-shrink-0"
+        [style.background]="avatarColor || '#8EC5D0'">
+        @if (imageUrl) {
+        <img [src]="imageUrl" [alt]="userName" class="w-full h-full rounded-full object-cover" />
+        } @else {
+        <span class="text-[20px] text-white font-normal leading-[27px] text-center">{{ initials }}</span>
+        }
+    </div>
+
+    <!-- Upload Button (Frame 96 > Frame 64) -->
+    @if (editable) {
+    <div class="flex flex-row items-center gap-[10px] w-[100px] h-[39px]">
+        <button (click)="onUploadClick()"
+            class="flex flex-row items-center justify-center px-[15px] py-[10px] gap-[10px] w-[100px] h-[39px] bg-[#E1E1E1] hover:bg-[#D1D1D1] border-none rounded-[8px]">
+            <span class="font-noto text-[14px] leading-[19px] text-[#333333]">画像を選択</span>
+        </button>
+    </div>
+    }
+</div>

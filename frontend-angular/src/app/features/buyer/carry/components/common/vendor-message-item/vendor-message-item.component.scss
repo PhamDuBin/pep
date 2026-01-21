@@ -1,0 +1,131 @@
+:host {
+  display: block;
+}
+
+.vendor-message-item {
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 15px;
+  border-bottom: 1px solid #e1e1e1;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.15s ease;
+  border: none;
+
+  &:hover {
+    background-color: rgba(230, 243, 245, 0.5);
+  }
+
+  &.selected {
+    background-color: #ffffff;
+  }
+}
+
+.vendor-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.vendor-name {
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: normal;
+  color: #333333;
+}
+
+.last-message {
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: normal;
+  color: #333333;
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.right-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex-shrink: 0;
+  gap: 5px;
+}
+
+.timestamp {
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 19px;
+  text-align: center;
+  color: #333333;
+}
+
+// Menu styles
+.menu-container {
+  position: relative;
+}
+
+.menu-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 4px;
+  transition: background-color 0.15s ease;
+
+  &:hover,
+  &.active {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 5px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  overflow: hidden;
+  min-width: 100px;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 15px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #333333;
+  text-align: left;
+  width: 100%;
+  white-space: nowrap;
+
+  &:hover {
+    background: #f5f5f5;
+  }
+
+  svg {
+    flex-shrink: 0;
+  }
+}
