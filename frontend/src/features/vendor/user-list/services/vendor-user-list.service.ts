@@ -2,7 +2,7 @@
 // VENDOR USER LIST SERVICE
 // =============================================================================
 
-import { VendorUser, PermissionOption } from "../types";
+import { VendorUser, PermissionOption } from "../models";
 import {
   VENDOR_USERS_MOCK,
   VENDOR_PERMISSION_OPTIONS_MOCK,

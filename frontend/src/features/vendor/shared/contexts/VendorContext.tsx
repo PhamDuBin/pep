@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useCallback, ReactNode } from "react";
-import { VendorCompany, VendorMessage, VendorMessageThread } from "../types/vendor";
+import { VendorCompany, VendorMessage, VendorMessageThread } from "../models";
 import {
   MOCK_VENDOR_COMPANIES,
   MOCK_VENDOR_MESSAGES,

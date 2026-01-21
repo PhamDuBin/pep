@@ -5,9 +5,11 @@ import {
   AvatarChangeModal,
   Loading,
   PageTransition,
+  UserInfoSection,
+  PaymentInfoSection,
+  Pagination,
 } from "@/shared/components";
 import { useMyPage } from "./hooks";
-import { UserInfoSection, PaymentInfoSection } from "./components";
 
 export function MyPage() {
   const {
@@ -32,7 +34,6 @@ export function MyPage() {
     setConfirmPassword,
     setShowPassword,
     setShowConfirmPassword,
-    setShowEmailModal,
     setShowAvatarModal,
     handleAvatarClick,
     handleEmailChangeClick,
@@ -59,28 +60,51 @@ export function MyPage() {
           <div className="flex flex-col gap-[35px]">
             {/* User Info Section */}
             <UserInfoSection
-              user={user}
+              user={{
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                initials: user.initials,
+                avatarColor: user.avatarColor,
+                role: user.role,
+              }}
               newPassword={newPassword}
               confirmPassword={confirmPassword}
-              showPassword={showPassword}
+              showNewPassword={showPassword}
               showConfirmPassword={showConfirmPassword}
-              showAvatarSaveSuccess={showAvatarSaveSuccess}
-              showPasswordSaveSuccess={showPasswordSaveSuccess}
+              showSaveSuccess={showAvatarSaveSuccess || showPasswordSaveSuccess}
               isSaving={isSaving}
-              setNewPassword={setNewPassword}
-              setConfirmPassword={setConfirmPassword}
-              setShowPassword={setShowPassword}
-              setShowConfirmPassword={setShowConfirmPassword}
-              handleAvatarClick={handleAvatarClick}
-              handleEmailChangeClick={handleEmailChangeClick}
-              handleSavePassword={handleSavePassword}
+              onNewPasswordChange={setNewPassword}
+              onConfirmPasswordChange={setConfirmPassword}
+              onToggleNewPassword={setShowPassword}
+              onToggleConfirmPassword={setShowConfirmPassword}
+              onAvatarClick={handleAvatarClick}
+              onEmailChangeClick={handleEmailChangeClick}
+              onSaveClick={handleSavePassword}
             />
 
             {/* Payment Info Section (Admin Only) */}
             {user.role === "admin" && paymentInfo && (
               <PaymentInfoSection
-                paymentInfo={paymentInfo}
-                paymentHistory={paymentHistory}
+                paymentInfo={{
+                  nextBillingDate: paymentInfo.nextBillingDate,
+                  billingAmount: paymentInfo.billingAmount,
+                  taxIncluded: paymentInfo.taxIncluded,
+                  paymentMethod: paymentInfo.paymentMethod
+                    ? {
+                        id: paymentInfo.paymentMethod.id || "default",
+                        type: paymentInfo.paymentMethod.type,
+                        lastFourDigits: paymentInfo.paymentMethod.lastFourDigits,
+                      }
+                    : null,
+                }}
+                paymentHistory={paymentHistory.map((record) => ({
+                  id: record.id,
+                  paymentDate: record.paymentDate,
+                  amount: record.amount,
+                  usagePeriod: record.usagePeriod,
+                  status: record.status as any,
+                }))}
                 currentPage={currentPage}
                 totalPages={totalPages}
                 handlePageChange={handlePageChange}

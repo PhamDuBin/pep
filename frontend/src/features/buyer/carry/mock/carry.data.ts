@@ -9,7 +9,7 @@ import {
   Tab,
   ChatMember,
   SearchableUser,
-} from "../types";
+} from "../models";
 
 export const CURRENT_PROJECT_NAME_MOCK = "AIを利用した花屋の業務効率化";
 

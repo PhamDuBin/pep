@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { Tab } from "@/shared/types";
-import Image from "next/image";
+import { Tab } from "@/shared/models";
 
 interface TabNavigationProps {
   tabs: Tab[];
@@ -15,7 +14,7 @@ export function TabNavigation({
 }: TabNavigationProps) {
   const [tabs, setTabs] = useState(initialTabs);
 
-  const handleSelectTab = useCallback(
+  const handleTabSelect = useCallback(
     (tab: Tab) => {
       if (tab.isDisabled) return;
 
@@ -42,7 +41,7 @@ export function TabNavigation({
               : "hover:bg-[#066a9e] [&:hover_span]:!text-[#ffffff] [&:hover_path]:!fill-[#ffffff] [&:hover_circle]:!fill-[#ffffff]"
           }`}
           disabled={tab.isDisabled}
-          onClick={() => handleSelectTab(tab)}
+          onClick={() => handleTabSelect(tab)}
         >
           {/* Kick Icon */}
           {tab.icon === "kick" && (

@@ -6,9 +6,8 @@ import {
   ArchiveProject,
   ProjectFilterOption,
   SortOption,
-  ArchiveProjectsResponse,
   ProjectActionResponse,
-} from "../types";
+} from "../models";
 import {
   ARCHIVE_PROJECTS_MOCK,
   PROJECT_FILTER_OPTIONS_MOCK,

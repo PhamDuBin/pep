@@ -7,7 +7,7 @@ import React, {
   useCallback,
   ReactNode,
 } from "react";
-import { Project } from "@/shared/types";
+import { Project } from "@/shared/models";
 import { INITIAL_PROJECTS } from "@/shared/mocks";
 
 interface ProjectContextType {

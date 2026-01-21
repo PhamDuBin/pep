@@ -4,10 +4,10 @@
 
 import {
   User,
-  UserPermission,
   PermissionOption,
   UserActionResponse,
-} from "../types/types";
+} from "../models";
+import { UserPermission } from "../types/types";
 import { USERS_MOCK, PERMISSION_OPTIONS_MOCK } from "../mock/user-list.data";
 
 const USE_MOCK = true;

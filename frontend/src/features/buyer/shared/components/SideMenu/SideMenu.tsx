@@ -4,7 +4,7 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSideMenu, useProjects } from "@/shared/contexts";
-import { Project } from "@/shared/types";
+import { Project } from "@/shared/models";
 
 // Animation variants - width values must match _tokens.scss
 const SIDEBAR_WIDTH = 200; // $sidebar-width in _tokens.scss
@@ -99,19 +99,19 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
     onProjectSelected?.(project);
   };
 
-  const navigateToNewProject = () => {
+  const handleNewProjectClick = () => {
     router.push("/buyer");
   };
 
-  const navigateToArchive = () => {
+  const handleArchiveClick = () => {
     router.push("/buyer/archive");
   };
 
-  const navigateToMyPage = () => {
+  const handleMyPageClick = () => {
     router.push("/buyer/my-page");
   };
 
-  const navigateToUserList = () => {
+  const handleUserListClick = () => {
     router.push("/buyer/user-list");
   };
 
@@ -151,7 +151,7 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
         <div className="flex flex-col gap-[3px] w-full">
           <motion.button
             className={`flex flex-row items-center p-[3px_0] gap-[7px] w-full h-[26px] rounded-[4px] cursor-pointer bg-transparent border-none transition-colors duration-200 hover:bg-[#f0f0f0] active:bg-[#f0f0f0] ${isCollapsed ? "justify-center" : ""}`}
-            onClick={navigateToNewProject}
+            onClick={handleNewProjectClick}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -192,12 +192,11 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
             )}
           </AnimatePresence>
           <motion.div
-            className={`flex items-center gap-[7px] p-[5px_10px] cursor-pointer rounded-[4px] transition-colors duration-200 ${
-              isCollapsed
+            className={`flex items-center gap-[7px] p-[5px_10px] cursor-pointer rounded-[4px] transition-colors duration-200 ${isCollapsed
                 ? "justify-center m-0 w-full p-[5px]"
                 : "m-[0_-10px] w-[calc(100%+20px)]"
             } ${isArchiveActive ? "bg-[#f0f0f0]" : "hover:bg-[#f9fafb]"}`}
-            onClick={navigateToArchive}
+            onClick={handleArchiveClick}
             whileHover={{ scale: 1.02, x: isCollapsed ? 0 : 3 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -240,9 +239,8 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
 
           {/* Search */}
           <motion.div
-            className={`flex items-center gap-[7px] p-[7px_10px] cursor-pointer rounded-[4px] transition-colors duration-200 hover:bg-[#f9fafb] ${
-              isCollapsed ? "justify-center m-0 p-[7px] w-full" : "m-[0_-10px]"
-            }`}
+            className={`flex items-center gap-[7px] p-[7px_10px] cursor-pointer rounded-[4px] transition-colors duration-200 hover:bg-[#f9fafb] ${isCollapsed ? "justify-center m-0 p-[7px] w-full" : "m-[0_-10px]"
+              }`}
             whileHover={{ scale: 1.02, x: isCollapsed ? 0 : 3 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -280,11 +278,10 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
                 {projects.map((project, index) => (
                   <motion.div
                     key={project.id}
-                    className={`flex items-center gap-[3px] p-[5px_10px] rounded-[4px] cursor-pointer transition-colors duration-200 m-[0_-10px] ${
-                      project.isSelected
+                    className={`flex items-center gap-[3px] p-[5px_10px] rounded-[4px] cursor-pointer transition-colors duration-200 m-[0_-10px] ${project.isSelected
                         ? "bg-[#e6f3f5]"
                         : "hover:bg-[#f9fafb]"
-                    }`}
+                      }`}
                     onClick={() => handleSelectProject(project)}
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -304,9 +301,8 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
                       className="flex-shrink-0"
                     />
                     <span
-                      className={`text-[14px] flex-1 overflow-hidden text-ellipsis whitespace-nowrap font-normal ${
-                        project.isSelected ? "text-[#066a9e]" : "text-[#333333]"
-                      }`}
+                      className={`text-[14px] flex-1 overflow-hidden text-ellipsis whitespace-nowrap font-normal ${project.isSelected ? "text-[#066a9e]" : "text-[#333333]"
+                        }`}
                     >
                       {project.name}
                     </span>
@@ -331,12 +327,11 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
       <div className={`flex flex-col justify-center gap-[5px] w-full self-stretch ${isCollapsed ? "items-center" : ""}`}>
         {/* User List */}
         <motion.div
-          className={`flex items-center p-[7px_10px] cursor-pointer rounded-[4px] transition-colors duration-200 gap-[7px] ${
-            isCollapsed
+          className={`flex items-center p-[7px_10px] cursor-pointer rounded-[4px] transition-colors duration-200 gap-[7px] ${isCollapsed
               ? "justify-center m-0 w-full p-[7px_5px]"
               : "m-[0_-10px] w-[calc(100%+20px)]"
           } ${isUserListActive ? "bg-[#f0f0f0]" : "hover:bg-[#f9fafb]"}`}
-          onClick={navigateToUserList}
+          onClick={handleUserListClick}
           whileHover={{ scale: 1.02, x: isCollapsed ? 0 : 3 }}
           whileTap={{ scale: 0.98 }}
         >
@@ -371,12 +366,11 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
 
         {/* User Profile */}
         <motion.div
-          className={`flex items-center p-[5px_10px] cursor-pointer rounded-[4px] transition-colors duration-200 gap-[7px] ${
-            isCollapsed
+          className={`flex items-center p-[5px_10px] cursor-pointer rounded-[4px] transition-colors duration-200 gap-[7px] ${isCollapsed
               ? "justify-center m-0 w-full p-[5px]"
               : "m-[0_-10px] w-[calc(100%+20px)]"
           } ${isMyPageActive ? "bg-[#f0f0f0]" : "hover:bg-[#f9fafb]"}`}
-          onClick={navigateToMyPage}
+          onClick={handleMyPageClick}
           whileHover={{ scale: 1.02, x: isCollapsed ? 0 : 3 }}
           whileTap={{ scale: 0.98 }}
         >

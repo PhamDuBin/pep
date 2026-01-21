@@ -22,8 +22,7 @@ import {
   MODE_DESCRIPTION,
   CHAT_INPUT_PLACEHOLDER,
 } from "./mock";
-import { Tab } from "./types";
-import Image from "next/image";
+import { Tab } from "./models";
 
 export function ProjectPlanPage() {
   const router = useRouter();
@@ -46,17 +45,17 @@ export function ProjectPlanPage() {
     vendorSearchQuery,
     setVendorSearchQuery,
     isSendingRfp,
-    sendMessage,
-    openDownloadModal,
-    closeDownloadModal,
+    handleMessageSend,
+    handleDownloadModalOpen,
+    handleDownloadModalClose,
     handleDownload,
-    openRfpConfirmModal,
-    closeRfpConfirmModal,
-    openVendorSelectionModal,
-    closeVendorSelectionModal,
-    toggleVendor,
-    sendRfp,
-    closeRfpSentModal,
+    handleRfpConfirmModalOpen,
+    handleRfpConfirmModalClose,
+    handleVendorSelectionModalOpen,
+    handleVendorSelectionModalClose,
+    handleVendorToggle,
+    handleRfpSend,
+    handleRfpSentModalClose,
   } = useProjectPlan();
 
   const scrollToBottom = useCallback(() => {
@@ -88,9 +87,9 @@ export function ProjectPlanPage() {
   }, []);
 
   const handleVendorChat = useCallback(() => {
-    closeRfpSentModal();
+    handleRfpSentModalClose();
     router.push("/buyer/carry");
-  }, [router, closeRfpSentModal]);
+  }, [router, handleRfpSentModalClose]);
 
   const handleBackToBuyerHome = useCallback(() => {
     router.push("/buyer");
@@ -130,8 +129,8 @@ export function ProjectPlanPage() {
                       pages={MOCK_PDF_PAGES}
                       completedCount={5}
                       totalCount={5}
-                      onDownload={openDownloadModal}
-                      onConfirm={openRfpConfirmModal}
+                      onDownload={handleDownloadModalOpen}
+                      onConfirm={handleRfpConfirmModalOpen}
                     />
                   </div>
                 )}
@@ -168,7 +167,7 @@ export function ProjectPlanPage() {
 
             <ChatInputBox
               placeholder={CHAT_INPUT_PLACEHOLDER}
-              onMessageSent={sendMessage}
+              onMessageSent={handleMessageSend}
               onMicrophoneClicked={handleMicrophoneClicked}
               disabled={isLoading}
             />
@@ -177,7 +176,7 @@ export function ProjectPlanPage() {
 
         <DownloadFormatModal
           isOpen={showDownloadModal}
-          onClose={closeDownloadModal}
+          onClose={handleDownloadModalClose}
           selectedFormat={selectedFormat}
           onFormatChange={setSelectedFormat}
           isDownloading={isDownloading}
@@ -186,25 +185,25 @@ export function ProjectPlanPage() {
 
         <RfpConfirmModal
           isOpen={showRfpConfirmModal}
-          onClose={closeRfpConfirmModal}
-          onConfirm={openVendorSelectionModal}
+          onClose={handleRfpConfirmModalClose}
+          onConfirm={handleVendorSelectionModalOpen}
         />
 
         <VendorSelectionModal
           isOpen={showVendorSelectionModal}
-          onClose={closeVendorSelectionModal}
+          onClose={handleVendorSelectionModalClose}
           vendors={filteredVendors}
           searchQuery={vendorSearchQuery}
           onSearchChange={setVendorSearchQuery}
-          onToggleVendor={toggleVendor}
+          onToggleVendor={handleVendorToggle}
           selectedCount={selectedVendorCount}
           isSending={isSendingRfp}
-          onSend={sendRfp}
+          onSend={handleRfpSend}
         />
 
         <RfpSentModal
           isOpen={showRfpSentModal}
-          onClose={closeRfpSentModal}
+          onClose={handleRfpSentModalClose}
           vendorRows={sentVendorRows}
           onVendorChat={handleVendorChat}
         />

@@ -11,18 +11,18 @@ import {
 } from "@/shared/components";
 import { useAiChat } from "../hooks";
 import { AI_CHAT_TABS } from "../mock";
-import { Tab } from "../types";
+import { Tab } from "../models";
 
 export function AiChatContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { messages, isLoading, sendMessage } = useAiChat();
+  const { messages, isLoading, handleMessageSend } = useAiChat();
 
   // Handle initial message from query parameter
   useEffect(() => {
     const initialMessage = searchParams.get("message");
     if (initialMessage) {
-      sendMessage(initialMessage);
+      handleMessageSend(initialMessage);
       router.replace("/buyer/ai-chat");
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -60,7 +60,7 @@ export function AiChatContent() {
           <div className="flex flex-col gap-[20px] items-center justify-center w-full max-w-[800px] mx-auto pt-[20px]">
             <ProjectPlanModeButton />
             <ChatInputBox
-              onMessageSent={sendMessage}
+              onMessageSent={handleMessageSend}
               onMicrophoneClicked={handleMicrophoneClicked}
               disabled={isLoading}
             />

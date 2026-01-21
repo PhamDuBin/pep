@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
-import { UserProfile, PaymentInfo, PaymentHistoryRecord } from "../types";
+import { UserProfile, PaymentInfo, PaymentHistoryRecord } from "../models";
 import {
   getUserProfile,
   getPaymentInfo,

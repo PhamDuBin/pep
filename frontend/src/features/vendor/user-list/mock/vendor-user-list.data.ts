@@ -2,7 +2,7 @@
 // VENDOR USER LIST MOCK DATA
 // =============================================================================
 
-import { VendorUser, PermissionOption } from "../types";
+import { VendorUser, PermissionOption } from "../models";
 
 export type VendorUserPermission = "管理者" | "メンバー";
 

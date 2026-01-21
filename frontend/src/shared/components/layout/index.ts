@@ -3,6 +3,8 @@
 // =============================================================================
 
 export { Header } from "./Header";
+export { Pagination } from "./Pagination";
+export { PageTransition } from "./PageTransition";
 
 // =============================================================================
 // RE-EXPORTS FOR BACKWARD COMPATIBILITY

@@ -1,40 +1,40 @@
 "use client";
 
 import Image from "next/image";
-import { VendorUserProfile } from "../types";
+import { UserProfile } from "@/features/buyer/my-page/models";
 
 interface UserInfoSectionProps {
-  userProfile: VendorUserProfile;
+  user: UserProfile;
   newPassword: string;
   confirmPassword: string;
   showNewPassword: boolean;
   showConfirmPassword: boolean;
-  showPasswordSaveSuccess: boolean;
+  showSaveSuccess: boolean;
   isSaving: boolean;
-  setNewPassword: (value: string) => void;
-  setConfirmPassword: (value: string) => void;
-  setShowNewPassword: (value: boolean) => void;
-  setShowConfirmPassword: (value: boolean) => void;
+  onNewPasswordChange: (value: string) => void;
+  onConfirmPasswordChange: (value: string) => void;
+  onToggleNewPassword: (value: boolean) => void;
+  onToggleConfirmPassword: (value: boolean) => void;
   onAvatarClick: () => void;
   onEmailChangeClick: () => void;
-  onSaveChanges: () => void;
+  onSaveClick: () => void;
 }
 
 export function UserInfoSection({
-  userProfile,
+  user,
   newPassword,
   confirmPassword,
   showNewPassword,
   showConfirmPassword,
-  showPasswordSaveSuccess,
+  showSaveSuccess,
   isSaving,
-  setNewPassword,
-  setConfirmPassword,
-  setShowNewPassword,
-  setShowConfirmPassword,
+  onNewPasswordChange,
+  onConfirmPasswordChange,
+  onToggleNewPassword,
+  onToggleConfirmPassword,
   onAvatarClick,
   onEmailChangeClick,
-  onSaveChanges,
+  onSaveClick,
 }: UserInfoSectionProps) {
   return (
     <div className="flex flex-col gap-[25px] w-full">
@@ -51,22 +51,12 @@ export function UserInfoSection({
         <div className="flex items-center gap-[25px] w-full">
           <div
             className="w-[70px] h-[70px] rounded-full flex items-center justify-center cursor-pointer transition-opacity duration-200 hover:opacity-80"
-            style={{ backgroundColor: userProfile.avatarColor || "#8ec5d0" }}
+            style={{ backgroundColor: user.avatarColor || "#8ec5d0" }}
             onClick={onAvatarClick}
           >
-            {userProfile.avatarUrl ? (
-              <Image
-                src={userProfile.avatarUrl}
-                alt={userProfile.name}
-                width={70}
-                height={70}
-                className="rounded-full"
-              />
-            ) : (
-              <span className="font-normal text-[24px] text-white">
-                {userProfile.initials}
-              </span>
-            )}
+            <span className="font-normal text-[24px] text-white">
+              {user.initials}
+            </span>
           </div>
           <button
             type="button"
@@ -78,7 +68,7 @@ export function UserInfoSection({
         </div>
 
         {/* Success Message */}
-        {showPasswordSaveSuccess && (
+        {showSaveSuccess && (
           <div className="flex items-center justify-center px-[20px] py-[10px] bg-[#e6f3f5] rounded-[4px] self-start">
             <span className="font-semibold text-[14px] leading-normal text-[#066a9e]">
               変更を保存しました。
@@ -95,7 +85,7 @@ export function UserInfoSection({
             </label>
             <div className="flex items-center h-[35px] px-[10px] py-[3px] bg-white rounded-[4px] w-[300px]">
               <span className="font-normal text-[16px] text-black">
-                {userProfile.name}
+                {user.name}
               </span>
             </div>
           </div>
@@ -107,7 +97,7 @@ export function UserInfoSection({
             </label>
             <div className="flex items-center h-[35px] px-[10px] py-[3px] bg-white rounded-[4px] w-auto gap-[25px]">
               <span className="font-normal text-[16px] text-black">
-                {userProfile.email}
+                {user.email}
               </span>
               <button
                 type="button"
@@ -142,28 +132,19 @@ export function UserInfoSection({
                 className="flex-1 border-none outline-none font-normal text-[16px] text-black bg-transparent placeholder:text-[#808080]"
                 placeholder="8〜16文字の英数字で入力"
                 value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
+                onChange={(e) => onNewPasswordChange(e.target.value)}
               />
               <button
                 type="button"
                 className="flex items-center justify-center bg-transparent border-none p-0 cursor-pointer shrink-0 hover:opacity-70"
-                onClick={() => setShowNewPassword(!showNewPassword)}
+                onClick={() => onToggleNewPassword(!showNewPassword)}
               >
-                {showNewPassword ? (
-                  <Image
-                    src="/assets/icons/eye-off.svg"
-                    alt="Eye Icon"
-                    width={24}
-                    height={24}
-                  />
-                ) : (
-                  <Image
-                    src="/assets/icons/eye.svg"
-                    alt="Eye Icon"
-                    width={24}
-                    height={24}
-                  />
-                )}
+                <Image
+                  src={showNewPassword ? "/assets/icons/eye-off.svg" : "/assets/icons/eye.svg"}
+                  alt="Eye Icon"
+                  width={24}
+                  height={24}
+                />
               </button>
             </div>
           </div>
@@ -179,28 +160,19 @@ export function UserInfoSection({
                 className="flex-1 border-none outline-none font-normal text-[16px] text-black bg-transparent placeholder:text-[#808080]"
                 placeholder="8〜16文字の英数字で入力"
                 value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                onChange={(e) => onConfirmPasswordChange(e.target.value)}
               />
               <button
                 type="button"
                 className="flex items-center justify-center bg-transparent border-none p-0 cursor-pointer shrink-0 hover:opacity-70"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                onClick={() => onToggleConfirmPassword(!showConfirmPassword)}
               >
-                {showConfirmPassword ? (
-                  <Image
-                    src="/assets/icons/eye-off.svg"
-                    alt="Eye Icon"
-                    width={24}
-                    height={24}
-                  />
-                ) : (
-                  <Image
-                    src="/assets/icons/eye.svg"
-                    alt="Eye Icon"
-                    width={24}
-                    height={24}
-                  />
-                )}
+                <Image
+                  src={showConfirmPassword ? "/assets/icons/eye-off.svg" : "/assets/icons/eye.svg"}
+                  alt="Eye Icon"
+                  width={24}
+                  height={24}
+                />
               </button>
             </div>
           </div>
@@ -212,7 +184,7 @@ export function UserInfoSection({
             type="button"
             className="flex items-center px-[15px] py-[10px] bg-[#066a9e] border-none rounded-[8px] font-normal text-[14px] text-white cursor-pointer transition-colors duration-200 hover:enabled:bg-[#055a84] disabled:opacity-60 disabled:cursor-not-allowed"
             disabled={isSaving}
-            onClick={onSaveChanges}
+            onClick={onSaveClick}
           >
             {isSaving ? "保存中..." : "変更を保存"}
           </button>

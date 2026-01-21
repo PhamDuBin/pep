@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { RefObject } from "react";
-import { VendorMessage, VendorThreadMessage } from "../../types";
+import { VendorMessage, VendorThreadMessage } from "../../models";
 
 interface MessageDetailProps {
   selectedMessage: VendorMessage | undefined;

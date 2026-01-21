@@ -71,7 +71,7 @@ export function PermissionChangeModal({
   onClose,
   onPermissionSaveClick,
   currentPermission = "member",
-  userName = "",
+  userName: _userName = "",
   isSaving = false,
   modalState = "select",
 }: PermissionChangeModalProps) {
