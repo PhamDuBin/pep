@@ -104,23 +104,23 @@ export function PaymentInfoSection({
               お支払い履歴
             </h2>
           </div>
-          <div className="w-full overflow-x-auto border border-[#d4d4d4]">
+          <div className="w-full overflow-x-auto border border-[#d4d4d4] rounded-[8px]">
             <table className="w-full border-collapse bg-white border border-[#d4d4d4] rounded-[4px] overflow-hidden">
               <thead>
                 <tr className="bg-[#f5f5f5]">
-                  <th className="w-[130px] border-l border-t border-[#d4d4d4] font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">
+                  <th className="w-[130px] border-l border-t border-[#d4d4d4] font-[600] font-[Inter] text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">
                     支払日
                   </th>
-                  <th className="flex-1 border-t border-[#d4d4d4] font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">
+                  <th className="flex-1 border-t border-[#d4d4d4] font-[600] font-[Inter] text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">
                     請求金額(税込)
                   </th>
-                  <th className="w-[179px] border-t border-[#d4d4d4] font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">
+                  <th className="w-[179px] border-t border-[#d4d4d4] font-[600] font-[Inter] text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">
                     利用年月
                   </th>
-                  <th className="flex-1 border-t border-[#d4d4d4] font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">
+                  <th className="flex-1 border-t border-[#d4d4d4] font-[600] font-[Inter] text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">
                     ステータス
                   </th>
-                  <th className="flex-1 border-t border-[#d4d4d4] font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">
+                  <th className="flex-1 border-t border-[#d4d4d4] font-[600] font-[Inter] text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">
                     請求書
                   </th>
                 </tr>
@@ -128,23 +128,23 @@ export function PaymentInfoSection({
               <tbody>
                 {paymentHistory.map((record) => (
                   <tr key={record.id}>
-                    <td className="w-[130px] border-l border-t border-[#d4d4d4] font-medium text-[14px] text-black text-center px-[12px] py-[15px]">
+                    <td className="w-[130px] border-l border-t border-[#d4d4d4] font-[500] font-['Noto_Sans_JP'] text-[14px] text-black text-center px-[12px] py-[15px]">
                       {record.paymentDate}
                     </td>
-                    <td className="flex-1 border-t border-[#d4d4d4] font-medium text-[14px] text-black text-center px-[12px] py-[15px]">
+                    <td className="flex-1 border-t border-[#d4d4d4] font-[500] font-['Noto_Sans_JP'] text-[14px] text-black text-center px-[12px] py-[15px]">
                       {formatAmount(record.amount)}
                     </td>
-                    <td className="w-[179px] border-t border-[#d4d4d4] font-medium text-[14px] text-black text-center px-[12px] py-[15px]">
+                    <td className="w-[179px] border-t border-[#d4d4d4] font-[500] font-['Noto_Sans_JP'] text-[14px] text-black text-center px-[12px] py-[15px]">
                       {record.usagePeriod}
                       {record.usagePeriod}
                     </td>
-                    <td className="flex-1 border-t border-[#d4d4d4] font-medium text-[12px] text-black text-center px-[12px] py-[15px]">
+                    <td className="flex-1 border-t border-[#d4d4d4] font-[500] font-['Noto_Sans_JP'] text-[12px] text-black text-center px-[12px] py-[15px]">
                       {getStatusLabel(record.status)}
                     </td>
-                    <td className="flex-1 border-t border-[#d4d4d4] font-medium text-[14px] text-black text-center px-[12px] py-[15px]">
+                    <td className="flex-1 border-t border-[#d4d4d4] font-[500] font-['Noto_Sans_JP'] text-[14px] text-black text-center px-[12px] py-[15px]">
                       <button
                         type="button"
-                        className="bg-transparent border-none font-medium text-[12px] text-[#066a9e] cursor-pointer p-0 hover:underline"
+                        className="bg-transparent border-none font-[500] font-['Noto_Sans_JP'] text-[12px] text-[#066a9e] cursor-pointer p-0 hover:underline"
                         onClick={() => handleDownloadInvoice(record.id)}
                       >
                         Download

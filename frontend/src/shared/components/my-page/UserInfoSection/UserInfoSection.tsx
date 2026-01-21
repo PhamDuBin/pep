@@ -54,13 +54,13 @@ export function UserInfoSection({
             style={{ backgroundColor: user.avatarColor || "#8ec5d0" }}
             onClick={onAvatarClick}
           >
-            <span className="font-normal text-[24px] text-white">
+            <span className="font-noto text-[24px] text-white">
               {user.initials}
             </span>
           </div>
           <button
             type="button"
-            className="flex items-center px-[15px] py-[10px] bg-[#e1e1e1] border-none rounded-[8px] font-normal text-[14px] text-[#333] cursor-pointer transition-colors duration-200 hover:bg-[#d1d1d1]"
+            className="flex items-center px-[15px] py-[10px] bg-[#e1e1e1] border-none rounded-[8px] font-noto text-[14px] text-[#333] cursor-pointer transition-colors duration-200 hover:bg-[#d1d1d1]"
             onClick={onAvatarClick}
           >
             画像を選択
@@ -129,12 +129,12 @@ export function UserInfoSection({
             <div className="flex items-center justify-between h-[35px] px-[10px] py-[3px] bg-white border border-[#b9b9b9] rounded-[4px] w-[300px] box-border">
               <input
                 type={showNewPassword ? "text" : "password"}
-                className="flex-1 border-none outline-none font-normal text-[16px] text-black bg-transparent placeholder:text-[#808080]"
+                className="flex-1 border-none outline-none font-normal text-[16px] text-black bg-transparent placeholder:text-[#B9B9B9] "
                 placeholder="8〜16文字の英数字で入力"
                 value={newPassword}
                 onChange={(e) => onNewPasswordChange(e.target.value)}
               />
-              <button
+              <button 
                 type="button"
                 className="flex items-center justify-center bg-transparent border-none p-0 cursor-pointer shrink-0 hover:opacity-70"
                 onClick={() => onToggleNewPassword(!showNewPassword)}
@@ -157,7 +157,7 @@ export function UserInfoSection({
             <div className="flex items-center justify-between h-[35px] px-[10px] py-[3px] bg-white border border-[#b9b9b9] rounded-[4px] w-[300px] box-border">
               <input
                 type={showConfirmPassword ? "text" : "password"}
-                className="flex-1 border-none outline-none font-normal text-[16px] text-black bg-transparent placeholder:text-[#808080]"
+                className="flex-1 border-none outline-none font-normal text-[16px] text-black bg-transparent placeholder:text-[#B9B9B9]"
                 placeholder="8〜16文字の英数字で入力"
                 value={confirmPassword}
                 onChange={(e) => onConfirmPasswordChange(e.target.value)}
