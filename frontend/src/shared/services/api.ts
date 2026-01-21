@@ -5,8 +5,12 @@
 // Ready for future API integration.
 
 import { API_CONFIG, HTTP_STATUS } from "@/shared/constants";
-import { type ApiResponse, type ErrorResponse, type RequestOptions } from "@/shared/models";
-import { ApiError } from "../errors/ApiError";
+import {
+  type ApiResponse,
+  type ErrorResponse,
+  type RequestOptions,
+} from "@/shared/models";
+import { ApiError } from "../errors/api-error";
 import { createTimeout } from "../utils/utils";
 
 /**

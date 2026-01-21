@@ -108,19 +108,19 @@ export function PaymentInfoSection({
             <table className="w-full border-collapse bg-white border border-[#d4d4d4] rounded-[4px] overflow-hidden">
               <thead>
                 <tr className="bg-[#f5f5f5]">
-                  <th className="w-[130px] border-l border-t border-[#d4d4d4] font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">
+                  <th className="w-[130px] border-l border-t border-[#d4d4d4] font-inter font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">
                     支払日
                   </th>
-                  <th className="flex-1 border-t border-[#d4d4d4] font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">
+                  <th className="flex-1 border-t border-[#d4d4d4] font-inter font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">
                     請求金額(税込)
                   </th>
-                  <th className="w-[179px] border-t border-[#d4d4d4] font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">
+                  <th className="w-[179px] border-t border-[#d4d4d4] font-inter font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">
                     利用年月
                   </th>
-                  <th className="flex-1 border-t border-[#d4d4d4] font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">
+                  <th className="flex-1 border-t border-[#d4d4d4] font-inter font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">
                     ステータス
                   </th>
-                  <th className="flex-1 border-t border-[#d4d4d4] font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">
+                  <th className="flex-1 border-t border-[#d4d4d4] font-inter font-semibold text-[14px] text-black text-center px-[12px] py-[15px] whitespace-nowrap">
                     請求書
                   </th>
                 </tr>

@@ -146,10 +146,11 @@ export function PermissionChangeModal({
                   className="flex items-center gap-[5px] cursor-pointer rounded-[4px]"
                 >
                   <div
-                    className={`w-[18px] h-[18px] border-2 rounded-full bg-white flex items-center justify-center transition-all duration-200 shrink-0 hover:border-[#333333] ${selectedPermission === option.value
-                      ? "border-[#333333]"
-                      : "border-[#b9b9b9]"
-                      }`}
+                    className={`w-[18px] h-[18px] border-2 rounded-full bg-white flex items-center justify-center transition-all duration-200 shrink-0 hover:border-[#333333] ${
+                      selectedPermission === option.value
+                        ? "border-[#333333]"
+                        : "border-[#b9b9b9]"
+                    }`}
                   >
                     {selectedPermission === option.value && (
                       <div className="w-[10px] h-[10px] rounded-full bg-[#333333]"></div>
@@ -178,13 +179,13 @@ export function PermissionChangeModal({
             <table className="w-full border-collapse ">
               <thead>
                 <tr className="bg-[#f5f5f5]">
-                  <th className="px-[12px] py-[15px] font-semibold text-[14px] leading-[1.3] text-[#333] text-center border-b border-[#d4d4d4]">
+                  <th className="px-[12px] py-[15px] font-inter font-semibold text-[14px] leading-[1.3] text-[#333] text-center border-b border-[#d4d4d4]">
                     機能
                   </th>
-                  <th className="px-[12px] py-[15px] font-semibold text-[14px] leading-[1.3] text-[#333] text-center border-b border-[#d4d4d4] w-[224px]">
+                  <th className="px-[12px] py-[15px] font-inter font-semibold text-[14px] leading-[1.3] text-[#333] text-center border-b border-[#d4d4d4] w-[224px]">
                     管理者
                   </th>
-                  <th className="px-[12px] py-[15px] font-semibold text-[14px] leading-[1.3] text-[#333] text-center border-b border-[#d4d4d4]">
+                  <th className="px-[12px] py-[15px] font-inter font-semibold text-[14px] leading-[1.3] text-[#333] text-center border-b border-[#d4d4d4]">
                     メンバー
                   </th>
                 </tr>
@@ -193,18 +194,20 @@ export function PermissionChangeModal({
                 {PERMISSION_TABLE_DATA.map((row, index) => (
                   <tr key={index}>
                     <td
-                      className={`px-[12px] py-[10px] font-medium text-[14px] leading-[1.3] text-[#333] text-center align-middle min-h-[44px] ${index !== PERMISSION_TABLE_DATA.length - 1
-                        ? "border-b border-[#d4d4d4]"
-                        : ""
-                        }`}
+                      className={`px-[12px] py-[10px] font-medium text-[14px] leading-[1.3] text-[#333] text-center align-middle min-h-[44px] ${
+                        index !== PERMISSION_TABLE_DATA.length - 1
+                          ? "border-b border-[#d4d4d4]"
+                          : ""
+                      }`}
                     >
                       {row.feature}
                     </td>
                     <td
-                      className={`px-[12px] py-[10px] font-medium text-[14px] leading-[1.3] text-[#333] text-center align-middle min-h-[44px] ${index !== PERMISSION_TABLE_DATA.length - 1
-                        ? "border-b border-[#d4d4d4]"
-                        : ""
-                        }`}
+                      className={`px-[12px] py-[10px] font-medium text-[14px] leading-[1.3] text-[#333] text-center align-middle min-h-[44px] ${
+                        index !== PERMISSION_TABLE_DATA.length - 1
+                          ? "border-b border-[#d4d4d4]"
+                          : ""
+                      }`}
                     >
                       {row.adminCheck ? (
                         <div className="flex flex-col items-center justify-center">
@@ -227,10 +230,11 @@ export function PermissionChangeModal({
                       ) : null}
                     </td>
                     <td
-                      className={`px-[12px] py-[10px] font-medium text-[14px] leading-[1.3] text-[#333] text-center align-middle min-h-[44px] ${index !== PERMISSION_TABLE_DATA.length - 1
-                        ? "border-b border-[#d4d4d4]"
-                        : ""
-                        }`}
+                      className={`px-[12px] py-[10px] font-medium text-[14px] leading-[1.3] text-[#333] text-center align-middle min-h-[44px] ${
+                        index !== PERMISSION_TABLE_DATA.length - 1
+                          ? "border-b border-[#d4d4d4]"
+                          : ""
+                      }`}
                     >
                       {row.memberCheck ? (
                         <div className="flex flex-col items-center justify-center">

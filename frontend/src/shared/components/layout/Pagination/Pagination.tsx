@@ -59,7 +59,7 @@ export function Pagination({
     <div className="flex items-center justify-center gap-0">
       {/* First Page Button */}
       <button
-        className="flex items-center justify-center px-[8px] py-[4px] min-w-[24px] bg-[#f5f5f5] border border-[#f5f5f4] font-['Roboto',sans-serif] font-normal text-[12px] leading-[16px] text-[#1f2937] cursor-pointer transition-[background-color] duration-200 first:rounded-l-[8px] last:rounded-r-[8px] hover:not-disabled:not-[.active]:bg-[#e5e5e5] disabled:opacity-50 disabled:cursor-not-allowed"
+        className="flex items-center justify-center px-[8px] py-[4px] min-w-[24px] bg-[#f5f5f5] border border-[#f5f5f4] font-noto font-normal text-[12px] leading-[16px] text-[#1f2937] cursor-pointer transition-[background-color] duration-200 first:rounded-l-[8px] last:rounded-r-[8px] hover:not-disabled:not-[.active]:bg-[#e5e5e5] disabled:opacity-50 disabled:cursor-not-allowed"
         disabled={currentPage === 1}
         onClick={handleFirstPage}
         type="button"
@@ -72,7 +72,7 @@ export function Pagination({
       {pageNumbers.map((page) => (
         <button
           key={page}
-          className={`flex items-center justify-center px-[8px] py-[4px] min-w-[24px] bg-[#f5f5f5] border border-[#f5f5f4] font-['Roboto',sans-serif] font-normal text-[12px] leading-[16px] text-[#1f2937] cursor-pointer transition-[background-color] duration-200 first:rounded-l-[8px] last:rounded-r-[8px] hover:not-disabled:bg-[#e5e5e5] disabled:opacity-50 disabled:cursor-not-allowed ${
+          className={`flex items-center justify-center px-[8px] py-[4px] min-w-[24px] bg-[#f5f5f5] border border-[#f5f5f4] font-noto font-normal text-[12px] leading-[16px] text-[#1f2937] cursor-pointer transition-[background-color] duration-200 first:rounded-l-[8px] last:rounded-r-[8px] hover:not-disabled:bg-[#e5e5e5] disabled:opacity-50 disabled:cursor-not-allowed ${
             page === currentPage
               ? "bg-[#dddddc] border-[#dddddc] hover:bg-[#dddddc]"
               : ""
@@ -87,7 +87,7 @@ export function Pagination({
 
       {/* Last Page Button */}
       <button
-        className="flex items-center justify-center px-[8px] py-[4px] min-w-[24px] bg-[#f5f5f5] border border-[#f5f5f4] font-['Roboto',sans-serif] font-normal text-[12px] leading-[16px] text-[#1f2937] cursor-pointer transition-[background-color] duration-200 first:rounded-l-[8px] last:rounded-r-[8px] hover:not-disabled:not-[.active]:bg-[#e5e5e5] disabled:opacity-50 disabled:cursor-not-allowed"
+        className="flex items-center justify-center px-[8px] py-[4px] min-w-[24px] bg-[#f5f5f5] border border-[#f5f5f4] font-noto font-normal text-[12px] leading-[16px] text-[#1f2937] cursor-pointer transition-[background-color] duration-200 first:rounded-l-[8px] last:rounded-r-[8px] hover:not-disabled:not-[.active]:bg-[#e5e5e5] disabled:opacity-50 disabled:cursor-not-allowed"
         disabled={currentPage === totalPages}
         onClick={handleLastPage}
         type="button"
