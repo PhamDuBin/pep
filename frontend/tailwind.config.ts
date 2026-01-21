@@ -37,10 +37,10 @@ const config: ConfigWithDaisyUI = {
         "avatar-bg": "#8EC5D0",
       },
       fontFamily: {
-        sans: ["Noto Sans", "Noto Sans JP", "sans-serif"],
-        noto: ["Noto Sans", "sans-serif"],
-        "noto-jp": ["Noto Sans JP", "sans-serif"],
-        inter: ["Inter", "sans-serif"],
+        sans: ["var(--font-noto)", "var(--font-noto-jp)", "sans-serif"],
+        noto: ["var(--font-noto)", "var(--font-noto-jp)", "sans-serif"],
+        "noto-jp": ["var(--font-noto-jp)", "sans-serif"],
+        inter: ["var(--font-inter)", "var(--font-noto-jp)", "sans-serif"],
       },
       boxShadow: {
         header: "0px 4px 15px rgba(0, 0, 0, 0.05)",

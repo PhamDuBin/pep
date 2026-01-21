@@ -12,6 +12,7 @@ import {
   downloadInvoice as downloadInvoiceService,
 } from "../services/my-page.service";
 import { EmailChangeModalState } from "@/shared/types";
+import { PASSWORD_ERRORS, GENERAL_ERRORS } from "@/shared/errors/error-messages";
 
 export interface UseMyPageReturn {
   // Loading state
@@ -146,7 +147,7 @@ export function useMyPage(): UseMyPageReturn {
 
   const handleSavePassword = useCallback(async () => {
     if (newPassword && newPassword !== confirmPassword) {
-      alert("パスワードが一致しません");
+      alert(PASSWORD_ERRORS.MISMATCH);
       return;
     }
     setIsSaving(true);
@@ -158,7 +159,7 @@ export function useMyPage(): UseMyPageReturn {
         setShowPasswordSaveSuccess(true);
         setTimeout(() => setShowPasswordSaveSuccess(false), 3000);
       } else {
-        alert(result.message || "変更に失敗しました");
+        alert(result.message || GENERAL_ERRORS.CHANGE_FAILED);
       }
     } catch (error) {
       console.error("Failed to change password:", error);
