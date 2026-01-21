@@ -288,7 +288,7 @@ Each type of information has exactly one authoritative source. Do not duplicate 
 | Use Cases | `docs/UC/*.md` | Mermaid sequence diagrams / Mermaidシーケンス図が正 |
 | Database Schema | `supabase/migrations/*.sql` | Implemented SQL is authoritative / 実装されたSQLが正 |
 | API Specification | `backend/app/schemas/*.py` | Pydantic models; Swagger UI auto-generated / Pydanticモデルが正、Swagger UIは自動生成 |
-| UI/Design | Figma | Design source of truth / デザインの正 |
+| UI/Design | [Figma](https://www.figma.com/design/p99AEtAPAzX11UGz461gfJ/) | Design source of truth / デザインの正 |
 | Coding Rules | `CLAUDE.md` | This file / このファイル |
 
 ### 2. Forbidden Documents / 作成禁止ドキュメント
