@@ -26,10 +26,6 @@ export interface UseVendorMyPageReturn {
   paymentInfo: VendorPaymentInfo | null;
   paymentHistory: VendorPaymentHistory[];
 
-  // Pagination state
-  currentPage: number;
-  totalPages: number;
-
   // Password state
   newPassword: string;
   confirmPassword: string;
@@ -59,7 +55,6 @@ export interface UseVendorMyPageReturn {
   handleAvatarClick: () => void;
   handleAvatarSaveClick: (color: string) => void;
   handleSaveChanges: () => void;
-  handlePageChange: (page: number) => void;
   handleDownloadInvoice: (invoiceUrl: string) => void;
   handleAddPaymentMethod: () => void;
   formatAmount: (amount: number, taxIncluded?: boolean) => string;
@@ -78,11 +73,6 @@ export function useVendorMyPage(): UseVendorMyPageReturn {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  // Pagination state
-  const [currentPage, setCurrentPage] = useState(1);
-  const PAYMENT_HISTORY_PAGE_SIZE = 10;
-  const totalPages = Math.ceil(paymentHistory.length / PAYMENT_HISTORY_PAGE_SIZE);
 
   // Modal states
   const [showEmailModal, setShowEmailModal] = useState(false);
@@ -179,10 +169,6 @@ export function useVendorMyPage(): UseVendorMyPageReturn {
     }
   }, []);
 
-  const handlePageChange = useCallback((page: number) => {
-    setCurrentPage(page);
-  }, []);
-
   const handleAddPaymentMethod = useCallback(() => {
     // TODO: Implement add payment method modal
     console.log("Add payment method clicked");
@@ -221,10 +207,6 @@ export function useVendorMyPage(): UseVendorMyPageReturn {
     paymentInfo,
     paymentHistory,
 
-    // Pagination state
-    currentPage,
-    totalPages,
-
     // Password state
     newPassword,
     confirmPassword,
@@ -254,11 +236,10 @@ export function useVendorMyPage(): UseVendorMyPageReturn {
     handleAvatarClick,
     handleAvatarSaveClick,
     handleSaveChanges,
-    handlePageChange,
     handleDownloadInvoice,
     handleAddPaymentMethod,
     formatAmount,
     getPaymentMethodDisplay,
     getStatusLabel,
   };
-} 
+}
