@@ -1,4 +1,4 @@
-import { ApiError } from "../errors/ApiError";
+import { ApiError } from "../errors/api-error";
 import { HTTP_STATUS } from "../constants/http-status-code";
 import { DateFormat } from "../types";
 

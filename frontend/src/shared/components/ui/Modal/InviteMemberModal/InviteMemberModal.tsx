@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect } from "react";
 import Image from "next/image";
 import { Modal } from "../Modal";
 import { InviteMemberModalState } from "@/shared/types";
+import { EMAIL_ERRORS } from "@/shared/errors/error-messages";
 
 interface EmailEntry {
   value: string;
@@ -51,12 +52,12 @@ export function InviteMemberModal({
 
       // Check email format
       if (!EMAIL_REGEX.test(trimmedEmail)) {
-        return "正しいメールアドレス形式で入力してください";
+        return EMAIL_ERRORS.INVALID_FORMAT;
       }
 
       // Check if already invited
       if (existingEmails.includes(trimmedEmail.toLowerCase())) {
-        return "このメールアドレスは既に招待されています";
+        return EMAIL_ERRORS.ALREADY_INVITED;
       }
 
       // Check for duplicates within non-empty emails only
@@ -65,7 +66,7 @@ export function InviteMemberModal({
         (e) => e.value.trim().toLowerCase() === trimmedEmail.toLowerCase()
       ).length;
       if (duplicateCount > 1) {
-        return "このメールアドレスは既に入力されています";
+        return EMAIL_ERRORS.DUPLICATE_INPUT;
       }
 
       return null;

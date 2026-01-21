@@ -15,6 +15,7 @@ import {
   PAYMENT_HISTORY_MOCK,
   AVATAR_COLOR_OPTIONS_MOCK,
 } from "../mock/my-page.data";
+import { PASSWORD_ERRORS } from "@/shared/errors/error-messages";
 
 const USE_MOCK = true;
 
@@ -105,7 +106,7 @@ export async function changePassword(
   if (USE_MOCK) {
     await new Promise((resolve) => setTimeout(resolve, 500));
     if (newPassword !== confirmPassword) {
-      return { success: false, message: "パスワードが一致しません" };
+      return { success: false, message: PASSWORD_ERRORS.MISMATCH };
     }
     return { success: true };
   }
