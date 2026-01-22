@@ -1,21 +1,21 @@
 // =============================================================================
-// VENDOR HOME SERVICE
+// HOME SERVICE
 // =============================================================================
 
-import { VendorMessage, VendorMessageThread, VendorThreadMessage } from "../models";
+import { Message, MessageThread, ThreadMessage } from "../models";
 import {
-  VENDOR_MESSAGES_MOCK,
-  VENDOR_MESSAGE_THREADS_MOCK,
-} from "../mock/vendor-home.data";
+  MESSAGES_MOCK,
+  MESSAGE_THREADS_MOCK,
+} from "../mock/home.data";
 
 const USE_MOCK = true;
 
 /**
- * Get vendor messages
+ * Get messages
  */
-export async function getVendorMessages(): Promise<VendorMessage[]> {
+export async function getMessages(): Promise<Message[]> {
   if (USE_MOCK) {
-    return VENDOR_MESSAGES_MOCK;
+    return MESSAGES_MOCK;
   }
 
   const res = await fetch("/api/vendor/messages");
@@ -29,9 +29,9 @@ export async function getVendorMessages(): Promise<VendorMessage[]> {
  */
 export async function getMessageThread(
   messageId: string
-): Promise<VendorMessageThread | undefined> {
+): Promise<MessageThread | undefined> {
   if (USE_MOCK) {
-    return VENDOR_MESSAGE_THREADS_MOCK.find((t) => t.messageId === messageId);
+    return MESSAGE_THREADS_MOCK.find((t) => t.messageId === messageId);
   }
 
   const res = await fetch(`/api/vendor/messages/${messageId}/thread`);
@@ -46,7 +46,7 @@ export async function getMessageThread(
 export async function sendThreadMessage(
   messageId: string,
   content: string
-): Promise<VendorThreadMessage> {
+): Promise<ThreadMessage> {
   if (USE_MOCK) {
     const now = new Date();
     const timestamp = `${(now.getMonth() + 1).toString().padStart(2, "0")}/${now.getDate().toString().padStart(2, "0")} ${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;

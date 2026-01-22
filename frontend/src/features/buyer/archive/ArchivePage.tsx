@@ -43,9 +43,14 @@ export function ArchivePage() {
     handleFilterDropdownToggle,
     handleSortDropdownToggle,
     handleFavoriteToggle,
+    searchQuery,
+    handleSearchChange,
   } = useArchive();
 
-  const renderGridView = (paginatedProjects: ArchiveProject[], currentPage: number) => (
+  const renderGridView = (
+    paginatedProjects: ArchiveProject[],
+    currentPage: number
+  ) => (
     <AnimatedList
       key={`grid-${currentPage}`}
       className="flex flex-wrap gap-[25px]"
@@ -54,7 +59,9 @@ export function ArchivePage() {
       {paginatedProjects.map((project) => (
         <AnimatedListItem
           key={project.id}
-          className={`relative ${openContextMenuId === project.id ? "z-[50]" : "z-0"}`}
+          className={`relative ${
+            openContextMenuId === project.id ? "z-[50]" : "z-0"
+          }`}
         >
           <motion.div
             onClick={(e) => e.stopPropagation()}
@@ -149,7 +156,9 @@ export function ArchivePage() {
                         key={item.action}
                         className="flex items-center justify-start p-[8px_6px] bg-[#ffffff] rounded-[4px] hover:bg-[#f5f5f5] border-none font-normal text-[14px] leading-[18px] text-black cursor-pointer text-left whitespace-nowrap transition-all duration-150 hover:text-primary hover:translate-x-[2px]"
                         type="button"
-                        onClick={() => handleContextAction(project.id, item.action)}
+                        onClick={() =>
+                          handleContextAction(project.id, item.action)
+                        }
                       >
                         {item.label}
                       </button>
@@ -189,7 +198,9 @@ export function ArchivePage() {
         {paginatedProjects.map((project) => (
           <AnimatedListItem
             key={project.id}
-            className={`relative ${openContextMenuId === project.id ? "z-[50]" : "z-0"}`}
+            className={`relative ${
+              openContextMenuId === project.id ? "z-[50]" : "z-0"
+            }`}
           >
             <motion.div
               onClick={(e) => e.stopPropagation()}
@@ -275,7 +286,9 @@ export function ArchivePage() {
                           key={item.action}
                           className="flex items-center justify-start p-[8px_6px] rounded-[4px] bg-[#ffffff] hover:bg-[#f5f5f5] border-none font-normal text-[14px] leading-[18px] text-black cursor-pointer text-left whitespace-nowrap transition-all duration-150 hover:text-primary hover:translate-x-[2px]"
                           type="button"
-                          onClick={() => handleContextAction(project.id, item.action)}
+                          onClick={() =>
+                            handleContextAction(project.id, item.action)
+                          }
                         >
                           {item.label}
                         </button>
@@ -301,8 +314,27 @@ export function ArchivePage() {
         </div>
 
         <div className="flex flex-col gap-[15px]">
-          <div className="flex items-center justify-end gap-[15px]">
-            <div className="flex items-center gap-[15px]">
+          <div className="flex items-center justify-between gap-[15px]">
+            {/* Search Input */}
+            <div className="relative w-[300px]">
+              <div className="flex items-center bg-[#f5f5f5] rounded-full px-[15px] py-[12px]">
+                <Image
+                  src="/assets/icons/search.svg"
+                  alt="Search Icon"
+                  width={15}
+                  height={15}
+                />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => handleSearchChange(e.target.value)}
+                  placeholder=""
+                  className="flex-1 bg-transparent border-none outline-none ml-[10px] font-normal text-[14px] text-[#333] placeholder:text-[#808080]"
+                />
+              </div>
+            </div>
+
+            <div className="flex items-center gap-[15px] ml-auto">
               <div className="relative" ref={filterRef}>
                 <button
                   className="flex items-center gap-[8px] py-[7px] px-[20px] bg-white border border-[#cfcfcf] rounded-[4px] cursor-pointer transition-[border-color] duration-200 hover:border-[#066A9E]"
@@ -340,7 +372,9 @@ export function ArchivePage() {
                           />
                         )}
                         <span
-                          className={option.id === selectedFilter ? "text-primary" : ""}
+                          className={
+                            option.id === selectedFilter ? "text-primary" : ""
+                          }
                         >
                           {option.name}
                         </span>
@@ -387,7 +421,9 @@ export function ArchivePage() {
                           />
                         )}
                         <span
-                          className={option.value === sortOrder ? "text-primary" : ""}
+                          className={
+                            option.value === sortOrder ? "text-primary" : ""
+                          }
                         >
                           {option.label}
                         </span>
@@ -432,7 +468,7 @@ export function ArchivePage() {
               <p>アーカイブされたプロジェクトはありません</p>
             </div>
           ) : (
-            <Pagination items={filteredProjects}>
+            <Pagination key={searchQuery} items={filteredProjects}>
               {(paginatedProjects, currentPage) =>
                 viewMode === "grid"
                   ? renderGridView(paginatedProjects, currentPage)

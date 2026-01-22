@@ -2,5 +2,6 @@
 // VENDOR MY PAGE MODELS - RE-EXPORTS
 // =============================================================================
 
-export * from "./vendor-user-profile.model";
-export * from "./vendor-payment.model";
+export * from "./user-profile.model";
+export * from "./payment.model";
+export * from "./payment-form-data.model";

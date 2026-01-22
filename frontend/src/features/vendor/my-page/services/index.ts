@@ -1,13 +1,13 @@
 // =============================================================================
-// VENDOR MY PAGE SERVICES - RE-EXPORTS
+// MY PAGE SERVICES - RE-EXPORTS
 // =============================================================================
 
 export {
-  getVendorUserProfile,
-  getVendorPaymentInfo,
-  getVendorPaymentHistory,
-  updateVendorAvatarColor,
-  changeVendorPassword,
-  requestVendorEmailChange,
-  downloadVendorInvoice,
-} from "./vendor-my-page.service";
+  getUserProfile,
+  getPaymentInfo,
+  getPaymentHistory,
+  updateAvatarColor,
+  changePassword,
+  requestEmailChange,
+  downloadInvoice,
+} from "./my-page.service";

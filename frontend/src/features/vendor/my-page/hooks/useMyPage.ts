@@ -1,30 +1,28 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
+import { UserProfile, PaymentInfo, PaymentHistory, PaymentFormData } from "../models";
 import {
-  VendorUserProfile,
-  VendorPaymentInfo,
-  VendorPaymentHistory,
-} from "../models";
-import {
-  getVendorUserProfile,
-  getVendorPaymentInfo,
-  getVendorPaymentHistory,
-  updateVendorAvatarColor,
-  changeVendorPassword,
-  requestVendorEmailChange,
-  downloadVendorInvoice,
-} from "../services/vendor-my-page.service";
+  getUserProfile,
+  getPaymentInfo,
+  getPaymentHistory,
+  updateAvatarColor,
+  changePassword,
+  requestEmailChange,
+  downloadInvoice,
+  addPaymentMethod,
+} from "../services/my-page.service";
+import { AddPaymentModalState } from "@/shared/types";
 
-export interface UseVendorMyPageReturn {
+export interface UseMyPageReturn {
   // Loading state
   isLoading: boolean;
   isSaving: boolean;
 
   // User data
-  userProfile: VendorUserProfile | null;
-  paymentInfo: VendorPaymentInfo | null;
-  paymentHistory: VendorPaymentHistory[];
+  userProfile: UserProfile | null;
+  paymentInfo: PaymentInfo | null;
+  paymentHistory: PaymentHistory[];
 
   // Password state
   newPassword: string;
@@ -37,6 +35,8 @@ export interface UseVendorMyPageReturn {
   showEmailModal: boolean;
   showEmailSuccessModal: boolean;
   showAvatarModal: boolean;
+  showAddPaymentModal: boolean;
+  paymentModalState: AddPaymentModalState;
 
   // Password handlers
   setNewPassword: (password: string) => void;
@@ -48,6 +48,7 @@ export interface UseVendorMyPageReturn {
   setShowEmailModal: (show: boolean) => void;
   setShowEmailSuccessModal: (show: boolean) => void;
   setShowAvatarModal: (show: boolean) => void;
+  setShowAddPaymentModal: (show: boolean) => void;
 
   // Action handlers
   handleEmailChangeClick: () => void;
@@ -57,16 +58,18 @@ export interface UseVendorMyPageReturn {
   handleSaveChanges: () => void;
   handleDownloadInvoice: (invoiceUrl: string) => void;
   handleAddPaymentMethod: () => void;
+  handleClosePaymentModal: () => void;
+  handlePaymentAdded: (data: PaymentFormData) => Promise<void>;
   formatAmount: (amount: number, taxIncluded?: boolean) => string;
   getPaymentMethodDisplay: () => string;
   getStatusLabel: (status: string) => string;
 }
 
-export function useVendorMyPage(): UseVendorMyPageReturn {
+export function useMyPage(): UseMyPageReturn {
   const [isLoading, setIsLoading] = useState(true);
-  const [userProfile, setUserProfile] = useState<VendorUserProfile | null>(null);
-  const [paymentInfo, setPaymentInfo] = useState<VendorPaymentInfo | null>(null);
-  const [paymentHistory, setPaymentHistory] = useState<VendorPaymentHistory[]>([]);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [paymentInfo, setPaymentInfo] = useState<PaymentInfo | null>(null);
+  const [paymentHistory, setPaymentHistory] = useState<PaymentHistory[]>([]);
 
   // Password state
   const [newPassword, setNewPassword] = useState("");
@@ -78,6 +81,8 @@ export function useVendorMyPage(): UseVendorMyPageReturn {
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [showEmailSuccessModal, setShowEmailSuccessModal] = useState(false);
   const [showAvatarModal, setShowAvatarModal] = useState(false);
+  const [showAddPaymentModal, setShowAddPaymentModal] = useState(false);
+  const [paymentModalState, setPaymentModalState] = useState<AddPaymentModalState>("form");
 
   // Save success states
   const [showPasswordSaveSuccess, setShowPasswordSaveSuccess] = useState(false);
@@ -89,9 +94,9 @@ export function useVendorMyPage(): UseVendorMyPageReturn {
       setIsLoading(true);
       try {
         const [profileData, paymentData, historyData] = await Promise.all([
-          getVendorUserProfile(),
-          getVendorPaymentInfo(),
-          getVendorPaymentHistory(),
+          getUserProfile(),
+          getPaymentInfo(),
+          getPaymentHistory(),
         ]);
         setUserProfile(profileData);
         setPaymentInfo(paymentData);
@@ -111,7 +116,7 @@ export function useVendorMyPage(): UseVendorMyPageReturn {
 
   const handleEmailSendClick = useCallback(async (newEmail: string, _confirmEmail: string) => {
     try {
-      const result = await requestVendorEmailChange(newEmail);
+      const result = await requestEmailChange(newEmail);
       if (result.success) {
         setShowEmailModal(false);
         setShowEmailSuccessModal(true);
@@ -128,7 +133,7 @@ export function useVendorMyPage(): UseVendorMyPageReturn {
 
   const handleAvatarSaveClick = useCallback(async (color: string) => {
     try {
-      await updateVendorAvatarColor(color);
+      await updateAvatarColor(color);
       setUserProfile((prev) => prev ? { ...prev, avatarColor: color } : null);
       setShowAvatarModal(false);
     } catch (error) {
@@ -144,7 +149,7 @@ export function useVendorMyPage(): UseVendorMyPageReturn {
 
     setIsSaving(true);
     try {
-      const result = await changeVendorPassword(newPassword, confirmPassword);
+      const result = await changePassword(newPassword, confirmPassword);
       if (result.success) {
         setNewPassword("");
         setConfirmPassword("");
@@ -163,7 +168,7 @@ export function useVendorMyPage(): UseVendorMyPageReturn {
 
   const handleDownloadInvoice = useCallback(async (invoiceUrl: string) => {
     try {
-      await downloadVendorInvoice(invoiceUrl);
+      await downloadInvoice(invoiceUrl);
       console.log("Downloading invoice:", invoiceUrl);
     } catch (error) {
       console.error("Failed to download invoice:", error);
@@ -171,8 +176,26 @@ export function useVendorMyPage(): UseVendorMyPageReturn {
   }, []);
 
   const handleAddPaymentMethod = useCallback(() => {
-    // TODO: Implement add payment method modal
-    console.log("Add payment method clicked");
+    setShowAddPaymentModal(true);
+  }, []);
+
+  const handleClosePaymentModal = useCallback(() => {
+    setShowAddPaymentModal(false);
+    setPaymentModalState("form"); // Reset to form state when closing
+  }, []);
+
+  const handlePaymentAdded = useCallback(async (data: PaymentFormData) => {
+    try {
+      await addPaymentMethod(data);
+      console.log("Payment method added:", data);
+      setPaymentModalState("success");
+      
+      // Refresh payment info after adding payment method
+      const info = await getPaymentInfo();
+      setPaymentInfo(info);
+    } catch (error) {
+      console.error("Failed to add payment method:", error);
+    }
   }, []);
 
   const formatAmount = useCallback((amount: number, taxIncluded?: boolean) => {
@@ -182,7 +205,8 @@ export function useVendorMyPage(): UseVendorMyPageReturn {
   const getPaymentMethodDisplay = useCallback(() => {
     if (!paymentInfo?.paymentMethod) return "";
     const { type, lastFourDigits } = paymentInfo.paymentMethod;
-    return `${type.toUpperCase()} ****${lastFourDigits}`;
+    const typeLabel = type.charAt(0).toUpperCase() + type.slice(1);
+    return `${typeLabel} **** **** ${lastFourDigits}`;
   }, [paymentInfo]);
 
   const getStatusLabel = useCallback((status: string) => {
@@ -219,6 +243,8 @@ export function useVendorMyPage(): UseVendorMyPageReturn {
     showEmailModal,
     showEmailSuccessModal,
     showAvatarModal,
+    showAddPaymentModal,
+    paymentModalState,
 
     // Password handlers
     setNewPassword,
@@ -230,6 +256,7 @@ export function useVendorMyPage(): UseVendorMyPageReturn {
     setShowEmailModal,
     setShowEmailSuccessModal,
     setShowAvatarModal,
+    setShowAddPaymentModal,
 
     // Action handlers
     handleEmailChangeClick,
@@ -239,6 +266,8 @@ export function useVendorMyPage(): UseVendorMyPageReturn {
     handleSaveChanges,
     handleDownloadInvoice,
     handleAddPaymentMethod,
+    handleClosePaymentModal,
+    handlePaymentAdded,
     formatAmount,
     getPaymentMethodDisplay,
     getStatusLabel,

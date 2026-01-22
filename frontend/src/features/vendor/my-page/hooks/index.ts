@@ -1,2 +1,2 @@
-export { useVendorMyPage } from "./useVendorMyPage";
-export type { UseVendorMyPageReturn } from "./useVendorMyPage";
+export { useMyPage } from "./useMyPage";
+export type { UseMyPageReturn } from "./useMyPage";

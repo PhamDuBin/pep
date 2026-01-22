@@ -2,11 +2,11 @@
 
 import Image from "next/image";
 import { RefObject } from "react";
-import { VendorMessage, VendorThreadMessage } from "../../models";
+import { Message, ThreadMessage } from "../../models";
 
 interface MessageDetailProps {
-  selectedMessage: VendorMessage | undefined;
-  threadMessages: VendorThreadMessage[];
+  selectedMessage: Message | undefined;
+  threadMessages: ThreadMessage[];
   newMessage: string;
   messageContainerRef: RefObject<HTMLDivElement | null>;
   onNewMessageChange: (value: string) => void;

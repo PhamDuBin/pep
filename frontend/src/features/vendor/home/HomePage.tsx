@@ -1,7 +1,7 @@
 "use client";
 
 import { PageTransition } from "@/shared/components";
-import { useVendorHome } from "./hooks";
+import { useHome } from "./hooks";
 import { MessageList, MessageDetail } from "./components";
 
 export function HomePage() {
@@ -19,7 +19,7 @@ export function HomePage() {
     handleSelectMessage,
     handleSendMessage,
     handleKeyDown,
-  } = useVendorHome();
+  } = useHome();
 
   return (
     <PageTransition>

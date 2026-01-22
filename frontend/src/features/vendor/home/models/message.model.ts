@@ -1,10 +1,10 @@
 // =============================================================================
-// VENDOR MESSAGE MODEL
+// MESSAGE MODEL
 // =============================================================================
 
 // Re-export from shared types (single source of truth)
 export type {
-  VendorMessage,
-  VendorThreadMessage,
-  VendorMessageThread,
+  Message,
+  ThreadMessage,
+  MessageThread,
 } from "../../shared/models";
