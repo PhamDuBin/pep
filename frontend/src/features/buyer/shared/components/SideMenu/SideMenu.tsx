@@ -125,7 +125,7 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
       {/* Top Section (Frame 14) */}
       <div className="flex flex-col items-start gap-[25px] self-stretch overflow-hidden">
         {/* Menu Toggle */}
-        <div className={`flex flex-col gap-[3px] w-full ${isCollapsed ? "items-center" : ""}`}>
+        <div className={`flex flex-col gap-[3px] w-full items-end px-[10px] ${isCollapsed ? "items-center" : ""}`}>
           <motion.button
             className="bg-transparent border-none p-0 cursor-pointer transition-opacity duration-200 hover:opacity-70"
             onClick={handleToggleMenu}
@@ -138,7 +138,7 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
               transition={{ duration: 0.3 }}
             >
               <Image
-                src="/assets/icons/menu-toggle.svg"
+                src="/assets/icons/arrow-left.svg"
                 alt="Menu"
                 width={20}
                 height={13}
@@ -174,8 +174,6 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
           </motion.button>
         </div>
 
-        {/* Separator Line */}
-        <div className="w-full h-[1px] bg-[#e5e7eb]" />
 
         {/* RFP Section */}
         <div className={`flex flex-col gap-[3px] w-full ${isCollapsed ? "items-center" : ""}`}>
@@ -187,7 +185,7 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
                 animate="visible"
                 exit="hidden"
               >
-                <span className="text-[14px] text-[#808080]">RFP</span>
+                <span className="text-[14px] text-[#808080]">プロジェクト計画書</span>
               </motion.div>
             )}
           </AnimatePresence>
