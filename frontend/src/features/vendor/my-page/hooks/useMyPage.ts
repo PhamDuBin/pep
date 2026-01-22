@@ -5,6 +5,7 @@ import {
   UserProfile,
   PaymentInfo,
   PaymentHistory,
+  PaymentFormData,
 } from "../models";
 import {
   getUserProfile,
@@ -14,6 +15,7 @@ import {
   changePassword,
   requestEmailChange,
   downloadInvoice,
+  addPaymentMethod,
 } from "../services/my-page.service";
 
 export interface UseMyPageReturn {
@@ -41,6 +43,7 @@ export interface UseMyPageReturn {
   showEmailModal: boolean;
   showEmailSuccessModal: boolean;
   showAvatarModal: boolean;
+  showAddPaymentModal: boolean;
 
   // Password handlers
   setNewPassword: (password: string) => void;
@@ -52,6 +55,7 @@ export interface UseMyPageReturn {
   setShowEmailModal: (show: boolean) => void;
   setShowEmailSuccessModal: (show: boolean) => void;
   setShowAvatarModal: (show: boolean) => void;
+  setShowAddPaymentModal: (show: boolean) => void;
 
   // Action handlers
   handleEmailChangeClick: () => void;
@@ -62,6 +66,7 @@ export interface UseMyPageReturn {
   handlePageChange: (page: number) => void;
   handleDownloadInvoice: (invoiceUrl: string) => void;
   handleAddPaymentMethod: () => void;
+  handlePaymentAdded: (data: PaymentFormData) => Promise<void>;
   formatAmount: (amount: number, taxIncluded?: boolean) => string;
   getPaymentMethodDisplay: () => string;
   getStatusLabel: (status: string) => string;
@@ -88,6 +93,7 @@ export function useMyPage(): UseMyPageReturn {
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [showEmailSuccessModal, setShowEmailSuccessModal] = useState(false);
   const [showAvatarModal, setShowAvatarModal] = useState(false);
+  const [showAddPaymentModal, setShowAddPaymentModal] = useState(false);
 
   // Save success states
   const [showPasswordSaveSuccess, setShowPasswordSaveSuccess] = useState(false);
@@ -184,8 +190,19 @@ export function useMyPage(): UseMyPageReturn {
   }, []);
 
   const handleAddPaymentMethod = useCallback(() => {
-    // TODO: Implement add payment method modal
-    console.log("Add payment method clicked");
+    setShowAddPaymentModal(true);
+  }, []);
+
+  const handlePaymentAdded = useCallback(async (data: PaymentFormData) => {
+    try {
+      await addPaymentMethod(data);
+      console.log("Payment method added:", data);
+      // Refresh payment info after adding payment method
+      const info = await getPaymentInfo();
+      setPaymentInfo(info);
+    } catch (error) {
+      console.error("Failed to add payment method:", error);
+    }
   }, []);
 
   const formatAmount = useCallback((amount: number, taxIncluded?: boolean) => {
@@ -236,6 +253,7 @@ export function useMyPage(): UseMyPageReturn {
     showEmailModal,
     showEmailSuccessModal,
     showAvatarModal,
+    showAddPaymentModal,
 
     // Password handlers
     setNewPassword,
@@ -247,6 +265,7 @@ export function useMyPage(): UseMyPageReturn {
     setShowEmailModal,
     setShowEmailSuccessModal,
     setShowAvatarModal,
+    setShowAddPaymentModal,
 
     // Action handlers
     handleEmailChangeClick,
@@ -257,6 +276,7 @@ export function useMyPage(): UseMyPageReturn {
     handlePageChange,
     handleDownloadInvoice,
     handleAddPaymentMethod,
+    handlePaymentAdded,
     formatAmount,
     getPaymentMethodDisplay,
     getStatusLabel,
