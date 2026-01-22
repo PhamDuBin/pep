@@ -290,6 +290,7 @@ Each type of information has exactly one authoritative source. Do not duplicate 
 | API Specification | `backend/app/schemas/*.py` | Pydantic models; Swagger UI auto-generated / Pydanticモデルが正、Swagger UIは自動生成 |
 | UI/Design | [Figma](https://www.figma.com/design/p99AEtAPAzX11UGz461gfJ/) | Design source of truth / デザインの正 |
 | Coding Rules | `CLAUDE.md` | This file / このファイル |
+| GitLab Workflow | `CONTRIBUTING.md` | Branch, commit, merge rules / ブランチ、コミット、マージルール |
 
 ### 2. Forbidden Documents / 作成禁止ドキュメント
 
