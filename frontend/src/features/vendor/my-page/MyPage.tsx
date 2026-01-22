@@ -30,6 +30,7 @@ export function MyPage() {
     showEmailSuccessModal,
     showAvatarModal,
     showAddPaymentModal,
+    paymentModalState,
     setNewPassword,
     setConfirmPassword,
     setShowNewPassword,
@@ -152,6 +153,7 @@ export function MyPage() {
           isOpen={showAddPaymentModal}
           onClose={() => setShowAddPaymentModal(false)}
           onAddPaymentMethod={handlePaymentAdded}
+          modalState={paymentModalState}
         />
       </div>
     </PageTransition>

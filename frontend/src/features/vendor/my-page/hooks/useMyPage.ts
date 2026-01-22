@@ -1,12 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
-import {
-  UserProfile,
-  PaymentInfo,
-  PaymentHistory,
-  PaymentFormData,
-} from "../models";
+import { UserProfile, PaymentInfo, PaymentHistory, PaymentFormData } from "../models";
 import {
   getUserProfile,
   getPaymentInfo,
@@ -17,6 +12,7 @@ import {
   downloadInvoice,
   addPaymentMethod,
 } from "../services/my-page.service";
+import { AddPaymentModalState } from "@/shared/types";
 
 export interface UseMyPageReturn {
   // Loading state
@@ -44,6 +40,7 @@ export interface UseMyPageReturn {
   showEmailSuccessModal: boolean;
   showAvatarModal: boolean;
   showAddPaymentModal: boolean;
+  paymentModalState: AddPaymentModalState;
 
   // Password handlers
   setNewPassword: (password: string) => void;
@@ -94,6 +91,7 @@ export function useMyPage(): UseMyPageReturn {
   const [showEmailSuccessModal, setShowEmailSuccessModal] = useState(false);
   const [showAvatarModal, setShowAvatarModal] = useState(false);
   const [showAddPaymentModal, setShowAddPaymentModal] = useState(false);
+  const [paymentModalState, setPaymentModalState] = useState<AddPaymentModalState>("form");
 
   // Save success states
   const [showPasswordSaveSuccess, setShowPasswordSaveSuccess] = useState(false);
@@ -197,6 +195,8 @@ export function useMyPage(): UseMyPageReturn {
     try {
       await addPaymentMethod(data);
       console.log("Payment method added:", data);
+      // Show success state
+      setPaymentModalState("success");
       // Refresh payment info after adding payment method
       const info = await getPaymentInfo();
       setPaymentInfo(info);
@@ -254,6 +254,7 @@ export function useMyPage(): UseMyPageReturn {
     showEmailSuccessModal,
     showAvatarModal,
     showAddPaymentModal,
+    paymentModalState,
 
     // Password handlers
     setNewPassword,

@@ -195,11 +195,6 @@ export function useMyPage(): UseMyPageReturn {
     // Call API to add payment method
     console.log("Adding payment method:", data);
     setPaymentModalState("success");
-    // Auto-close after 3 seconds
-    setTimeout(() => {
-      setPaymentModalState("form");
-      setShowPaymentMethodModal(false);
-    }, 3000);
   }, []);
 
   const formatAmount = useCallback((amount: number, includeTax?: boolean) => {
