@@ -25,6 +25,7 @@ export function useArchive() {
   const [showFilterDropdown, setShowFilterDropdown] = useState(false);
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [openContextMenuId, setOpenContextMenuId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Project Plan Modal state
   const [showPlanModal, setShowPlanModal] = useState(false);
@@ -77,14 +78,22 @@ export function useArchive() {
   }, [selectedFilter, filterOptions]);
 
   const filteredProjects = useMemo(() => {
+    const normalizedQuery = searchQuery.toLowerCase().trim();
     return projects
       .filter((p) => selectedFilter === "all" || p.authorId === selectedFilter)
+      .filter((p) => {
+        if (!normalizedQuery) return true;
+        return (
+          p.name.toLowerCase().includes(normalizedQuery) ||
+          p.authorName.toLowerCase().includes(normalizedQuery)
+        );
+      })
       .sort((a, b) => {
         const dateA = new Date(a.createdAt.replace(/\//g, "-")).getTime();
         const dateB = new Date(b.createdAt.replace(/\//g, "-")).getTime();
         return sortOrder === "desc" ? dateB - dateA : dateA - dateB;
       });
-  }, [projects, selectedFilter, sortOrder]);
+  }, [projects, selectedFilter, sortOrder, searchQuery]);
 
   const handleViewModeToggle = useCallback(() => {
     setViewMode((prev) => (prev === "grid" ? "list" : "grid"));
@@ -152,6 +161,10 @@ export function useArchive() {
     setShowSortDropdown((prev) => !prev);
   }, []);
 
+  const handleSearchChange = useCallback((query: string) => {
+    setSearchQuery(query);
+  }, []);
+
   return {
     isLoading,
     viewMode,
@@ -168,6 +181,7 @@ export function useArchive() {
     sortOptions,
     showPlanModal,
     selectedProject,
+    searchQuery,
     handleViewModeToggle,
     handleFilterSelect,
     handleSortSelect,
@@ -179,5 +193,6 @@ export function useArchive() {
     handleFilterDropdownToggle,
     handleSortDropdownToggle,
     handleFavoriteToggle,
+    handleSearchChange,
   };
 }
