@@ -319,21 +319,18 @@ export function ArchivePage() {
 
             <div className="flex items-center gap-[15px] ml-auto">
               {/* Star Filter Icon */}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
+              <Image
+                src={
+                  showOnlyFavorites
+                    ? "/assets/icons/star-filled.svg"
+                    : "/assets/icons/star.svg"
+                }
+                alt="Star Filter"
+                width={24}
+                height={24}
                 className="cursor-pointer transition-all duration-200 hover:scale-110"
                 onClick={handleFavoriteFilterToggle}
-              >
-                <path
-                  d="M14.3496 8.81543L14.4678 9.09277L14.7666 9.11816L20.7783 9.63574L16.2129 13.5918L15.9844 13.79L16.0527 14.084L17.4238 19.96L12.2588 16.8418L12 16.6855L11.7412 16.8418L6.57324 19.9609L7.9375 14.083L8.00488 13.79L7.77734 13.5928L3.21973 9.63672L9.2334 9.11816L9.53223 9.09277L9.65039 8.81543L12 3.27832L14.3496 8.81543Z"
-                  stroke="#066A9E"
-                  fill={showOnlyFavorites ? "#066A9E" : "none"}
-                />
-              </svg>
+              />
 
               <div className="relative" ref={filterRef}>
                 <button
