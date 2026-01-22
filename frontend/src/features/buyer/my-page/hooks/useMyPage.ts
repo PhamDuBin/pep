@@ -32,10 +32,6 @@ export interface UseMyPageReturn {
   showAvatarSaveSuccess: boolean;
   showPasswordSaveSuccess: boolean;
 
-  // Pagination state
-  currentPage: number;
-  totalPages: number;
-
   // Modal state
   showEmailModal: boolean;
   showAvatarModal: boolean;
@@ -60,7 +56,6 @@ export interface UseMyPageReturn {
   handleEmailChangeClick: () => void;
   handleAvatarSaveClick: (color: string) => void;
   handleSavePassword: () => Promise<void>;
-  handlePageChange: (page: number) => void;
   handleDownloadInvoice: (recordId: string) => void;
   handleAddPaymentMethod: () => void;
   handleAddPaymentMethodSubmit: (data: any) => void;
@@ -77,9 +72,7 @@ export function useMyPage(): UseMyPageReturn {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<UserProfile | null>(null);
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo | null>(null);
-  const [paymentHistory, setPaymentHistory] = useState<PaymentHistoryRecord[]>(
-    []
-  );
+  const [paymentHistory, setPaymentHistory] = useState<PaymentHistoryRecord[]>([]);
 
   // Password state
   const [newPassword, setNewPassword] = useState("");
@@ -89,10 +82,6 @@ export function useMyPage(): UseMyPageReturn {
   const [showAvatarSaveSuccess, setShowAvatarSaveSuccess] = useState(false);
   const [showPasswordSaveSuccess, setShowPasswordSaveSuccess] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-
-  // Pagination state
-  const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.ceil(paymentHistory.length / 10);
 
   // Modal state
   const [showEmailModal, setShowEmailModal] = useState(false);
@@ -174,10 +163,6 @@ export function useMyPage(): UseMyPageReturn {
     }
   }, [newPassword, confirmPassword]);
 
-  const handlePageChange = useCallback((page: number) => {
-    setCurrentPage(page);
-  }, []);
-
   const handleDownloadInvoice = useCallback(async (recordId: string) => {
     try {
       await downloadInvoiceService(recordId);
@@ -215,12 +200,13 @@ export function useMyPage(): UseMyPageReturn {
   }, []);
 
   const handleEmailSendClick = useCallback(
-    async (newEmail: string, confirmEmail: string) => {
+    async (newEmail: string, _confirmEmail: string) => {
       setIsSendingEmail(true);
       try {
         const result = await requestEmailChange(newEmail);
         if (result.success) {
           setEmailModalState("email-sent");
+          setUser((prev) => (prev ? { ...prev, email: newEmail } : null));
         }
       } catch (error) {
         console.error("Failed to request email change:", error);
@@ -249,10 +235,6 @@ export function useMyPage(): UseMyPageReturn {
     showAvatarSaveSuccess,
     showPasswordSaveSuccess,
 
-    // Pagination state
-    currentPage,
-    totalPages,
-
     // Modal state
     showEmailModal,
     showAvatarModal,
@@ -277,7 +259,6 @@ export function useMyPage(): UseMyPageReturn {
     handleEmailChangeClick,
     handleAvatarSaveClick,
     handleSavePassword,
-    handlePageChange,
     handleDownloadInvoice,
     handleAddPaymentMethod,
     handleAddPaymentMethodSubmit,

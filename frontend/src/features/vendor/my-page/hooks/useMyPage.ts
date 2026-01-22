@@ -24,10 +24,6 @@ export interface UseMyPageReturn {
   paymentInfo: PaymentInfo | null;
   paymentHistory: PaymentHistory[];
 
-  // Pagination state
-  currentPage: number;
-  totalPages: number;
-
   // Password state
   newPassword: string;
   confirmPassword: string;
@@ -60,7 +56,6 @@ export interface UseMyPageReturn {
   handleAvatarClick: () => void;
   handleAvatarSaveClick: (color: string) => void;
   handleSaveChanges: () => void;
-  handlePageChange: (page: number) => void;
   handleDownloadInvoice: (invoiceUrl: string) => void;
   handleAddPaymentMethod: () => void;
   handlePaymentAdded: (data: PaymentFormData) => Promise<void>;
@@ -80,11 +75,6 @@ export function useMyPage(): UseMyPageReturn {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  // Pagination state
-  const [currentPage, setCurrentPage] = useState(1);
-  const PAYMENT_HISTORY_PAGE_SIZE = 10;
-  const totalPages = Math.ceil(paymentHistory.length / PAYMENT_HISTORY_PAGE_SIZE);
 
   // Modal states
   const [showEmailModal, setShowEmailModal] = useState(false);
@@ -129,6 +119,7 @@ export function useMyPage(): UseMyPageReturn {
       if (result.success) {
         setShowEmailModal(false);
         setShowEmailSuccessModal(true);
+        setUserProfile((prev) => (prev ? { ...prev, email: newEmail } : null));
       }
     } catch (error) {
       console.error("Failed to request email change:", error);
@@ -183,10 +174,6 @@ export function useMyPage(): UseMyPageReturn {
     }
   }, []);
 
-  const handlePageChange = useCallback((page: number) => {
-    setCurrentPage(page);
-  }, []);
-
   const handleAddPaymentMethod = useCallback(() => {
     setShowAddPaymentModal(true);
   }, []);
@@ -238,10 +225,6 @@ export function useMyPage(): UseMyPageReturn {
     paymentInfo,
     paymentHistory,
 
-    // Pagination state
-    currentPage,
-    totalPages,
-
     // Password state
     newPassword,
     confirmPassword,
@@ -274,7 +257,6 @@ export function useMyPage(): UseMyPageReturn {
     handleAvatarClick,
     handleAvatarSaveClick,
     handleSaveChanges,
-    handlePageChange,
     handleDownloadInvoice,
     handleAddPaymentMethod,
     handlePaymentAdded,
@@ -282,4 +264,4 @@ export function useMyPage(): UseMyPageReturn {
     getPaymentMethodDisplay,
     getStatusLabel,
   };
-} 
+}

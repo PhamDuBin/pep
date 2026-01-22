@@ -19,8 +19,6 @@ export function MyPage() {
     userProfile,
     paymentInfo,
     paymentHistory,
-    currentPage,
-    totalPages,
     newPassword,
     confirmPassword,
     showNewPassword,
@@ -44,7 +42,6 @@ export function MyPage() {
     handleAvatarClick,
     handleAvatarSaveClick,
     handleSaveChanges,
-    handlePageChange,
     handleDownloadInvoice,
     handleAddPaymentMethod,
     handlePaymentAdded,
@@ -110,9 +107,6 @@ export function MyPage() {
                   status: record.status as any,
                   invoiceUrl: record.invoiceUrl,
                 }))}
-                currentPage={currentPage}
-                totalPages={totalPages}
-                handlePageChange={handlePageChange}
                 handleDownloadInvoice={(invoiceUrl) => {
                   handleDownloadInvoice(invoiceUrl);
                 }}

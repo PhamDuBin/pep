@@ -5,3 +5,4 @@
 
 export * from "./config";
 export * from "./http-status-code";
+export * from "./paging";
