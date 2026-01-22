@@ -205,7 +205,8 @@ export function useMyPage(): UseMyPageReturn {
   const getPaymentMethodDisplay = useCallback(() => {
     if (!paymentInfo?.paymentMethod) return "";
     const { type, lastFourDigits } = paymentInfo.paymentMethod;
-    return `${type.toUpperCase()} ****${lastFourDigits}`;
+    const typeLabel = type.charAt(0).toUpperCase() + type.slice(1);
+    return `${typeLabel} **** **** ${lastFourDigits}`;
   }, [paymentInfo]);
 
   const getStatusLabel = useCallback((status: string) => {
