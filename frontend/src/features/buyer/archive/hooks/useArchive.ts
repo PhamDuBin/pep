@@ -25,8 +25,6 @@ export function useArchive() {
   const [showFilterDropdown, setShowFilterDropdown] = useState(false);
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [openContextMenuId, setOpenContextMenuId] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
 
   // Project Plan Modal state
   const [showPlanModal, setShowPlanModal] = useState(false);
@@ -88,19 +86,8 @@ export function useArchive() {
       });
   }, [projects, selectedFilter, sortOrder]);
 
-  const paginatedProjects = useMemo(() => {
-    if (viewMode === "grid") return filteredProjects;
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    return filteredProjects.slice(startIndex, startIndex + itemsPerPage);
-  }, [filteredProjects, viewMode, currentPage, itemsPerPage]);
-
-  const totalPages = useMemo(() => {
-    return Math.ceil(filteredProjects.length / itemsPerPage);
-  }, [filteredProjects.length, itemsPerPage]);
-
   const handleViewModeToggle = useCallback(() => {
     setViewMode((prev) => (prev === "grid" ? "list" : "grid"));
-    setCurrentPage(1);
   }, []);
 
   const handleFilterSelect = useCallback((filterId: string) => {
@@ -157,10 +144,6 @@ export function useArchive() {
     }
   }, []);
 
-  const handlePageChange = useCallback((page: number) => {
-    setCurrentPage(page);
-  }, []);
-
   const handleFilterDropdownToggle = useCallback(() => {
     setShowFilterDropdown((prev) => !prev);
   }, []);
@@ -178,10 +161,7 @@ export function useArchive() {
     showFilterDropdown,
     showSortDropdown,
     openContextMenuId,
-    currentPage,
-    totalPages,
     filteredProjects,
-    paginatedProjects,
     filterRef,
     sortRef,
     filterOptions,
@@ -196,7 +176,6 @@ export function useArchive() {
     handleContextAction,
     handleProjectClick,
     handlePlanModalClose,
-    handlePageChange,
     handleFilterDropdownToggle,
     handleSortDropdownToggle,
     handleFavoriteToggle,

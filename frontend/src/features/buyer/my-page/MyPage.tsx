@@ -7,7 +7,6 @@ import {
   PageTransition,
   UserInfoSection,
   PaymentInfoSection,
-  Pagination,
 } from "@/shared/components";
 import { useMyPage } from "./hooks";
 
@@ -24,8 +23,6 @@ export function MyPage() {
     showConfirmPassword,
     showAvatarSaveSuccess,
     showPasswordSaveSuccess,
-    currentPage,
-    totalPages,
     showEmailModal,
     showAvatarModal,
     emailModalState,
@@ -39,7 +36,6 @@ export function MyPage() {
     handleEmailChangeClick,
     handleAvatarSaveClick,
     handleSavePassword,
-    handlePageChange,
     handleDownloadInvoice,
     handleAddPaymentMethod,
     handleEmailSendClick,
@@ -105,9 +101,6 @@ export function MyPage() {
                   usagePeriod: record.usagePeriod,
                   status: record.status as any,
                 }))}
-                currentPage={currentPage}
-                totalPages={totalPages}
-                handlePageChange={handlePageChange}
                 handleDownloadInvoice={handleDownloadInvoice}
                 handleAddPaymentMethod={handleAddPaymentMethod}
                 formatAmount={formatAmount}
