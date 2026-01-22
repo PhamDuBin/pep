@@ -45,7 +45,7 @@ export function AiChatContent() {
       <div className="flex flex-col h-full bg-white">
         <TabNavigation tabs={AI_CHAT_TABS} onTabChange={handleTabChange} />
 
-        <div className="flex flex-col h-[calc(100vh-89px-94px)] bg-white py-[50px] px-[75px]">
+        <div className="flex flex-col h-[calc(100vh-65px-94px)] bg-white py-[50px] px-[75px]">
           <div className="flex-1 flex flex-col gap-[25px] items-center overflow-hidden">
             <div className="w-full max-w-[800px] flex-1 overflow-hidden">
               <ChatMessageList

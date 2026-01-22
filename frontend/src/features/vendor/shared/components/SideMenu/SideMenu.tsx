@@ -103,7 +103,7 @@ export function SideMenu() {
 
   return (
     <motion.aside
-      className={`fixed left-0 top-[89px] bottom-0 h-[calc(100vh-89px)] bg-white flex flex-col justify-between items-start py-[15px] px-[10px] pb-[25px] z-40 transition-[width] duration-300 ease-[cubic-bezier(0.25,0.8,0.25,1)] shadow-[0px_4px_15px_rgba(0,0,0,0.1)] ${isCollapsed ? "w-[60px]" : "w-[172px]"
+      className={`fixed left-0 top-[65px] bottom-0 h-[calc(100vh-65px)] bg-white flex flex-col justify-between items-start py-[15px] px-[10px] pb-[25px] z-40 transition-[width] duration-300 ease-[cubic-bezier(0.25,0.8,0.25,1)] shadow-[0px_4px_15px_rgba(0,0,0,0.1)] ${isCollapsed ? "w-[60px]" : "w-[172px]"
         }`}
       variants={sidebarVariants}
       animate={isCollapsed ? "collapsed" : "expanded"}
