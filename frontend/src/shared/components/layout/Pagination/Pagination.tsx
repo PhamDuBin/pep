@@ -33,7 +33,9 @@ export function Pagination<T>({
   }, [items.length]);
 
   const paginatedItems = useMemo(() => {
-    const startIndex = (currentPage - 1) * LINES_PER_PAGE;
+    const maxPage = Math.ceil(items.length / LINES_PER_PAGE) || 1;
+    const safeCurrentPage = Math.min(currentPage, maxPage);
+    const startIndex = (safeCurrentPage - 1) * LINES_PER_PAGE;
     return items.slice(startIndex, startIndex + LINES_PER_PAGE);
   }, [items, currentPage]);
 
