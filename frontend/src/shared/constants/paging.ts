@@ -4,4 +4,4 @@
  */
 
 /** Number of lines/items per page for all paginated lists */
-export const LINES_PER_PAGE = 2;
+export const LINES_PER_PAGE = 10;

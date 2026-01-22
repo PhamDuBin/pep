@@ -337,7 +337,7 @@ export function ArchivePage() {
               </div>
             </div>
 
-            <div className="flex items-center gap-[15px]">
+            <div className="flex items-center gap-[15px] ml-auto">
               <div className="relative" ref={filterRef}>
                 <button
                   className="flex items-center gap-[8px] py-[7px] px-[20px] bg-white border border-[#d1d5db] rounded-[4px] cursor-pointer transition-[border-color] duration-200 hover:border-[#9ca3af]"
