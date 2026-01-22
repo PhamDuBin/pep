@@ -113,7 +113,7 @@ export function SideMenu() {
       <div className="flex flex-col items-start gap-[25px] self-stretch overflow-hidden">
         {/* Menu Toggle */}
         <div
-          className={`flex flex-col gap-[3px] w-full ${isCollapsed ? "items-center" : ""
+          className={`flex flex-col gap-[3px] w-full items-end px-[10px] ${isCollapsed ? "items-center" : ""
             }`}
         >
           <motion.button
@@ -128,7 +128,7 @@ export function SideMenu() {
               transition={{ duration: 0.3 }}
             >
               <Image
-                src="/assets/icons/menu-toggle.svg"
+                src="/assets/icons/arrow-left.svg"
                 alt="Menu"
                 width={20}
                 height={13}
