@@ -33,8 +33,6 @@ export function ArchivePage() {
     sortOptions,
     showPlanModal,
     selectedProject,
-    searchQuery,
-    setSearchQuery,
     handleViewModeToggle,
     handleFilterSelect,
     handleSortSelect,
@@ -118,17 +116,12 @@ export function ArchivePage() {
                     onClick={() => handleContextMenuToggle(project.id)}
                     type="button"
                   >
-                    <svg
-                      width="16"
-                      height="4"
-                      viewBox="0 0 16 4"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <circle cx="2" cy="2" r="1.5" fill="#808080" />
-                      <circle cx="8" cy="2" r="1.5" fill="#808080" />
-                      <circle cx="14" cy="2" r="1.5" fill="#808080" />
-                    </svg>
+                    <Image
+                      src="/assets/icons/dots.svg"
+                      alt="Menu"
+                      width={16}
+                      height={16}
+                    />
                   </button>
                 </div>
               </div>
@@ -234,17 +227,12 @@ export function ArchivePage() {
                     onClick={() => handleContextMenuToggle(project.id)}
                     type="button"
                   >
-                    <svg
-                      width="16"
-                      height="4"
-                      viewBox="0 0 16 4"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <circle cx="2" cy="2" r="1.5" fill="#333333" />
-                      <circle cx="8" cy="2" r="1.5" fill="#333333" />
-                      <circle cx="14" cy="2" r="1.5" fill="#333333" />
-                    </svg>
+                    <Image
+                      src="/assets/icons/dot.svg"
+                      alt="Menu"
+                      width={16}
+                      height={16}
+                    />
                   </button>
                 </div>
               </div>
@@ -294,33 +282,16 @@ export function ArchivePage() {
         </div>
 
         <div className="flex flex-col gap-[15px]">
-          <div className="flex items-center justify-between gap-[15px]">
-            <div className="flex items-center gap-[10px] px-[15px] py-[10px] w-[300px] h-[39px] bg-[#F5F5F5] rounded-[1000px] border border-[#E5E5E5]">
-              <Image
-                src="/assets/icons/search.svg"
-                alt="Search"
-                width={16}
-                height={16}
-              />
-              <input
-                type="text"
-                placeholder="プロジェクト名で検索"
-                className="flex-1 bg-transparent border-none outline-none text-[14px] placeholder-[#999999] text-[#333333]"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-
-            <div className="flex items-center justify-end gap-[15px]">
-              <Image
-                src="/assets/icons/star.svg"
-                alt="Favorites"
-                width={24}
-                height={24}
-                className="cursor-pointer transition-all duration-200 hover:scale-110"
-              />
-              <div className="flex items-center gap-[15px]">
-                <div className="relative" ref={filterRef}>
+          <div className="flex items-center justify-end gap-[15px]">
+            <Image
+              src="/assets/icons/star.svg"
+              alt="Favorites"
+              width={24}
+              height={24}
+              className="cursor-pointer transition-all duration-200 hover:scale-110"
+            />
+            <div className="flex items-center gap-[15px]">
+              <div className="relative" ref={filterRef}>
                 <button
                   className="flex items-center gap-[8px] py-[7px] px-[20px] bg-white border border-[#d1d5db] rounded-[4px] cursor-pointer transition-[border-color] duration-200 hover:border-[#9ca3af]"
                   onClick={handleFilterDropdownToggle}
@@ -420,23 +391,22 @@ export function ArchivePage() {
               onClick={handleViewModeToggle}
               type="button"
             >
-                {viewMode === "grid" ? (
-                  <Image
-                    src="/assets/icons/group.svg"
-                    alt="Grid View"
-                    width={23}
-                    height={21}
-                  />
-                ) : (
-                  <Image
-                    src="/assets/icons/vector.svg"
-                    alt="Group View"
-                    width={22}
-                    height={21}
-                  />
-                )}
-              </button>
-            </div>
+              {viewMode === "grid" ? (
+                <Image
+                  src="/assets/icons/group.svg"
+                  alt="Grid View"
+                  width={23}
+                  height={21}
+                />
+              ) : (
+                <Image
+                  src="/assets/icons/vector.svg"
+                  alt="Group View"
+                  width={22}
+                  height={21}
+                />
+              )}
+            </button>
           </div>
         </div>
 
@@ -469,14 +439,14 @@ export function ArchivePage() {
             </div>
           )}
         </div>
-      </div>
 
-      {/* Project Plan Modal */}
-      <ProjectPlanModal
-        isOpen={showPlanModal}
-        onClose={handlePlanModalClose}
-        project={selectedProject}
-      />
+        {/* Project Plan Modal */}
+        <ProjectPlanModal
+          isOpen={showPlanModal}
+          onClose={handlePlanModalClose}
+          project={selectedProject}
+        />
+      </div>
     </PageTransition>
   );
 }
