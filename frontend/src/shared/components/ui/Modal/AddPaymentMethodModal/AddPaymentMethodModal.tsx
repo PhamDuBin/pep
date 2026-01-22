@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import { Modal } from "../Modal";
 import type { AddPaymentModalState } from "@/shared/types";
 import type { PaymentFormData } from "@/shared/models";
@@ -91,15 +91,18 @@ export function AddPaymentMethodModal({
     }
   }, [formData, onAddPaymentMethod]);
 
-  const isValid =
-    formData.cardNumber.trim() !== "" &&
-    formData.expiryDate.trim() !== "" &&
-    formData.securityCode.trim() !== "" &&
-    formData.cardholderName.trim() !== "" &&
-    formData.postalCode.trim() !== "" &&
-    formData.prefecture.trim() !== "" &&
-    formData.city.trim() !== "" &&
-    formData.streetAddress.trim() !== "";
+  const isValid = useMemo(
+    () =>
+      formData.cardNumber.trim() !== "" &&
+      formData.expiryDate.trim() !== "" &&
+      formData.securityCode.trim() !== "" &&
+      formData.cardholderName.trim() !== "" &&
+      formData.postalCode.trim() !== "" &&
+      formData.prefecture.trim() !== "" &&
+      formData.city.trim() !== "" &&
+      formData.streetAddress.trim() !== "",
+    [formData]
+  );
 
   return (
     <Modal

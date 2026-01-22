@@ -44,6 +44,7 @@ export function MyPage() {
     handleSaveChanges,
     handleDownloadInvoice,
     handleAddPaymentMethod,
+    handleClosePaymentModal,
     handlePaymentAdded,
     formatAmount,
     getPaymentMethodDisplay,
@@ -145,7 +146,7 @@ export function MyPage() {
         {/* Add Payment Method Modal */}
         <AddPaymentMethodModal
           isOpen={showAddPaymentModal}
-          onClose={() => setShowAddPaymentModal(false)}
+          onClose={handleClosePaymentModal}
           onAddPaymentMethod={handlePaymentAdded}
           modalState={paymentModalState}
         />

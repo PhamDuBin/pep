@@ -10,6 +10,7 @@ import {
   changePassword as changePasswordService,
   requestEmailChange,
   downloadInvoice as downloadInvoiceService,
+  addPaymentMethod,
 } from "../services/my-page.service";
 import { EmailChangeModalState, AddPaymentModalState } from "@/shared/types";
 import { PASSWORD_ERRORS, GENERAL_ERRORS } from "@/shared/errors/error-messages";
@@ -58,6 +59,7 @@ export interface UseMyPageReturn {
   handleSavePassword: () => Promise<void>;
   handleDownloadInvoice: (recordId: string) => void;
   handleAddPaymentMethod: () => void;
+  handleClosePaymentModal: () => void;
   handleAddPaymentMethodSubmit: (data: any) => void;
   handleEmailSendClick: (newEmail: string, confirmEmail: string) => void;
   handleCloseEmailModal: () => void;
@@ -176,10 +178,19 @@ export function useMyPage(): UseMyPageReturn {
     setShowPaymentMethodModal(true);
   }, []);
 
-  const handleAddPaymentMethodSubmit = useCallback((data: PaymentFormData) => {
-    // Call API to add payment method
-    console.log("Adding payment method:", data);
-    setPaymentModalState("success");
+  const handleClosePaymentModal = useCallback(() => {
+    setShowPaymentMethodModal(false);
+    setPaymentModalState("form"); // Reset to form state when closing
+  }, []);
+
+  const handleAddPaymentMethodSubmit = useCallback(async (data: PaymentFormData) => {
+    try {
+      await addPaymentMethod(data);
+      console.log("Adding payment method:", data);
+      setPaymentModalState("success");
+    } catch (error) {
+      console.error("Failed to add payment method:", error);
+    }
   }, []);
 
   const formatAmount = useCallback((amount: number, includeTax?: boolean) => {
@@ -261,6 +272,7 @@ export function useMyPage(): UseMyPageReturn {
     handleSavePassword,
     handleDownloadInvoice,
     handleAddPaymentMethod,
+    handleClosePaymentModal,
     handleAddPaymentMethodSubmit,
     handleEmailSendClick,
     handleCloseEmailModal,

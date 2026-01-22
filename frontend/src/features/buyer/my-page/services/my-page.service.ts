@@ -149,7 +149,6 @@ export async function addPaymentMethod(
   paymentData: unknown
 ): Promise<ActionResponse> {
   if (USE_MOCK) {
-    await new Promise((resolve) => setTimeout(resolve, 500));
     return { success: true };
   }
 

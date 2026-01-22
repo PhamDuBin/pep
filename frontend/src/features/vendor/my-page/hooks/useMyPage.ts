@@ -58,6 +58,7 @@ export interface UseMyPageReturn {
   handleSaveChanges: () => void;
   handleDownloadInvoice: (invoiceUrl: string) => void;
   handleAddPaymentMethod: () => void;
+  handleClosePaymentModal: () => void;
   handlePaymentAdded: (data: PaymentFormData) => Promise<void>;
   formatAmount: (amount: number, taxIncluded?: boolean) => string;
   getPaymentMethodDisplay: () => string;
@@ -178,11 +179,16 @@ export function useMyPage(): UseMyPageReturn {
     setShowAddPaymentModal(true);
   }, []);
 
+  const handleClosePaymentModal = useCallback(() => {
+    setShowAddPaymentModal(false);
+    setPaymentModalState("form"); // Reset to form state when closing
+  }, []);
+
   const handlePaymentAdded = useCallback(async (data: PaymentFormData) => {
     try {
       await addPaymentMethod(data);
       console.log("Payment method added:", data);
-      // Show success state
+      // Show success state after API succeeds
       setPaymentModalState("success");
       // Refresh payment info after adding payment method
       const info = await getPaymentInfo();
@@ -259,6 +265,7 @@ export function useMyPage(): UseMyPageReturn {
     handleSaveChanges,
     handleDownloadInvoice,
     handleAddPaymentMethod,
+    handleClosePaymentModal,
     handlePaymentAdded,
     formatAmount,
     getPaymentMethodDisplay,

@@ -147,8 +147,6 @@ export async function addPaymentMethod(
   paymentData: PaymentFormData
 ): Promise<ActionResponse> {
   if (USE_MOCK) {
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
     // Extract card type from card number (first digit)
     const firstDigit = paymentData.cardNumber.charAt(0);
     let cardType: "visa" | "mastercard" | "amex" | "jcb" = "visa";

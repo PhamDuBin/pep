@@ -42,6 +42,7 @@ export function MyPage() {
     handleSavePassword,
     handleDownloadInvoice,
     handleAddPaymentMethod,
+    handleClosePaymentModal,
     handleAddPaymentMethodSubmit,
     handleEmailSendClick,
     handleCloseEmailModal,
@@ -93,10 +94,10 @@ export function MyPage() {
                   taxIncluded: paymentInfo.taxIncluded,
                   paymentMethod: paymentInfo.paymentMethod
                     ? {
-                        id: paymentInfo.paymentMethod.id || "default",
-                        type: paymentInfo.paymentMethod.type,
-                        lastFourDigits: paymentInfo.paymentMethod.lastFourDigits,
-                      }
+                      id: paymentInfo.paymentMethod.id || "default",
+                      type: paymentInfo.paymentMethod.type,
+                      lastFourDigits: paymentInfo.paymentMethod.lastFourDigits,
+                    }
                     : null,
                 }}
                 paymentHistory={paymentHistory.map((record) => ({
@@ -136,7 +137,7 @@ export function MyPage() {
         {/* Payment Method Modal */}
         <AddPaymentMethodModal
           isOpen={showPaymentMethodModal}
-          onClose={() => setShowPaymentMethodModal(false)}
+          onClose={handleClosePaymentModal}
           onAddPaymentMethod={handleAddPaymentMethodSubmit}
           modalState={paymentModalState}
         />
