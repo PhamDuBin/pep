@@ -25,6 +25,7 @@ export function useArchive() {
   const [showFilterDropdown, setShowFilterDropdown] = useState(false);
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [openContextMenuId, setOpenContextMenuId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Project Plan Modal state
   const [showPlanModal, setShowPlanModal] = useState(false);
@@ -79,12 +80,18 @@ export function useArchive() {
   const filteredProjects = useMemo(() => {
     return projects
       .filter((p) => selectedFilter === "all" || p.authorId === selectedFilter)
+      .filter((p) =>
+        searchQuery === ""
+          ? true
+          : p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            p.authorName.toLowerCase().includes(searchQuery.toLowerCase())
+      )
       .sort((a, b) => {
         const dateA = new Date(a.createdAt.replace(/\//g, "-")).getTime();
         const dateB = new Date(b.createdAt.replace(/\//g, "-")).getTime();
         return sortOrder === "desc" ? dateB - dateA : dateA - dateB;
       });
-  }, [projects, selectedFilter, sortOrder]);
+  }, [projects, selectedFilter, sortOrder, searchQuery]);
 
   const handleViewModeToggle = useCallback(() => {
     setViewMode((prev) => (prev === "grid" ? "list" : "grid"));
@@ -168,6 +175,8 @@ export function useArchive() {
     sortOptions,
     showPlanModal,
     selectedProject,
+    searchQuery,
+    setSearchQuery,
     handleViewModeToggle,
     handleFilterSelect,
     handleSortSelect,
