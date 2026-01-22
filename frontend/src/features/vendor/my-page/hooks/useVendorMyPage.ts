@@ -115,6 +115,7 @@ export function useVendorMyPage(): UseVendorMyPageReturn {
       if (result.success) {
         setShowEmailModal(false);
         setShowEmailSuccessModal(true);
+        setUserProfile((prev) => (prev ? { ...prev, email: newEmail } : null));
       }
     } catch (error) {
       console.error("Failed to request email change:", error);
