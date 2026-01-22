@@ -60,7 +60,7 @@ export interface UseMyPageReturn {
   handleDownloadInvoice: (recordId: string) => void;
   handleAddPaymentMethod: () => void;
   handleClosePaymentModal: () => void;
-  handleAddPaymentMethodSubmit: (data: any) => void;
+  handlePaymentAdded: (data: PaymentFormData) => Promise<void>;
   handleEmailSendClick: (newEmail: string, confirmEmail: string) => void;
   handleCloseEmailModal: () => void;
 
@@ -180,16 +180,22 @@ export function useMyPage(): UseMyPageReturn {
 
   const handleClosePaymentModal = useCallback(() => {
     setShowPaymentMethodModal(false);
-    setPaymentModalState("form"); // Reset to form state when closing
+    setPaymentModalState("form"); 
   }, []);
 
-  const handleAddPaymentMethodSubmit = useCallback(async (data: PaymentFormData) => {
+  const handlePaymentAdded = useCallback(async (data: PaymentFormData) => {
     try {
+      setIsSaving(true);
       await addPaymentMethod(data);
-      console.log("Adding payment method:", data);
+      console.log("Payment method added:", data);
       setPaymentModalState("success");
+      // Refresh payment info after adding payment method
+      const info = await getPaymentInfo();
+      setPaymentInfo(info);
     } catch (error) {
       console.error("Failed to add payment method:", error);
+    } finally {
+      setIsSaving(false);
     }
   }, []);
 
@@ -200,10 +206,9 @@ export function useMyPage(): UseMyPageReturn {
 
   const getPaymentMethodDisplay = useCallback(() => {
     if (!paymentInfo?.paymentMethod) return "";
-    const method = paymentInfo.paymentMethod;
-    const typeLabel =
-      method.type.charAt(0).toUpperCase() + method.type.slice(1);
-    return `${typeLabel}  **** **** ${method.lastFourDigits}`;
+    const { type, lastFourDigits } = paymentInfo.paymentMethod;
+    const typeLabel = type.charAt(0).toUpperCase() + type.slice(1);
+    return `${typeLabel} **** **** ${lastFourDigits}`;
   }, [paymentInfo]);
 
   const getStatusLabel = useCallback((status: string) => {
@@ -273,7 +278,7 @@ export function useMyPage(): UseMyPageReturn {
     handleDownloadInvoice,
     handleAddPaymentMethod,
     handleClosePaymentModal,
-    handleAddPaymentMethodSubmit,
+    handlePaymentAdded,
     handleEmailSendClick,
     handleCloseEmailModal,
 

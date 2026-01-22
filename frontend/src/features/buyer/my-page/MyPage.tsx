@@ -43,7 +43,7 @@ export function MyPage() {
     handleDownloadInvoice,
     handleAddPaymentMethod,
     handleClosePaymentModal,
-    handleAddPaymentMethodSubmit,
+    handlePaymentAdded,
     handleEmailSendClick,
     handleCloseEmailModal,
     formatAmount,
@@ -138,7 +138,7 @@ export function MyPage() {
         <AddPaymentMethodModal
           isOpen={showPaymentMethodModal}
           onClose={handleClosePaymentModal}
-          onAddPaymentMethod={handleAddPaymentMethodSubmit}
+          onAddPaymentMethod={handlePaymentAdded}
           modalState={paymentModalState}
         />
       </div>

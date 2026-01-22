@@ -188,8 +188,8 @@ export function useMyPage(): UseMyPageReturn {
     try {
       await addPaymentMethod(data);
       console.log("Payment method added:", data);
-      // Show success state after API succeeds
       setPaymentModalState("success");
+      
       // Refresh payment info after adding payment method
       const info = await getPaymentInfo();
       setPaymentInfo(info);
