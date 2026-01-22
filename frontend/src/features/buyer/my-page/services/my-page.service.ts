@@ -6,6 +6,7 @@ import {
   UserProfile,
   PaymentInfo,
   PaymentHistoryRecord,
+  PaymentFormData,
   AvatarColorOption,
   ActionResponse,
 } from "../models";
@@ -18,6 +19,9 @@ import {
 import { PASSWORD_ERRORS } from "@/shared/errors/error-messages";
 
 const USE_MOCK = true;
+
+// Mock storage for added payment method
+let mockPaymentMethod: PaymentInfo["paymentMethod"] | null = null;
 
 /**
  * Get current user profile
@@ -39,7 +43,11 @@ export async function getUserProfile(): Promise<UserProfile> {
  */
 export async function getPaymentInfo(): Promise<PaymentInfo> {
   if (USE_MOCK) {
-    return PAYMENT_INFO_MOCK;
+    // Return updated payment info with stored payment method if available
+    return {
+      ...PAYMENT_INFO_MOCK,
+      paymentMethod: mockPaymentMethod || PAYMENT_INFO_MOCK.paymentMethod,
+    };
   }
 
   const res = await fetch("/api/payment/info");
@@ -146,9 +154,24 @@ export async function requestEmailChange(newEmail: string): Promise<ActionRespon
  * Add payment method
  */
 export async function addPaymentMethod(
-  paymentData: unknown
+  paymentData: PaymentFormData
 ): Promise<ActionResponse> {
   if (USE_MOCK) {
+    // Extract card type from card number (first digit)
+    const firstDigit = paymentData.cardNumber.charAt(0);
+    let cardType: "visa" | "mastercard" | "amex" | "jcb" = "visa";
+    if (firstDigit === "4") cardType = "visa";
+    else if (firstDigit === "5") cardType = "mastercard";
+    else if (firstDigit === "3") cardType = "amex";
+    else if (firstDigit === "3") cardType = "jcb";
+
+    // Store the new payment method
+    mockPaymentMethod = {
+      id: `payment-${Date.now()}`,
+      type: cardType,
+      lastFourDigits: paymentData.cardNumber.slice(-4),
+    };
+
     return { success: true };
   }
 

@@ -188,8 +188,8 @@ export function useMyPage(): UseMyPageReturn {
     try {
       await addPaymentMethod(data);
       console.log("Payment method added:", data);
-      // Show success state after API succeeds
       setPaymentModalState("success");
+      
       // Refresh payment info after adding payment method
       const info = await getPaymentInfo();
       setPaymentInfo(info);
@@ -205,7 +205,8 @@ export function useMyPage(): UseMyPageReturn {
   const getPaymentMethodDisplay = useCallback(() => {
     if (!paymentInfo?.paymentMethod) return "";
     const { type, lastFourDigits } = paymentInfo.paymentMethod;
-    return `${type.toUpperCase()} ****${lastFourDigits}`;
+    const typeLabel = type.charAt(0).toUpperCase() + type.slice(1);
+    return `${typeLabel} **** **** ${lastFourDigits}`;
   }, [paymentInfo]);
 
   const getStatusLabel = useCallback((status: string) => {
