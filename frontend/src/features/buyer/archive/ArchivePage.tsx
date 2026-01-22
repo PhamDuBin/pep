@@ -66,11 +66,11 @@ export function ArchivePage() {
           >
             <div className="flex flex-col gap-[5px] w-[220px] flex-shrink-0 group/card">
               <div
-                className="flex items-center justify-center p-[15px] h-[100px] rounded-[12px] box-border transition-all duration-300 hover:shadow-[0_4px_12px_rgba(0,0,0,0.15)] cursor-pointer"
+                className="flex items-center justify-start p-[15px] h-[100px] rounded-[12px] box-border transition-all duration-300 hover:shadow-[0_4px_12px_rgba(0,0,0,0.15)] cursor-pointer"
                 style={{ backgroundColor: getProjectColor(project.id) }}
                 onClick={() => handleProjectClick(project.id)}
               >
-                <p className="font-bold text-[16px] leading-[22px] text-[#ffffff] overflow-hidden text-ellipsis line-clamp-2 break-words m-0 text-center">
+                <p className="font-bold text-[16px] leading-[22px] text-[#ffffff] overflow-hidden text-ellipsis line-clamp-2 break-words m-0 text-left">
                   {project.name}
                 </p>
               </div>
