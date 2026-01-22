@@ -1,19 +1,19 @@
 "use client";
 
 import { useState, useCallback, useMemo, useEffect } from "react";
-import { VendorUser, PermissionOption } from "../models";
+import { User, PermissionOption } from "../models";
 import { ChangePermissionModalState } from "../components/ChangePermissionModal/PermissionChangeModal";
 import {
-  getVendorUsers,
-  getVendorPermissionOptions,
-  inviteVendorUser,
-  updateVendorUser,
-  deleteVendorUsers,
-} from "../services/vendor-user-list.service";
+  getUsers,
+  getPermissionOptions,
+  inviteUser,
+  updateUser,
+  deleteUsers,
+} from "../services/user-list.service";
 
-export function useVendorUserList() {
+export function useUserList() {
   const [isLoading, setIsLoading] = useState(true);
-  const [users, setUsers] = useState<VendorUser[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [permissionOptions, setPermissionOptions] = useState<
     PermissionOption[]
   >([]);
@@ -34,7 +34,7 @@ export function useVendorUserList() {
 
   // Permission state
   const [selectedUserForPermission, setSelectedUserForPermission] =
-    useState<VendorUser | null>(null);
+    useState<User | null>(null);
   const [lastChangedPermissionUserName, setLastChangedPermissionUserName] =
     useState("");
   const [lastChangedPermissionRole, setLastChangedPermissionRole] =
@@ -46,8 +46,8 @@ export function useVendorUserList() {
       setIsLoading(true);
       try {
         const [usersData, optionsData] = await Promise.all([
-          getVendorUsers(),
-          getVendorPermissionOptions(),
+          getUsers(),
+          getPermissionOptions(),
         ]);
         setUsers(usersData);
         setPermissionOptions(optionsData);
@@ -66,7 +66,7 @@ export function useVendorUserList() {
     [users]
   );
 
-  const toggleUserSelection = useCallback((user: VendorUser) => {
+  const toggleUserSelection = useCallback((user: User) => {
     setUsers((prev) =>
       prev.map((u) => (u.id === user.id ? { ...u, selected: !u.selected } : u))
     );
@@ -86,7 +86,7 @@ export function useVendorUserList() {
     try {
       // Invite each email with default role
       for (const email of emails) {
-        const result = await inviteVendorUser(email, "メンバー");
+        const result = await inviteUser(email, "メンバー");
         if (result.success && result.user) {
           setUsers((prev) => [...prev, result.user!]);
         }
@@ -111,7 +111,7 @@ export function useVendorUserList() {
   const handleDeleteConfirm = useCallback(async () => {
     try {
       const userIdsToDelete = users.filter((u) => u.selected).map((u) => u.id);
-      await deleteVendorUsers(userIdsToDelete);
+      await deleteUsers(userIdsToDelete);
       setUsers((prev) => prev.filter((u) => !u.selected));
       setDeleteModalState("complete");
     } catch (error) {
@@ -130,7 +130,7 @@ export function useVendorUserList() {
   }, []);
 
   // Change permission handlers
-  const handleChangePermission = useCallback((user: VendorUser) => {
+  const handleChangePermission = useCallback((user: User) => {
     setSelectedUserForPermission(user);
     setChangePermissionModalState("select");
     setShowChangePermissionModal(true);
@@ -141,7 +141,7 @@ export function useVendorUserList() {
       if (!selectedUserForPermission) return;
 
       try {
-        await updateVendorUser(
+        await updateUser(
           selectedUserForPermission.id,
           selectedUserForPermission.name,
           newRole

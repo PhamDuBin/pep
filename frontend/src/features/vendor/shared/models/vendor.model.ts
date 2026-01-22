@@ -2,13 +2,13 @@
 // VENDOR MODELS
 // =============================================================================
 
-export interface VendorCompany {
+export interface Company {
   id: string;
   name: string;
   isSelected: boolean;
 }
 
-export interface VendorMessage {
+export interface Message {
   id: string;
   companyId: string;
   companyName: string;
@@ -19,20 +19,20 @@ export interface VendorMessage {
   isSelected: boolean;
 }
 
-export interface VendorThreadMessage {
+export interface ThreadMessage {
   id: string;
   content: string;
   timestamp: string;
   isFromUser: boolean;
 }
 
-export interface VendorMessageThread {
+export interface MessageThread {
   id: string;
   messageId: string;
-  messages: VendorThreadMessage[];
+  messages: ThreadMessage[];
 }
 
-export interface VendorUser {
+export interface User {
   id: string;
   name: string;
   initials: string;
@@ -43,18 +43,18 @@ export interface VendorUser {
   selected?: boolean;
 }
 
-export interface VendorPaymentMethod {
+export interface PaymentMethod {
   type: string;
   lastFourDigits: string;
 }
 
-export interface VendorPaymentInfo {
+export interface PaymentInfo {
   nextPaymentDate: string;
   amount: number;
-  paymentMethod: VendorPaymentMethod;
+  paymentMethod: PaymentMethod;
 }
 
-export interface VendorPaymentHistory {
+export interface PaymentHistory {
   id: string;
   paymentDate: string;
   amount: number;

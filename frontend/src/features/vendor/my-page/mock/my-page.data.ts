@@ -1,14 +1,14 @@
 // =============================================================================
-// VENDOR MY PAGE MOCK DATA
+// MY PAGE MOCK DATA
 // =============================================================================
 
 import {
-  VendorUserProfile,
-  VendorPaymentInfo,
-  VendorPaymentHistory,
+  UserProfile,
+  PaymentInfo,
+  PaymentHistory,
 } from "../models";
 
-export const VENDOR_USER_PROFILE_MOCK: VendorUserProfile = {
+export const USER_PROFILE_MOCK: UserProfile = {
   id: "1",
   name: "山口 太郎",
   initials: "山口",
@@ -17,7 +17,7 @@ export const VENDOR_USER_PROFILE_MOCK: VendorUserProfile = {
   avatarUrl: undefined,
 };
 
-export const VENDOR_PAYMENT_INFO_MOCK: VendorPaymentInfo = {
+export const PAYMENT_INFO_MOCK: PaymentInfo = {
   nextPaymentDate: "2024年12月15日",
   amount: 30000,
   paymentMethod: {
@@ -26,7 +26,7 @@ export const VENDOR_PAYMENT_INFO_MOCK: VendorPaymentInfo = {
   },
 };
 
-export const VENDOR_PAYMENT_HISTORY_MOCK: VendorPaymentHistory[] = [
+export const PAYMENT_HISTORY_MOCK: PaymentHistory[] = [
   {
     id: "p1",
     paymentDate: "2024/11/15",

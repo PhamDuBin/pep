@@ -1,10 +1,10 @@
 "use client";
 
-import { VendorMessage } from "../../models";
+import { Message } from "../../models";
 import Image from "next/image";
 
 interface MessageListProps {
-  messages: VendorMessage[];
+  messages: Message[];
   selectedMessageId: string | null;
   searchQuery: string;
   onSearchChange: (query: string) => void;

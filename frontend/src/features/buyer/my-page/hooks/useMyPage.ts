@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
-import { UserProfile, PaymentInfo, PaymentHistoryRecord } from "../models";
+import { UserProfile, PaymentInfo, PaymentHistoryRecord, PaymentFormData } from "../models";
 import {
   getUserProfile,
   getPaymentInfo,
@@ -10,8 +10,9 @@ import {
   changePassword as changePasswordService,
   requestEmailChange,
   downloadInvoice as downloadInvoiceService,
+  addPaymentMethod,
 } from "../services/my-page.service";
-import { EmailChangeModalState } from "@/shared/types";
+import { EmailChangeModalState, AddPaymentModalState } from "@/shared/types";
 import { PASSWORD_ERRORS, GENERAL_ERRORS } from "@/shared/errors/error-messages";
 
 export interface UseMyPageReturn {
@@ -35,6 +36,8 @@ export interface UseMyPageReturn {
   // Modal state
   showEmailModal: boolean;
   showAvatarModal: boolean;
+  showPaymentMethodModal: boolean;
+  paymentModalState: AddPaymentModalState;
   emailModalState: EmailChangeModalState;
   isSendingEmail: boolean;
 
@@ -47,6 +50,7 @@ export interface UseMyPageReturn {
   // Modal handlers
   setShowEmailModal: (show: boolean) => void;
   setShowAvatarModal: (show: boolean) => void;
+  setShowPaymentMethodModal: (show: boolean) => void;
 
   // Action handlers
   handleAvatarClick: () => void;
@@ -55,6 +59,8 @@ export interface UseMyPageReturn {
   handleSavePassword: () => Promise<void>;
   handleDownloadInvoice: (recordId: string) => void;
   handleAddPaymentMethod: () => void;
+  handleClosePaymentModal: () => void;
+  handlePaymentAdded: (data: PaymentFormData) => Promise<void>;
   handleEmailSendClick: (newEmail: string, confirmEmail: string) => void;
   handleCloseEmailModal: () => void;
 
@@ -82,6 +88,8 @@ export function useMyPage(): UseMyPageReturn {
   // Modal state
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [showAvatarModal, setShowAvatarModal] = useState(false);
+  const [showPaymentMethodModal, setShowPaymentMethodModal] = useState(false);
+  const [paymentModalState, setPaymentModalState] = useState<AddPaymentModalState>("form");
   const [emailModalState, setEmailModalState] =
     useState<EmailChangeModalState>("email-change");
   const [isSendingEmail, setIsSendingEmail] = useState(false);
@@ -167,7 +175,28 @@ export function useMyPage(): UseMyPageReturn {
   }, []);
 
   const handleAddPaymentMethod = useCallback(() => {
-    console.log("Add payment method");
+    setShowPaymentMethodModal(true);
+  }, []);
+
+  const handleClosePaymentModal = useCallback(() => {
+    setShowPaymentMethodModal(false);
+    setPaymentModalState("form"); 
+  }, []);
+
+  const handlePaymentAdded = useCallback(async (data: PaymentFormData) => {
+    try {
+      setIsSaving(true);
+      await addPaymentMethod(data);
+      console.log("Payment method added:", data);
+      setPaymentModalState("success");
+      // Refresh payment info after adding payment method
+      const info = await getPaymentInfo();
+      setPaymentInfo(info);
+    } catch (error) {
+      console.error("Failed to add payment method:", error);
+    } finally {
+      setIsSaving(false);
+    }
   }, []);
 
   const formatAmount = useCallback((amount: number, includeTax?: boolean) => {
@@ -177,10 +206,9 @@ export function useMyPage(): UseMyPageReturn {
 
   const getPaymentMethodDisplay = useCallback(() => {
     if (!paymentInfo?.paymentMethod) return "";
-    const method = paymentInfo.paymentMethod;
-    const typeLabel =
-      method.type.charAt(0).toUpperCase() + method.type.slice(1);
-    return `${typeLabel}  **** **** ${method.lastFourDigits}`;
+    const { type, lastFourDigits } = paymentInfo.paymentMethod;
+    const typeLabel = type.charAt(0).toUpperCase() + type.slice(1);
+    return `${typeLabel} **** **** ${lastFourDigits}`;
   }, [paymentInfo]);
 
   const getStatusLabel = useCallback((status: string) => {
@@ -226,6 +254,8 @@ export function useMyPage(): UseMyPageReturn {
     // Modal state
     showEmailModal,
     showAvatarModal,
+    showPaymentMethodModal,
+    paymentModalState,
     emailModalState,
     isSendingEmail,
 
@@ -238,6 +268,7 @@ export function useMyPage(): UseMyPageReturn {
     // Modal handlers
     setShowEmailModal,
     setShowAvatarModal,
+    setShowPaymentMethodModal,
 
     // Action handlers
     handleAvatarClick,
@@ -246,6 +277,8 @@ export function useMyPage(): UseMyPageReturn {
     handleSavePassword,
     handleDownloadInvoice,
     handleAddPaymentMethod,
+    handleClosePaymentModal,
+    handlePaymentAdded,
     handleEmailSendClick,
     handleCloseEmailModal,
 

@@ -1,8 +1,8 @@
 // =============================================================================
-// VENDOR USER PROFILE MODEL
+// USER PROFILE MODEL
 // =============================================================================
 
-export interface VendorUserProfile {
+export interface UserProfile {
   id: string;
   name: string;
   initials: string;

@@ -5,15 +5,15 @@ export { MyPage } from "./MyPage";
 export { MyPage as VendorMyPage } from "./MyPage";
 
 // Hooks
-export { useVendorMyPage } from "./hooks";
-export type { UseVendorMyPageReturn } from "./hooks";
+export { useMyPage } from "./hooks";
+export type { UseMyPageReturn } from "./hooks";
 
 // Types
 export type {
-  VendorUserProfile,
-  VendorPaymentMethod,
-  VendorPaymentInfo,
-  VendorPaymentHistory,
+  UserProfile,
+  PaymentMethod,
+  PaymentInfo,
+  PaymentHistory,
 } from "./models";
 
 // Mock data
