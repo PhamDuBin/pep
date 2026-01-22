@@ -465,7 +465,6 @@ export function ArchivePage() {
             </Pagination>
           )}
         </div>
-      </div>
 
         {/* Project Plan Modal */}
         <ProjectPlanModal
