@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
-import { UserProfile, PaymentInfo, PaymentHistoryRecord } from "../models";
-import { PaymentFormData } from "@/shared/models";
+import { UserProfile, PaymentInfo, PaymentHistoryRecord, PaymentFormData } from "../models";
 import {
   getUserProfile,
   getPaymentInfo,
