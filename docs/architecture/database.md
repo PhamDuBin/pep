@@ -111,7 +111,7 @@ erDiagram
     }
 
     buyer_org_details {
-        uuid org_id PK_FK "organizations.id"
+        uuid org_id PK,FK "organizations.id"
         string industry "nullable, 業種"
         string employee_count "nullable, 従業員規模"
         text purpose "nullable, 利用目的"
@@ -123,7 +123,7 @@ erDiagram
     }
 
     vendor_org_details {
-        uuid org_id PK_FK "organizations.id"
+        uuid org_id PK,FK "organizations.id"
         string industry "nullable, 業種"
         string employee_count "nullable, 従業員規模"
         text business_description "nullable, 事業内容"
