@@ -11,6 +11,7 @@ import {
 } from "@/shared/components";
 import { useArchive } from "./hooks";
 import { MENU_ITEMS } from "./constants/menu.constants";
+import { getProjectColor } from "./constants/project-colors.constants";
 import { ProjectPlanModal } from "./components";
 import { ArchiveProject } from "./models";
 import Image from "next/image";
@@ -45,6 +46,8 @@ export function ArchivePage() {
     handleFavoriteToggle,
     searchQuery,
     handleSearchChange,
+    showOnlyFavorites,
+    handleFavoriteFilterToggle,
   } = useArchive();
 
   const renderGridView = (
@@ -52,16 +55,15 @@ export function ArchivePage() {
     currentPage: number
   ) => (
     <AnimatedList
-      key={`grid-${currentPage}`}
+      key={`grid-${currentPage}-${showOnlyFavorites}`}
       className="flex flex-wrap gap-[25px]"
       staggerDelay={0.03}
     >
       {paginatedProjects.map((project) => (
         <AnimatedListItem
           key={project.id}
-          className={`relative ${
-            openContextMenuId === project.id ? "z-[50]" : "z-0"
-          }`}
+          className={`relative ${openContextMenuId === project.id ? "z-[50]" : "z-0"
+            }`}
         >
           <motion.div
             onClick={(e) => e.stopPropagation()}
@@ -73,7 +75,7 @@ export function ArchivePage() {
                 className="flex items-center p-[10px] h-[70px] bg-white border border-[#e1e1e1] rounded-[12px] box-border transition-all duration-300 hover:border-primary hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] cursor-pointer"
                 onClick={() => handleProjectClick(project.id)}
               >
-                <p className="font-bold text-[14px] leading-[1.4] text-[#333333] overflow-hidden text-ellipsis line-clamp-2 break-words m-0">
+                <p className="font-bold text-[16px] leading-[22px] text-[#ffffff] overflow-hidden text-ellipsis line-clamp-2 break-words m-0 text-left">
                   {project.name}
                 </p>
               </div>
@@ -101,11 +103,10 @@ export function ArchivePage() {
                     height="24"
                     viewBox="0 0 24 24"
                     fill="none"
-                    className={`cursor-pointer transition-all duration-200 hover:scale-110 ${
-                      project.isFavorite
-                        ? "opacity-100"
-                        : "opacity-0 group-hover/card:opacity-100"
-                    }`}
+                    className={`cursor-pointer transition-all duration-200 hover:scale-110 ${project.isFavorite
+                      ? "opacity-100"
+                      : "opacity-0 group-hover/card:opacity-100"
+                      }`}
                     onClick={(e) => {
                       e.stopPropagation();
                       handleFavoriteToggle(project.id);
@@ -121,17 +122,12 @@ export function ArchivePage() {
                     onClick={() => handleContextMenuToggle(project.id)}
                     type="button"
                   >
-                    <svg
-                      width="16"
-                      height="4"
-                      viewBox="0 0 16 4"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <circle cx="2" cy="2" r="1.5" fill="#808080" />
-                      <circle cx="8" cy="2" r="1.5" fill="#808080" />
-                      <circle cx="14" cy="2" r="1.5" fill="#808080" />
-                    </svg>
+                    <Image
+                      src="/assets/icons/dots.svg"
+                      alt="Menu"
+                      width={16}
+                      height={16}
+                    />
                   </button>
                 </div>
               </div>
@@ -179,15 +175,19 @@ export function ArchivePage() {
         <span className="flex-1 font-normal text-[14px] text-[#333333]">
           プロジェクト名
         </span>
-        <div className="flex-1 flex items-center ml-[8px]">
-          <span className="flex-1 font-normal text-[12px] text-[#333333] ml-[12px]">
-            作成者
-          </span>
-          <span className="w-[150px] text-center font-normal text-[12px] text-[#333333]">
-            作成日
-          </span>
-          <span className="w-[36.5px]"></span>
+        <div className="flex-1 flex items-center gap-[25px]">
+          <div className="flex-1 flex items-center gap-[5px] pl-[10px]">
+            <span className="font-normal text-[12px] text-[#333333]">
+              作成者
+            </span>
+          </div>
+          <div className="w-[150px] flex items-center justify-center">
+            <span className="font-normal text-[12px] text-[#333333]">
+              作成日
+            </span>
+          </div>
         </div>
+        <div className="w-[36.5px]"></div>
       </div>
 
       <AnimatedList
@@ -198,70 +198,49 @@ export function ArchivePage() {
         {paginatedProjects.map((project) => (
           <AnimatedListItem
             key={project.id}
-            className={`relative ${
-              openContextMenuId === project.id ? "z-[50]" : "z-0"
-            }`}
+            className={`relative ${openContextMenuId === project.id ? "z-[50]" : "z-0"
+              }`}
           >
             <motion.div
               onClick={(e) => e.stopPropagation()}
-              whileHover={{ scale: 1.005 }}
-              transition={{ duration: 0.2 }}
+              transition={{ duration: 0.15 }}
             >
               <div className="flex items-center justify-center gap-[25px] w-full hover:bg-[#F4FAFB]">
                 <div
                   className="flex-1 min-w-0 flex items-center p-[10px] transition-all duration-300 hover:border-b-primary cursor-pointer"
                   onClick={() => handleProjectClick(project.id)}
                 >
-                  <p className="font-bold text-[14px] leading-[1.4] text-[#333333] overflow-hidden text-ellipsis whitespace-nowrap m-0">
-                    {project.name}
-                  </p>
+                  {project.name}
                 </div>
-                <div className="flex-1 flex items-center min-w-0">
-                  <div className="flex-1 flex items-center min-w-0">
-                    <div className="flex-1 flex items-center gap-[5px] min-w-0">
-                      <Image
-                        src="/assets/icons/pencil-archive.svg"
-                        alt="Pencil Icon"
-                        width={11}
-                        height={11}
-                      />
-                      <span className="font-normal text-[12px] text-[#808080] overflow-hidden text-ellipsis whitespace-nowrap">
-                        {project.authorName}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-center w-[150px] px-[12px] flex-shrink-0">
-                      <span className="font-normal text-[12px] text-[#808080]">
-                        {project.createdAt}
-                      </span>
-                    </div>
-                  </div>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    className="cursor-pointer transition-all duration-200 hover:scale-110 flex-shrink-0"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleFavoriteToggle(project.id);
-                    }}
-                  >
-                    <path
-                      d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.62L12 2L9.19 8.62L2 9.24L7.45 13.97L5.82 21L12 17.27Z"
-                      fill={project.isFavorite ? "#066A9E" : "#b9b9b9"}
+                <div className="flex-1 flex items-center gap-[25px]">
+                  <div className="flex-1 flex items-center gap-[5px]">
+                    <Image
+                      src="/assets/icons/pencil-archive.svg"
+                      alt="Pencil Icon"
+                      width={11}
+                      height={11}
                     />
-                  </svg>
+                    <span className="font-normal text-[12px] text-[#808080] overflow-hidden text-ellipsis whitespace-nowrap">
+                      {project.authorName}
+                    </span>
+                  </div>
+                  <div className="w-[150px] flex items-center justify-center px-[12px]">
+                    <span className="font-normal text-[12px] text-[#808080]">
+                      {project.createdAt}
+                    </span>
+                  </div>
+                </div>
+                <div className="w-[36.5px] flex items-center justify-center py-[9px] px-[12px]">
                   <button
-                    className="flex items-center justify-center w-[36.5px] h-[20.5px] p-0 bg-transparent border-none cursor-pointer flex-shrink-0 hover:opacity-70"
+                    className="flex items-center justify-center w-[12.5px] h-[2.5px] p-0 bg-transparent border-none cursor-pointer hover:opacity-70"
                     onClick={() => handleContextMenuToggle(project.id)}
                     type="button"
                   >
                     <Image
-                      src="/assets/icons/dots.svg"
-                      alt="More Options"
-                      width={12}
-                      height={2}
+                      src="/assets/icons/dot.svg"
+                      alt="Menu"
+                      width={16}
+                      height={16}
                     />
                   </button>
                 </div>
@@ -275,7 +254,7 @@ export function ArchivePage() {
                       onClick={handleContextMenuClose}
                     />
                     <motion.div
-                      className="absolute top-[calc(100%+5px)] right-[36px] flex flex-col gap-[8px] py-[14px] px-[20px] bg-[#ffffff] border border-[#cfcfcf] rounded-[4px] z-[150] min-w-[120px] shadow-[0_2px_8px_rgba(0,0,0,0.1)]"
+                      className="absolute top-[calc(100%+5px)] right-[0px] flex flex-col gap-[8px] py-[14px] px-[20px] bg-[#ffffff] border border-[#cfcfcf] rounded-[4px] z-[150] min-w-[120px] shadow-[0_2px_8px_rgba(0,0,0,0.1)]"
                       initial={{ opacity: 0, scale: 0.95, y: -5 }}
                       animate={{ opacity: 1, scale: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.95, y: -5 }}
@@ -335,6 +314,20 @@ export function ArchivePage() {
             </div>
 
             <div className="flex items-center gap-[15px] ml-auto">
+              {/* Star Filter Icon */}
+              <Image
+                src={
+                  showOnlyFavorites
+                    ? "/assets/icons/star-filled.svg"
+                    : "/assets/icons/star.svg"
+                }
+                alt="Star Filter"
+                width={24}
+                height={24}
+                className="cursor-pointer transition-all duration-200 hover:scale-110"
+                onClick={handleFavoriteFilterToggle}
+              />
+
               <div className="relative" ref={filterRef}>
                 <button
                   className="flex items-center gap-[8px] py-[7px] px-[20px] bg-white border border-[#cfcfcf] rounded-[4px] cursor-pointer transition-[border-color] duration-200 hover:border-[#066A9E]"
@@ -477,14 +470,14 @@ export function ArchivePage() {
             </Pagination>
           )}
         </div>
-      </div>
 
-      {/* Project Plan Modal */}
-      <ProjectPlanModal
-        isOpen={showPlanModal}
-        onClose={handlePlanModalClose}
-        project={selectedProject}
-      />
+        {/* Project Plan Modal */}
+        <ProjectPlanModal
+          isOpen={showPlanModal}
+          onClose={handlePlanModalClose}
+          project={selectedProject}
+        />
+      </div>
     </PageTransition>
   );
 }
