@@ -25,6 +25,8 @@
 
 ## Task List / タスク一覧
 
+### Account Management / アカウント管理
+
 | # | Task | GitLab Issue | RPC | Status |
 |---|------|--------------|-----|--------|
 | 001 | [Self-Signup](./001-signup.md) | [#26](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/26) | ✅ create_signup | 🔲 Not Started |
@@ -33,9 +35,27 @@
 | 004 | [Role Change & Owner Transfer](./004-role-change.md) | [#29](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/29) | ✅ transfer_ownership | 🔲 Not Started |
 | 005 | [Account Suspension & Member Removal](./005-account-management.md) | [#30](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/30) | ❌ | 🔲 Not Started |
 
+### RFI/Project Management / RFI・プロジェクト管理
+
+| # | Task | GitLab Issue | RPC | Status |
+|---|------|--------------|-----|--------|
+| 006 | [Project Management](./006-project-management.md) | (TBD) | ❌ | 🔲 Not Started |
+| 007 | [Project Plans](./007-project-plans.md) | (TBD) | ❌ | 🔲 Not Started |
+| 008 | [Project Attachments](./008-project-attachments.md) | (TBD) | ❌ | 🔲 Not Started |
+
+### AI / Chat
+
+| # | Task | GitLab Issue | RPC | Status |
+|---|------|--------------|-----|--------|
+| 009 | [AI Chat Sessions](./009-ai-chat.md) | (TBD) | ❌ | 🔲 Not Started |
+| 010 | [Buyer-Vendor Chat](./010-buyer-vendor-chat.md) | (TBD) | ❌ | 🔲 Not Started |
+| 011 | [Notifications](./011-notifications.md) | (TBD) | ❌ | 🔲 Not Started |
+
 ---
 
 ## Dependencies / 依存関係
+
+### Account Management
 
 ```
 001 Self-Signup (テーブル作成)
@@ -47,6 +67,22 @@
 004 Role Change (ロール管理)
   ↓
 005 Account Management (停止・削除)
+```
+
+### RFI / Chat
+
+```
+001 Self-Signup
+  ↓
+006 Project Management ─────────────────┐
+  ↓                                     ↓
+007 Project Plans                  008 Project Attachments
+  ↓
+009 AI Chat Sessions
+  ↓
+010 Buyer-Vendor Chat
+  ↓
+011 Notifications (006, 010 と連携)
 ```
 
 ---
@@ -73,6 +109,12 @@
 | [003-invitation.md](./003-invitation.md) | Invitation 指示書 |
 | [004-role-change.md](./004-role-change.md) | Role Change 指示書 |
 | [005-account-management.md](./005-account-management.md) | Account Management 指示書 |
+| [006-project-management.md](./006-project-management.md) | Project Management 指示書 |
+| [007-project-plans.md](./007-project-plans.md) | Project Plans 指示書 |
+| [008-project-attachments.md](./008-project-attachments.md) | Project Attachments 指示書 |
+| [009-ai-chat.md](./009-ai-chat.md) | AI Chat Sessions 指示書 |
+| [010-buyer-vendor-chat.md](./010-buyer-vendor-chat.md) | Buyer-Vendor Chat 指示書 |
+| [011-notifications.md](./011-notifications.md) | Notifications 指示書 |
 
 ---
 
