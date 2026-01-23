@@ -3,7 +3,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Loading,
-  Pagination,
   AnimatedDropdown,
   AnimatedList,
   AnimatedListItem,
@@ -27,6 +26,7 @@ export function ArchivePage() {
     showSortDropdown,
     openContextMenuId,
     filteredProjects,
+    visibleProjects,
     filterRef,
     sortRef,
     filterOptions,
@@ -48,22 +48,21 @@ export function ArchivePage() {
     handleSearchChange,
     showOnlyFavorites,
     handleFavoriteFilterToggle,
+    handleLoadMore,
   } = useArchive();
 
-  const renderGridView = (
-    paginatedProjects: ArchiveProject[],
-    currentPage: number
-  ) => (
+  const renderGridView = (projects: ArchiveProject[]) => (
     <AnimatedList
-      key={`grid-${currentPage}-${showOnlyFavorites}`}
+      key={`grid-${showOnlyFavorites}`}
       className="flex flex-wrap gap-[25px]"
       staggerDelay={0.03}
     >
-      {paginatedProjects.map((project) => (
+      {projects.map((project) => (
         <AnimatedListItem
           key={project.id}
-          className={`relative ${openContextMenuId === project.id ? "z-[50]" : "z-0"
-            }`}
+          className={`relative ${
+            openContextMenuId === project.id ? "z-[50]" : "z-0"
+          }`}
         >
           <motion.div
             onClick={(e) => e.stopPropagation()}
@@ -72,7 +71,8 @@ export function ArchivePage() {
           >
             <div className="flex flex-col gap-[5px] w-[220px] flex-shrink-0 group/card">
               <div
-                className="flex items-center p-[10px] h-[70px] bg-white border border-[#e1e1e1] rounded-[12px] box-border transition-all duration-300 hover:border-primary hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] cursor-pointer"
+                className="flex items-center p-[10px] h-[70px] rounded-[12px] box-border transition-all duration-300 hover:shadow-[0_4px_12px_rgba(0,0,0,0.15)] cursor-pointer"
+                style={{ backgroundColor: getProjectColor(project.id) }}
                 onClick={() => handleProjectClick(project.id)}
               >
                 <p className="font-bold text-[16px] leading-[22px] text-[#ffffff] overflow-hidden text-ellipsis line-clamp-2 break-words m-0 text-left">
@@ -103,10 +103,11 @@ export function ArchivePage() {
                     height="24"
                     viewBox="0 0 24 24"
                     fill="none"
-                    className={`cursor-pointer transition-all duration-200 hover:scale-110 ${project.isFavorite
-                      ? "opacity-100"
-                      : "opacity-0 group-hover/card:opacity-100"
-                      }`}
+                    className={`cursor-pointer transition-all duration-200 hover:scale-110 ${
+                      project.isFavorite
+                        ? "opacity-100"
+                        : "opacity-0 group-hover/card:opacity-100"
+                    }`}
                     onClick={(e) => {
                       e.stopPropagation();
                       handleFavoriteToggle(project.id);
@@ -169,7 +170,7 @@ export function ArchivePage() {
     </AnimatedList>
   );
 
-  const renderListView = (paginatedProjects: ArchiveProject[], currentPage: number) => (
+  const renderListView = (projects: ArchiveProject[]) => (
     <div className="flex flex-col gap-[0px]">
       <div className="flex items-center gap-[25px] p-[10px] border-b border-[#e1e1e1]">
         <span className="flex-1 font-normal text-[14px] text-[#333333]">
@@ -191,15 +192,16 @@ export function ArchivePage() {
       </div>
 
       <AnimatedList
-        key={`list-${currentPage}`}
+        key="list"
         className="flex flex-col divide-y divide-[#e1e1e1]"
         staggerDelay={0.05}
       >
-        {paginatedProjects.map((project) => (
+        {projects.map((project) => (
           <AnimatedListItem
             key={project.id}
-            className={`relative ${openContextMenuId === project.id ? "z-[50]" : "z-0"
-              }`}
+            className={`relative ${
+              openContextMenuId === project.id ? "z-[50]" : "z-0"
+            }`}
           >
             <motion.div
               onClick={(e) => e.stopPropagation()}
@@ -237,7 +239,7 @@ export function ArchivePage() {
                     type="button"
                   >
                     <Image
-                      src="/assets/icons/dot.svg"
+                      src="/assets/icons/dots.svg"
                       alt="Menu"
                       width={16}
                       height={16}
@@ -351,7 +353,9 @@ export function ArchivePage() {
                       <button
                         key={option.id}
                         className={`flex items-center gap-[5px] p-[8px_6px] bg-[#ffffff] hover:bg-[#f5f5f5] rounded-[4px] border-none font-normal text-[14px] leading-[18px] cursor-pointer text-left whitespace-nowrap transition-all duration-150 hover:text-primary hover:translate-x-[2px] ${
-                          option.id === selectedFilter ? "text-primary" : "text-[#333333]"
+                          option.id === selectedFilter
+                            ? "text-primary"
+                            : "text-[#333333]"
                         }`}
                         type="button"
                         onClick={() => handleFilterSelect(option.id)}
@@ -400,7 +404,9 @@ export function ArchivePage() {
                       <button
                         key={option.value}
                         className={`flex items-center gap-[5px] p-[8px_6px] rounded-[4px] bg-[#ffffff] hover:bg-[#f5f5f5] border-none font-normal text-[14px] leading-[18px] cursor-pointer text-left whitespace-nowrap transition-all duration-150 hover:text-primary hover:translate-x-[2px] ${
-                          option.value === sortOrder ? "text-primary" : "text-black"
+                          option.value === sortOrder
+                            ? "text-primary"
+                            : "text-black"
                         }`}
                         type="button"
                         onClick={() => handleSortSelect(option.value)}
@@ -451,7 +457,7 @@ export function ArchivePage() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-[15px] w-full">
+        <div className="flex flex-col gap-[25px] w-full">
           {isLoading ? (
             <div className="flex items-center justify-center min-h-[200px]">
               <Loading type="spinner" size="lg" />
@@ -461,13 +467,22 @@ export function ArchivePage() {
               <p>アーカイブされたプロジェクトはありません</p>
             </div>
           ) : (
-            <Pagination key={searchQuery} items={filteredProjects}>
-              {(paginatedProjects, currentPage) =>
-                viewMode === "grid"
-                  ? renderGridView(paginatedProjects, currentPage)
-                  : renderListView(paginatedProjects, currentPage)
-              }
-            </Pagination>
+            <>
+              {viewMode === "grid"
+                ? renderGridView(visibleProjects)
+                : renderListView(visibleProjects)}
+
+              {/* Load More Button - Always visible for API refresh */}
+              <div className="flex items-center justify-center w-full">
+                <button
+                  type="button"
+                  className="px-[15px] py-[7px] bg-transparent border border-[#808080] rounded-[8px] font-normal text-[14px] text-[#333] cursor-pointer transition-all duration-200 hover:border-[#066a9e] hover:text-[#066a9e]"
+                  onClick={handleLoadMore}
+                >
+                  もっと表示
+                </button>
+              </div>
+            </>
           )}
         </div>
 
