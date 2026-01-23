@@ -46,6 +46,8 @@ export function ArchivePage() {
     handleFavoriteToggle,
     searchQuery,
     handleSearchChange,
+    showOnlyFavorites,
+    handleFavoriteFilterToggle,
   } = useArchive();
 
   const renderGridView = (
@@ -53,16 +55,15 @@ export function ArchivePage() {
     currentPage: number
   ) => (
     <AnimatedList
-      key={`grid-${currentPage}`}
+      key={`grid-${currentPage}-${showOnlyFavorites}`}
       className="flex flex-wrap gap-[25px]"
       staggerDelay={0.03}
     >
       {paginatedProjects.map((project) => (
         <AnimatedListItem
           key={project.id}
-          className={`relative ${
-            openContextMenuId === project.id ? "z-[50]" : "z-0"
-          }`}
+          className={`relative ${openContextMenuId === project.id ? "z-[50]" : "z-0"
+            }`}
         >
           <motion.div
             onClick={(e) => e.stopPropagation()}
@@ -103,11 +104,10 @@ export function ArchivePage() {
                     height="24"
                     viewBox="0 0 24 24"
                     fill="none"
-                    className={`cursor-pointer transition-all duration-200 hover:scale-110 ${
-                      project.isFavorite
-                        ? "opacity-100"
-                        : "opacity-0 group-hover/card:opacity-100"
-                    }`}
+                    className={`cursor-pointer transition-all duration-200 hover:scale-110 ${project.isFavorite
+                      ? "opacity-100"
+                      : "opacity-0 group-hover/card:opacity-100"
+                      }`}
                     onClick={(e) => {
                       e.stopPropagation();
                       handleFavoriteToggle(project.id);
@@ -195,16 +195,15 @@ export function ArchivePage() {
       </div>
 
       <AnimatedList
-        key={`list-${currentPage}`}
+        key={`list-${currentPage}-${showOnlyFavorites}`}
         className="flex flex-col gap-[0px]"
         staggerDelay={0.05}
       >
         {paginatedProjects.map((project) => (
           <AnimatedListItem
             key={project.id}
-            className={`relative ${
-              openContextMenuId === project.id ? "z-[50]" : "z-0"
-            }`}
+            className={`relative ${openContextMenuId === project.id ? "z-[50]" : "z-0"
+              }`}
           >
             <motion.div
               onClick={(e) => e.stopPropagation()}
@@ -319,6 +318,20 @@ export function ArchivePage() {
             </div>
 
             <div className="flex items-center gap-[15px] ml-auto">
+              {/* Star Filter Icon */}
+              <Image
+                src={
+                  showOnlyFavorites
+                    ? "/assets/icons/star-filled.svg"
+                    : "/assets/icons/star.svg"
+                }
+                alt="Star Filter"
+                width={24}
+                height={24}
+                className="cursor-pointer transition-all duration-200 hover:scale-110"
+                onClick={handleFavoriteFilterToggle}
+              />
+
               <div className="relative" ref={filterRef}>
                 <button
                   className="flex items-center gap-[8px] py-[7px] px-[20px] bg-white border border-[#d1d5db] rounded-[4px] cursor-pointer transition-[border-color] duration-200 hover:border-[#9ca3af]"
@@ -341,11 +354,10 @@ export function ArchivePage() {
                     {filterOptions.map((option) => (
                       <button
                         key={option.id}
-                        className={`flex items-center gap-[5px] py-[6px] bg-[#ffffff] hover:bg-[#f5f5f5] border-none font-normal text-[14px] leading-[18px] cursor-pointer text-left whitespace-nowrap transition-all duration-150 hover:text-primary hover:translate-x-[2px] ${
-                          option.id === selectedFilter
-                            ? "text-primary"
-                            : "text-black"
-                        }`}
+                        className={`flex items-center gap-[5px] py-[6px] bg-[#ffffff] hover:bg-[#f5f5f5] border-none font-normal text-[14px] leading-[18px] cursor-pointer text-left whitespace-nowrap transition-all duration-150 hover:text-primary hover:translate-x-[2px] ${option.id === selectedFilter
+                          ? "text-primary"
+                          : "text-black"
+                          }`}
                         type="button"
                         onClick={() => handleFilterSelect(option.id)}
                       >
@@ -392,11 +404,10 @@ export function ArchivePage() {
                     {sortOptions.map((option) => (
                       <button
                         key={option.value}
-                        className={`flex items-center gap-[5px] py-[6px] bg-[#ffffff] hover:bg-[#f5f5f5] border-none font-normal text-[14px] leading-[18px] cursor-pointer text-left whitespace-nowrap transition-all duration-150 hover:text-primary hover:translate-x-[2px] ${
-                          option.value === sortOrder
-                            ? "text-primary"
-                            : "text-black"
-                        }`}
+                        className={`flex items-center gap-[5px] py-[6px] bg-[#ffffff] hover:bg-[#f5f5f5] border-none font-normal text-[14px] leading-[18px] cursor-pointer text-left whitespace-nowrap transition-all duration-150 hover:text-primary hover:translate-x-[2px] ${option.value === sortOrder
+                          ? "text-primary"
+                          : "text-black"
+                          }`}
                         type="button"
                         onClick={() => handleSortSelect(option.value)}
                       >

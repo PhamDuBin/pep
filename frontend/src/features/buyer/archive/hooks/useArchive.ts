@@ -26,6 +26,7 @@ export function useArchive() {
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [openContextMenuId, setOpenContextMenuId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [showOnlyFavorites, setShowOnlyFavorites] = useState(false);
 
   // Project Plan Modal state
   const [showPlanModal, setShowPlanModal] = useState(false);
@@ -81,6 +82,7 @@ export function useArchive() {
     const normalizedQuery = searchQuery.toLowerCase().trim();
     return projects
       .filter((p) => selectedFilter === "all" || p.authorId === selectedFilter)
+      .filter((p) => !showOnlyFavorites || p.isFavorite)
       .filter((p) => {
         if (!normalizedQuery) return true;
         return (
@@ -93,7 +95,7 @@ export function useArchive() {
         const dateB = new Date(b.createdAt.replace(/\//g, "-")).getTime();
         return sortOrder === "desc" ? dateB - dateA : dateA - dateB;
       });
-  }, [projects, selectedFilter, sortOrder, searchQuery]);
+  }, [projects, selectedFilter, sortOrder, searchQuery, showOnlyFavorites]);
 
   const handleViewModeToggle = useCallback(() => {
     setViewMode((prev) => (prev === "grid" ? "list" : "grid"));
@@ -165,6 +167,10 @@ export function useArchive() {
     setSearchQuery(query);
   }, []);
 
+  const handleFavoriteFilterToggle = useCallback(() => {
+    setShowOnlyFavorites((prev) => !prev);
+  }, []);
+
   return {
     isLoading,
     viewMode,
@@ -182,6 +188,7 @@ export function useArchive() {
     showPlanModal,
     selectedProject,
     searchQuery,
+    showOnlyFavorites,
     handleViewModeToggle,
     handleFilterSelect,
     handleSortSelect,
@@ -194,5 +201,6 @@ export function useArchive() {
     handleSortDropdownToggle,
     handleFavoriteToggle,
     handleSearchChange,
+    handleFavoriteFilterToggle,
   };
 }
