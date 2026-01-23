@@ -2,7 +2,7 @@
 
 import { TabNavigation, PageTransition } from "@/shared/components";
 import { useCarry } from "./hooks";
-import { AddMemberModal, ProjectPlanModal } from "./components";
+import { AddMemberModal, ProjectPlanModal, DeleteMemberModal } from "./components";
 import { CARRY_TABS, MESSAGE_INPUT_PLACEHOLDER } from "./mock";
 import { VendorContact } from "./models/vendor-contact.model";
 import Image from "next/image";
@@ -27,6 +27,14 @@ export function CarryPage() {
     isAddingMembers,
     isSearchingMembers,
     projectName,
+    // Delete Member Modal State
+    isAdmin,
+    hoveredMemberId,
+    showDeleteMemberModal,
+    memberToDelete,
+    deleteMemberModalState,
+    isDeletingMember,
+    currentUserOrganization,
     // Setters
     setNewMessage,
     setShowProjectPlanModal,
@@ -34,6 +42,7 @@ export function CarryPage() {
     setHoveredVendorId,
     setShowVendorMenu,
     setShowMemberDropdown,
+    setHoveredMemberId,
     // Handlers
     handleTabChange,
     handleVendorSelect,
@@ -46,6 +55,10 @@ export function CarryPage() {
     handleCloseAddMemberModal,
     handleSearchMembers,
     handleAddMembers,
+    // Delete Member Modal Handlers
+    handleDeleteMemberClick,
+    handleConfirmDeleteMember,
+    handleCloseDeleteMemberModal,
   } = useCarry();
 
   return (
@@ -105,8 +118,9 @@ export function CarryPage() {
                 {filteredVendors.map((vendor: VendorContact) => (
                   <div
                     key={vendor.id}
-                    className={`w-full flex gap-[10px] items-start justify-end p-[15px] border-b border-[#e1e1e1] bg-transparent cursor-pointer text-left transition-colors duration-150 hover:bg-[rgba(230,243,245,0.5)] ${selectedVendor?.id === vendor.id ? "bg-white" : ""
-                      }`}
+                    className={`w-full flex gap-[10px] items-start justify-end p-[15px] border-b border-[#e1e1e1] bg-transparent cursor-pointer text-left transition-colors duration-150 hover:bg-[rgba(230,243,245,0.5)] ${
+                      selectedVendor?.id === vendor.id ? "bg-white" : ""
+                    }`}
                     onClick={() => handleVendorSelect(vendor)}
                     onMouseEnter={() => setHoveredVendorId(vendor.id)}
                     onMouseLeave={() => {
@@ -134,41 +148,42 @@ export function CarryPage() {
                       )}
                       {(hoveredVendorId === vendor.id ||
                         showVendorMenu === vendor.id) && (
-                          <div className="relative">
-                            <button
-                              type="button"
-                              className={`flex items-center justify-center w-[20px] h-[20px] bg-transparent border-none cursor-pointer p-0 rounded-[4px] transition-colors duration-150 hover:bg-[rgba(0,0,0,0.05)] ${showVendorMenu === vendor.id
+                        <div className="relative">
+                          <button
+                            type="button"
+                            className={`flex items-center justify-center w-[20px] h-[20px] bg-transparent border-none cursor-pointer p-0 rounded-[4px] transition-colors duration-150 hover:bg-[rgba(0,0,0,0.05)] ${
+                              showVendorMenu === vendor.id
                                 ? "bg-[rgba(0,0,0,0.05)]"
                                 : ""
-                                }`}
-                              onClick={(e) => toggleVendorMenu(e, vendor.id)}
-                            >
-                              <Image
-                                src="/assets/icons/dots.svg"
-                                alt="Project Plan"
-                                width={15}
-                                height={2}
-                              />
-                            </button>
-                            {showVendorMenu === vendor.id && (
-                              <div className="absolute top-[calc(100%+5px)] right-full mr-[-20px] bg-[#ffffff] rounded-[8px] shadow-[0px_4px_20px_rgba(0,0,0,0.15)] z-[100] overflow-hidden min-w-[100px]">
-                                <button
-                                  type="button"
-                                  className="flex items-center gap-[8px] p-[10px_15px] bg-transparent border-none cursor-pointer font-normal text-[14px] text-[#333333] text-left w-full whitespace-nowrap hover:bg-[#f5f5f5] [&_svg]:flex-shrink-0"
-                                  onClick={(e) => handleVendorExit(e, vendor.id)}
-                                >
-                                  <Image
-                                    src="/assets/icons/exit.svg"
-                                    alt="Exit"
-                                    width={25}
-                                    height={25}
-                                  />
-                                  <span className="text-[#066a9e]">退出</span>
-                                </button>
-                              </div>
-                            )}
-                          </div>
-                        )}
+                            }`}
+                            onClick={(e) => toggleVendorMenu(e, vendor.id)}
+                          >
+                            <Image
+                              src="/assets/icons/dots.svg"
+                              alt="Project Plan"
+                              width={15}
+                              height={2}
+                            />
+                          </button>
+                          {showVendorMenu === vendor.id && (
+                            <div className="absolute top-[calc(100%+5px)] right-full mr-[-20px] bg-[#ffffff] rounded-[8px] shadow-[0px_4px_20px_rgba(0,0,0,0.15)] z-[100] overflow-hidden min-w-[100px]">
+                              <button
+                                type="button"
+                                className="flex items-center gap-[8px] p-[10px_15px] bg-transparent border-none cursor-pointer font-normal text-[14px] text-[#333333] text-left w-full whitespace-nowrap hover:bg-[#f5f5f5] [&_svg]:flex-shrink-0"
+                                onClick={(e) => handleVendorExit(e, vendor.id)}
+                              >
+                                <Image
+                                  src="/assets/icons/exit.svg"
+                                  alt="Exit"
+                                  width={25}
+                                  height={25}
+                                />
+                                <span className="text-[#066a9e]">退出</span>
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -198,8 +213,9 @@ export function CarryPage() {
                     <div className="relative">
                       <button
                         type="button"
-                        className={`flex items-center justify-center bg-transparent border-none cursor-pointer p-0 hover:opacity-80 ${showMemberDropdown ? "opacity-80" : ""
-                          }`}
+                        className={`flex items-center justify-center bg-transparent border-none cursor-pointer p-0 hover:opacity-80 ${
+                          showMemberDropdown ? "opacity-80" : ""
+                        }`}
                         onClick={() =>
                           setShowMemberDropdown(!showMemberDropdown)
                         }
@@ -213,11 +229,12 @@ export function CarryPage() {
                       </button>
                       {/* Member Dropdown Menu */}
                       {showMemberDropdown && (
-                        <div className="absolute top-[calc(100%+5px)] right-[-10px] w-[210px] bg-[#ffffff] rounded-[8px] shadow-[0px_4px_20px_rgba(0,0,0,0.15)] z-[100] overflow-hidden">
-                          <div className="flex flex-col py-[10px]">
+                        <div className="absolute top-[calc(100%+5px)] right-[-10px] w-[280px] bg-white border border-[#cfcfcf] rounded-[4px] z-[100] flex flex-col gap-[10px] px-[20px] py-[14px]">
+                          {/* Action buttons */}
+                          <div className="flex flex-col">
                             <button
                               type="button"
-                              className="flex items-center gap-[8px] p-[10px_15px] bg-transparent border-none cursor-pointer font-normal text-[14px] text-[#333333] text-left w-full whitespace-nowrap hover:bg-[#f5f5f5] [&_svg]:flex-shrink-0"
+                              className="flex items-center gap-[5px] py-[6px] bg-transparent border-none cursor-pointer text-left"
                               onClick={handleOpenAddMemberModal}
                             >
                               <Image
@@ -226,13 +243,13 @@ export function CarryPage() {
                                 width={25}
                                 height={25}
                               />
-                              <span className="text-[#066a9e]">
+                              <span className="font-normal text-[14px] leading-[18px] text-[#066a9e]">
                                 メンバーを追加
                               </span>
                             </button>
                             <button
                               type="button"
-                              className="flex items-center gap-[8px] p-[10px_15px] bg-transparent border-none cursor-pointer font-normal text-[14px] text-[#333333] text-left w-full whitespace-nowrap hover:bg-[#f5f5f5] [&_svg]:flex-shrink-0"
+                              className="flex items-center gap-[5px] py-[6px] bg-transparent border-none cursor-pointer text-left"
                               onClick={() => {
                                 setShowMemberDropdown(false);
                               }}
@@ -243,30 +260,84 @@ export function CarryPage() {
                                 width={25}
                                 height={25}
                               />
-                              <span className="text-[#066a9e]">退出</span>
+                              <span className="font-normal text-[14px] leading-[18px] text-[#066a9e]">
+                                退出
+                              </span>
                             </button>
                           </div>
-                          <div className="h-[1px] bg-[#d9d9d9] mx-[15px]"></div>
-                          <div className="p-[10px_15px_15px]">
-                            <p className="font-normal text-[12px] text-[#808080] m-0 mb-[10px]">
+
+                          {/* Member list */}
+                          <div className="flex flex-col gap-[5px]">
+                            <p className="font-normal text-[14px] leading-[18px] text-[#333] m-0">
                               メンバー({chatMembers.length})
                             </p>
-                            <div className="flex flex-col gap-[8px] max-h-[150px] overflow-y-auto">
-                              {chatMembers.map((member) => (
-                                <div
-                                  key={member.id}
-                                  className="flex items-center gap-[10px]"
-                                >
-                                  <div className="w-[25px] h-[25px] rounded-full bg-[#066a9e] flex items-center justify-center flex-shrink-0">
-                                    <span className="font-medium text-[10px] text-white">
-                                      {member.initials}
-                                    </span>
+                            <div className="flex flex-col max-h-[200px] overflow-y-auto">
+                              {chatMembers.map((member) => {
+                                const canDelete =
+                                  isAdmin &&
+                                  member.organization ===
+                                    currentUserOrganization;
+                                const isHovered = hoveredMemberId === member.id;
+
+                                return (
+                                  <div
+                                    key={member.id}
+                                    className={`flex items-center justify-between px-[10px] py-[6px] rounded-[4px] ${
+                                      isHovered ? "bg-[#f5f5f5]" : ""
+                                    }`}
+                                    onMouseEnter={() =>
+                                      setHoveredMemberId(member.id)
+                                    }
+                                    onMouseLeave={() =>
+                                      setHoveredMemberId(null)
+                                    }
+                                  >
+                                    {/* Left: Avatar + Name */}
+                                    <div className="flex items-center gap-[10px]">
+                                      <div className="w-[30px] h-[30px] rounded-full bg-[#8ec5d0] flex items-center justify-center flex-shrink-0">
+                                        <span className="font-normal text-[13px] text-white text-center">
+                                          {member.initials}
+                                        </span>
+                                      </div>
+                                      <span className="font-normal text-[14px] leading-[18px] text-[#333]">
+                                        {member.name}
+                                      </span>
+                                    </div>
+
+                                    {/* Right: Organization label + Delete button */}
+                                    <div className="flex items-center gap-[10px]">
+                                      <span
+                                        className={`font-semibold text-[14px] leading-[18px] ${
+                                          member.organization === "buyer"
+                                            ? "text-[#066a9e]"
+                                            : "text-[#808080]"
+                                        }`}
+                                      >
+                                        {member.organization === "buyer"
+                                          ? "Buyer"
+                                          : "Vendor"}
+                                      </span>
+                                      {canDelete && isHovered && (
+                                        <button
+                                          type="button"
+                                          className="flex items-center justify-center w-[10px] h-[10px] bg-transparent border-none cursor-pointer p-0 flex-shrink-0"
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleDeleteMemberClick(member);
+                                          }}
+                                        >
+                                          <Image
+                                            src="/assets/icons/cross.svg"
+                                            alt="Delete"
+                                            width={10}
+                                            height={10}
+                                          />
+                                        </button>
+                                      )}
+                                    </div>
                                   </div>
-                                  <span className="font-normal text-[14px] text-[#333333] whitespace-nowrap overflow-hidden text-ellipsis">
-                                    {member.name}
-                                  </span>
-                                </div>
-                              ))}
+                                );
+                              })}
                             </div>
                           </div>
                         </div>
@@ -281,17 +352,19 @@ export function CarryPage() {
                     {messages.map((msg) => (
                       <div
                         key={msg.id}
-                        className={`flex gap-[10px] w-full ${msg.sender === "buyer"
-                          ? "justify-end"
-                          : "justify-start"
-                          }`}
+                        className={`flex gap-[10px] w-full ${
+                          msg.sender === "buyer"
+                            ? "justify-end"
+                            : "justify-start"
+                        }`}
                       >
                         {msg.sender === "vendor" && (
                           <div className="w-[25px] h-[25px] rounded-full bg-[#cccccc] flex-shrink-0"></div>
                         )}
                         <div
-                          className={`flex flex-col gap-[2px] max-w-[60%] min-w-[200px] ${msg.sender === "buyer" ? "items-end" : ""
-                            }`}
+                          className={`flex flex-col gap-[2px] max-w-[60%] min-w-[200px] ${
+                            msg.sender === "buyer" ? "items-end" : ""
+                          }`}
                         >
                           {msg.sender === "vendor" && (
                             <p className="font-bold text-[10px] leading-[19px] text-[#333333] m-0">
@@ -299,10 +372,11 @@ export function CarryPage() {
                             </p>
                           )}
                           <div
-                            className={`flex items-center justify-center p-[7px] rounded-[4px] w-full box-border border border-[#8ec0d0] ${msg.sender === "buyer"
-                              ? "bg-[#e6f3f5]"
-                              : "bg-white"
-                              }`}
+                            className={`flex items-center justify-center p-[7px] rounded-[4px] w-full box-border border border-[#8ec0d0] ${
+                              msg.sender === "buyer"
+                                ? "bg-[#e6f3f5]"
+                                : "bg-white"
+                            }`}
                           >
                             <p className="flex-1 font-normal text-[13px] leading-normal text-[#333333] m-0 whitespace-pre-wrap break-words">
                               {msg.content}
@@ -373,6 +447,16 @@ export function CarryPage() {
           onClose={handleCloseAddMemberModal}
           onSearch={handleSearchMembers}
           onAddMembers={handleAddMembers}
+        />
+
+        {/* Delete Member Modal */}
+        <DeleteMemberModal
+          isOpen={showDeleteMemberModal}
+          onClose={handleCloseDeleteMemberModal}
+          onDeleteConfirm={handleConfirmDeleteMember}
+          memberName={memberToDelete?.name ?? ""}
+          isDeleting={isDeletingMember}
+          modalState={deleteMemberModalState}
         />
       </div>
     </PageTransition>
