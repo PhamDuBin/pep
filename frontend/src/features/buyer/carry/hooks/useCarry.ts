@@ -16,6 +16,7 @@ import {
 } from "../models";
 import { VendorConversation } from "../models/vendor-conversation.model";
 import { AddMemberModalState } from "../types";
+import { DeleteConfirmModalState } from "@/shared/types";
 import {
   getVendorContacts,
   getVendorMessages,
@@ -52,6 +53,16 @@ export function useCarry(): UseCarryReturn {
   const [isAddingMembers, setIsAddingMembers] = useState(false);
   const [isSearchingMembers, setIsSearchingMembers] = useState(false);
   const projectName = CURRENT_PROJECT_NAME_MOCK;
+
+  // Delete Member Modal State
+  const [isAdmin] = useState(true); // Mock: current user is admin
+  const [hoveredMemberId, setHoveredMemberId] = useState<string | null>(null);
+  const [showDeleteMemberModal, setShowDeleteMemberModal] = useState(false);
+  const [memberToDelete, setMemberToDelete] = useState<ChatMember | null>(null);
+  const [deleteMemberModalState, setDeleteMemberModalState] =
+    useState<DeleteConfirmModalState>("confirm");
+  const [isDeletingMember, setIsDeletingMember] = useState(false);
+  const currentUserOrganization: "buyer" | "vendor" = "buyer"; // Mock: current user is buyer
 
   // Load vendors on mount
   useEffect(() => {
@@ -176,11 +187,37 @@ export function useCarry(): UseCarryReturn {
         id: m.id,
         name: m.name,
         initials: m.initials,
+        organization: m.organization,
       }));
       setChatMembers((prev) => [...prev, ...newMembers]);
       setIsAddingMembers(false);
       setAddMemberModalState("complete");
     }, 500);
+  }, []);
+
+  // Delete Member Modal Handlers
+  const handleDeleteMemberClick = useCallback((member: ChatMember) => {
+    setMemberToDelete(member);
+    setDeleteMemberModalState("confirm");
+    setShowDeleteMemberModal(true);
+  }, []);
+
+  const handleConfirmDeleteMember = useCallback(() => {
+    if (!memberToDelete) return;
+
+    setIsDeletingMember(true);
+    // Simulate API call
+    setTimeout(() => {
+      setChatMembers((prev) => prev.filter((m) => m.id !== memberToDelete.id));
+      setIsDeletingMember(false);
+      setDeleteMemberModalState("complete");
+    }, 500);
+  }, [memberToDelete]);
+
+  const handleCloseDeleteMemberModal = useCallback(() => {
+    setShowDeleteMemberModal(false);
+    setMemberToDelete(null);
+    setDeleteMemberModalState("confirm");
   }, []);
 
   // Scroll to bottom when messages change
@@ -211,6 +248,15 @@ export function useCarry(): UseCarryReturn {
     isSearchingMembers,
     projectName,
 
+    // Delete Member Modal State
+    isAdmin,
+    hoveredMemberId,
+    showDeleteMemberModal,
+    memberToDelete,
+    deleteMemberModalState,
+    isDeletingMember,
+    currentUserOrganization,
+
     // Setters
     setNewMessage,
     setShowProjectPlanModal,
@@ -218,6 +264,7 @@ export function useCarry(): UseCarryReturn {
     setHoveredVendorId,
     setShowVendorMenu,
     setShowMemberDropdown,
+    setHoveredMemberId,
 
     // Handlers
     handleTabChange,
@@ -232,5 +279,10 @@ export function useCarry(): UseCarryReturn {
     handleCloseAddMemberModal,
     handleSearchMembers,
     handleAddMembers,
+
+    // Delete Member Modal Handlers
+    handleDeleteMemberClick,
+    handleConfirmDeleteMember,
+    handleCloseDeleteMemberModal,
   };
 }
