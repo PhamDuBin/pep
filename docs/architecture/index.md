@@ -12,7 +12,7 @@ This directory contains the architecture documentation for the PEP (Project Enha
 | [2. Database Design / データベース設計](./database.md) | ER diagram and table definitions / ER図とテーブル定義 |
 | [3. Authentication Flow / 認証フロー](./auth.md) | Supabase Auth JWT-based authentication / Supabase Auth JWT ベース認証 |
 | [4. AI Integration / AI連携](./ai-integration.md) | OpenAI API for RFI generation / OpenAI API による RFI 生成 |
-| [5. State Machines / 状態遷移](./state-machine.md) | Project and RFI response state transitions / プロジェクトと RFI 回答の状態遷移 |
+| [5. State Machines / 状態遷移](./state-machine.md) | State overview / 状態遷移概要 (詳細は [Workflows](../workflows/index.md)) |
 | [6. Payments / 決済](./payments.md) | Stripe integration and webhook handling / Stripe 連携と Webhook 処理 |
 | [7. Software Layers / ソフトウェア層](./layers.md) | 3-layer architecture and transaction control / 3層アーキテクチャとトランザクション制御 |
 | [8. API Endpoints / API エンドポイント](./api-endpoints.md) | REST API endpoint list / REST API エンドポイント一覧 |
@@ -31,6 +31,10 @@ This directory contains the architecture documentation for the PEP (Project Enha
 - **OpenAI**: Quality of RFI draft generation with GPT-4 / GPT-4によるRFI草案生成の品質
 
 ---
+
+## Related Documents / 関連ドキュメント
+
+- [Workflows / ワークフロー詳細](../workflows/index.md) - 業務フローの詳細ドキュメント
 
 ## References / 参考資料
 
