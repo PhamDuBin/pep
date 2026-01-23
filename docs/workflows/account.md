@@ -4,6 +4,56 @@
 
 ---
 
+## Record Creation Overview / レコード作成タイミング概要
+
+各フローで作成されるレコードと作成タイミングを整理。
+
+### Flow Summary / フロー別まとめ
+
+| Flow | auth.users | organizations | profiles | applications |
+|------|------------|---------------|----------|--------------|
+| **Self-Signup** | ① ユーザー登録時 | ② RPC内（pending） | ② RPC内（pending） | ② RPC内（pending） |
+| **Application Approval** | 作成済み | UPDATE→active | UPDATE→active | UPDATE→approved |
+| **Invitation Accept** | ① 招待承諾時 | 作成しない（既存） | ② RPC内（active） | 作成しない |
+
+### Creation Timeline Diagram / 作成タイミング図
+
+```mermaid
+flowchart LR
+    subgraph "Self-Signup Flow"
+        SS1[auth.users] -->|create_signup RPC| SS2[organizations<br/>status=pending]
+        SS1 -->|create_signup RPC| SS3[profiles<br/>status=pending]
+        SS1 -->|create_signup RPC| SS4[applications<br/>status=pending]
+    end
+
+    subgraph "Application Approval Flow"
+        AA1[applications<br/>status=pending] -->|approve_application RPC| AA2[organizations<br/>status=active]
+        AA1 -->|approve_application RPC| AA3[profiles<br/>status=active]
+        AA1 -->|approve_application RPC| AA4[applications<br/>status=approved]
+    end
+
+    subgraph "Invitation Accept Flow"
+        IA1[auth.users] -->|accept_invitation RPC| IA2[profiles<br/>role=invited role]
+        IA3[invitations] -->|accept_invitation RPC| IA4[invitations<br/>status=accepted]
+    end
+```
+
+### Key Points / 重要ポイント
+
+1. **Self-Signup時点では全て `pending`**
+   - ユーザーはまだサービス利用不可
+   - Platform Admin の承認待ち
+
+2. **Application Approvalで `active` に更新**
+   - 新しいレコードは作成しない
+   - 既存レコードのステータスを更新するのみ
+
+3. **auth.users の作成場所**
+   - Self-Signup: Frontend → Supabase Auth 直接
+   - Invitation: 招待承諾時に Frontend → Supabase Auth
+
+---
+
 ## 1.1 Application State Transitions / 利用申請の状態遷移
 
 **Tables / 対象テーブル:**

@@ -10,8 +10,22 @@
 
 | Document | Description | Contents |
 |----------|-------------|----------|
-| [Account & Organization](./account.md) | アカウント・組織管理 | 申請承認、招待、新規登録、ロール変更、停止、削除 |
+| [Account & Organization](./account.md) | アカウント・組織管理 | レコード作成タイミング、申請承認、招待、新規登録、ロール変更、停止、削除 |
 | [Projects & RFI](./projects.md) | プロジェクト・RFI管理 | プロジェクト状態遷移、RFI回答状態遷移 |
+
+---
+
+## Record Creation Overview / レコード作成概要
+
+**重要**: 各フローでのテーブル操作タイミング
+
+| Flow | auth.users | organizations | profiles | applications |
+|------|------------|---------------|----------|--------------|
+| **Self-Signup** | INSERT | INSERT (pending) | INSERT (pending) | INSERT (pending) |
+| **Application Approval** | - | UPDATE (active) | UPDATE (active) | UPDATE (approved) |
+| **Invitation Accept** | INSERT | - | INSERT (active) | - |
+
+詳細: [Account Workflow - Record Creation Overview](./account.md#record-creation-overview--レコード作成タイミング概要)
 
 ---
 
