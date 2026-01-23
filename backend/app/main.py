@@ -74,7 +74,12 @@ async def db_check() -> dict:
         }
 
 
-# TODO: Import and include routers
+# Include routers
+from app.api.routes import users
+
+app.include_router(users.router, prefix="/api/users", tags=["Users"])
+
+# TODO: Add more routers
 # from app.api.routes import projects, rfi, chat, slides, webhooks
 # app.include_router(projects.router, prefix="/api/projects", tags=["Projects"])
 # app.include_router(rfi.router, prefix="/api/rfi", tags=["RFI"])
