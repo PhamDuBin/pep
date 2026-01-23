@@ -11,7 +11,7 @@ export function Header() {
         left: 0,
         right: 0,
         width: "100%",
-        height: "89px",
+        height: "65px",
         backgroundColor: "#ffffff",
         borderBottom: "1px solid #e1e1e1",
         display: "flex",

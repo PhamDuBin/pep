@@ -63,7 +63,7 @@ export const MOCK_ARCHIVE_PROJECTS: ArchiveProject[] = [
  * Project filter options matching Figma design
  */
 export const PROJECT_FILTER_OPTIONS: ProjectFilterOption[] = [
-  { id: 'all', name: 'すべてのプロジェクト', isSelected: true },
+  { id: 'all', name: 'すべてのメンバー', isSelected: true },
   { id: 'user-1', name: '山田 太郎', isSelected: false },
   { id: 'user-2', name: '東 次郎', isSelected: false },
   { id: 'user-3', name: '宮崎 花子', isSelected: false },

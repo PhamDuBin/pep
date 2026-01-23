@@ -72,8 +72,7 @@ export function ArchivePage() {
           >
             <div className="flex flex-col gap-[5px] w-[220px] flex-shrink-0 group/card">
               <div
-                className="flex items-center justify-start p-[15px] h-[100px] rounded-[12px] box-border transition-all duration-300 hover:shadow-[0_4px_12px_rgba(0,0,0,0.15)] cursor-pointer"
-                style={{ backgroundColor: getProjectColor(project.id) }}
+                className="flex items-center p-[10px] h-[70px] bg-white border border-[#e1e1e1] rounded-[12px] box-border transition-all duration-300 hover:border-primary hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] cursor-pointer"
                 onClick={() => handleProjectClick(project.id)}
               >
                 <p className="font-bold text-[16px] leading-[22px] text-[#ffffff] overflow-hidden text-ellipsis line-clamp-2 break-words m-0 text-left">
@@ -142,7 +141,7 @@ export function ArchivePage() {
                     onClick={handleContextMenuClose}
                   />
                   <motion.div
-                    className="absolute top-full right-0 flex flex-col gap-[8px] py-[14px] px-[20px] bg-[#ffffff] border border-[#cfcfcf] rounded-[4px] z-[100] min-w-[120px] shadow-[0_2px_8px_rgba(0,0,0,0.1)]"
+                    className="absolute top-full right-[0px] flex flex-col gap-[8px] p-[15px] bg-[#ffffff] border border-[#cfcfcf] rounded-[4px] z-[100] min-w-[120px] shadow-[0_2px_8px_rgba(0,0,0,0.1)]"
                     initial={{ opacity: 0, scale: 0.95, y: -5 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95, y: -5 }}
@@ -151,7 +150,7 @@ export function ArchivePage() {
                     {MENU_ITEMS.map((item) => (
                       <button
                         key={item.action}
-                        className="flex items-center justify-start py-[6px] bg-[#ffffff] hover:bg-[#f5f5f5] border-none font-normal text-[14px] leading-[18px] text-black cursor-pointer text-left whitespace-nowrap transition-all duration-150 hover:text-primary hover:translate-x-[2px]"
+                        className="flex items-center justify-start p-[8px_6px] bg-[#ffffff] rounded-[4px] hover:bg-[#f5f5f5] border-none font-normal text-[14px] leading-[18px] text-black cursor-pointer text-left whitespace-nowrap transition-all duration-150 hover:text-primary hover:translate-x-[2px]"
                         type="button"
                         onClick={() =>
                           handleContextAction(project.id, item.action)
@@ -170,12 +169,9 @@ export function ArchivePage() {
     </AnimatedList>
   );
 
-  const renderListView = (
-    paginatedProjects: ArchiveProject[],
-    currentPage: number
-  ) => (
-    <div className="flex flex-col gap-[25px]">
-      <div className="flex items-center gap-[25px] py-[10px] border-b border-[#c3c3c3]">
+  const renderListView = (paginatedProjects: ArchiveProject[], currentPage: number) => (
+    <div className="flex flex-col gap-[0px]">
+      <div className="flex items-center gap-[25px] p-[10px] border-b border-[#e1e1e1]">
         <span className="flex-1 font-normal text-[14px] text-[#333333]">
           プロジェクト名
         </span>
@@ -195,8 +191,8 @@ export function ArchivePage() {
       </div>
 
       <AnimatedList
-        key={`list-${currentPage}-${showOnlyFavorites}`}
-        className="flex flex-col gap-[0px]"
+        key={`list-${currentPage}`}
+        className="flex flex-col divide-y divide-[#e1e1e1]"
         staggerDelay={0.05}
       >
         {paginatedProjects.map((project) => (
@@ -209,9 +205,9 @@ export function ArchivePage() {
               onClick={(e) => e.stopPropagation()}
               transition={{ duration: 0.15 }}
             >
-              <div className="flex items-center gap-[25px] py-[10px] px-[0px] border-b border-[#CFCFCF] h-[40.5px]">
+              <div className="flex items-center justify-center gap-[25px] w-full hover:bg-[#F4FAFB]">
                 <div
-                  className="flex-1 flex items-center px-[10px] py-[0px] rounded-[12px] font-bold text-[14px] text-[#333333] cursor-pointer hover:opacity-80"
+                  className="flex-1 min-w-0 flex items-center p-[10px] transition-all duration-300 hover:border-b-primary cursor-pointer"
                   onClick={() => handleProjectClick(project.id)}
                 >
                   {project.name}
@@ -267,7 +263,7 @@ export function ArchivePage() {
                       {MENU_ITEMS.map((item) => (
                         <button
                           key={item.action}
-                          className="flex items-center justify-start py-[6px] bg-[#ffffff] hover:bg-[#f5f5f5] border-none font-normal text-[14px] leading-[18px] text-black cursor-pointer text-left whitespace-nowrap transition-all duration-150 hover:text-primary hover:translate-x-[2px]"
+                          className="flex items-center justify-start p-[8px_6px] rounded-[4px] bg-[#ffffff] hover:bg-[#f5f5f5] border-none font-normal text-[14px] leading-[18px] text-black cursor-pointer text-left whitespace-nowrap transition-all duration-150 hover:text-primary hover:translate-x-[2px]"
                           type="button"
                           onClick={() =>
                             handleContextAction(project.id, item.action)
@@ -334,7 +330,7 @@ export function ArchivePage() {
 
               <div className="relative" ref={filterRef}>
                 <button
-                  className="flex items-center gap-[8px] py-[7px] px-[20px] bg-white border border-[#d1d5db] rounded-[4px] cursor-pointer transition-[border-color] duration-200 hover:border-[#9ca3af]"
+                  className="flex items-center gap-[8px] py-[7px] px-[20px] bg-white border border-[#cfcfcf] rounded-[4px] cursor-pointer transition-[border-color] duration-200 hover:border-[#066A9E]"
                   onClick={handleFilterDropdownToggle}
                   type="button"
                 >
@@ -350,14 +346,13 @@ export function ArchivePage() {
                 </button>
 
                 <AnimatedDropdown isOpen={showFilterDropdown}>
-                  <div className="absolute top-[calc(100%+4px)] left-0 flex flex-col gap-[8px] py-[14px] px-[20px] bg-[#ffffff] border border-[#cfcfcf] rounded-[4px] z-[200] shadow-[0_2px_8px_rgba(0,0,0,0.1)] min-w-[180px]">
+                  <div className="absolute top-[calc(100%+4px)] left-0 flex flex-col gap-[8px] p-[15px] bg-[#ffffff] border border-[#cfcfcf] rounded-[4px] z-[200] shadow-[0_2px_8px_rgba(0,0,0,0.1)] min-w-[180px]">
                     {filterOptions.map((option) => (
                       <button
                         key={option.id}
-                        className={`flex items-center gap-[5px] py-[6px] bg-[#ffffff] hover:bg-[#f5f5f5] border-none font-normal text-[14px] leading-[18px] cursor-pointer text-left whitespace-nowrap transition-all duration-150 hover:text-primary hover:translate-x-[2px] ${option.id === selectedFilter
-                          ? "text-primary"
-                          : "text-black"
-                          }`}
+                        className={`flex items-center gap-[5px] p-[8px_6px] bg-[#ffffff] hover:bg-[#f5f5f5] rounded-[4px] border-none font-normal text-[14px] leading-[18px] cursor-pointer text-left whitespace-nowrap transition-all duration-150 hover:text-primary hover:translate-x-[2px] ${
+                          option.id === selectedFilter ? "text-primary" : "text-[#333333]"
+                        }`}
                         type="button"
                         onClick={() => handleFilterSelect(option.id)}
                       >
@@ -384,7 +379,7 @@ export function ArchivePage() {
 
               <div className="relative" ref={sortRef}>
                 <button
-                  className="flex items-center gap-[8px] py-[7px] px-[20px] bg-white border border-[#d1d5db] rounded-[4px] cursor-pointer transition-[border-color] duration-200 hover:border-[#9ca3af]"
+                  className="flex items-center gap-[8px] py-[7px] px-[20px] bg-white border border-[#cfcfcf] rounded-[4px] cursor-pointer transition-[border-color] duration-200 hover:border-[#066A9E]"
                   onClick={handleSortDropdownToggle}
                   type="button"
                 >
@@ -400,14 +395,13 @@ export function ArchivePage() {
                 </button>
 
                 <AnimatedDropdown isOpen={showSortDropdown}>
-                  <div className="absolute top-[calc(100%+4px)] left-0 flex flex-col gap-[8px] py-[14px] px-[20px] bg-[#ffffff] border border-[#cfcfcf] rounded-[4px] z-[200] shadow-[0_2px_8px_rgba(0,0,0,0.1)] min-w-[100px]">
+                  <div className="absolute top-[calc(100%+4px)] left-0 flex flex-col gap-[8px] p-[15px] bg-[#ffffff] border border-[#cfcfcf] rounded-[4px] z-[200] shadow-[0_2px_8px_rgba(0,0,0,0.1)] min-w-[100px]">
                     {sortOptions.map((option) => (
                       <button
                         key={option.value}
-                        className={`flex items-center gap-[5px] py-[6px] bg-[#ffffff] hover:bg-[#f5f5f5] border-none font-normal text-[14px] leading-[18px] cursor-pointer text-left whitespace-nowrap transition-all duration-150 hover:text-primary hover:translate-x-[2px] ${option.value === sortOrder
-                          ? "text-primary"
-                          : "text-black"
-                          }`}
+                        className={`flex items-center gap-[5px] p-[8px_6px] rounded-[4px] bg-[#ffffff] hover:bg-[#f5f5f5] border-none font-normal text-[14px] leading-[18px] cursor-pointer text-left whitespace-nowrap transition-all duration-150 hover:text-primary hover:translate-x-[2px] ${
+                          option.value === sortOrder ? "text-primary" : "text-black"
+                        }`}
                         type="button"
                         onClick={() => handleSortSelect(option.value)}
                       >

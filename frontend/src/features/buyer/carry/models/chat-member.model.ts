@@ -2,10 +2,13 @@
 // CHAT MEMBER MODEL
 // =============================================================================
 
+import { OrganizationType } from "../types";
+
 export interface ChatMember {
   id: string;
   name: string;
   initials: string;
+  organization: OrganizationType;
 }
 
 export interface SearchableUser {
@@ -13,4 +16,5 @@ export interface SearchableUser {
   name: string;
   email: string;
   initials: string;
+  organization: OrganizationType;
 }

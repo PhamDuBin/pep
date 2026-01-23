@@ -28,7 +28,7 @@ export function HomePage() {
   return (
     <div className="flex flex-col h-full bg-white">
       <TabNavigation tabs={HOME_TABS} onTabChange={handleTabChange} />
-      <div className="flex-1 flex flex-col justify-between items-center py-[10px] px-[25px] min-h-[calc(100vh-89px-94px)]">
+      <div className="flex-1 flex flex-col justify-between items-center py-[10px] px-[25px] min-h-[calc(100vh-65px-94px)]">
         <div className="flex flex-col items-center justify-center flex-1 gap-[20px] w-full max-w-[800px] mx-auto">
           <ProjectPlanModeButton />
           <ChatInput onMessageSent={handleMessageSent} />
