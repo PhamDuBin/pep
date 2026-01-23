@@ -34,11 +34,11 @@ export function TabNavigation({
         <button
           key={tab.id}
           className={`flex-1 flex items-center justify-center gap-[10px] p-[25px_10px] transition-all duration-200 border-b border-t-0 border-l-0 border-r-0 cursor-pointer bg-transparent ${
-            tab.isActive ? "border-b-[#066a9e]" : "border-b-[#b9b9b9]"
+            tab.isActive ? "border-b-[#066a9e] shadow-[0px_4px_10px_rgba(0,0,0,0.07)] [clip-path:inset(0_0_-15px_0)]" : "border-b-[#b9b9b9]"
           } ${
             tab.isDisabled
               ? "cursor-not-allowed"
-              : "hover:bg-[#066a9e] [&:hover_span]:!text-[#ffffff] [&:hover_path]:!fill-[#ffffff] [&:hover_circle]:!fill-[#ffffff]"
+              : "hover:bg-[#066a9e] [&:hover_span]:!text-[#ffffff] [&:hover_path]:!fill-[#ffffff] [&:hover_circle]:!fill-[#ffffff] active:shadow-[inset_0px_4px_10px_rgba(0,0,0,0.2),0px_4px_15px_rgba(0,0,0,0.15)]"
           }`}
           disabled={tab.isDisabled}
           onClick={() => handleTabSelect(tab)}
@@ -46,12 +46,12 @@ export function TabNavigation({
           {/* Kick Icon */}
           {tab.icon === "kick" && (
             <svg
-              width="40"
-              height="40"
-              viewBox="0 4 40 40"
+              width="32"
+              height="32"
+              viewBox="0 2 40 40"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              className="transition-colors duration-200"
+              className={`transition-all duration-200 ${tab.isActive ? "scale-125" : ""}`}
             >
               <path
                 className={`transition-[fill] duration-200 ${
@@ -66,12 +66,12 @@ export function TabNavigation({
           {/* Carry Icon */}
           {tab.icon === "carry" && (
             <svg
-              width="25"
-              height="25"
+              width="30"
+              height="30"
               viewBox="0 0 25 25"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              className="transition-colors duration-200"
+              className={`transition-all duration-200 ${tab.isActive ? "scale-125" : ""}`}
             >
               <path
                 className={`transition-[fill] duration-200 ${

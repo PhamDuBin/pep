@@ -17,7 +17,7 @@ function LayoutContent({ children }: LayoutContentProps) {
       <Header />
       <SideMenu />
       <main
-        className={`mt-[89px] min-h-[calc(100vh-89px)] transition-[margin-left] duration-300 ease-[cubic-bezier(0.25,0.8,0.25,1)] ${
+        className={`mt-[65px] min-h-[calc(100vh-65px)] transition-[margin-left] duration-300 ease-[cubic-bezier(0.25,0.8,0.25,1)] ${
           isCollapsed ? "ml-[60px]" : "ml-[172px]"
         }`}
       >

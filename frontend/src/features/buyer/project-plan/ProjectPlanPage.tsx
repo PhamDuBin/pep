@@ -104,7 +104,7 @@ export function ProjectPlanPage() {
       <div className="flex flex-col h-full bg-[#ffffff]">
         <TabNavigation tabs={PROJECT_PLAN_TABS} onTabChange={handleTabChange} />
 
-        <div className="flex flex-col h-[calc(100vh-89px-94px)] bg-[#ffffff] py-[50px] px-[75px]">
+        <div className="flex flex-col h-[calc(100vh-65px-94px)] bg-[#ffffff] py-[50px] px-[75px]">
           <div className="flex-1 flex flex-col gap-[25px] items-center overflow-hidden">
             <div
               ref={scrollContainerRef}
