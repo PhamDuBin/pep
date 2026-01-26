@@ -39,17 +39,17 @@
 
 | # | Task | GitLab Issue | RPC | Status |
 |---|------|--------------|-----|--------|
-| 006 | [Project Management](./006-project-management.md) | (TBD) | ❌ | 🔲 Not Started |
-| 007 | [Project Plans](./007-project-plans.md) | (TBD) | ❌ | 🔲 Not Started |
-| 008 | [Project Attachments](./008-project-attachments.md) | (TBD) | ❌ | 🔲 Not Started |
+| 006 | [Project Management](./006-project-management.md) | [#31](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/31) | ❌ | 🔲 Not Started |
+| 007 | [Project Plans](./007-project-plans.md) | [#32](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/32) | ❌ | 🔲 Not Started |
+| 008 | [Project Attachments](./008-project-attachments.md) | [#33](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/33) | ❌ | 🔲 Not Started |
 
 ### AI / Chat
 
 | # | Task | GitLab Issue | RPC | Status |
 |---|------|--------------|-----|--------|
-| 009 | [AI Chat Sessions](./009-ai-chat.md) | (TBD) | ❌ | 🔲 Not Started |
-| 010 | [Buyer-Vendor Chat](./010-buyer-vendor-chat.md) | (TBD) | ❌ | 🔲 Not Started |
-| 011 | [Notifications](./011-notifications.md) | (TBD) | ❌ | 🔲 Not Started |
+| 009 | [AI Chat Sessions](./009-ai-chat.md) | [#34](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/34) | ❌ | 🔲 Not Started |
+| 010 | [Buyer-Vendor Chat](./010-buyer-vendor-chat.md) | [#35](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/35) | ❌ | 🔲 Not Started |
+| 011 | [Notifications](./011-notifications.md) | [#36](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/36) | ❌ | 🔲 Not Started |
 
 ---
 
