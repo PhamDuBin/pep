@@ -19,10 +19,10 @@
 ### 1. Supabaseプロジェクト作成 / Create Supabase Project
 
 1. https://supabase.com にアクセス
-2. GitHubアカウントでサインイン
+2. サインイン（GitHub / Google / Email など）
 3. 「New Project」をクリック
 4. 設定:
-   - **Name**: `pep-dev` (開発用) / `pep-prod` (本番用)
+   - **Name**: `PEP` (開発用) / `pep-prod` (本番用)
    - **Database Password**: 強力なパスワードを設定（保存しておく）
    - **Region**: Northeast Asia (Tokyo)
 5. 「Create new project」をクリック

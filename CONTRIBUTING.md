@@ -69,7 +69,7 @@ Format / 形式: `[Type] Name`
 | Doc | `[Doc] name` | `[Doc] Correct spelling of CHANGELOG` |
 | Style | `[Style] name` | `[Style] Remove empty line` |
 | Test | `[Test] name` | `[Test] Create user creation test case` |
-| Spike | `[Spike] name` | `[Spike] Practice Angular` |
+| Spike | `[Spike] name` | `[Spike] Practice Next.js` |
 | Chore | `[Chore] name` | `[Chore] Improve code coverage` |
 
 **Scope examples / Scopeの例**: `api`, `fe`, `be`, `screen`, etc.

@@ -12,7 +12,7 @@
 sequenceDiagram
     autonumber
     actor User
-    participant FE as Angular
+    participant FE as Next.js
     participant API as Cloud Run
     participant AI as OpenAI API
     participant DB as PostgreSQL
