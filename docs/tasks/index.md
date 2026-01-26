@@ -51,6 +51,14 @@
 | 010 | [Buyer-Vendor Chat](./010-buyer-vendor-chat.md) | [#35](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/35) | ❌ | 🔲 Not Started |
 | 011 | [Notifications](./011-notifications.md) | [#36](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/36) | ❌ | 🔲 Not Started |
 
+### Billing / 課金
+
+| # | Task | GitLab Issue | RPC | Status |
+|---|------|--------------|-----|--------|
+| 012 | [Subscription Management](./012-subscription.md) | [#37](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/37) | ❌ | 🔲 Not Started |
+| 013 | [Invoice Management](./013-invoice.md) | [#38](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/38) | ❌ | 🔲 Not Started |
+| 014 | [Stripe Webhook](./014-stripe-webhook.md) | [#39](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/39) | ✅ handle_stripe_webhook | 🔲 Not Started |
+
 ---
 
 ## Dependencies / 依存関係
@@ -85,6 +93,18 @@
 011 Notifications (006, 010 と連携)
 ```
 
+### Billing
+
+```
+001 Self-Signup
+  ↓
+012 Subscription Management (Stripe Checkout)
+  ↓
+014 Stripe Webhook (契約確定・請求書同期)
+  ↓
+013 Invoice Management (請求書一覧表示)
+```
+
 ---
 
 ## Record Creation Overview / レコード作成概要
@@ -115,6 +135,9 @@
 | [009-ai-chat.md](./009-ai-chat.md) | AI Chat Sessions 指示書 |
 | [010-buyer-vendor-chat.md](./010-buyer-vendor-chat.md) | Buyer-Vendor Chat 指示書 |
 | [011-notifications.md](./011-notifications.md) | Notifications 指示書 |
+| [012-subscription.md](./012-subscription.md) | Subscription Management 指示書 |
+| [013-invoice.md](./013-invoice.md) | Invoice Management 指示書 |
+| [014-stripe-webhook.md](./014-stripe-webhook.md) | Stripe Webhook 指示書 |
 
 ---
 
