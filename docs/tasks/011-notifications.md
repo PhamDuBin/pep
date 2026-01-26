@@ -7,7 +7,7 @@
 
 ## 📝 概要
 
-RFI通知、チャット新着通知などをメール・WebPush・アプリ内で配信する機能。
+プロジェクト計画書通知、チャット新着通知などをメール・WebPush・アプリ内で配信する機能。
 SendGridを使用したメール送信、Supabase Realtimeを使用したリアルタイム通知を実装。
 
 ---
@@ -16,7 +16,7 @@ SendGridを使用したメール送信、Supabase Realtimeを使用したリア�
 
 | Document | Section |
 |----------|---------|
-| [UC08](../UC/UC8.md) | ベンダーへのRFI通知 |
+| [UC08](../UC/UC8.md) | ベンダーへのプロジェクト計画書通知 |
 | [UC12](../UC/UC12.md) | チャット新着確認 |
 | [Database Design](../architecture/database.md) | テーブル定義 |
 | [Software Layers](../architecture/layers.md) | 3層アーキテクチャ |
@@ -26,7 +26,7 @@ SendGridを使用したメール送信、Supabase Realtimeを使用したリア�
 ## 📊 処理フロー概要
 
 ```
-1. RFI送信通知（UC08）
+1. プロジェクト計画書送信通知（UC08）
    project.status → in_discussion
    └─→ 各Vendorにメール送信
    └─→ チャットルーム作成 + 初回メッセージ
@@ -49,7 +49,7 @@ SendGridを使用したメール送信、Supabase Realtimeを使用したリア�
 
 - [ ] SendGrid統合（メール送信）
 - [ ] 通知サービス (`notification_service.py`)
-- [ ] RFI通知テンプレート
+- [ ] プロジェクト計画書通知テンプレート
 - [ ] チャット通知テンプレート
 - [ ] Webhook/イベントハンドラ
 
@@ -94,13 +94,13 @@ SendGridを使用したメール送信、Supabase Realtimeを使用したリア�
 
 ```python
 class NotificationService:
-    async def send_rfi_notification(
+    async def send_project_plan_notification(
         self,
         project: Project,
         vendor_org: Organization,
         vendor_users: List[Profile]
     ) -> None:
-        """RFI開始通知をVendorに送信"""
+        """プロジェクト計画書通知をVendorに送信"""
         # 1. メール送信（各ユーザーに）
         # 2. チャットルーム作成
         # 3. 初回システムメッセージ投稿
@@ -127,12 +127,12 @@ class NotificationService:
 
 テンプレート（HTMLメール）:
 
-**RFI通知メール**:
+**プロジェクト計画書通知メール**:
 ```
-件名: [PEP] 新しいRFIが届きました - {project.title}
+件名: [PEP] 新しいプロジェクト計画書が届きました - {project.title}
 
 本文:
-{buyer_org.name} 様から新しいRFIが届きました。
+{buyer_org.name} 様から新しいプロジェクト計画書が届きました。
 
 プロジェクト: {project.title}
 
@@ -164,7 +164,7 @@ async def start_discussion(project_id: UUID):
 
     # 通知送信
     for vendor in project_vendors:
-        await notification_service.send_rfi_notification(
+        await notification_service.send_project_plan_notification(
             project, vendor.org, vendor.users
         )
 ```
@@ -200,7 +200,7 @@ async def send_message(room_id: UUID, content: str):
 ## ✅ 完了条件
 
 - [ ] SendGrid統合が動作
-- [ ] RFI通知メールが送信される
+- [ ] プロジェクト計画書通知メールが送信される
 - [ ] チャットルームが自動作成される
 - [ ] 初回システムメッセージが投稿される
 - [ ] エラーハンドリングが適切

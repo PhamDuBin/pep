@@ -7,7 +7,7 @@
 
 ## 📝 概要
 
-Buyerがプロジェクト（RFI）を作成・編集・管理する機能。
+Buyerがプロジェクトを作成・編集・管理する機能。
 プロジェクトのステータス遷移（Draft → In Discussion → Closed）と、対象Vendorの紐付けを含む。
 
 ---
@@ -16,8 +16,8 @@ Buyerがプロジェクト（RFI）を作成・編集・管理する機能。
 
 | Document | Section |
 |----------|---------|
-| [UC06](../UC/UC6.md) | RFI草案作成 |
-| [UC07](../UC/UC7.md) | RFI編集・送信開始 |
+| [UC06](../UC/UC6.md) | プロジェクト計画書草案作成 |
+| [UC07](../UC/UC7.md) | プロジェクト計画書編集・送信開始 |
 | [UC10](../UC/UC10.md) | プロジェクト完了 |
 | [UC11](../UC/UC11.md) | プロジェクト一覧・検索 |
 | [Database Design](../architecture/database.md) | テーブル定義 |

@@ -1,3 +1,6 @@
 
 /.claude
 /NUL
+
+# Supabase
+supabase/.temp/

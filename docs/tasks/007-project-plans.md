@@ -16,8 +16,8 @@ AIとのチャットで生成されたプロジェクト計画書（PDF等）を
 
 | Document | Section |
 |----------|---------|
-| [UC06](../UC/UC6.md) | RFI草案作成（AI生成） |
-| [UC07](../UC/UC7.md) | RFI編集・送信開始 |
+| [UC06](../UC/UC6.md) | プロジェクト計画書草案作成（AI生成） |
+| [UC07](../UC/UC7.md) | プロジェクト計画書編集・送信開始 |
 | [Database Design](../architecture/database.md) | project_plans, project_plan_vendors |
 | [API Endpoints](../architecture/api-endpoints.md) | APIエンドポイント |
 | [Software Layers](../architecture/layers.md) | 3層アーキテクチャ |

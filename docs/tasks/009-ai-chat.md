@@ -7,7 +7,7 @@
 
 ## 📝 概要
 
-BuyerがAIとチャットしてRFI草案やプロジェクト計画書を生成する機能。
+BuyerがAIとチャットしてプロジェクト計画書を生成する機能。
 OpenAI APIを利用し、チャット履歴をDBに保存。生成物はproject_plansに連携。
 
 ---
@@ -16,7 +16,7 @@ OpenAI APIを利用し、チャット履歴をDBに保存。生成物はproject_
 
 | Document | Section |
 |----------|---------|
-| [UC06](../UC/UC6.md) | RFI草案作成（AIチャット） |
+| [UC06](../UC/UC6.md) | プロジェクト計画書草案作成（AIチャット） |
 | [Database Design](../architecture/database.md) | ai_chat_sessions, ai_chat_messages |
 | [AI Integration](../architecture/ai-integration.md) | AI連携設計 |
 | [API Endpoints](../architecture/api-endpoints.md) | APIエンドポイント |
@@ -169,7 +169,7 @@ POST /api/ai/sessions/{id}/generate-plan
 ### 3. OpenAI Integration
 
 - Model: gpt-4-turbo (configurable)
-- System prompt for RFI generation context
+- System prompt for Project Plan generation context
 - Embedding model: text-embedding-3-small
 
 ### 4. レイヤー構成

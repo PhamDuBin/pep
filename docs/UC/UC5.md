@@ -61,7 +61,7 @@ sequenceDiagram
 
     rect rgb(248, 248, 248)
         Note over VU, DB: Post-login operations (overview) / ログイン後の操作（概要）
-        VU->>VWeb: Navigate RFI list or chats / RFI一覧やチャットを操作
+        VU->>VWeb: Navigate project list or chats / プロジェクト一覧やチャットを操作
         VWeb->>API: Authorized API call / 認可付きAPIコール<br/>(Authorization header with token / Authorizationヘッダにトークン)
         API->>DB: Get required data / 必要データ取得
         DB-->>API: Data / データ

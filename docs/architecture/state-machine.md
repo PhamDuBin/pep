@@ -17,7 +17,7 @@
 | Domain | Document | Key States |
 |--------|----------|------------|
 | **Account & Organization** | [account.md](../workflows/account.md) | Application, Invitation, Signup, Role, Suspension |
-| **Projects & RFI** | [projects.md](../workflows/projects.md) | Project Status, RFI Response |
+| **Projects** | [projects.md](../workflows/projects.md) | Project Status, Project Plan Response |
 
 ---
 
@@ -68,12 +68,12 @@ owner ↔ admin ↔ member → Removed
 | Account Suspension | [1.5](../workflows/account.md#15-account-suspension--アカウント停止) | ❌ No |
 | Member Removal | [1.6](../workflows/account.md#16-member-removal--メンバー削除) | ❌ No |
 
-### Projects & RFI Domain
+### Projects Domain
 
 | Flow | Link | RPC Required |
 |------|------|--------------|
 | Project State Transitions | [2.1](../workflows/projects.md#21-project-state-transitions--プロジェクト状態遷移) | ❌ No |
-| RFI Response State | [2.2](../workflows/projects.md#22-rfi-response-state-transitions--rfi回答の状態遷移) | ❌ No |
+| Project Plan Response State | [2.2](../workflows/projects.md#22-project-plan-response-state-transitions--プロジェクト計画書回答の状態遷移) | ❌ No |
 
 ---
 

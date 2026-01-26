@@ -35,7 +35,7 @@
 | 004 | [Role Change & Owner Transfer](./004-role-change.md) | [#29](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/29) | ✅ transfer_ownership | 🔲 Not Started |
 | 005 | [Account Suspension & Member Removal](./005-account-management.md) | [#30](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/30) | ❌ | 🔲 Not Started |
 
-### RFI/Project Management / RFI・プロジェクト管理
+### Project Management / プロジェクト管理
 
 | # | Task | GitLab Issue | RPC | Status |
 |---|------|--------------|-----|--------|
@@ -69,7 +69,7 @@
 005 Account Management (停止・削除)
 ```
 
-### RFI / Chat
+### Project / Chat
 
 ```
 001 Self-Signup

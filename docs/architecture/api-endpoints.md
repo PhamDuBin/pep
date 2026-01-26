@@ -63,13 +63,13 @@
 | `POST` | `/api/projects/{id}/start-discussion` | Start discussion / 送信開始 | UC07 |
 | `POST` | `/api/projects/{id}/close` | Close project / 完了 | UC10 |
 
-## RFI
+## Project Plans / プロジェクト計画書
 
 | Method | Path | Description | UC |
 |--------|------|-------------|-----|
-| `POST` | `/api/rfi/ai-suggest` | AI draft generation / AI草案生成 | UC06 |
-| `GET` | `/api/rfi/{project_id}/responses` | List responses / 回答一覧 | UC10 |
-| `POST` | `/api/rfi/{project_id}/responses` | Submit response / 回答提出 | UC08 |
+| `POST` | `/api/project-plans/ai-suggest` | AI draft generation / AI草案生成 | UC06 |
+| `GET` | `/api/project-plans/{project_id}/responses` | List responses / 回答一覧 | UC10 |
+| `POST` | `/api/project-plans/{project_id}/responses` | Submit response / 回答提出 | UC08 |
 
 ## Chat / チャット
 

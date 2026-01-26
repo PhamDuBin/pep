@@ -1,4 +1,4 @@
-# 2. Projects & RFI Workflows / プロジェクト・RFIワークフロー
+# 2. Projects Workflows / プロジェクトワークフロー
 
 [← Back to Workflows Index / ワークフロー目次に戻る](./index.md)
 
@@ -18,21 +18,21 @@ stateDiagram-v2
     Draft --> Draft: PUT /projects/{id}<br/>Edit content / 内容編集
     Draft --> InDiscussion: POST /projects/{id}/start-discussion<br/>Select Vendor + Send / Vendor選択 + 送信
 
-    InDiscussion --> InDiscussion: Chat discussion / チャット協議<br/>Receive RFI response / RFI回答受信
+    InDiscussion --> InDiscussion: Chat discussion / チャット協議<br/>Receive response / 回答受信
     InDiscussion --> Closed: POST /projects/{id}/close<br/>Complete / 完了処理
 
     Closed --> [*]
 
     note right of Draft
-        Buyer creating RFI draft
-        Buyer が RFI 草案を作成中
+        Buyer creating Project Plan draft
+        Buyer がプロジェクト計画書草案を作成中
         Refine with AI chat
         AI チャットで内容をブラッシュアップ
     end note
 
     note right of InDiscussion
-        RFI sent to Vendor
-        Vendor に RFI を送信済み
+        Project Plan sent to Vendor
+        Vendor にプロジェクト計画書を送信済み
         In discussion via chat
         チャットで協議中
     end note
@@ -47,14 +47,14 @@ stateDiagram-v2
 
 ---
 
-## 2.2 RFI Response State Transitions / RFI回答の状態遷移
+## 2.2 Project Plan Response State Transitions / プロジェクト計画書回答の状態遷移
 
 ```mermaid
 stateDiagram-v2
     [*] --> Draft: Vendor starts response / Vendor が回答開始
 
-    Draft --> Draft: PUT /rfi/{id}/responses/{rid}<br/>Update draft / 下書き更新
-    Draft --> Submitted: POST /rfi/{id}/responses/{rid}/submit<br/>Submit response / 回答提出
+    Draft --> Draft: PUT /project-plans/{id}/responses/{rid}<br/>Update draft / 下書き更新
+    Draft --> Submitted: POST /project-plans/{id}/responses/{rid}/submit<br/>Submit response / 回答提出
 
     Submitted --> [*]
 
@@ -88,14 +88,14 @@ stateDiagram-v2
 | GET | `/projects` | Buyer/Vendor | List projects |
 | GET | `/projects/{id}` | Buyer/Vendor | Get project details |
 
-### RFI Response APIs
+### Project Plan Response APIs
 
 | Method | Endpoint | Actor | Description |
 |--------|----------|-------|-------------|
-| POST | `/rfi/{id}/responses` | Vendor | Create response draft |
-| PUT | `/rfi/{id}/responses/{rid}` | Vendor | Update response |
-| POST | `/rfi/{id}/responses/{rid}/submit` | Vendor | Submit response |
-| GET | `/rfi/{id}/responses` | Buyer/Vendor | List responses |
+| POST | `/project-plans/{id}/responses` | Vendor | Create response draft |
+| PUT | `/project-plans/{id}/responses/{rid}` | Vendor | Update response |
+| POST | `/project-plans/{id}/responses/{rid}/submit` | Vendor | Submit response |
+| GET | `/project-plans/{id}/responses` | Buyer/Vendor | List responses |
 
 ---
 

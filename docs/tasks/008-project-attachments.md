@@ -16,8 +16,8 @@ AIが生成した計画書とは別に、Buyerが任意のファイルをアッ�
 
 | Document | Section |
 |----------|---------|
-| [UC06](../UC/UC6.md) | RFI草案作成 |
-| [UC07](../UC/UC7.md) | RFI編集・送信開始 |
+| [UC06](../UC/UC6.md) | プロジェクト計画書草案作成 |
+| [UC07](../UC/UC7.md) | プロジェクト計画書編集・送信開始 |
 | [Database Design](../architecture/database.md) | project_attachments |
 | [Software Layers](../architecture/layers.md) | 3層アーキテクチャ |
 
