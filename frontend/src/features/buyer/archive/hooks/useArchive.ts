@@ -13,6 +13,7 @@ import {
   getSortOptions,
   toggleProjectFavorite,
 } from "../services/archive.service";
+import { VISIBLE_COUNT_INCREMENT } from "../constants/visible-count.constants";
 
 export function useArchive() {
   const [isLoading, setIsLoading] = useState(true);
@@ -24,13 +25,18 @@ export function useArchive() {
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [showFilterDropdown, setShowFilterDropdown] = useState(false);
   const [showSortDropdown, setShowSortDropdown] = useState(false);
-  const [openContextMenuId, setOpenContextMenuId] = useState<string | null>(null);
+  const [openContextMenuId, setOpenContextMenuId] = useState<string | null>(
+    null
+  );
   const [searchQuery, setSearchQuery] = useState("");
   const [showOnlyFavorites, setShowOnlyFavorites] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(VISIBLE_COUNT_INCREMENT);
 
   // Project Plan Modal state
   const [showPlanModal, setShowPlanModal] = useState(false);
-  const [selectedProject, setSelectedProject] = useState<ArchiveProject | null>(null);
+  const [selectedProject, setSelectedProject] = useState<ArchiveProject | null>(
+    null
+  );
 
   const filterRef = useRef<HTMLDivElement>(null);
   const sortRef = useRef<HTMLDivElement>(null);
@@ -97,6 +103,20 @@ export function useArchive() {
       });
   }, [projects, selectedFilter, sortOrder, searchQuery, showOnlyFavorites]);
 
+  // Visible projects (load more functionality)
+  const visibleProjects = useMemo(() => {
+    return filteredProjects.slice(0, visibleCount);
+  }, [filteredProjects, visibleCount]);
+
+  const hasMoreItems = useMemo(() => {
+    return visibleCount < filteredProjects.length;
+  }, [visibleCount, filteredProjects.length]);
+
+  // Reset visible count when filters change
+  useEffect(() => {
+    setVisibleCount(VISIBLE_COUNT_INCREMENT);
+  }, [selectedFilter, sortOrder, searchQuery, showOnlyFavorites]);
+
   const handleViewModeToggle = useCallback(() => {
     setViewMode((prev) => (prev === "grid" ? "list" : "grid"));
   }, []);
@@ -119,10 +139,13 @@ export function useArchive() {
     setOpenContextMenuId(null);
   }, []);
 
-  const handleContextAction = useCallback((projectId: string, action: string) => {
-    console.log(`Action: ${action} for project: ${projectId}`);
-    setOpenContextMenuId(null);
-  }, []);
+  const handleContextAction = useCallback(
+    (projectId: string, action: string) => {
+      console.log(`Action: ${action} for project: ${projectId}`);
+      setOpenContextMenuId(null);
+    },
+    []
+  );
 
   const handleProjectClick = useCallback(
     (projectId: string) => {
@@ -171,6 +194,10 @@ export function useArchive() {
     setShowOnlyFavorites((prev) => !prev);
   }, []);
 
+  const handleLoadMore = useCallback(() => {
+    setVisibleCount((prev) => prev + VISIBLE_COUNT_INCREMENT);
+  }, []);
+
   return {
     isLoading,
     viewMode,
@@ -181,6 +208,8 @@ export function useArchive() {
     showSortDropdown,
     openContextMenuId,
     filteredProjects,
+    visibleProjects,
+    hasMoreItems,
     filterRef,
     sortRef,
     filterOptions,
@@ -202,5 +231,6 @@ export function useArchive() {
     handleFavoriteToggle,
     handleSearchChange,
     handleFavoriteFilterToggle,
+    handleLoadMore,
   };
 }
