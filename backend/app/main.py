@@ -22,6 +22,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         settings.frontend_url,
+        "http://localhost:3000",  # Next.js dev server
         "http://localhost:4200",  # Angular dev server
     ],
     allow_credentials=True,
@@ -75,9 +76,10 @@ async def db_check() -> dict:
 
 
 # Include routers
-from app.api.routes import users
+from app.api.routes import users, auth
 
 app.include_router(users.router, prefix="/api/users", tags=["Users"])
+app.include_router(auth.router, prefix="/api/auth", tags=["Auth"])
 
 # TODO: Add more routers
 # from app.api.routes import projects, rfi, chat, slides, webhooks
