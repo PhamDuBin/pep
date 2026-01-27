@@ -77,9 +77,27 @@ AIとのチャットで生成されたプロジェクト計画書（PDF等）を
 
 ### Tests
 
-- [ ] ファイルアップロードテスト
-- [ ] Vendor送信テスト
-- [ ] RLSテスト
+#### Unit Tests / ユニットテスト
+
+| Layer | Test File | Mock Target |
+|-------|-----------|-------------|
+| Routes | `tests/unit/test_routes/test_plans.py` | Service層 |
+| Services | `tests/unit/test_services/test_plan_service.py` | CRUD層, Storage |
+| CRUD | `tests/unit/test_crud/test_plan_crud.py` | Supabase client |
+
+- [ ] Routes層テスト（リクエスト/レスポンス検証）
+- [ ] Service層テスト（アップロード/送信ロジック検証）
+- [ ] CRUD層テスト（DB操作検証）
+
+#### Test Cases / テストケース
+
+| # | Test Case | Layer | Expected |
+|---|-----------|-------|----------|
+| 1 | ファイルアップロード成功 | Service | plan_id 返却 |
+| 2 | サイズ超過ファイル | Service | Error (10MB超過) |
+| 3 | 非対応形式 | Service | Error |
+| 4 | Vendor送信成功 | Service | sent_count 返却 |
+| 5 | ダウンロードURL取得 | Service | Signed URL 返却 |
 
 ---
 
@@ -177,6 +195,12 @@ GET /api/projects/{id}/plans/{plan_id}/vendors
 - 型ヒント必須
 - Pydanticでリクエスト/レスポンス定義
 
+## テスト要件
+- 各レイヤー（Routes/Services/CRUD）のユニットテストを作成
+- Service層は80%以上のカバレッジを目標
+- 依存先はモックを使用（実DBアクセス不要）
+- Supabase Storageはモック使用
+
 --------------------------------------------------
 
 ---
@@ -189,7 +213,9 @@ GET /api/projects/{id}/plans/{plan_id}/vendors
 - [ ] ダウンロードURL取得が動作
 - [ ] Vendor送信が動作
 - [ ] RLSが正しく機能
-- [ ] テストがパス
+- [ ] ユニットテスト作成（Routes/Services/CRUD）
+- [ ] `pytest tests/unit/` がパス
+- [ ] Service層カバレッジ 80%以上
 
 ---
 

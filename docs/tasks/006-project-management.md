@@ -82,9 +82,28 @@ Buyerがプロジェクトを作成・編集・管理する機能。
 
 ### Tests
 
-- [ ] ステータス遷移テスト
-- [ ] RLSテスト（他組織のプロジェクトにアクセス不可）
-- [ ] APIエンドポイントテスト
+#### Unit Tests / ユニットテスト
+
+| Layer | Test File | Mock Target |
+|-------|-----------|-------------|
+| Routes | `tests/unit/test_routes/test_projects.py` | Service層 |
+| Services | `tests/unit/test_services/test_project_service.py` | CRUD層 |
+| CRUD | `tests/unit/test_crud/test_project_crud.py` | Supabase client |
+
+- [ ] Routes層テスト（リクエスト/レスポンス検証）
+- [ ] Service層テスト（ステータス遷移ロジック検証）
+- [ ] CRUD層テスト（DB操作検証）
+
+#### Test Cases / テストケース
+
+| # | Test Case | Layer | Expected |
+|---|-----------|-------|----------|
+| 1 | プロジェクト作成成功 | Service | status = draft |
+| 2 | draft → in_discussion 遷移 | Service | 成功、started_at設定 |
+| 3 | in_discussion → closed 遷移 | Service | 成功、closed_at設定 |
+| 4 | draft以外からの編集 | Service | Error |
+| 5 | 不正なステータス遷移（draft → closed） | Service | Error |
+| 6 | 他組織のプロジェクトアクセス | Routes | 403/404 |
 
 ---
 
@@ -180,6 +199,11 @@ POST /api/projects/{id}/close
 - Pydanticでリクエスト/レスポンス定義
 - soft delete (is_deleted=true)
 
+## テスト要件
+- 各レイヤー（Routes/Services/CRUD）のユニットテストを作成
+- Service層は80%以上のカバレッジを目標
+- 依存先はモックを使用（実DBアクセス不要）
+
 --------------------------------------------------
 
 ---
@@ -190,7 +214,9 @@ POST /api/projects/{id}/close
 - [ ] 全APIエンドポイントが正常に動作
 - [ ] ステータス遷移が正しく機能（draft → in_discussion → closed）
 - [ ] RLSポリシーが正しく機能
-- [ ] テストがパス
+- [ ] ユニットテスト作成（Routes/Services/CRUD）
+- [ ] `pytest tests/unit/` がパス
+- [ ] Service層カバレッジ 80%以上
 
 ---
 

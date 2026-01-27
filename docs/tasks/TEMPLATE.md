@@ -46,8 +46,24 @@
 
 ### Tests
 
-- [ ] ユニットテスト
-- [ ] 統合テスト
+#### Unit Tests / ユニットテスト
+
+| Layer | Test File | Mock Target |
+|-------|-----------|-------------|
+| Routes | `tests/unit/test_routes/test_{name}.py` | Service層 |
+| Services | `tests/unit/test_services/test_{name}_service.py` | CRUD層 |
+| CRUD | `tests/unit/test_crud/test_{name}_crud.py` | Supabase client |
+
+- [ ] Routes層テスト（リクエスト/レスポンス検証）
+- [ ] Service層テスト（ビジネスロジック検証）
+- [ ] CRUD層テスト（DBクエリ検証）
+
+#### Test Cases / テストケース
+
+| # | Test Case | Layer | Expected |
+|---|-----------|-------|----------|
+| 1 | {正常系テストケース} | Service | {期待結果} |
+| 2 | {異常系テストケース} | Service | {エラー内容} |
 
 ---
 
@@ -82,6 +98,11 @@
 - 型ヒント必須
 - Pydanticでリクエスト/レスポンス定義
 
+## テスト要件
+- 各レイヤー（Routes/Services/CRUD）のユニットテストを作成
+- Service層は80%以上のカバレッジを目標
+- 依存先はモックを使用（実DBアクセス不要）
+
 --------------------------------------------------
 
 ---
@@ -90,7 +111,9 @@
 
 - [ ] {条件1}
 - [ ] {条件2}
-- [ ] テストがパス
+- [ ] ユニットテスト作成（Routes/Services/CRUD）
+- [ ] `pytest tests/unit/` がパス
+- [ ] Service層カバレッジ 80%以上
 
 ---
 

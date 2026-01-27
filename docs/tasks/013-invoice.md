@@ -61,8 +61,26 @@ GET /api/billing/invoices
 
 ### Tests
 
-- [ ] 請求書一覧取得のユニットテスト
-- [ ] RLSポリシーのテスト
+#### Unit Tests / ユニットテスト
+
+| Layer | Test File | Mock Target |
+|-------|-----------|-------------|
+| Routes | `tests/unit/test_routes/test_billing.py` | Service層 |
+| Services | `tests/unit/test_services/test_invoice_service.py` | CRUD層 |
+| CRUD | `tests/unit/test_crud/test_invoices_crud.py` | Supabase client |
+
+- [ ] Routes層テスト（リクエスト/レスポンス検証）
+- [ ] Service層テスト（請求書一覧・詳細取得ロジック検証）
+- [ ] CRUD層テスト（DB操作検証）
+
+#### Test Cases / テストケース
+
+| # | Test Case | Layer | Expected |
+|---|-----------|-------|----------|
+| 1 | 請求書一覧取得成功 | Service | invoices配列, total_count返却 |
+| 2 | 請求書詳細取得成功 | Service | invoice情報返却 |
+| 3 | 他組織の請求書アクセス | Routes | 403/404 |
+| 4 | 存在しない請求書ID | Service | 404 Not Found |
 
 ---
 
@@ -189,6 +207,11 @@ CREATE POLICY "Organization members can view own invoices"
 - invoices テーブルへの書き込みは Webhook (Task 014) 経由のみ
 - PDFダウンロードは Stripe の hosted URL を使用
 
+## テスト要件
+- 各レイヤー（Routes/Services/CRUD）のユニットテストを作成
+- Service層は80%以上のカバレッジを目標
+- 依存先はモックを使用（実DBアクセス不要）
+
 --------------------------------------------------
 
 ---
@@ -199,7 +222,9 @@ CREATE POLICY "Organization members can view own invoices"
 - [ ] 請求書詳細が取得できる
 - [ ] PDF URL が正しく返される
 - [ ] RLSポリシーにより他組織の請求書が見えない
-- [ ] テストがパス
+- [ ] ユニットテスト作成（Routes/Services/CRUD）
+- [ ] `pytest tests/unit/` がパス
+- [ ] Service層カバレッジ 80%以上
 
 ---
 

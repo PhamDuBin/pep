@@ -67,9 +67,27 @@ POST /api/invitations { email, role }
 
 ### Tests
 
-- [ ] RPC関数のユニットテスト
-- [ ] 有効期限切れテスト
-- [ ] 権限チェックテスト
+#### Unit Tests / ユニットテスト
+
+| Layer | Test File | Mock Target |
+|-------|-----------|-------------|
+| Routes | `tests/unit/test_routes/test_invitations.py` | Service層 |
+| Services | `tests/unit/test_services/test_invitation_service.py` | CRUD層 |
+| CRUD | `tests/unit/test_crud/test_invitation_crud.py` | Supabase client |
+
+- [ ] Routes層テスト（リクエスト/レスポンス検証）
+- [ ] Service層テスト（招待/承諾ロジック検証）
+- [ ] CRUD層テスト（RPC呼び出し検証）
+
+#### Test Cases / テストケース
+
+| # | Test Case | Layer | Expected |
+|---|-----------|-------|----------|
+| 1 | 招待作成成功 | Service | invitation_id, token 返却 |
+| 2 | 招待承諾成功 | Service | profile作成, status=active |
+| 3 | 有効期限切れ招待の承諾 | Service | Error |
+| 4 | 重複招待 | Service | Error |
+| 5 | Owner/Admin以外からの招待作成 | Routes | 403 Forbidden |
 
 ---
 
@@ -145,6 +163,11 @@ POST /api/invitations { email, role }
 - 有効期限切れの招待はacceptでエラー
 - 型ヒント必須
 
+## テスト要件
+- 各レイヤー（Routes/Services/CRUD）のユニットテストを作成
+- Service層は80%以上のカバレッジを目標
+- 依存先はモックを使用（実DBアクセス不要）
+
 --------------------------------------------------
 
 ---
@@ -157,7 +180,9 @@ POST /api/invitations { email, role }
 - [ ] 招待承諾後、profiles.status = 'active'
 - [ ] 有効期限切れ招待がエラーになる
 - [ ] 重複招待がエラーになる
-- [ ] テストがパス
+- [ ] ユニットテスト作成（Routes/Services/CRUD）
+- [ ] `pytest tests/unit/` がパス
+- [ ] Service層カバレッジ 80%以上
 
 ---
 

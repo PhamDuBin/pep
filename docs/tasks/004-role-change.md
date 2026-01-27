@@ -58,8 +58,27 @@ member (一般権限) - 複数可
 
 ### Tests
 
-- [ ] RPC関数のユニットテスト
-- [ ] 権限マトリックスのテスト
+#### Unit Tests / ユニットテスト
+
+| Layer | Test File | Mock Target |
+|-------|-----------|-------------|
+| Routes | `tests/unit/test_routes/test_members.py` | Service層 |
+| Services | `tests/unit/test_services/test_member_service.py` | CRUD層 |
+| CRUD | `tests/unit/test_crud/test_member_crud.py` | Supabase client |
+
+- [ ] Routes層テスト（リクエスト/レスポンス検証）
+- [ ] Service層テスト（権限チェック・ロール変更ロジック検証）
+- [ ] CRUD層テスト（RPC呼び出し検証）
+
+#### Test Cases / テストケース
+
+| # | Test Case | Layer | Expected |
+|---|-----------|-------|----------|
+| 1 | Owner→Adminへのロール変更 | Service | Error (Ownerは変更不可) |
+| 2 | Admin→Memberへのロール変更（Ownerが実行） | Service | 成功 |
+| 3 | Admin→Memberへのロール変更（Adminが実行） | Service | Error |
+| 4 | Owner移譲成功 | Service | 元Owner=admin, 新Owner=owner |
+| 5 | pending ユーザーへのOwner移譲 | Service | Error |
 
 ---
 
@@ -118,6 +137,11 @@ member (一般権限) - 複数可
 - 組織には常に1人のOwnerが存在
 - 型ヒント必須
 
+## テスト要件
+- 各レイヤー（Routes/Services/CRUD）のユニットテストを作成
+- Service層は80%以上のカバレッジを目標
+- 依存先はモックを使用（実DBアクセス不要）
+
 --------------------------------------------------
 
 ---
@@ -128,7 +152,9 @@ member (一般権限) - 複数可
 - [ ] ロール変更APIが権限マトリックス通りに動作
 - [ ] Owner移譲後、元Ownerがadminになる
 - [ ] 組織に常に1人のOwnerが存在する
-- [ ] テストがパス
+- [ ] ユニットテスト作成（Routes/Services/CRUD）
+- [ ] `pytest tests/unit/` がパス
+- [ ] Service層カバレッジ 80%以上
 
 ---
 

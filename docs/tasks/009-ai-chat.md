@@ -79,9 +79,27 @@ OpenAI APIを利用し、チャット履歴をDBに保存。生成物はproject_
 
 ### Tests
 
-- [ ] セッション作成テスト
-- [ ] メッセージ送信テスト（OpenAI mock）
-- [ ] RLSテスト
+#### Unit Tests / ユニットテスト
+
+| Layer | Test File | Mock Target |
+|-------|-----------|-------------|
+| Routes | `tests/unit/test_routes/test_ai.py` | Service層 |
+| Services | `tests/unit/test_services/test_ai_service.py` | CRUD層, OpenAI API |
+| CRUD | `tests/unit/test_crud/test_ai_crud.py` | Supabase client |
+
+- [ ] Routes層テスト（リクエスト/レスポンス検証）
+- [ ] Service層テスト（セッション管理・メッセージ処理ロジック検証）
+- [ ] CRUD層テスト（DB操作検証）
+
+#### Test Cases / テストケース
+
+| # | Test Case | Layer | Expected |
+|---|-----------|-------|----------|
+| 1 | セッション作成成功 | Service | session_id 返却 |
+| 2 | メッセージ送信成功（OpenAI mock） | Service | user/assistant両方返却 |
+| 3 | 他ユーザーのセッションアクセス | Service | Error |
+| 4 | 計画書生成成功 | Service | plan_id 返却 |
+| 5 | OpenAI APIエラー時 | Service | 適切なエラーハンドリング |
 
 ---
 
@@ -190,6 +208,12 @@ POST /api/ai/sessions/{id}/generate-plan
 - 型ヒント必須
 - Pydanticでリクエスト/レスポンス定義
 
+## テスト要件
+- 各レイヤー（Routes/Services/CRUD）のユニットテストを作成
+- Service層は80%以上のカバレッジを目標
+- OpenAI APIはモック使用（実API呼び出し不要）
+- 依存先はモックを使用（実DBアクセス不要）
+
 --------------------------------------------------
 
 ---
@@ -202,7 +226,9 @@ POST /api/ai/sessions/{id}/generate-plan
 - [ ] メッセージ送信でOpenAI応答が返る
 - [ ] 計画書生成が動作（project_plansに連携）
 - [ ] RLSが正しく機能
-- [ ] テストがパス
+- [ ] ユニットテスト作成（Routes/Services/CRUD）
+- [ ] `pytest tests/unit/` がパス
+- [ ] Service層カバレッジ 80%以上
 
 ---
 
