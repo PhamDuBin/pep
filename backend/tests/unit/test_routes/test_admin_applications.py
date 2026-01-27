@@ -1,6 +1,7 @@
 """Unit tests for admin application routes (mock Service, mock Platform Admin)."""
 
 import pytest
+import pytest_asyncio
 from unittest.mock import AsyncMock, MagicMock
 from httpx import AsyncClient, ASGITransport
 from fastapi import HTTPException
@@ -15,7 +16,7 @@ from app.schemas.application import (
 )
 
 
-@pytest.fixture
+@pytest_asyncio.fixture
 async def admin_client():
     """Async client with get_current_platform_admin overridden to return admin user."""
     async def override_platform_admin():
