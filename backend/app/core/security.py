@@ -1,11 +1,13 @@
 """Security utilities for JWT verification."""
 
 from typing import Optional
-from fastapi import HTTPException, Security
+from fastapi import Depends, HTTPException, Security
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 import httpx
+from supabase import Client
 
 from app.core.config import get_settings
+from app.core.supabase import get_supabase
 
 security = HTTPBearer()
 
@@ -75,3 +77,34 @@ async def get_optional_user(
     if credentials is None:
         return None
     return await verify_token(credentials)
+
+
+async def get_current_platform_admin(
+    current_user: dict = Depends(get_current_user),
+    supabase: Client = Depends(get_supabase),
+) -> dict:
+    """
+    Require current user to be a Platform Admin.
+
+    Used by admin-only routes (e.g. application approval). Returns 403 if
+    the user has no profile or is_platform_admin is not True.
+    """
+    if not current_user or not current_user.get("id"):
+        raise HTTPException(
+            status_code=403,
+            detail="Forbidden / 権限がありません",
+        )
+    result = (
+        supabase.table("profiles")
+        .select("is_platform_admin")
+        .eq("id", current_user["id"])
+        .eq("is_deleted", False)
+        .execute()
+    )
+    rows = result.data or []
+    if not rows or not rows[0].get("is_platform_admin"):
+        raise HTTPException(
+            status_code=403,
+            detail="Forbidden / Platform Admin only / プラットフォーム管理者のみ利用可能",
+        )
+    return current_user
