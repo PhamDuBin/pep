@@ -71,9 +71,28 @@
 
 ### Tests
 
-- [ ] RPC関数のユニットテスト
-- [ ] APIエンドポイントのテスト
-- [ ] エラーハンドリングテスト
+#### Unit Tests / ユニットテスト
+
+| Layer | Test File | Mock Target |
+|-------|-----------|-------------|
+| Routes | `tests/unit/test_routes/test_auth.py` | Service層 |
+| Services | `tests/unit/test_services/test_auth_service.py` | CRUD層 |
+| CRUD | `tests/unit/test_crud/test_auth_crud.py` | Supabase client |
+
+- [ ] Routes層テスト（リクエスト/レスポンス検証）
+- [ ] Service層テスト（ビジネスロジック検証）
+- [ ] CRUD層テスト（RPC呼び出し検証）
+
+#### Test Cases / テストケース
+
+| # | Test Case | Layer | Expected |
+|---|-----------|-------|----------|
+| 1 | Buyer登録成功 | Service | organization_id, profile_id, application_id 返却 |
+| 2 | Vendor登録成功 | Service | organization_id, profile_id, application_id 返却 |
+| 3 | 必須フィールド不足 | Routes | 422 Validation Error |
+| 4 | 不正なorg_type | Service | ValueError |
+| 5 | RPC失敗時のクリーンアップ | Service | auth.users削除が呼ばれる |
+| 6 | 重複メールアドレス | CRUD | IntegrityError |
 
 ---
 
@@ -171,6 +190,12 @@
 - 型ヒント必須
 - Pydanticでリクエスト/レスポンス定義
 
+## テスト要件
+- 各レイヤー（Routes/Services/CRUD）のユニットテストを作成
+- Service層は80%以上のカバレッジを目標
+- 依存先はモックを使用（実DBアクセス不要）
+- テストファイル: `tests/unit/test_routes/test_auth.py`, `tests/unit/test_services/test_auth_service.py`, `tests/unit/test_crud/test_auth_crud.py`
+
 --------------------------------------------------
 
 ---
@@ -184,7 +209,9 @@
 - [ ] Buyer/Vendor 両方の登録が動作
 - [ ] エラー時のクリーンアップが動作
 - [ ] RLSポリシーが正しく機能
-- [ ] テストがパス
+- [ ] ユニットテスト作成（Routes/Services/CRUD）
+- [ ] `pytest tests/unit/` がパス
+- [ ] Service層カバレッジ 80%以上
 
 ---
 

@@ -63,9 +63,28 @@ DELETE /api/organizations/{org_id}/members/{profile_id}
 
 ### Tests
 
-- [ ] 停止/再開テスト
-- [ ] ソフトデリートテスト
-- [ ] アクセス制限テスト
+#### Unit Tests / ユニットテスト
+
+| Layer | Test File | Mock Target |
+|-------|-----------|-------------|
+| Routes | `tests/unit/test_routes/test_admin_organizations.py` | Service層 |
+| Services | `tests/unit/test_services/test_organization_service.py` | CRUD層 |
+| CRUD | `tests/unit/test_crud/test_organization_crud.py` | Supabase client |
+
+- [ ] Routes層テスト（リクエスト/レスポンス検証）
+- [ ] Service層テスト（停止/削除ロジック検証）
+- [ ] CRUD層テスト（DB操作検証）
+
+#### Test Cases / テストケース
+
+| # | Test Case | Layer | Expected |
+|---|-----------|-------|----------|
+| 1 | 組織停止成功 | Service | status = suspended |
+| 2 | 組織再開成功 | Service | status = active |
+| 3 | メンバー削除成功（ソフトデリート） | Service | is_deleted = true |
+| 4 | Owner削除の試行 | Service | Error |
+| 5 | 自己退会（Ownerが試行） | Service | Error |
+| 6 | Platform Admin以外からの停止 | Routes | 403 Forbidden |
 
 ---
 
@@ -129,6 +148,11 @@ profilesテーブルに追加:
 - Ownerの削除/退会は不可
 - 型ヒント必須
 
+## テスト要件
+- 各レイヤー（Routes/Services/CRUD）のユニットテストを作成
+- Service層は80%以上のカバレッジを目標
+- 依存先はモックを使用（実DBアクセス不要）
+
 --------------------------------------------------
 
 ---
@@ -141,7 +165,9 @@ profilesテーブルに追加:
 - [ ] 自己退会が動作
 - [ ] Ownerの削除/退会がエラーになる
 - [ ] RLSポリシーが正しく機能
-- [ ] テストがパス
+- [ ] ユニットテスト作成（Routes/Services/CRUD）
+- [ ] `pytest tests/unit/` がパス
+- [ ] Service層カバレッジ 80%以上
 
 ---
 

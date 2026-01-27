@@ -78,10 +78,28 @@
 
 ### Tests
 
-- [ ] メッセージ送信テスト
-- [ ] 既読更新テスト
-- [ ] 未読カウントテスト
-- [ ] RLSテスト
+#### Unit Tests / ユニットテスト
+
+| Layer | Test File | Mock Target |
+|-------|-----------|-------------|
+| Routes | `tests/unit/test_routes/test_chat.py` | Service層 |
+| Services | `tests/unit/test_services/test_chat_service.py` | CRUD層 |
+| CRUD | `tests/unit/test_crud/test_chat_crud.py` | Supabase client |
+
+- [ ] Routes層テスト（リクエスト/レスポンス検証）
+- [ ] Service層テスト（メッセージ送信・既読管理ロジック検証）
+- [ ] CRUD層テスト（DB操作検証）
+
+#### Test Cases / テストケース
+
+| # | Test Case | Layer | Expected |
+|---|-----------|-------|----------|
+| 1 | チャットルーム作成成功 | Service | room_id 返却 |
+| 2 | メッセージ送信成功 | Service | message_id 返却 |
+| 3 | 既読更新成功 | Service | last_read_at 更新 |
+| 4 | 未読カウント計算 | Service | 正確な未読数 |
+| 5 | 他組織のルームアクセス | Service | Error |
+| 6 | LINE風既読数計算 | Service | 正確な既読数 |
 
 ---
 
@@ -209,6 +227,11 @@ Supabase Realtime で新着メッセージを購読:
 - 型ヒント必須
 - Pydanticでリクエスト/レスポンス定義
 
+## テスト要件
+- 各レイヤー（Routes/Services/CRUD）のユニットテストを作成
+- Service層は80%以上のカバレッジを目標
+- 依存先はモックを使用（実DBアクセス不要）
+
 --------------------------------------------------
 
 ---
@@ -222,7 +245,9 @@ Supabase Realtime で新着メッセージを購読:
 - [ ] 未読カウントが正しく計算される
 - [ ] LINE風既読カウントが動作
 - [ ] RLSが正しく機能
-- [ ] テストがパス
+- [ ] ユニットテスト作成（Routes/Services/CRUD）
+- [ ] `pytest tests/unit/` がパス
+- [ ] Service層カバレッジ 80%以上
 
 ---
 

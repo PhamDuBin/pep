@@ -61,8 +61,24 @@ SendGridを使用したメール送信、Supabase Realtimeを使用したリア�
 
 ### Tests
 
-- [ ] メール送信テスト（mock）
-- [ ] 通知トリガーテスト
+#### Unit Tests / ユニットテスト
+
+| Layer | Test File | Mock Target |
+|-------|-----------|-------------|
+| Services | `tests/unit/test_services/test_notification_service.py` | SendGrid API |
+| Services | `tests/unit/test_services/test_email_service.py` | SendGrid API |
+
+- [ ] Service層テスト（通知ロジック検証）
+- [ ] メール送信テスト（SendGrid mock）
+
+#### Test Cases / テストケース
+
+| # | Test Case | Layer | Expected |
+|---|-----------|-------|----------|
+| 1 | プロジェクト計画書通知成功 | Service | メール送信呼出, チャットルーム作成 |
+| 2 | チャット通知成功 | Service | 通知送信呼出 |
+| 3 | SendGridエラー時 | Service | エラーログ記録, 処理継続 |
+| 4 | 通知頻度制限 | Service | 連続通知抑制 |
 
 ---
 
@@ -193,6 +209,11 @@ async def send_message(room_id: UUID, content: str):
 - 通知頻度制限（同一ユーザーへの連続通知抑制）
 - 型ヒント必須
 
+## テスト要件
+- Service層のユニットテストを作成
+- Service層は80%以上のカバレッジを目標
+- SendGrid APIはモック使用（実API呼び出し不要）
+
 --------------------------------------------------
 
 ---
@@ -204,7 +225,9 @@ async def send_message(room_id: UUID, content: str):
 - [ ] チャットルームが自動作成される
 - [ ] 初回システムメッセージが投稿される
 - [ ] エラーハンドリングが適切
-- [ ] テストがパス
+- [ ] ユニットテスト作成（notification_service, email_service）
+- [ ] `pytest tests/unit/` がパス
+- [ ] Service層カバレッジ 80%以上
 
 ---
 

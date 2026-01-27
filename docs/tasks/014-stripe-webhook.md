@@ -61,8 +61,26 @@ FastAPI: 200 OK を返却
 
 ### Tests
 
-- [ ] 署名検証のテスト（モック使用）
+#### Unit Tests / ユニットテスト
+
+| Layer | Test File | Mock Target |
+|-------|-----------|-------------|
+| Routes | `tests/unit/test_routes/test_webhooks.py` | Stripe署名検証, RPC |
+| RPC | `tests/unit/test_rpc/test_stripe_webhook.py` | Supabase (結合テスト推奨) |
+
+- [ ] Routes層テスト（署名検証、RPC呼び出し検証）
 - [ ] 各イベント種別の処理テスト
+
+#### Test Cases / テストケース
+
+| # | Test Case | Layer | Expected |
+|---|-----------|-------|----------|
+| 1 | 署名検証成功 | Routes | 200 OK |
+| 2 | 署名検証失敗 | Routes | 400 Bad Request |
+| 3 | checkout.session.completed | RPC | subscription作成, org.status=active |
+| 4 | invoice.payment_failed | RPC | subscription.status=past_due |
+| 5 | customer.subscription.deleted | RPC | org.status=suspended |
+| 6 | 重複イベント送信（冪等性） | RPC | already_processed 返却 |
 
 ---
 
@@ -348,6 +366,12 @@ STRIPE_WEBHOOK_SECRET=whsec_...
 - Service Role Key を使用してRPCを呼び出す
 - 冪等性を担保（同じイベントを2回処理しない）
 
+## テスト要件
+- Routes層の署名検証テストを作成（Stripe署名モック使用）
+- 各イベント種別の処理テストを作成
+- RPC関数のテストは結合テストまたはモックで対応
+- 冪等性テスト必須
+
 --------------------------------------------------
 
 ---
@@ -360,7 +384,9 @@ STRIPE_WEBHOOK_SECRET=whsec_...
 - [ ] customer.subscription.deleted で組織が suspended になる
 - [ ] 同じイベントを2回送信しても冪等に処理される
 - [ ] stripe_event_logs にイベントが記録される
-- [ ] テストがパス
+- [ ] ユニットテスト作成（署名検証、イベント処理）
+- [ ] `pytest tests/unit/` がパス
+- [ ] 冪等性テストがパス
 
 ---
 

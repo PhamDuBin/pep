@@ -62,9 +62,27 @@ Platform Admin が利用申請を承認/却下する機能。承認時は **既�
 
 ### Tests
 
-- [ ] RPC関数のユニットテスト
-- [ ] APIエンドポイントのテスト
-- [ ] 権限チェックテスト
+#### Unit Tests / ユニットテスト
+
+| Layer | Test File | Mock Target |
+|-------|-----------|-------------|
+| Routes | `tests/unit/test_routes/test_admin_applications.py` | Service層 |
+| Services | `tests/unit/test_services/test_application_service.py` | CRUD層 |
+| CRUD | `tests/unit/test_crud/test_application_crud.py` | Supabase client |
+
+- [ ] Routes層テスト（リクエスト/レスポンス検証）
+- [ ] Service層テスト（承認/却下ロジック検証）
+- [ ] CRUD層テスト（RPC呼び出し検証）
+
+#### Test Cases / テストケース
+
+| # | Test Case | Layer | Expected |
+|---|-----------|-------|----------|
+| 1 | 承認成功 | Service | org/profile status = active |
+| 2 | 却下成功 | Service | application status = rejected |
+| 3 | 承認済み申請の再承認 | Service | Error |
+| 4 | Platform Admin以外からの実行 | Routes | 403 Forbidden |
+| 5 | 存在しない申請ID | Service | 404 Not Found |
 
 ---
 
@@ -129,6 +147,11 @@ Platform Admin が利用申請を承認/却下する機能。承認時は **既�
 - 却下は organizations/profiles のステータスを変更しない
 - 型ヒント必須
 
+## テスト要件
+- 各レイヤー（Routes/Services/CRUD）のユニットテストを作成
+- Service層は80%以上のカバレッジを目標
+- 依存先はモックを使用（実DBアクセス不要）
+
 --------------------------------------------------
 
 ---
@@ -142,7 +165,9 @@ Platform Admin が利用申請を承認/却下する機能。承認時は **既�
 - [ ] 却下時に review_note が保存される
 - [ ] 却下時は organizations/profiles が pending のまま
 - [ ] 権限チェックが正しく機能
-- [ ] テストがパス
+- [ ] ユニットテスト作成（Routes/Services/CRUD）
+- [ ] `pytest tests/unit/` がパス
+- [ ] Service層カバレッジ 80%以上
 
 ---
 

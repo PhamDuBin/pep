@@ -66,8 +66,27 @@ AIが生成した計画書とは別に、Buyerが任意のファイルをアッ�
 
 ### Tests
 
-- [ ] ファイルアップロードテスト
-- [ ] RLSテスト
+#### Unit Tests / ユニットテスト
+
+| Layer | Test File | Mock Target |
+|-------|-----------|-------------|
+| Routes | `tests/unit/test_routes/test_attachments.py` | Service層 |
+| Services | `tests/unit/test_services/test_attachment_service.py` | CRUD層, Storage |
+| CRUD | `tests/unit/test_crud/test_attachment_crud.py` | Supabase client |
+
+- [ ] Routes層テスト（リクエスト/レスポンス検証）
+- [ ] Service層テスト（アップロード/削除ロジック検証）
+- [ ] CRUD層テスト（DB操作検証）
+
+#### Test Cases / テストケース
+
+| # | Test Case | Layer | Expected |
+|---|-----------|-------|----------|
+| 1 | ファイルアップロード成功 | Service | attachment_id 返却 |
+| 2 | サイズ超過ファイル（50MB超） | Service | Error |
+| 3 | draft以外でのアップロード | Service | Error |
+| 4 | 他ユーザーによる削除（Admin以外） | Service | Error |
+| 5 | ダウンロードURL取得 | Service | Signed URL 返却 |
 
 ---
 
@@ -140,6 +159,12 @@ DELETE /api/projects/{id}/attachments/{attachment_id}
 - 型ヒント必須
 - Pydanticでリクエスト/レスポンス定義
 
+## テスト要件
+- 各レイヤー（Routes/Services/CRUD）のユニットテストを作成
+- Service層は80%以上のカバレッジを目標
+- 依存先はモックを使用（実DBアクセス不要）
+- Supabase Storageはモック使用
+
 --------------------------------------------------
 
 ---
@@ -151,7 +176,9 @@ DELETE /api/projects/{id}/attachments/{attachment_id}
 - [ ] ファイルアップロードが動作
 - [ ] ダウンロードURL取得が動作
 - [ ] RLSが正しく機能
-- [ ] テストがパス
+- [ ] ユニットテスト作成（Routes/Services/CRUD）
+- [ ] `pytest tests/unit/` がパス
+- [ ] Service層カバレッジ 80%以上
 
 ---
 

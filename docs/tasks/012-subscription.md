@@ -72,8 +72,27 @@ Stripe Webhook → Task 014 で処理
 
 ### Tests
 
-- [ ] Stripe Checkout Session作成のユニットテスト（モック使用）
-- [ ] 契約状態取得の統合テスト
+#### Unit Tests / ユニットテスト
+
+| Layer | Test File | Mock Target |
+|-------|-----------|-------------|
+| Routes | `tests/unit/test_routes/test_billing.py` | Service層 |
+| Services | `tests/unit/test_services/test_billing_service.py` | Stripe API, CRUD層 |
+| CRUD | `tests/unit/test_crud/test_subscriptions_crud.py` | Supabase client |
+
+- [ ] Routes層テスト（リクエスト/レスポンス検証）
+- [ ] Service層テスト（Checkout Session作成・契約状態取得ロジック検証）
+- [ ] CRUD層テスト（DB操作検証）
+
+#### Test Cases / テストケース
+
+| # | Test Case | Layer | Expected |
+|---|-----------|-------|----------|
+| 1 | Checkout Session作成成功 | Service | checkout_url 返却 |
+| 2 | 契約状態取得成功 | Service | status, period情報返却 |
+| 3 | Customer Portal URL取得 | Service | portal_url 返却 |
+| 4 | 他組織のデータアクセス | Routes | 403/404 |
+| 5 | Stripe APIエラー時 | Service | 適切なエラーハンドリング |
 
 ---
 
@@ -204,6 +223,12 @@ STRIPE_VENDOR_PRICE_ID=price_... # Vendor年額プラン
 - Stripeの秘密鍵は環境変数から取得
 - 決済完了処理は Task 014 (Stripe Webhook) で実装
 
+## テスト要件
+- 各レイヤー（Routes/Services/CRUD）のユニットテストを作成
+- Service層は80%以上のカバレッジを目標
+- Stripe APIはモック使用（実API呼び出し不要）
+- 依存先はモックを使用（実DBアクセス不要）
+
 --------------------------------------------------
 
 ---
@@ -214,7 +239,9 @@ STRIPE_VENDOR_PRICE_ID=price_... # Vendor年額プラン
 - [ ] 契約状態が正しく取得できる
 - [ ] Customer Portal へのリンクが取得できる
 - [ ] RLSポリシーにより他組織のデータが見えない
-- [ ] テストがパス
+- [ ] ユニットテスト作成（Routes/Services/CRUD）
+- [ ] `pytest tests/unit/` がパス
+- [ ] Service層カバレッジ 80%以上
 
 ---
 
