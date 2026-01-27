@@ -52,7 +52,7 @@ export class ArchiveService {
   // Computed for selected filter label
   selectedFilterLabel = computed(() => {
     const selected = this._filterOptions().find(f => f.id === this._selectedFilter());
-    return selected?.name || 'すべてのプロジェクト';
+    return selected?.name || 'すべてのメンバー';
   });
 
   // Computed for selected sort label

@@ -5,10 +5,10 @@ export { UserListPage } from "./UserListPage";
 export { UserListPage as VendorUserListPage } from "./UserListPage";
 
 // Hooks
-export { useVendorUserList } from "./hooks";
+export { useUserList } from "./hooks";
 
 // Types
-export type { VendorUser, PermissionOption } from "./models";
+export type { User, PermissionOption } from "./models";
 
 // Mock data
 export { MOCK_VENDOR_USERS } from "./mock";

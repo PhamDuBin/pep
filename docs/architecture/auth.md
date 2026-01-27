@@ -12,7 +12,7 @@
 sequenceDiagram
     autonumber
     actor User
-    participant FE as Angular
+    participant FE as Next.js
     participant Auth as Supabase Auth
     participant API as Cloud Run<br/>(FastAPI)
     participant DB as PostgreSQL

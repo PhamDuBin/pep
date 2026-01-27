@@ -217,16 +217,7 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(
               {title && (
                 <h2
                   id="modal-title"
-                  className="modal-title"
-                  style={{
-                    fontWeight: 400,
-                    fontSize: "16px",
-                    lineHeight: "normal",
-                    color: "#066a9e",
-                    margin: 0,
-                    textAlign: "center",
-                    paddingRight: "24px",
-                  }}
+                  className="modal-title font-normal text-[20px] text-[#066a9e] text-center w-full self-center"
                 >
                   {title}
                 </h2>

@@ -1,7 +1,7 @@
 "use client";
 
 import { PageTransition } from "@/shared/components";
-import { useVendorHome } from "./hooks";
+import { useHome } from "./hooks";
 import { MessageList, MessageDetail } from "./components";
 
 export function HomePage() {
@@ -19,12 +19,12 @@ export function HomePage() {
     handleSelectMessage,
     handleSendMessage,
     handleKeyDown,
-  } = useVendorHome();
+  } = useHome();
 
   return (
     <PageTransition>
       <div
-        className={`flex h-[calc(100vh-89px)] bg-white overflow-hidden transition-[width] duration-300 ease-[cubic-bezier(0.25,0.8,0.25,1)] ${isCollapsed ? "w-[calc(100vw-60px)]" : "w-[calc(100vw-172px)]"
+        className={`flex h-[calc(100vh-65px)] bg-white overflow-hidden transition-[width] duration-300 ease-[cubic-bezier(0.25,0.8,0.25,1)] ${isCollapsed ? "w-[calc(100vw-60px)]" : "w-[calc(100vw-172px)]"
           }`}
       >
         <MessageList

@@ -1,14 +1,14 @@
 // Components
 export { HomePage } from "./HomePage";
 // Hooks
-export { useVendorHome } from "./hooks";
+export { useHome } from "./hooks";
 
 // Types
 export type {
-  VendorMessage,
-  VendorThreadMessage,
-  VendorMessageThread,
+  Message,
+  ThreadMessage,
+  MessageThread,
 } from "./models";
 
 // Mock data
-export { MOCK_VENDOR_MESSAGES, MOCK_VENDOR_MESSAGE_THREADS } from "./mock";
+export { MESSAGES_MOCK, MESSAGE_THREADS_MOCK } from "./mock";

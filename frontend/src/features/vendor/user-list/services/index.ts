@@ -1,11 +1,11 @@
 // =============================================================================
-// VENDOR USER LIST SERVICES - RE-EXPORTS
+// USER LIST SERVICES - RE-EXPORTS
 // =============================================================================
 
 export {
-  getVendorUsers,
-  getVendorPermissionOptions,
-  inviteVendorUser,
-  updateVendorUser,
-  deleteVendorUsers,
-} from "./vendor-user-list.service";
+  getUsers,
+  getPermissionOptions,
+  inviteUser,
+  updateUser,
+  deleteUsers,
+} from "./user-list.service";

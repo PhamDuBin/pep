@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
-import { useVendor } from "@/shared/contexts";
-import { VendorThreadMessage } from "../models";
-import { sendThreadMessage } from "../services/vendor-home.service";
+import { useVendor } from "../../shared/contexts";
+import { ThreadMessage } from "../models";
+import { sendThreadMessage } from "../services/home.service";
 
-export function useVendorHome() {
+export function useHome() {
   const {
     isCollapsed,
     filteredMessages,
@@ -17,11 +17,11 @@ export function useVendorHome() {
   } = useVendor();
 
   const [newMessage, setNewMessage] = useState("");
-  const [threadMessages, setThreadMessages] = useState<VendorThreadMessage[]>([]);
+  const [threadMessages, setThreadMessages] = useState<ThreadMessage[]>([]);
   const messageContainerRef = useRef<HTMLDivElement>(null);
 
   // Get the selected message details
-  const selectedMessage = filteredMessages.find((m) => m.id === selectedMessageId);
+  const selectedMessage = filteredMessages.find((m: any) => m.id === selectedMessageId);
 
   // Load thread messages when selection changes
   useEffect(() => {

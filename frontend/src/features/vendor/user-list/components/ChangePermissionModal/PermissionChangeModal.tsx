@@ -2,10 +2,10 @@
 
 import { useState, useCallback, useEffect } from "react";
 import { Modal } from "@/shared/components";
-import { VendorUserPermission } from "../../mock";
+import { UserPermission } from "../../mock";
 import {
-  VENDOR_PERMISSION_OPTIONS_MOCK,
-  VENDOR_PERMISSION_LABELS_MOCK,
+  PERMISSION_OPTIONS_MOCK,
+  PERMISSION_LABELS_MOCK,
 } from "../../mock";
 import Image from "next/image";
 
@@ -14,8 +14,8 @@ export type ChangePermissionModalState = "select" | "complete";
 interface ChangePermissionModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onPermissionSaveClick: (permission: VendorUserPermission) => void;
-  currentPermission?: VendorUserPermission;
+  onPermissionSaveClick: (permission: UserPermission) => void;
+  currentPermission?: UserPermission;
   isSaving?: boolean;
 }
 
@@ -58,7 +58,7 @@ export function PermissionChangeModal({
   const [modalState, setModalState] =
     useState<ChangePermissionModalState>("select");
   const [selectedPermission, setSelectedPermission] =
-    useState<VendorUserPermission>(currentPermission || "メンバー");
+    useState<UserPermission>(currentPermission || "メンバー");
 
   useEffect(() => {
     if (isOpen) {
@@ -72,8 +72,8 @@ export function PermissionChangeModal({
     setModalState("complete");
   }, [selectedPermission, onPermissionSaveClick]);
 
-  const getPermissionLabel = (permission: VendorUserPermission) => {
-    return VENDOR_PERMISSION_LABELS_MOCK[permission] || permission;
+  const getPermissionLabel = (permission: UserPermission) => {
+    return PERMISSION_LABELS_MOCK[permission] || permission;
   };
 
   return (
@@ -123,13 +123,13 @@ export function PermissionChangeModal({
         <>
           {/* Permission Selection Mode */}
           <div className="flex flex-col items-center p-0 gap-[10px] w-full mb-[25px]">
-            <p className="font-noto-jp font-[500] text-[14px] leading-[130%] text-center text-[#333333] m-0 w-[265px]">
+            <p className="font-noto-jp font-medium text-[14px] leading-[130%] text-center text-[#333333] m-0 w-[265px]">
               このユーザーを以下の権限へ変更します。
             </p>
 
             {/* Radio Buttons (Horizontal) */}
             <div className="flex flex-row items-center justify-center p-0 gap-[25px] h-[40px]">
-              {VENDOR_PERMISSION_OPTIONS_MOCK.map((option) => (
+              {PERMISSION_OPTIONS_MOCK.map((option) => (
                 <label
                   key={option.value}
                   className="flex flex-row items-center gap-[5px] cursor-pointer"
@@ -142,7 +142,7 @@ export function PermissionChangeModal({
                       checked={selectedPermission === option.value}
                       onChange={() =>
                         setSelectedPermission(
-                          option.value as VendorUserPermission
+                          option.value as UserPermission
                         )
                       }
                       className="appearance-none w-[24px] h-[24px] bg-white border border-[#e5e7eb] rounded-full cursor-pointer
@@ -173,21 +173,21 @@ export function PermissionChangeModal({
               <div className="flex flex-row items-start p-0 w-full h-[50px] bg-[rgba(255,255,255,0.0001)]">
                 <div className="flex flex-col justify-center items-center p-0 flex-1 h-[50px] bg-[#f5f5f5]">
                   <div className="flex flex-row items-start py-[15px] px-[12px] w-full h-[48px]">
-                    <span className="font-inter font-[600] text-[14px] leading-[130%] text-[#333333] text-center flex-grow">
+                    <span className="font-inter font-semibold text-[14px] leading-[130%] text-[#333333] text-center flex-grow">
                       機能
                     </span>
                   </div>
                 </div>
                 <div className="flex flex-col justify-center items-center p-0 flex-1 h-[50px] bg-[#f5f5f5]">
                   <div className="flex flex-row items-start py-[15px] px-[12px] w-full h-[48px]">
-                    <span className="font-inter font-[600] text-[14px] leading-[130%] text-[#333333] text-center flex-grow">
+                    <span className="font-inter font-semibold text-[14px] leading-[130%] text-[#333333] text-center flex-grow">
                       管理者
                     </span>
                   </div>
                 </div>
                 <div className="flex flex-col justify-center items-center p-0 flex-1 h-[50px] bg-[#f5f5f5]">
                   <div className="flex flex-row items-start py-[15px] px-[12px] w-full h-[48px]">
-                    <span className="font-inter font-[600] text-[14px] leading-[130%] text-[#333333] text-center flex-grow">
+                    <span className="font-inter font-semibold text-[14px] leading-[130%] text-[#333333] text-center flex-grow">
                       メンバー
                     </span>
                   </div>
@@ -209,7 +209,7 @@ export function PermissionChangeModal({
                       style={{ height: `${rowHeight}px` }}
                     >
                       <div className="flex flex-row justify-center items-center py-[10px] px-[12px] w-full h-[38px]">
-                        <span className="font-noto-jp font-[500] text-[14px] leading-[130%] text-[#333333] text-center flex-grow">
+                        <span className="font-noto-jp font-medium text-[14px] leading-[130%] text-[#333333] text-center flex-grow">
                           {row.feature}
                         </span>
                       </div>
@@ -233,7 +233,7 @@ export function PermissionChangeModal({
                           />
                         )}
                         {row.adminText && (
-                          <span className="font-noto-jp font-[500] text-[14px] leading-[130%] text-[#333333] text-center">
+                          <span className="font-noto-jp font-medium text-[14px] leading-[130%] text-[#333333] text-center">
                             {row.adminText}
                           </span>
                         )}
@@ -258,7 +258,7 @@ export function PermissionChangeModal({
                           />
                         )}
                         {row.memberText && (
-                          <span className="font-noto-jp font-[500] text-[14px] leading-[130%] text-[#333333] text-center">
+                          <span className="font-noto-jp font-medium text-[14px] leading-[130%] text-[#333333] text-center">
                             {row.memberText}
                           </span>
                         )}
@@ -275,7 +275,7 @@ export function PermissionChangeModal({
           {/* Completion Mode */}
           {/* Completion Mode - Frame 121 + Frame 51 structure */}
           <div className="flex flex-col items-center gap-[10px] w-[252px] h-[68px] justify-center p-0 mb-0">
-            <p className="font-noto-jp font-[500] text-[14px] leading-[130%] text-center text-[#333333] m-0 w-full">
+            <p className="font-noto-jp font-medium text-[14px] leading-[130%] text-center text-[#333333] m-0 w-full">
               ユーザーを以下の権限へ変更しました。
             </p>
             <div className="flex items-center justify-center h-[40px] gap-[25px] w-auto">

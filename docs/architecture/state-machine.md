@@ -4,74 +4,76 @@
 
 ---
 
-## 5.1 Project State Transitions / プロジェクト状態遷移
+> **Note:** 詳細なワークフローは [docs/workflows/](../workflows/index.md) に移動しました。
+>
+> **Note:** Detailed workflows have been moved to [docs/workflows/](../workflows/index.md).
 
-**Constraints / 制約:**
-- `Draft → InDiscussion`: Vendor selection required / Vendor選択必須
-- `InDiscussion → Closed`: Manual only (no auto-close) / 手動のみ（自動クローズなし）
-- Once `Closed`, cannot reopen / 一度 `Closed` になると再オープン不可
+---
 
-```mermaid
-stateDiagram-v2
-    [*] --> Draft: POST /projects
+## Overview / 概要
 
-    Draft --> Draft: PUT /projects/{id}<br/>Edit content / 内容編集
-    Draft --> InDiscussion: POST /projects/{id}/start-discussion<br/>Select Vendor + Send / Vendor選択 + 送信
+本システムの主要な状態遷移を機能ドメイン別に整理しています。
 
-    InDiscussion --> InDiscussion: Chat discussion / チャット協議<br/>Receive RFI response / RFI回答受信
-    InDiscussion --> Closed: POST /projects/{id}/close<br/>Complete / 完了処理
+| Domain | Document | Key States |
+|--------|----------|------------|
+| **Account & Organization** | [account.md](../workflows/account.md) | Application, Invitation, Signup, Role, Suspension |
+| **Projects** | [projects.md](../workflows/projects.md) | Project Status, Project Plan Response |
 
-    Closed --> [*]
+---
 
-    note right of Draft
-        Buyer creating RFI draft
-        Buyer が RFI 草案を作成中
-        Refine with AI chat
-        AI チャットで内容をブラッシュアップ
-    end note
+## Quick State Reference / 状態クイックリファレンス
 
-    note right of InDiscussion
-        RFI sent to Vendor
-        Vendor に RFI を送信済み
-        In discussion via chat
-        チャットで協議中
-    end note
+### Project Status
 
-    note right of Closed
-        Project completed
-        プロジェクト完了
-        No changes allowed
-        変更不可
-    end note
+```
+Draft → InDiscussion → Closed
+```
+
+### Application Status
+
+```
+Pending → Approved / Rejected
+```
+
+### Invitation Status
+
+```
+Pending → Accepted / Expired
+```
+
+### Organization Status
+
+```
+pending → active → suspended / inactive
+```
+
+### Profile Role
+
+```
+owner ↔ admin ↔ member → Removed
 ```
 
 ---
 
-## 5.2 RFI Response State Transitions / RFI回答の状態遷移
+## Detailed Documentation / 詳細ドキュメント
 
-```mermaid
-stateDiagram-v2
-    [*] --> Draft: Vendor starts response / Vendor が回答開始
+### Account & Organization Domain
 
-    Draft --> Draft: PUT /rfi/{id}/responses/{rid}<br/>Update draft / 下書き更新
-    Draft --> Submitted: POST /rfi/{id}/responses/{rid}/submit<br/>Submit response / 回答提出
+| Flow | Link | RPC Required |
+|------|------|--------------|
+| Application Approval | [1.1](../workflows/account.md#11-application-state-transitions--利用申請の状態遷移) | ✅ Yes |
+| Invitation Accept | [1.2](../workflows/account.md#12-invitation-state-transitions--招待の状態遷移) | ✅ Yes |
+| Self-Signup | [1.3](../workflows/account.md#13-self-signup-process--新規登録フロー) | ✅ Yes |
+| Role Change | [1.4](../workflows/account.md#14-role-change--ロール変更) | Partial (Owner Transfer) |
+| Account Suspension | [1.5](../workflows/account.md#15-account-suspension--アカウント停止) | ❌ No |
+| Member Removal | [1.6](../workflows/account.md#16-member-removal--メンバー削除) | ❌ No |
 
-    Submitted --> [*]
+### Projects Domain
 
-    note right of Draft
-        Vendor creating response
-        Vendor が回答を作成中
-        Can edit multiple times
-        何度でも編集可能
-    end note
-
-    note right of Submitted
-        Response submitted to Buyer
-        Buyer に回答を提出済み
-        No further edits allowed
-        以降は編集不可
-    end note
-```
+| Flow | Link | RPC Required |
+|------|------|--------------|
+| Project State Transitions | [2.1](../workflows/projects.md#21-project-state-transitions--プロジェクト状態遷移) | ❌ No |
+| Project Plan Response State | [2.2](../workflows/projects.md#22-project-plan-response-state-transitions--プロジェクト計画書回答の状態遷移) | ❌ No |
 
 ---
 

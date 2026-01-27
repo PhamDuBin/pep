@@ -25,10 +25,10 @@ graph LR
         UC17[UC17: Org Suspend/Resume / 組織の停止・再開]
     end
 
-    subgraph RFI Management / RFI管理
-        UC06[UC06: RFI Draft Creation / RFI草案の作成]
-        UC07[UC07: RFI Edit & Send / RFI編集・送信開始]
-        UC08[UC08: Vendor RFI Notification / ベンダーへのRFI通知]
+    subgraph Project Plan Management / プロジェクト計画書管理
+        UC06[UC06: Project Plan Draft / プロジェクト計画書草案作成]
+        UC07[UC07: Project Plan Edit & Send / プロジェクト計画書編集・送信開始]
+        UC08[UC08: Vendor Notification / ベンダーへの通知]
         UC09[UC09: Chat Discussion / ベンダーとのチャット協議]
         UC10[UC10: Project Completion / プロジェクトの完了]
         UC11[UC11: Project List & Search / プロジェクト一覧・検索]
@@ -90,10 +90,10 @@ graph LR
 | [UC02](./UC2.md) | Buyer Member Invitation & Authorization / Buyerメンバー招待・権限付与 | Buyer Admin | Organization admin invites members via email and grants Buyer Member permissions / 既存組織の管理者が、メンバーをメール招待し、Buyer Member権限を付与する |
 | [UC03](./UC3.md) | Vendor Application & Approval / Vendor申請・承認 | Vendor Admin / Platform Admin | Vendor submits application, Platform Admin reviews and approves for access / Vendorが利用申請を行い、Platform Adminが審査・承認して利用開始できるようにする |
 | [UC04](./UC4.md) | Buyer Login/Logout / Buyerのログイン・ログアウト | Buyer Admin/Member | Buyer user logs into PEP, accesses dashboard, and logs out / BuyerユーザがPEPにログインし、自分のダッシュボードにアクセス／ログアウトする |
-| [UC05](./UC5.md) | Vendor Login/Logout / Vendorのログイン・ログアウト | Vendor Admin/Member | Vendor user logs into PEP and accesses their RFI/chat list / VendorユーザがPEPにログインし、自分宛のRFI・チャット一覧にアクセスする |
-| [UC06](./UC6.md) | RFI Draft Creation (AI Chat) / RFI草案の作成（AIチャット） | Buyer Admin/Member, OpenAI API | Buyer creates new project using AI chat to draft RFI and saves as Draft / Buyerが新規プロジェクトとしてAIチャットを使ってRFI草案を作成し、Draft 状態で保存する |
-| [UC07](./UC7.md) | RFI Edit & Send (Draft → In Discussion) / RFI編集・送信開始 | Buyer Admin | Edit Draft RFI, select target vendors, and start project (status → In Discussion) / Draft状態のRFIを編集し、送信先ベンダーを決めてプロジェクトを開始（ステータスをIn Discussionにする） |
-| [UC08](./UC8.md) | Vendor RFI Notification (Email/Chat) / ベンダーへのRFI通知 | Buyer Admin, Vendor Admin/Member, SendGrid | Send email notification and initial chat message to selected vendors when RFI starts / RFI開始時に、選定されたVendorに対してメール通知／システム内チャットの初回メッセージを送る |
+| [UC05](./UC5.md) | Vendor Login/Logout / Vendorのログイン・ログアウト | Vendor Admin/Member | Vendor user logs into PEP and accesses their project/chat list / VendorユーザがPEPにログインし、自分宛のプロジェクト・チャット一覧にアクセスする |
+| [UC06](./UC6.md) | Project Plan Draft (AI Chat) / プロジェクト計画書草案作成（AIチャット） | Buyer Admin/Member, OpenAI API | Buyer creates new project using AI chat to draft Project Plan and saves as Draft / Buyerが新規プロジェクトとしてAIチャットを使ってプロジェクト計画書草案を作成し、Draft 状態で保存する |
+| [UC07](./UC7.md) | Project Plan Edit & Send (Draft → In Discussion) / プロジェクト計画書編集・送信開始 | Buyer Admin | Edit Draft Project Plan, select target vendors, and start project (status → In Discussion) / Draft状態のプロジェクト計画書を編集し、送信先ベンダーを決めてプロジェクトを開始（ステータスをIn Discussionにする） |
+| [UC08](./UC8.md) | Vendor Notification (Email/Chat) / ベンダーへの通知 | Buyer Admin, Vendor Admin/Member, SendGrid | Send email notification and initial chat message to selected vendors when project starts / プロジェクト開始時に、選定されたVendorに対してメール通知／システム内チャットの初回メッセージを送る |
 | [UC09](./UC9.md) | Chat Discussion with Vendors (In Discussion) / ベンダーとのチャット協議 | Buyer Admin/Member, Vendor Admin/Member | Buyer and vendor align requirements through chat during In Discussion status / In Discussion状態で、発注者とベンダーがチャットを通じて要件のすり合わせを行う |
 | [UC10](./UC10.md) | Project Completion / プロジェクトの完了 | Buyer Admin | Buyer Admin marks completed project as "Complete" (completion flag ON) / 協議が完了したプロジェクトに対して、Buyer Adminが「完了」を押し、完了フラグをONにする |
 | [UC11](./UC11.md) | Project List & Search / プロジェクト一覧・検索 | Buyer Admin/Member | Buyer filters and views organization's projects by "In Progress" or "Completed" / Buyerが、自分の組織のプロジェクトを「進行中」「完了済み」で絞り込み、詳細を参照する |

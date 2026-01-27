@@ -10,7 +10,12 @@ max_rows = 1000
 
 [db]
 port = 54322
-major_version = 15
+major_version = 17
+
+# Seed data configuration
+[db.seed]
+enabled = true
+sql_paths = ["./seed.sql"]
 
 [studio]
 enabled = true
@@ -27,7 +32,6 @@ enable_signup = true
 [auth.email]
 enable_signup = true
 double_confirm_changes = true
-enable_confirmations = true
 
 [storage]
 enabled = true

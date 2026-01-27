@@ -1,6 +1,6 @@
 
 /.claude
 /NUL
-/supabase/.branches
-/supabase/.temp
-desktop.ini
+
+# Supabase
+supabase/.temp/

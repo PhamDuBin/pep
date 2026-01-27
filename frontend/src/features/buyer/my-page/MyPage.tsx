@@ -7,7 +7,7 @@ import {
   PageTransition,
   UserInfoSection,
   PaymentInfoSection,
-  Pagination,
+  AddPaymentMethodModal
 } from "@/shared/components";
 import { useMyPage } from "./hooks";
 
@@ -24,10 +24,10 @@ export function MyPage() {
     showConfirmPassword,
     showAvatarSaveSuccess,
     showPasswordSaveSuccess,
-    currentPage,
-    totalPages,
     showEmailModal,
     showAvatarModal,
+    showPaymentMethodModal,
+    paymentModalState,
     emailModalState,
     isSendingEmail,
     setNewPassword,
@@ -35,13 +35,15 @@ export function MyPage() {
     setShowPassword,
     setShowConfirmPassword,
     setShowAvatarModal,
+    setShowPaymentMethodModal,
     handleAvatarClick,
     handleEmailChangeClick,
     handleAvatarSaveClick,
     handleSavePassword,
-    handlePageChange,
     handleDownloadInvoice,
     handleAddPaymentMethod,
+    handleClosePaymentModal,
+    handlePaymentAdded,
     handleEmailSendClick,
     handleCloseEmailModal,
     formatAmount,
@@ -92,10 +94,10 @@ export function MyPage() {
                   taxIncluded: paymentInfo.taxIncluded,
                   paymentMethod: paymentInfo.paymentMethod
                     ? {
-                        id: paymentInfo.paymentMethod.id || "default",
-                        type: paymentInfo.paymentMethod.type,
-                        lastFourDigits: paymentInfo.paymentMethod.lastFourDigits,
-                      }
+                      id: paymentInfo.paymentMethod.id || "default",
+                      type: paymentInfo.paymentMethod.type,
+                      lastFourDigits: paymentInfo.paymentMethod.lastFourDigits,
+                    }
                     : null,
                 }}
                 paymentHistory={paymentHistory.map((record) => ({
@@ -105,9 +107,6 @@ export function MyPage() {
                   usagePeriod: record.usagePeriod,
                   status: record.status as any,
                 }))}
-                currentPage={currentPage}
-                totalPages={totalPages}
-                handlePageChange={handlePageChange}
                 handleDownloadInvoice={handleDownloadInvoice}
                 handleAddPaymentMethod={handleAddPaymentMethod}
                 formatAmount={formatAmount}
@@ -133,6 +132,14 @@ export function MyPage() {
           onClose={() => setShowAvatarModal(false)}
           onAvatarSaveClick={handleAvatarSaveClick}
           currentColor={user?.avatarColor || "#8ec5d0"}
+        />
+
+        {/* Payment Method Modal */}
+        <AddPaymentMethodModal
+          isOpen={showPaymentMethodModal}
+          onClose={handleClosePaymentModal}
+          onAddPaymentMethod={handlePaymentAdded}
+          modalState={paymentModalState}
         />
       </div>
     </PageTransition>

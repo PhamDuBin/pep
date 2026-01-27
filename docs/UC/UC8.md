@@ -1,4 +1,4 @@
-# UC08: Vendor RFI Notification (Email/Chat) / ベンダーへのRFI通知（メール／チャット）
+# UC08: Vendor Notification (Email/Chat) / ベンダーへの通知（メール／チャット）
 
 ```mermaid
 sequenceDiagram
@@ -26,7 +26,7 @@ sequenceDiagram
             API->>DB: Get Vendor Admin user / Vendor Adminユーザ取得
             DB-->>API: User info / ユーザ情報
 
-            API->>Mail: Request email send / メール送信依頼<br/>(RFI start notification / RFI開始通知)
+            API->>Mail: Request email send / メール送信依頼<br/>(Project start notification / プロジェクト開始通知)
             Mail-->>API: Send complete / 送信完了
 
             Note over API, DB: Post initial chat message / 初回チャットメッセージ投稿
@@ -38,7 +38,7 @@ sequenceDiagram
             DB-->>API: Update complete / 更新完了
 
             Note over API, Notif: WebPush notification / WebPush通知
-            API->>Notif: notify("You have a new RFI" / "新着RFIがあります")
+            API->>Notif: notify("You have a new project" / "新着プロジェクトがあります")
             Notif-->>API: Notification complete / 通知完了
         end
     end
@@ -48,7 +48,7 @@ sequenceDiagram
 
     rect rgb(240, 255, 240)
         Note over VU, VWeb: Vendor side (access from email) / Vendor側（メールからアクセス）
-        VU->>Mail: Open RFI notification email / RFI通知メールを開く
+        VU->>Mail: Open project notification email / プロジェクト通知メールを開く
         VU->>VWeb: Click URL in email / メール内のURLをクリック
         VWeb->>API: GET /projects/{id}/messages
         API->>DB: Get message list / メッセージ一覧取得

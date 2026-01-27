@@ -30,7 +30,7 @@ export function UserListTable({
       <table className="w-full border-collapse bg-white border border-[#d4d4d4] rounded-[4px] overflow-hidden min-w-[600px]">
         <thead>
           <tr className="bg-[#f5f5f5]">
-            <th className="w-[44px] px-[12px] py-[10px] text-center align-middle border-l border-[#cfcfcf] border-t border-t-[#d4d4d4] font-semibold text-[14px] leading-[1.3] text-black">
+            <th className="w-[44px] px-[12px] py-[10px] text-center align-middle border-l border-[#cfcfcf] border-t border-t-[#d4d4d4] font-inter font-semibold text-[14px] leading-[1.3] text-black">
               <label className="relative inline-flex items-center justify-center cursor-pointer">
                 <input
                   type="checkbox"
@@ -68,13 +68,13 @@ export function UserListTable({
                 </span>
               </label>
             </th>
-            <th className="px-[12px] py-[15px] font-bold text-[16px] leading-[1.3] text-black text-center border-t border-t-[#d4d4d4]">
+            <th className="px-[12px] py-[15px] font-inter font-bold text-[16px] leading-[1.3] text-black text-center border-t border-t-[#d4d4d4]">
               ユーザー
             </th>
-            <th className="w-[120px] px-[12px] py-[15px] text-center border-t border-t-[#d4d4d4] font-semibold text-[14px] leading-[1.3] text-black">
+            <th className="w-[120px] px-[12px] py-[15px] text-center border-t border-t-[#d4d4d4] font-inter font-semibold text-[14px] leading-[1.3] text-black">
               権限
             </th>
-            <th className="px-[12px] py-[10px] text-center border-t border-t-[#d4d4d4] font-semibold text-[14px] leading-[1.3] text-black" />
+            <th className="px-[12px] py-[10px] text-center border-t border-t-[#d4d4d4] font-inter font-semibold text-[14px] leading-[1.3] text-black" />
           </tr>
         </thead>
         <tbody>

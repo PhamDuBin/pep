@@ -13,6 +13,7 @@ import {
   getSortOptions,
   toggleProjectFavorite,
 } from "../services/archive.service";
+import { VISIBLE_COUNT_INCREMENT } from "../constants/visible-count.constants";
 
 export function useArchive() {
   const [isLoading, setIsLoading] = useState(true);
@@ -24,13 +25,18 @@ export function useArchive() {
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [showFilterDropdown, setShowFilterDropdown] = useState(false);
   const [showSortDropdown, setShowSortDropdown] = useState(false);
-  const [openContextMenuId, setOpenContextMenuId] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const [openContextMenuId, setOpenContextMenuId] = useState<string | null>(
+    null
+  );
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showOnlyFavorites, setShowOnlyFavorites] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(VISIBLE_COUNT_INCREMENT);
 
   // Project Plan Modal state
   const [showPlanModal, setShowPlanModal] = useState(false);
-  const [selectedProject, setSelectedProject] = useState<ArchiveProject | null>(null);
+  const [selectedProject, setSelectedProject] = useState<ArchiveProject | null>(
+    null
+  );
 
   const filterRef = useRef<HTMLDivElement>(null);
   const sortRef = useRef<HTMLDivElement>(null);
@@ -79,28 +85,40 @@ export function useArchive() {
   }, [selectedFilter, filterOptions]);
 
   const filteredProjects = useMemo(() => {
+    const normalizedQuery = searchQuery.toLowerCase().trim();
     return projects
       .filter((p) => selectedFilter === "all" || p.authorId === selectedFilter)
+      .filter((p) => !showOnlyFavorites || p.isFavorite)
+      .filter((p) => {
+        if (!normalizedQuery) return true;
+        return (
+          p.name.toLowerCase().includes(normalizedQuery) ||
+          p.authorName.toLowerCase().includes(normalizedQuery)
+        );
+      })
       .sort((a, b) => {
         const dateA = new Date(a.createdAt.replace(/\//g, "-")).getTime();
         const dateB = new Date(b.createdAt.replace(/\//g, "-")).getTime();
         return sortOrder === "desc" ? dateB - dateA : dateA - dateB;
       });
-  }, [projects, selectedFilter, sortOrder]);
+  }, [projects, selectedFilter, sortOrder, searchQuery, showOnlyFavorites]);
 
-  const paginatedProjects = useMemo(() => {
-    if (viewMode === "grid") return filteredProjects;
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    return filteredProjects.slice(startIndex, startIndex + itemsPerPage);
-  }, [filteredProjects, viewMode, currentPage, itemsPerPage]);
+  // Visible projects (load more functionality)
+  const visibleProjects = useMemo(() => {
+    return filteredProjects.slice(0, visibleCount);
+  }, [filteredProjects, visibleCount]);
 
-  const totalPages = useMemo(() => {
-    return Math.ceil(filteredProjects.length / itemsPerPage);
-  }, [filteredProjects.length, itemsPerPage]);
+  const hasMoreItems = useMemo(() => {
+    return visibleCount < filteredProjects.length;
+  }, [visibleCount, filteredProjects.length]);
+
+  // Reset visible count when filters change
+  useEffect(() => {
+    setVisibleCount(VISIBLE_COUNT_INCREMENT);
+  }, [selectedFilter, sortOrder, searchQuery, showOnlyFavorites]);
 
   const handleViewModeToggle = useCallback(() => {
     setViewMode((prev) => (prev === "grid" ? "list" : "grid"));
-    setCurrentPage(1);
   }, []);
 
   const handleFilterSelect = useCallback((filterId: string) => {
@@ -121,10 +139,13 @@ export function useArchive() {
     setOpenContextMenuId(null);
   }, []);
 
-  const handleContextAction = useCallback((projectId: string, action: string) => {
-    console.log(`Action: ${action} for project: ${projectId}`);
-    setOpenContextMenuId(null);
-  }, []);
+  const handleContextAction = useCallback(
+    (projectId: string, action: string) => {
+      console.log(`Action: ${action} for project: ${projectId}`);
+      setOpenContextMenuId(null);
+    },
+    []
+  );
 
   const handleProjectClick = useCallback(
     (projectId: string) => {
@@ -157,16 +178,24 @@ export function useArchive() {
     }
   }, []);
 
-  const handlePageChange = useCallback((page: number) => {
-    setCurrentPage(page);
-  }, []);
-
   const handleFilterDropdownToggle = useCallback(() => {
     setShowFilterDropdown((prev) => !prev);
   }, []);
 
   const handleSortDropdownToggle = useCallback(() => {
     setShowSortDropdown((prev) => !prev);
+  }, []);
+
+  const handleSearchChange = useCallback((query: string) => {
+    setSearchQuery(query);
+  }, []);
+
+  const handleFavoriteFilterToggle = useCallback(() => {
+    setShowOnlyFavorites((prev) => !prev);
+  }, []);
+
+  const handleLoadMore = useCallback(() => {
+    setVisibleCount((prev) => prev + VISIBLE_COUNT_INCREMENT);
   }, []);
 
   return {
@@ -178,16 +207,17 @@ export function useArchive() {
     showFilterDropdown,
     showSortDropdown,
     openContextMenuId,
-    currentPage,
-    totalPages,
     filteredProjects,
-    paginatedProjects,
+    visibleProjects,
+    hasMoreItems,
     filterRef,
     sortRef,
     filterOptions,
     sortOptions,
     showPlanModal,
     selectedProject,
+    searchQuery,
+    showOnlyFavorites,
     handleViewModeToggle,
     handleFilterSelect,
     handleSortSelect,
@@ -196,9 +226,11 @@ export function useArchive() {
     handleContextAction,
     handleProjectClick,
     handlePlanModalClose,
-    handlePageChange,
     handleFilterDropdownToggle,
     handleSortDropdownToggle,
     handleFavoriteToggle,
+    handleSearchChange,
+    handleFavoriteFilterToggle,
+    handleLoadMore,
   };
 }

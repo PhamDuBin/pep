@@ -3,13 +3,14 @@
 import {
   EmailChangeModal,
   AvatarChangeModal,
+  AddPaymentMethodModal,
   Loading,
   PageTransition,
   UserInfoSection,
   PaymentInfoSection,
 } from "@/shared/components";
 import { InfoModal } from "@/features/vendor/shared/components";
-import { useVendorMyPage } from "./hooks";
+import { useMyPage } from "./hooks";
 
 export function MyPage() {
   const {
@@ -18,8 +19,6 @@ export function MyPage() {
     userProfile,
     paymentInfo,
     paymentHistory,
-    currentPage,
-    totalPages,
     newPassword,
     confirmPassword,
     showNewPassword,
@@ -28,6 +27,8 @@ export function MyPage() {
     showEmailModal,
     showEmailSuccessModal,
     showAvatarModal,
+    showAddPaymentModal,
+    paymentModalState,
     setNewPassword,
     setConfirmPassword,
     setShowNewPassword,
@@ -35,18 +36,20 @@ export function MyPage() {
     setShowEmailModal,
     setShowEmailSuccessModal,
     setShowAvatarModal,
+    setShowAddPaymentModal,
     handleEmailChangeClick,
     handleEmailSendClick,
     handleAvatarClick,
     handleAvatarSaveClick,
     handleSaveChanges,
-    handlePageChange,
     handleDownloadInvoice,
     handleAddPaymentMethod,
+    handleClosePaymentModal,
+    handlePaymentAdded,
     formatAmount,
     getPaymentMethodDisplay,
     getStatusLabel,
-  } = useVendorMyPage();
+  } = useMyPage();
 
   return (
     <PageTransition>
@@ -91,13 +94,13 @@ export function MyPage() {
                   taxIncluded: true,
                   paymentMethod: paymentInfo.paymentMethod
                     ? {
-                        id: `vendor-payment-${paymentInfo.paymentMethod.lastFourDigits}`,
-                        type: paymentInfo.paymentMethod.type as any,
-                        lastFourDigits: paymentInfo.paymentMethod.lastFourDigits,
-                      }
+                      id: `vendor-payment-${paymentInfo.paymentMethod.lastFourDigits}`,
+                      type: paymentInfo.paymentMethod.type as any,
+                      lastFourDigits: paymentInfo.paymentMethod.lastFourDigits,
+                    }
                     : null,
                 }}
-                paymentHistory={paymentHistory.map((record) => ({
+                paymentHistory={paymentHistory.map((record: any) => ({
                   id: record.id,
                   paymentDate: record.paymentDate,
                   amount: record.amount,
@@ -105,9 +108,6 @@ export function MyPage() {
                   status: record.status as any,
                   invoiceUrl: record.invoiceUrl,
                 }))}
-                currentPage={currentPage}
-                totalPages={totalPages}
-                handlePageChange={handlePageChange}
                 handleDownloadInvoice={(invoiceUrl) => {
                   handleDownloadInvoice(invoiceUrl);
                 }}
@@ -141,6 +141,14 @@ export function MyPage() {
           onClose={() => setShowAvatarModal(false)}
           onAvatarSaveClick={handleAvatarSaveClick}
           currentColor={userProfile?.avatarColor || "#8ec5d0"}
+        />
+
+        {/* Add Payment Method Modal */}
+        <AddPaymentMethodModal
+          isOpen={showAddPaymentModal}
+          onClose={handleClosePaymentModal}
+          onAddPaymentMethod={handlePaymentAdded}
+          modalState={paymentModalState}
         />
       </div>
     </PageTransition>

@@ -1,2 +1,1 @@
-# pytest configuration
-pytest_plugins = []
+"""PEP Backend Tests."""

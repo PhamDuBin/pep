@@ -1,14 +1,14 @@
 // =============================================================================
-// VENDOR HOME MOCK DATA - RE-EXPORTS
+// HOME MOCK DATA - RE-EXPORTS
 // =============================================================================
 
 export {
-  VENDOR_MESSAGES_MOCK,
-  VENDOR_MESSAGE_THREADS_MOCK,
-} from "./vendor-home.data";
+  MESSAGES_MOCK,
+  MESSAGE_THREADS_MOCK,
+} from "./home.data";
 
 // Legacy exports for backward compatibility
 export {
-  VENDOR_MESSAGES_MOCK as MOCK_VENDOR_MESSAGES,
-  VENDOR_MESSAGE_THREADS_MOCK as MOCK_VENDOR_MESSAGE_THREADS,
-} from "./vendor-home.data";
+  MESSAGES_MOCK as MOCK_VENDOR_MESSAGES,
+  MESSAGE_THREADS_MOCK as MOCK_VENDOR_MESSAGE_THREADS,
+} from "./home.data";

@@ -12,7 +12,7 @@
 ```mermaid
 graph TD
     subgraph Client["Client"]
-        FE[Angular Frontend]
+        FE[Next.js Frontend]
     end
 
     subgraph Backend["Backend (FastAPI)"]

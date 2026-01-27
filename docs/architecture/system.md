@@ -8,7 +8,7 @@
 - **Next.js (App Router)**: React-based SSR/SSG, optimized DX, TypeScript-first / Reactベース SSR/SSG、優れたDX、TypeScriptファースト
 - **Cloud Run**: Serverless, pay-per-use, auto-scaling (0→N) / サーバーレス・従量課金・自動スケール (0→N)
 - **Supabase**: All-in-one DB/Auth/Storage/Realtime, reduced operational costs / DB/Auth/Storage/Realtimeを一括提供、運用コスト削減
-- **OpenAI**: Quality of RFI draft generation with GPT-4 / GPT-4によるRFI草案生成の品質
+- **OpenAI**: Quality of Project Plan draft generation with GPT-4 / GPT-4によるプロジェクト計画書草案生成の品質
 
 ```mermaid
 graph TB

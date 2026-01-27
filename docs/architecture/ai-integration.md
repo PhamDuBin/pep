@@ -1,4 +1,4 @@
-# 4. RFI Generation Flow (AI Integration) / RFI生成フロー (AI連携)
+# 4. Project Plan Generation Flow (AI Integration) / プロジェクト計画書生成フロー (AI連携)
 
 [← Back to Index / 目次に戻る](./index.md)
 
@@ -12,15 +12,15 @@
 sequenceDiagram
     autonumber
     actor User
-    participant FE as Angular
+    participant FE as Next.js
     participant API as Cloud Run
     participant AI as OpenAI API
     participant DB as PostgreSQL
 
     rect rgb(255, 250, 240)
-        Note over User, DB: RFI Draft Generation / RFI草案生成
+        Note over User, DB: Project Plan Draft Generation / プロジェクト計画書草案生成
         User->>FE: Enter project overview / プロジェクト概要入力<br/>"Lumber wholesaler DX / 材木卸問屋のDX推進"
-        FE->>API: POST /api/rfi/ai-suggest<br/>{prompt, project_id}
+        FE->>API: POST /api/project-plans/ai-suggest<br/>{prompt, project_id}
 
         API->>AI: POST /v1/chat/completions<br/>{model: "gpt-4", messages: [...]}
         AI-->>API: Stream: "Background... / 背景として..."
@@ -33,7 +33,7 @@ sequenceDiagram
         API->>DB: UPDATE chat_messages<br/>SET embedding = [...]
 
         API-->>FE: 200 OK<br/>{content, message_id}
-        FE-->>User: Display RFI draft / RFI草案表示
+        FE-->>User: Display Project Plan draft / プロジェクト計画書草案表示
     end
 ```
 

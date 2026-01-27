@@ -180,6 +180,299 @@ pep/
    - Multi-table operations & payments: Use **Supabase RPC** (`supabase-py` doesn't support transactions)
    - 複数テーブル操作・決済などは **Supabase RPC** を使用 (`supabase-py` はトランザクション非対応)
 
+### Testing / テスト
+
+#### Backend Test Structure / バックエンドテスト構成
+
+```
+backend/
+├── tests/
+│   ├── unit/                    # Unit tests / ユニットテスト
+│   │   ├── test_routes/         # API layer tests / API層テスト
+│   │   ├── test_services/       # Service layer tests / Service層テスト
+│   │   └── test_crud/           # CRUD layer tests / CRUD層テスト
+│   ├── integration/             # Integration tests (real DB) / 結合テスト（実DB）
+│   └── conftest.py              # pytest fixtures
+```
+
+#### Test Commands / テストコマンド
+
+```bash
+cd backend
+pip install pytest pytest-asyncio pytest-cov httpx
+pytest                           # Run all tests / 全テスト実行
+pytest tests/unit/               # Unit tests only / ユニットテストのみ
+pytest --cov=app --cov-report=html  # With coverage / カバレッジ付き
+```
+
+#### Layer-by-Layer Testing Strategy / レイヤー別テスト戦略
+
+| Layer | Test Target / テスト対象 | Mock Target / モック対象 |
+|-------|-------------------------|-------------------------|
+| Routes (API) | HTTP request/response, auth | Service layer / Service層 |
+| Services | Business logic | CRUD layer, external APIs / CRUD層、外部API |
+| CRUD | DB queries | Supabase client |
+
+#### Testing Rules / テストルール
+
+1. **Isolation / 分離**: Each layer tests only its own responsibility / 各層は自身の責務のみテスト
+2. **Mocking**: Mock dependencies, not the layer under test / 依存先をモック、テスト対象はモックしない
+3. **Async**: Use `@pytest.mark.asyncio` for async functions / async関数には `@pytest.mark.asyncio` を使用
+4. **Coverage Target**: Aim for 80%+ coverage on Service layer / Service層は80%以上のカバレッジを目標
+5. **RPC Testing**: Test RPC calls with mocked Supabase client / RPCコールはSupabaseクライアントをモックしてテスト
+
+#### Example Test Patterns / テストパターン例
+
+##### 1. Routes Layer Test (API層テスト)
+
+```python
+# tests/unit/test_routes/test_projects.py
+import pytest
+from unittest.mock import AsyncMock, patch
+from httpx import AsyncClient, ASGITransport
+from app.main import app
+
+@pytest.fixture
+def mock_current_user():
+    """Mock authenticated user / 認証済みユーザーのモック"""
+    return {
+        "id": "user-uuid",
+        "org_id": "org-uuid",
+        "role": "buyer_admin"
+    }
+
+@pytest.fixture
+def mock_project_service():
+    """Mock ProjectService / ProjectServiceのモック"""
+    return AsyncMock()
+
+@pytest.mark.asyncio
+async def test_get_projects_success(mock_current_user, mock_project_service):
+    """Test project list endpoint / プロジェクト一覧取得テスト"""
+    # Arrange - Mock dependencies
+    mock_project_service.list_projects.return_value = {
+        "projects": [{"id": "proj-1", "title": "Test Project"}],
+        "total_count": 1
+    }
+
+    with patch("app.api.routes.projects.get_current_user", return_value=mock_current_user), \
+         patch("app.api.routes.projects.ProjectService", return_value=mock_project_service):
+
+        # Act
+        transport = ASGITransport(app=app)
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            response = await client.get(
+                "/api/projects",
+                headers={"Authorization": "Bearer test-token"}
+            )
+
+        # Assert
+        assert response.status_code == 200
+        data = response.json()
+        assert len(data["projects"]) == 1
+        mock_project_service.list_projects.assert_called_once()
+
+@pytest.mark.asyncio
+async def test_get_projects_unauthorized():
+    """Test unauthorized access / 未認証アクセステスト"""
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        response = await client.get("/api/projects")
+
+    assert response.status_code == 401
+```
+
+##### 2. Services Layer Test (Service層テスト)
+
+```python
+# tests/unit/test_services/test_project_service.py
+import pytest
+from unittest.mock import AsyncMock, MagicMock
+from app.services.project_service import ProjectService
+from app.schemas.project import ProjectCreate
+
+@pytest.fixture
+def mock_project_crud():
+    """Mock ProjectCRUD / ProjectCRUDのモック"""
+    return AsyncMock()
+
+@pytest.fixture
+def mock_openai_client():
+    """Mock OpenAI client / OpenAIクライアントのモック"""
+    return MagicMock()
+
+@pytest.mark.asyncio
+async def test_create_project_success(mock_project_crud):
+    """Test project creation / プロジェクト作成テスト"""
+    # Arrange
+    mock_project_crud.create.return_value = {
+        "id": "new-proj-uuid",
+        "title": "New Project",
+        "status": "draft"
+    }
+    service = ProjectService(crud=mock_project_crud)
+    project_data = ProjectCreate(title="New Project", description="Test")
+
+    # Act
+    result = await service.create_project(
+        org_id="org-uuid",
+        user_id="user-uuid",
+        data=project_data
+    )
+
+    # Assert
+    assert result["id"] == "new-proj-uuid"
+    assert result["status"] == "draft"
+    mock_project_crud.create.assert_called_once()
+
+@pytest.mark.asyncio
+async def test_generate_ai_draft(mock_project_crud, mock_openai_client):
+    """Test AI draft generation / AI草案生成テスト"""
+    # Arrange
+    mock_openai_client.chat.completions.create.return_value = MagicMock(
+        choices=[MagicMock(message=MagicMock(content="Generated content"))]
+    )
+    service = ProjectService(crud=mock_project_crud, openai=mock_openai_client)
+
+    # Act
+    result = await service.generate_draft(project_id="proj-uuid")
+
+    # Assert
+    assert "Generated content" in result["content"]
+    mock_openai_client.chat.completions.create.assert_called_once()
+
+@pytest.mark.asyncio
+async def test_access_denied_other_org(mock_project_crud):
+    """Test access to other org's project / 他組織プロジェクトへのアクセス拒否テスト"""
+    # Arrange
+    mock_project_crud.get_by_id.return_value = None  # Not found for this org
+    service = ProjectService(crud=mock_project_crud)
+
+    # Act & Assert
+    with pytest.raises(NotFoundException):
+        await service.get_project(project_id="proj-uuid", org_id="wrong-org")
+```
+
+##### 3. CRUD Layer Test (CRUD層テスト)
+
+```python
+# tests/unit/test_crud/test_projects_crud.py
+import pytest
+from unittest.mock import MagicMock, AsyncMock
+from app.crud.projects import ProjectCRUD
+
+@pytest.fixture
+def mock_supabase():
+    """Mock Supabase client / Supabaseクライアントのモック"""
+    mock = MagicMock()
+    # Chainable methods / チェーン可能なメソッド
+    mock.table.return_value = mock
+    mock.select.return_value = mock
+    mock.insert.return_value = mock
+    mock.update.return_value = mock
+    mock.eq.return_value = mock
+    mock.order.return_value = mock
+    mock.range.return_value = mock
+    mock.single.return_value = mock
+    return mock
+
+@pytest.mark.asyncio
+async def test_get_projects_by_org(mock_supabase):
+    """Test fetching projects by organization / 組織別プロジェクト取得テスト"""
+    # Arrange
+    mock_supabase.execute.return_value = MagicMock(
+        data=[
+            {"id": "proj-1", "title": "Project 1"},
+            {"id": "proj-2", "title": "Project 2"}
+        ]
+    )
+    crud = ProjectCRUD(supabase=mock_supabase)
+
+    # Act
+    result = await crud.get_by_org(org_id="org-uuid", limit=10, offset=0)
+
+    # Assert
+    assert len(result) == 2
+    mock_supabase.table.assert_called_with("projects")
+    mock_supabase.eq.assert_called_with("organization_id", "org-uuid")
+
+@pytest.mark.asyncio
+async def test_create_project(mock_supabase):
+    """Test project creation in DB / DB上でのプロジェクト作成テスト"""
+    # Arrange
+    mock_supabase.execute.return_value = MagicMock(
+        data=[{"id": "new-proj", "title": "New Project", "status": "draft"}]
+    )
+    crud = ProjectCRUD(supabase=mock_supabase)
+
+    # Act
+    result = await crud.create({
+        "title": "New Project",
+        "organization_id": "org-uuid",
+        "created_by": "user-uuid"
+    })
+
+    # Assert
+    assert result["id"] == "new-proj"
+    mock_supabase.insert.assert_called_once()
+
+@pytest.mark.asyncio
+async def test_rpc_call(mock_supabase):
+    """Test Supabase RPC call / Supabase RPC呼び出しテスト"""
+    # Arrange
+    mock_supabase.rpc.return_value = MagicMock()
+    mock_supabase.rpc.return_value.execute.return_value = MagicMock(
+        data={"status": "success", "result": {"action": "processed"}}
+    )
+    crud = ProjectCRUD(supabase=mock_supabase)
+
+    # Act
+    result = await crud.call_rpc("handle_status_change", {
+        "p_project_id": "proj-uuid",
+        "p_new_status": "in_discussion"
+    })
+
+    # Assert
+    assert result["status"] == "success"
+    mock_supabase.rpc.assert_called_with("handle_status_change", {
+        "p_project_id": "proj-uuid",
+        "p_new_status": "in_discussion"
+    })
+```
+
+##### 4. External API Mock (外部APIモック)
+
+```python
+# tests/unit/test_services/test_billing_service.py
+import pytest
+from unittest.mock import MagicMock, patch
+
+@pytest.mark.asyncio
+async def test_create_checkout_session():
+    """Test Stripe Checkout Session creation / Stripe Checkout Session作成テスト"""
+    # Arrange - Mock Stripe API
+    mock_session = MagicMock(
+        id="cs_test_xxx",
+        url="https://checkout.stripe.com/pay/cs_test_xxx"
+    )
+
+    with patch("stripe.checkout.Session.create", return_value=mock_session):
+        from app.services.billing_service import BillingService
+        service = BillingService()
+
+        # Act
+        result = await service.create_checkout_session(
+            org_id="org-uuid",
+            price_id="price_xxx",
+            success_url="https://example.com/success",
+            cancel_url="https://example.com/cancel"
+        )
+
+        # Assert
+        assert result["session_id"] == "cs_test_xxx"
+        assert "checkout.stripe.com" in result["checkout_url"]
+```
+
 ### Database (Supabase)
 
 1. **RLS**: Row Level Security required for all tables / すべてのテーブルにRow Level Security必須

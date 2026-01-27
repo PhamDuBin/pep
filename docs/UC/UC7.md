@@ -1,4 +1,4 @@
-# UC07: RFI Edit & Send (Draft → In Discussion) / RFI編集・送信開始（Draft → In Discussion）
+# UC07: Project Plan Edit & Send (Draft → In Discussion) / プロジェクト計画書編集・送信開始（Draft → In Discussion）
 
 ```mermaid
 sequenceDiagram
@@ -19,15 +19,15 @@ sequenceDiagram
 
         BA->>BWeb: Select target project / 対象プロジェクトを選択
         BWeb->>API: GET /projects/{id}
-        API->>DB: Get project details / プロジェクト詳細取得<br/>(RFI body, title etc. / RFI本文, タイトル等)
+        API->>DB: Get project details / プロジェクト詳細取得<br/>(Project Plan body, title etc. / プロジェクト計画書本文, タイトル等)
         DB-->>API: Project details / プロジェクト詳細
         API-->>BWeb: Project details / プロジェクト詳細
-        BWeb-->>BA: Display edit screen / 編集画面表示<br/>(RFI body edit + Vendor selection UI / RFI本文編集＋Vendor選定UI)
+        BWeb-->>BA: Display edit screen / 編集画面表示<br/>(Project Plan body edit + Vendor selection UI / プロジェクト計画書本文編集＋Vendor選定UI)
     end
 
     rect rgb(248, 248, 255)
-        Note over BA, BWeb: Edit RFI content / RFI内容の編集
-        BA->>BWeb: Edit RFI body/title/tags etc. / RFI本文/タイトル/タグ等を編集
+        Note over BA, BWeb: Edit Project Plan content / プロジェクト計画書内容の編集
+        BA->>BWeb: Edit Project Plan body/title/tags etc. / プロジェクト計画書本文/タイトル/タグ等を編集
     end
 
     rect rgb(240, 255, 240)
@@ -45,7 +45,7 @@ sequenceDiagram
     rect rgb(255, 250, 240)
         Note over BA, DB: Validation and start send / バリデーションと送信開始
         BA->>BWeb: Click "Start Send" / 「送信開始」ボタン押下
-        BWeb->>API: POST /projects/{id}/start-discussion<br/>(edited RFI content / 編集済みRFI内容,<br/>selected Vendor list / 選定Vendorリスト)
+        BWeb->>API: POST /projects/{id}/start-discussion<br/>(edited Project Plan content / 編集済みプロジェクト計画書内容,<br/>selected Vendor list / 選定Vendorリスト)
 
         API->>DB: Check project exists / プロジェクト存在確認<br/>+ check current status / 現在ステータス確認
         DB-->>API: Check result / 確認結果

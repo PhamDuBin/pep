@@ -1,12 +1,12 @@
 // =============================================================================
-// VENDOR USER LIST SERVICE
+// USER LIST SERVICE
 // =============================================================================
 
-import { VendorUser, PermissionOption } from "../models";
+import { User, PermissionOption } from "../models";
 import {
-  VENDOR_USERS_MOCK,
-  VENDOR_PERMISSION_OPTIONS_MOCK,
-} from "../mock/vendor-user-list.data";
+  USERS_MOCK,
+  PERMISSION_OPTIONS_MOCK,
+} from "../mock/user-list.data";
 
 const USE_MOCK = true;
 
@@ -16,11 +16,11 @@ interface ActionResponse {
 }
 
 /**
- * Get vendor users
+ * Get users
  */
-export async function getVendorUsers(): Promise<VendorUser[]> {
+export async function getUsers(): Promise<User[]> {
   if (USE_MOCK) {
-    return VENDOR_USERS_MOCK;
+    return USERS_MOCK;
   }
 
   const res = await fetch("/api/vendor/users");
@@ -30,11 +30,11 @@ export async function getVendorUsers(): Promise<VendorUser[]> {
 }
 
 /**
- * Get vendor permission options
+ * Get permission options
  */
-export async function getVendorPermissionOptions(): Promise<PermissionOption[]> {
+export async function getPermissionOptions(): Promise<PermissionOption[]> {
   if (USE_MOCK) {
-    return VENDOR_PERMISSION_OPTIONS_MOCK;
+    return PERMISSION_OPTIONS_MOCK;
   }
 
   const res = await fetch("/api/vendor/users/permission-options");
@@ -44,15 +44,15 @@ export async function getVendorPermissionOptions(): Promise<PermissionOption[]> 
 }
 
 /**
- * Invite vendor user
+ * Invite user
  */
-export async function inviteVendorUser(
+export async function inviteUser(
   email: string,
   role: string
-): Promise<ActionResponse & { user?: VendorUser }> {
+): Promise<ActionResponse & { user?: User }> {
   if (USE_MOCK) {
     await new Promise((resolve) => setTimeout(resolve, 500));
-    const newUser: VendorUser = {
+    const newUser: User = {
       id: `u-${Date.now()}`,
       name: email.split("@")[0],
       initials: email.slice(0, 2).toUpperCase(),
@@ -76,9 +76,9 @@ export async function inviteVendorUser(
 }
 
 /**
- * Update vendor user
+ * Update user
  */
-export async function updateVendorUser(
+export async function updateUser(
   userId: string,
   name: string,
   role: string
@@ -100,9 +100,9 @@ export async function updateVendorUser(
 }
 
 /**
- * Delete vendor users
+ * Delete users
  */
-export async function deleteVendorUsers(
+export async function deleteUsers(
   userIds: string[]
 ): Promise<ActionResponse> {
   if (USE_MOCK) {

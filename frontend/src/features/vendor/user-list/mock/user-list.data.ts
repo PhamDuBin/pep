@@ -1,12 +1,12 @@
 // =============================================================================
-// VENDOR USER LIST MOCK DATA
+// USER LIST MOCK DATA
 // =============================================================================
 
-import { VendorUser, PermissionOption } from "../models";
+import { User, PermissionOption } from "../models";
 
-export type VendorUserPermission = "管理者" | "メンバー";
+export type UserPermission = "管理者" | "メンバー";
 
-export const VENDOR_USERS_MOCK: VendorUser[] = [
+export const USERS_MOCK: User[] = [
   {
     id: "u1",
     name: "山口 太郎",
@@ -36,12 +36,12 @@ export const VENDOR_USERS_MOCK: VendorUser[] = [
   },
 ];
 
-export const VENDOR_PERMISSION_OPTIONS_MOCK: PermissionOption[] = [
+export const PERMISSION_OPTIONS_MOCK: PermissionOption[] = [
   { value: "管理者", label: "管理者" },
   { value: "メンバー", label: "メンバー" },
 ];
 
-export const VENDOR_PERMISSION_LABELS_MOCK: Record<VendorUserPermission, string> = {
+export const PERMISSION_LABELS_MOCK: Record<UserPermission, string> = {
   "管理者": "管理者",
   "メンバー": "メンバー",
 };

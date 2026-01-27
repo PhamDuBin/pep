@@ -1,10 +1,10 @@
 "use client";
 
-import { VendorMessage } from "../../models";
+import { Message } from "../../models";
 import Image from "next/image";
 
 interface MessageListProps {
-  messages: VendorMessage[];
+  messages: Message[];
   selectedMessageId: string | null;
   searchQuery: string;
   onSearchChange: (query: string) => void;
@@ -49,7 +49,7 @@ export function MessageList({
             value={searchQuery}
             onChange={handleSearchInputChange}
             className="flex-1 outline-none border-none bg-transparent text-[13px] text-[#333333] placeholder:text-[#808080]"
-            placeholder="検索..."
+            placeholder=""
           />
         </div>
       </div>

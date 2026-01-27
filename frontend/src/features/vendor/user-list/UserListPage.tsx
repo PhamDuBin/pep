@@ -7,7 +7,7 @@ import {
   UserListTable,
 } from "@/shared/components";
 import { ChangePermissionModal } from "./components";
-import { useVendorUserList } from "./hooks";
+import { useUserList } from "./hooks";
 
 export function UserListPage() {
   const {
@@ -42,7 +42,7 @@ export function UserListPage() {
     handleChangePermission,
     handlePermissionSaveClick,
     handleCloseChangePermissionModal,
-  } = useVendorUserList();
+  } = useUserList();
 
   // Wrapper to handle selection by ID (for shared component)
   const handleToggleSelection = (userId: string) => {
@@ -62,7 +62,7 @@ export function UserListPage() {
 
   return (
     <PageTransition>
-      <div className="flex flex-col items-center py-[25px] px-[50px] gap-[50px] w-full min-h-[calc(100vh-89px)] bg-white">
+      <div className="flex flex-col items-center py-[25px] px-[50px] gap-[50px] w-full min-h-[calc(100vh-65px)] bg-white">
         <div className="flex flex-col items-start gap-[25px] w-full">
           {/* Header */}
           <div className="flex flex-row items-center px-0 pb-[10px] gap-[10px] w-full h-[37px] border-b border-[#CFCFCF]">

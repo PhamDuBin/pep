@@ -115,9 +115,9 @@ export const CONVERSATION_MOCK: VendorConversation = {
 };
 
 export const MEMBERS_MOCK: ChatMember[] = [
-  { id: "1", name: "山田 太郎", initials: "山" },
-  { id: "2", name: "佐藤 花子", initials: "佐" },
-  { id: "3", name: "田中 次郎", initials: "田" },
+  { id: "1", name: "山田 太郎", initials: "山", organization: "buyer" },
+  { id: "2", name: "佐藤 花子", initials: "佐", organization: "buyer" },
+  { id: "3", name: "田中 次郎", initials: "田", organization: "vendor" },
 ];
 
 export const CARRY_TABS_MOCK: Tab[] = [
@@ -144,12 +144,12 @@ export const MESSAGE_INPUT_PLACEHOLDER_MOCK = "メッセージを入力";
 export const MESSAGE_LIST_TITLE_MOCK = "メッセージ一覧";
 
 export const SEARCHABLE_USERS_MOCK: SearchableUser[] = [
-  { id: "user-1", name: "鈴木 一郎", email: "suzuki@example.com", initials: "鈴" },
-  { id: "user-2", name: "高橋 美咲", email: "takahashi@example.com", initials: "高" },
-  { id: "user-3", name: "渡辺 健太", email: "watanabe@example.com", initials: "渡" },
-  { id: "user-4", name: "伊藤 さくら", email: "ito@example.com", initials: "伊" },
-  { id: "user-5", name: "中村 大輔", email: "nakamura@example.com", initials: "中" },
-  { id: "user-6", name: "小林 由美", email: "kobayashi@example.com", initials: "小" },
-  { id: "user-7", name: "加藤 翔太", email: "kato@example.com", initials: "加" },
-  { id: "user-8", name: "吉田 愛", email: "yoshida@example.com", initials: "吉" },
+  { id: "user-1", name: "鈴木 一郎", email: "suzuki@example.com", initials: "鈴", organization: "buyer" },
+  { id: "user-2", name: "高橋 美咲", email: "takahashi@example.com", initials: "高", organization: "buyer" },
+  { id: "user-3", name: "渡辺 健太", email: "watanabe@example.com", initials: "渡", organization: "vendor" },
+  { id: "user-4", name: "伊藤 さくら", email: "ito@example.com", initials: "伊", organization: "buyer" },
+  { id: "user-5", name: "中村 大輔", email: "nakamura@example.com", initials: "中", organization: "vendor" },
+  { id: "user-6", name: "小林 由美", email: "kobayashi@example.com", initials: "小", organization: "buyer" },
+  { id: "user-7", name: "加藤 翔太", email: "kato@example.com", initials: "加", organization: "vendor" },
+  { id: "user-8", name: "吉田 愛", email: "yoshida@example.com", initials: "吉", organization: "buyer" },
 ];

@@ -1,1 +1,1 @@
-export { useVendorUserList } from "./useVendorUserList";
+export { useUserList } from "./useUserList";
