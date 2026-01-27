@@ -7,6 +7,14 @@ from unittest.mock import AsyncMock, patch
 from app.main import app
 
 
+def pytest_configure(config):
+    """Register custom markers."""
+    config.addinivalue_line(
+        "markers",
+        "integration: mark test as integration (uses real DB, requires network)",
+    )
+
+
 @pytest.fixture
 def mock_current_user():
     """Mock authenticated user."""
