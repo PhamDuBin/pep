@@ -39,6 +39,27 @@ Next.js (Cloud Run or Vercel) [UI/BFF only]
             └── Stripe API
 ```
 
+## Prerequisites / 前提条件
+
+| Tool | Version | Notes |
+|------|---------|-------|
+| **Python** | 3.11+ | Required for backend / バックエンド必須 |
+| **Node.js** | 20+ | Required for frontend / フロントエンド必須 |
+| **pyenv** | - | Recommended for Python version management / Pythonバージョン管理推奨 |
+
+### Python Setup / Pythonセットアップ
+```bash
+# Install Python 3.11 with pyenv / pyenvでPython 3.11をインストール
+pyenv install 3.11.8
+cd backend
+pyenv local 3.11.8      # Set local Python version / ローカルPythonバージョン設定
+python --version        # Verify: Python 3.11.8
+```
+
+**IMPORTANT**: All developers must use Python 3.11+ to match the production environment (Cloud Run). Code uses Python 3.9+ type hints (`list[...]`, `tuple[...]`).
+
+**重要**: 本番環境(Cloud Run)と合わせるため、全開発者はPython 3.11+を使用すること。コードはPython 3.9+の型ヒント(`list[...]`, `tuple[...]`)を使用。
+
 ## Key Commands / 主要コマンド
 
 ### Frontend (Next.js)
@@ -53,7 +74,9 @@ npm run lint            # Run ESLint / ESLint実行
 ### Backend (FastAPI)
 ```bash
 cd backend
+python --version         # Verify Python 3.11+ / Python 3.11+を確認
 pip install -r requirements.txt
+pip install -r requirements-dev.txt  # Dev dependencies (pytest, etc.) / 開発用依存関係
 uvicorn app.main:app --reload  # Start dev server at http://localhost:8000 / 開発サーバー起動
 ```
 
