@@ -18,6 +18,7 @@ DECLARE
     v_org_type TEXT;
     v_ba RECORD;
     v_va RECORD;
+    v_applicant_profile_id UUID;
 BEGIN
     -- 1. Try to find in buyer_applications first
     SELECT * INTO v_ba FROM buyer_applications WHERE id = p_application_id AND is_deleted = FALSE;
@@ -62,12 +63,18 @@ BEGIN
             updated_by = p_admin_id,
             updated_at = NOW();
 
-        -- 5. Update profiles for this org
-        UPDATE profiles
-        SET status = 'active',
-            updated_by = p_admin_id,
-            updated_at = NOW()
-        WHERE org_id = v_org_id AND is_deleted = FALSE;
+        -- 5. Update only the applicant's profile (created_by on application; fallback: org.created_by)
+        v_applicant_profile_id := v_ba.created_by;
+        IF v_applicant_profile_id IS NULL THEN
+            SELECT created_by INTO v_applicant_profile_id FROM organizations WHERE id = v_org_id;
+        END IF;
+        IF v_applicant_profile_id IS NOT NULL THEN
+            UPDATE profiles
+            SET status = 'active',
+                updated_by = p_admin_id,
+                updated_at = NOW()
+            WHERE id = v_applicant_profile_id AND is_deleted = FALSE;
+        END IF;
 
         RETURN jsonb_build_object(
             'status', 'approved',
@@ -124,12 +131,18 @@ BEGIN
             updated_by = p_admin_id,
             updated_at = NOW();
 
-        -- 5. Update profiles for this org
-        UPDATE profiles
-        SET status = 'active',
-            updated_by = p_admin_id,
-            updated_at = NOW()
-        WHERE org_id = v_org_id AND is_deleted = FALSE;
+        -- 5. Update only the applicant's profile (created_by on application; fallback: org.created_by)
+        v_applicant_profile_id := v_va.created_by;
+        IF v_applicant_profile_id IS NULL THEN
+            SELECT created_by INTO v_applicant_profile_id FROM organizations WHERE id = v_org_id;
+        END IF;
+        IF v_applicant_profile_id IS NOT NULL THEN
+            UPDATE profiles
+            SET status = 'active',
+                updated_by = p_admin_id,
+                updated_at = NOW()
+            WHERE id = v_applicant_profile_id AND is_deleted = FALSE;
+        END IF;
 
         RETURN jsonb_build_object(
             'status', 'approved',
@@ -155,6 +168,7 @@ GRANT EXECUTE ON FUNCTION approve_application(UUID, UUID) TO service_role;
 GRANT EXECUTE ON FUNCTION approve_application(UUID, UUID) TO authenticated;
 
 COMMENT ON FUNCTION approve_application(UUID, UUID) IS
-'利用申請承認RPC: application/organization/profiles を active/approved に更新し、
+'利用申請承認RPC: application/organization を active/approved に更新し、
+申請人の profile のみ status=active に更新（組織内の他メンバーは更新しない）。
 applications → org_details へデータコピー。
 buyer_applications / vendor_applications のいずれかで id が pending のときのみ成功。';
