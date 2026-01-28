@@ -1,5 +1,8 @@
 """Security utilities for JWT verification."""
 
+import base64
+import json
+import logging
 from typing import Optional
 from fastapi import Depends, HTTPException, Security
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -9,6 +12,7 @@ from supabase import Client
 from app.core.config import get_settings
 from app.core.supabase import get_supabase
 
+logger = logging.getLogger(__name__)
 security = HTTPBearer()
 
 
@@ -39,12 +43,27 @@ async def verify_token(
             )
 
             if response.status_code != 200:
+                sub = None
+                try:
+                    payload_b64 = token.split(".")[1]
+                    payload = json.loads(base64.urlsafe_b64decode(payload_b64 + "=="))
+                    sub = payload.get("sub")
+                except Exception:
+                    pass
+                logger.warning(
+                    "JWT rejected by Supabase. status=%s body=%s sub=%s",
+                    response.status_code,
+                    response.text,
+                    sub,
+                )
                 raise HTTPException(
                     status_code=401,
                     detail="Invalid or expired token",
                 )
 
-            return response.json()
+            user = response.json()
+            logger.info("Authenticated user_id=%s", user.get("id"))
+            return user
 
     except httpx.RequestError as e:
         raise HTTPException(
