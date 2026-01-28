@@ -39,7 +39,10 @@ async def verify_token(
         async with httpx.AsyncClient() as client:
             response = await client.get(
                 f"{settings.supabase_url}/auth/v1/user",
-                headers={"Authorization": f"Bearer {token}"},
+                headers={
+                    "Authorization": f"Bearer {token}",
+                    "apikey": settings.supabase_anon_key,
+                },
             )
 
             if response.status_code != 200:
