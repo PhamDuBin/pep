@@ -80,6 +80,30 @@ pip install -r requirements-dev.txt  # Dev dependencies (pytest, etc.) / 開発�
 uvicorn app.main:app --reload  # Start dev server at http://localhost:8000 / 開発サーバー起動
 ```
 
+### API Testing / APIテスト
+
+JWT token is required for authenticated API calls. Use the helper script to get a token.
+
+認証が必要なAPIを呼び出すにはJWTトークンが必要です。ヘルパースクリプトでトークンを取得できます。
+
+```bash
+cd backend
+
+# Get JWT token / JWTトークン取得
+python scripts/get_token.py <email> <password>
+
+# Example / 例
+python scripts/get_token.py api-test@example.com ApiTest1234
+
+# Use with curl / curlで使用
+TOKEN=$(python scripts/get_token.py api-test@example.com ApiTest1234 2>/dev/null | grep "^Bearer" | cut -d' ' -f2)
+curl -H "Authorization: Bearer $TOKEN" http://localhost:8000/api/users/me
+```
+
+**Test User / テストユーザー**: Create via Supabase Dashboard (Authentication → Users → Add user)
+
+**Supabase設定**: Authentication → Providers → Email → **Confirm email: OFF** (開発環境のみ)
+
 ### Supabase
 ```bash
 supabase db push         # Apply migrations / マイグレーション適用
