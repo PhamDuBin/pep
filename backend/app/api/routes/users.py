@@ -10,6 +10,7 @@ from app.schemas.user import (
     UserProfileUpdate,
     AvatarUpdate,
     AvatarColor,
+    PlatformAdminStatus,
 )
 
 router = APIRouter()
@@ -71,3 +72,25 @@ async def get_avatar_colors(
     利用可能なアバター色の一覧を取得
     """
     return service.get_avatar_colors()
+
+
+@router.get("/platform-admin", response_model=PlatformAdminStatus)
+async def get_platform_admin_status(
+    current_user: dict = Depends(get_current_user),
+    supabase=Depends(get_supabase),
+) -> PlatformAdminStatus:
+    """
+    Check if current user is a Platform Admin.
+
+    Requires JWT. Returns {is_platform_admin: true/false}.
+    """
+    result = (
+        supabase.table("profiles")
+        .select("is_platform_admin")
+        .eq("id", current_user["id"])
+        .eq("is_deleted", False)
+        .execute()
+    )
+    rows = result.data or []
+    is_admin = bool(rows and rows[0].get("is_platform_admin"))
+    return PlatformAdminStatus(is_platform_admin=is_admin)

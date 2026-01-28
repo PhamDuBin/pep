@@ -57,3 +57,9 @@ class AvatarColor(BaseModel):
     id: str
     color: str
     border_color: str
+
+
+class PlatformAdminStatus(BaseModel):
+    """Platform admin flag response schema."""
+
+    is_platform_admin: bool

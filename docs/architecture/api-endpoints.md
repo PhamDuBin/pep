@@ -14,6 +14,7 @@
 | `PUT` | `/api/users/password` | Change password / パスワード変更 | UC16 |
 | `POST` | `/api/users/email/request-change` | Request email change / メール変更リクエスト | UC16 |
 | `GET` | `/api/users/avatar-colors` | List avatar colors / アバター色一覧 | UC16 |
+| `GET` | `/api/users/platform-admin` | Check platform admin flag / 管理者フラグ確認 | - |
 
 ## Organizations / 組織
 

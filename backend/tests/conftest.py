@@ -1,6 +1,7 @@
 """Pytest fixtures for API testing."""
 
 import pytest
+import pytest_asyncio
 from httpx import AsyncClient, ASGITransport
 from unittest.mock import AsyncMock, patch
 
@@ -32,7 +33,7 @@ def mock_supabase():
     return mock
 
 
-@pytest.fixture
+@pytest_asyncio.fixture
 async def client(mock_current_user):
     """Async test client with mocked authentication."""
     from app.core.security import get_current_user
@@ -51,7 +52,7 @@ async def client(mock_current_user):
     app.dependency_overrides.clear()
 
 
-@pytest.fixture
+@pytest_asyncio.fixture
 async def unauthenticated_client():
     """Async test client without authentication."""
     async with AsyncClient(
