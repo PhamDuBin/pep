@@ -35,8 +35,8 @@ if errorlevel 1 (
   set PYARG=
 )
 
-echo Installing dependencies...
-%PYEXE% %PYARG% -m pip install -r requirements.txt
+echo Installing dependencies (requirements.txt + requirements-dev.txt)...
+%PYEXE% %PYARG% -m pip install -r requirements.txt -r requirements-dev.txt
 if errorlevel 1 (
   echo pip install failed. Check Python and network.
   pause
