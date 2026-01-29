@@ -132,3 +132,64 @@ async def test_list_applications_returns_application_list_response(service):
     assert out.applications[0].id == "id1"
     assert out.applications[0].org_type == "buyer"
     assert out.applications[0].status == "pending"
+
+
+# --- Approve/Reject: result None → 500 ---
+@pytest.mark.asyncio
+async def test_approve_application_result_none_raises_500(service):
+    """Approval RPC returns None → 500."""
+    with patch.object(service.crud, "call_approve_application_rpc", new_callable=AsyncMock) as m:
+        m.return_value = None
+        with pytest.raises(HTTPException) as exc_info:
+            await service.approve_application("app-x", "admin-x")
+    assert exc_info.value.status_code == 500
+    assert "承認" in exc_info.value.detail or "failed" in exc_info.value.detail.lower()
+
+
+@pytest.mark.asyncio
+async def test_reject_application_result_none_raises_500(service):
+    """Rejection RPC returns None → 500."""
+    with patch.object(service.crud, "call_reject_application_rpc", new_callable=AsyncMock) as m:
+        m.return_value = None
+        with pytest.raises(HTTPException) as exc_info:
+            await service.reject_application("app-x", "admin-x")
+    assert exc_info.value.status_code == 500
+    assert "却下" in exc_info.value.detail or "failed" in exc_info.value.detail.lower()
+
+
+# --- _map_rpc_error: generic → 400 ---
+@pytest.mark.asyncio
+async def test_map_rpc_error_generic_raises_400(service):
+    """Unknown RPC error message → 400."""
+    with patch.object(service.crud, "call_approve_application_rpc", new_callable=AsyncMock) as m:
+        m.side_effect = Exception("Some other database error")
+        with pytest.raises(HTTPException) as exc_info:
+            await service.approve_application("app-x", "admin-x")
+    assert exc_info.value.status_code == 400
+    assert "failed" in exc_info.value.detail.lower() or "失敗" in exc_info.value.detail
+
+
+# --- ApproveResponse fallback keys ---
+@pytest.mark.asyncio
+async def test_approve_application_fallback_keys(service):
+    """Approve with result missing org_type/application_id uses fallbacks."""
+    result_data = {"status": "approved"}
+    with patch.object(service.crud, "call_approve_application_rpc", new_callable=AsyncMock) as m:
+        m.return_value = result_data
+        out = await service.approve_application("app-fallback", "admin-1")
+    assert out.status == "approved"
+    assert out.application_id == "app-fallback"
+    assert out.org_id == ""
+    assert out.org_type == "buyer"
+
+
+# --- list_applications empty rows ---
+@pytest.mark.asyncio
+async def test_list_applications_empty_returns_zero_count(service):
+    """list_applications with no rows returns total_count=0."""
+    params = ApplicationQueryParams(limit=10, offset=0)
+    with patch.object(service.crud, "list_applications", new_callable=AsyncMock) as m:
+        m.return_value = ([], 0)
+        out = await service.list_applications(params)
+    assert out.total_count == 0
+    assert out.applications == []

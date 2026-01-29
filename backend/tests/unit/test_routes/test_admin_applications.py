@@ -138,3 +138,43 @@ async def test_reject_application_returns_200_and_shape(admin_client, mock_appli
         assert data["application_id"] == "app-1"
     finally:
         app.dependency_overrides.pop(get_application_service, None)
+
+
+@pytest.mark.asyncio
+async def test_reject_application_without_body_returns_200(admin_client, mock_application_service):
+    """Admin reject without JSON body (review_note=None) returns 200."""
+    def return_mock_service():
+        return mock_application_service
+
+    app.dependency_overrides[get_application_service] = return_mock_service
+    try:
+        response = await admin_client.put(
+            "/api/admin/applications/app-uuid-789/reject",
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert data["status"] == "rejected"
+    finally:
+        app.dependency_overrides.pop(get_application_service, None)
+
+
+@pytest.mark.asyncio
+async def test_list_applications_with_query_params(admin_client, mock_application_service):
+    """Admin list with query params (status, org_type, limit, offset) passes to service."""
+    def return_mock_service():
+        return mock_application_service
+
+    app.dependency_overrides[get_application_service] = return_mock_service
+    try:
+        response = await admin_client.get(
+            "/api/admin/applications?status=pending&org_type=buyer&limit=5&offset=0"
+        )
+        assert response.status_code == 200
+        mock_application_service.list_applications.assert_called_once()
+        call_args = mock_application_service.list_applications.call_args[0][0]
+        assert call_args.status == "pending"
+        assert call_args.org_type == "buyer"
+        assert call_args.limit == 5
+        assert call_args.offset == 0
+    finally:
+        app.dependency_overrides.pop(get_application_service, None)
