@@ -42,8 +42,9 @@ async def test_create_invitation_returns_id_and_token(crud, mock_supabase):
     assert call_kw["organization_id"] == "org-uuid"
     assert call_kw["email"] == "invitee@example.com"
     assert call_kw["role"] == "member"
-    assert call_kw["invited_by"] == "profile-uuid"
+    assert call_kw["created_by"] == "profile-uuid"
     assert "token" in call_kw
+    assert "expires_at" in call_kw
 
 
 @pytest.mark.asyncio
@@ -75,7 +76,7 @@ async def test_list_invitations_returns_rows_and_count(crud, mock_supabase):
         "role": "member",
         "status": "pending",
         "expires_at": "2025-02-01T00:00:00Z",
-        "invited_by": "p-1",
+        "created_by": "p-1",
         "created_at": "2025-01-01T00:00:00Z",
     }
     chain = (

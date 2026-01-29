@@ -80,7 +80,7 @@ class InvitationService:
                 role=r["role"],
                 status=r["status"],
                 expires_at=r["expires_at"],
-                invited_by=str(r["invited_by"]),
+                invited_by=str(r.get("created_by", r.get("invited_by", ""))),
                 created_at=r["created_at"],
             )
             for r in rows

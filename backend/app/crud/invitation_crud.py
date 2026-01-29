@@ -1,9 +1,11 @@
 """Invitation CRUD operations (create / list / accept / cancel)."""
 
 import uuid
+from datetime import datetime, timezone, timedelta
 from typing import Any, List, Optional
 
 from supabase import Client
+
 
 class InvitationCRUD:
     """
@@ -35,6 +37,7 @@ class InvitationCRUD:
             Dict with id, token
         """
         token = str(uuid.uuid4())
+        expires_at = (datetime.now(timezone.utc) + timedelta(days=7)).isoformat()
         result = (
             self.supabase.table("invitations")
             .insert(
@@ -43,7 +46,8 @@ class InvitationCRUD:
                     "email": email,
                     "role": role,
                     "token": token,
-                    "invited_by": invited_by,
+                    "created_by": invited_by,
+                    "expires_at": expires_at,
                 }
             )
             .execute()
@@ -69,7 +73,7 @@ class InvitationCRUD:
         """
         q = (
             self.supabase.table("invitations")
-            .select("id,organization_id,email,role,status,expires_at,invited_by,created_at", count="exact")
+            .select("id,organization_id,email,role,status,expires_at,created_by,created_at", count="exact")
             .eq("organization_id", org_id)
             .order("created_at", desc=True)
         )

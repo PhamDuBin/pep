@@ -4,6 +4,9 @@
 -- 前提: invitations テーブルは別マイグレーションで作成済みであること。未作成なら本マイグレーションでエラーになる。
 -- =============================================================================
 
+-- Add accepted_at if missing (init.sql may not have it)
+ALTER TABLE invitations ADD COLUMN IF NOT EXISTS accepted_at TIMESTAMPTZ;
+
 -- ============================================
 -- accept_invitation RPC
 -- 招待承諾: invitation 更新 + profile 更新（既存 profile を active に）
