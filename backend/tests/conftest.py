@@ -1,10 +1,19 @@
 """Pytest fixtures for API testing."""
 
 import pytest
+import pytest_asyncio
 from httpx import AsyncClient, ASGITransport
 from unittest.mock import AsyncMock, patch
 
 from app.main import app
+
+
+def pytest_configure(config):
+    """Register custom markers."""
+    config.addinivalue_line(
+        "markers",
+        "integration: mark test as integration (uses real DB, requires network)",
+    )
 
 
 @pytest.fixture
@@ -24,7 +33,7 @@ def mock_supabase():
     return mock
 
 
-@pytest.fixture
+@pytest_asyncio.fixture
 async def client(mock_current_user):
     """Async test client with mocked authentication."""
     from app.core.security import get_current_user
@@ -43,7 +52,7 @@ async def client(mock_current_user):
     app.dependency_overrides.clear()
 
 
-@pytest.fixture
+@pytest_asyncio.fixture
 async def unauthenticated_client():
     """Async test client without authentication."""
     async with AsyncClient(

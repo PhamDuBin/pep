@@ -119,3 +119,40 @@ async def test_list_applications_vendor_queries_vendor_table(crud, mock_supabase
     mock_supabase.table.assert_called_with("vendor_applications")
     assert total == 0
     assert rows == []
+
+
+@pytest.mark.asyncio
+async def test_list_applications_org_type_none_merges_both(crud, mock_supabase):
+    """list_applications with org_type=None merges buyer + vendor and paginates."""
+    params = ApplicationQueryParams(org_type=None, limit=10, offset=0)
+    buyer_data = [
+        {"id": "b1", "org_id": "o1", "company_name": "B1", "contact_email": "b1@x.com",
+         "industry": None, "employee_count": None, "status": "pending",
+         "reviewed_at": None, "created_at": "2024-01-02T00:00:00Z"}
+    ]
+    vendor_data = [
+        {"id": "v1", "org_id": "o2", "company_name": "V1", "contact_email": "v1@x.com",
+         "industry": None, "employee_count": None, "status": "pending",
+         "reviewed_at": None, "created_at": "2024-01-01T00:00:00Z"}
+    ]
+    chain_b = MagicMock()
+    chain_b.execute.return_value.data = buyer_data
+    chain_v = MagicMock()
+    chain_v.execute.return_value.data = vendor_data
+
+    def table_side_effect(name):
+        chain = MagicMock()
+        chain.select.return_value.eq.return_value.order.return_value = chain
+        res = MagicMock()
+        res.data = buyer_data if name == "buyer_applications" else vendor_data
+        chain.execute.return_value = res
+        return chain
+
+    mock_supabase.table.side_effect = table_side_effect
+
+    rows, total = await crud.list_applications(params)
+
+    assert total == 2
+    assert len(rows) == 2
+    assert rows[0]["org_type"] == "buyer"
+    assert rows[1]["org_type"] == "vendor"

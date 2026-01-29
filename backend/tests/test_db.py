@@ -67,6 +67,7 @@ def test_remote_database_url():
     assert "127.0.0.1" not in settings.supabase_url
 
 
+@pytest.mark.integration
 def test_buyer_applications_table_exists():
     """Test that buyer_applications table exists and is accessible."""
     supabase = get_supabase_client()
@@ -75,6 +76,7 @@ def test_buyer_applications_table_exists():
     assert result.data is not None
 
 
+@pytest.mark.integration
 def test_buyer_applications_table_query():
     """Test querying buyer_applications table structure."""
     supabase = get_supabase_client()

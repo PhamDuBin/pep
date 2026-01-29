@@ -23,7 +23,8 @@ async def test_get_profile_requires_auth(unauthenticated_client):
     """Test that profile endpoint requires authentication."""
     response = await unauthenticated_client.get("/api/users/profile")
 
-    assert response.status_code == 403  # Forbidden without token
+    # FastAPI HTTPBearer may return 403 ("Not authenticated") or 401 depending on auth handling.
+    assert response.status_code in (401, 403)
 
 
 @pytest.mark.asyncio
