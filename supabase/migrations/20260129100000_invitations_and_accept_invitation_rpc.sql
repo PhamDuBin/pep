@@ -23,11 +23,11 @@ AS $$
 DECLARE
     v_inv RECORD;
 BEGIN
-    -- 1. Find invitation by token (init table uses org_id)
+    -- 1. Find invitation by token (init table uses org_id); ignore soft-deleted
     SELECT id, org_id, email, role, status, expires_at
     INTO v_inv
     FROM invitations
-    WHERE token = p_token;
+    WHERE token = p_token AND is_deleted = FALSE;
 
     IF NOT FOUND THEN
         RAISE EXCEPTION 'Invitation not found';
