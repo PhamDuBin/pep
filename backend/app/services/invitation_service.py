@@ -75,7 +75,7 @@ class InvitationService:
         items = [
             InvitationListItem(
                 id=str(r["id"]),
-                organization_id=str(r["organization_id"]),
+                organization_id=str(r.get("org_id", r.get("organization_id", ""))),
                 email=r["email"],
                 role=r["role"],
                 status=r["status"],

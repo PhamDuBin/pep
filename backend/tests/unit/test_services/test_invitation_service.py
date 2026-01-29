@@ -97,12 +97,12 @@ async def test_list_invitations_success(service):
             [
                 {
                     "id": "inv-1",
-                    "organization_id": "org-1",
+                    "org_id": "org-1",
                     "email": "a@b.com",
                     "role": "member",
                     "status": "pending",
                     "expires_at": "2025-02-01T00:00:00Z",
-                    "invited_by": "p-1",
+                    "created_by": "p-1",
                     "created_at": "2025-01-01T00:00:00Z",
                 }
             ],

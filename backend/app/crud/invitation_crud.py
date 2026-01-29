@@ -42,7 +42,7 @@ class InvitationCRUD:
             self.supabase.table("invitations")
             .insert(
                 {
-                    "organization_id": org_id,
+                    "org_id": org_id,
                     "email": email,
                     "role": role,
                     "token": token,
@@ -73,8 +73,9 @@ class InvitationCRUD:
         """
         q = (
             self.supabase.table("invitations")
-            .select("id,organization_id,email,role,status,expires_at,created_by,created_at", count="exact")
-            .eq("organization_id", org_id)
+            .select("id,org_id,email,role,status,expires_at,created_by,created_at", count="exact")
+            .eq("org_id", org_id)
+            .eq("is_deleted", False)
             .order("created_at", desc=True)
         )
         if status is not None:
@@ -112,7 +113,7 @@ class InvitationCRUD:
             self.supabase.table("invitations")
             .delete()
             .eq("id", invitation_id)
-            .eq("organization_id", org_id)
+            .eq("org_id", org_id)
             .execute()
         )
         data = result.data or []
@@ -131,9 +132,10 @@ class InvitationCRUD:
         result = (
             self.supabase.table("invitations")
             .select("id")
-            .eq("organization_id", org_id)
+            .eq("org_id", org_id)
             .eq("email", email)
             .eq("status", "pending")
+            .eq("is_deleted", False)
             .limit(1)
             .execute()
         )

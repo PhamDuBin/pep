@@ -39,7 +39,7 @@ async def test_create_invitation_returns_id_and_token(crud, mock_supabase):
     mock_supabase.table.assert_called_with("invitations")
     mock_supabase.table.return_value.insert.assert_called_once()
     call_kw = mock_supabase.table.return_value.insert.call_args[0][0]
-    assert call_kw["organization_id"] == "org-uuid"
+    assert call_kw["org_id"] == "org-uuid"
     assert call_kw["email"] == "invitee@example.com"
     assert call_kw["role"] == "member"
     assert call_kw["created_by"] == "profile-uuid"
@@ -71,7 +71,7 @@ async def test_list_invitations_returns_rows_and_count(crud, mock_supabase):
     """List invitations returns rows and total count."""
     row = {
         "id": "inv-1",
-        "organization_id": "org-1",
+        "org_id": "org-1",
         "email": "a@b.com",
         "role": "member",
         "status": "pending",
@@ -80,7 +80,7 @@ async def test_list_invitations_returns_rows_and_count(crud, mock_supabase):
         "created_at": "2025-01-01T00:00:00Z",
     }
     chain = (
-        mock_supabase.table.return_value.select.return_value.eq.return_value.order.return_value.range.return_value
+        mock_supabase.table.return_value.select.return_value.eq.return_value.eq.return_value.order.return_value.range.return_value
     )
     chain.execute.return_value = MagicMock(data=[row], count=1)
     rows, total = await crud.list_invitations(org_id="org-1", limit=10, offset=0)
@@ -141,9 +141,10 @@ async def test_delete_invitation_returns_false_when_empty(crud, mock_supabase):
 @pytest.mark.asyncio
 async def test_get_pending_by_org_and_email_found(crud, mock_supabase):
     """Get pending invitation returns row when found."""
-    mock_supabase.table.return_value.select.return_value.eq.return_value.eq.return_value.eq.return_value.limit.return_value.execute.return_value = MagicMock(
-        data=[{"id": "inv-1"}]
+    chain = (
+        mock_supabase.table.return_value.select.return_value.eq.return_value.eq.return_value.eq.return_value.eq.return_value.limit.return_value
     )
+    chain.execute.return_value = MagicMock(data=[{"id": "inv-1"}])
     result = await crud.get_pending_by_org_and_email("org-1", "a@b.com")
     assert result is not None
     assert result["id"] == "inv-1"
@@ -152,8 +153,9 @@ async def test_get_pending_by_org_and_email_found(crud, mock_supabase):
 @pytest.mark.asyncio
 async def test_get_pending_by_org_and_email_not_found(crud, mock_supabase):
     """Get pending invitation returns None when not found."""
-    mock_supabase.table.return_value.select.return_value.eq.return_value.eq.return_value.eq.return_value.limit.return_value.execute.return_value = MagicMock(
-        data=[]
+    chain = (
+        mock_supabase.table.return_value.select.return_value.eq.return_value.eq.return_value.eq.return_value.eq.return_value.limit.return_value
     )
+    chain.execute.return_value = MagicMock(data=[])
     result = await crud.get_pending_by_org_and_email("org-1", "a@b.com")
     assert result is None

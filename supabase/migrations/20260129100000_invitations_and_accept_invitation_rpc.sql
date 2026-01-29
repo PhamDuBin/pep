@@ -23,8 +23,8 @@ AS $$
 DECLARE
     v_inv RECORD;
 BEGIN
-    -- 1. Find invitation by token
-    SELECT id, organization_id, email, role, status, expires_at
+    -- 1. Find invitation by token (init table uses org_id)
+    SELECT id, org_id, email, role, status, expires_at
     INTO v_inv
     FROM invitations
     WHERE token = p_token;
@@ -50,7 +50,7 @@ BEGIN
 
     -- 3. Update profile (created by handle_new_user on signUp): set org_id, role, status='active'
     UPDATE profiles
-    SET org_id = v_inv.organization_id,
+    SET org_id = v_inv.org_id,
         role = v_inv.role,
         status = 'active',
         email = v_inv.email,
@@ -63,7 +63,7 @@ BEGIN
 
     RETURN jsonb_build_object(
         'profile_id', p_user_id,
-        'organization_id', v_inv.organization_id
+        'organization_id', v_inv.org_id
     );
 END;
 $$;
@@ -88,7 +88,7 @@ CREATE POLICY invitations_select_policy ON invitations
         EXISTS (
             SELECT 1 FROM profiles p
             WHERE p.id = auth.uid()
-            AND p.org_id = invitations.organization_id
+            AND p.org_id = invitations.org_id
             AND p.role IN ('owner', 'admin')
             AND p.is_deleted = FALSE
         )
@@ -102,7 +102,7 @@ CREATE POLICY invitations_insert_policy ON invitations
         EXISTS (
             SELECT 1 FROM profiles p
             WHERE p.id = auth.uid()
-            AND p.org_id = invitations.organization_id
+            AND p.org_id = invitations.org_id
             AND p.role IN ('owner', 'admin')
             AND p.is_deleted = FALSE
         )
@@ -116,7 +116,7 @@ CREATE POLICY invitations_update_policy ON invitations
         EXISTS (
             SELECT 1 FROM profiles p
             WHERE p.id = auth.uid()
-            AND p.org_id = invitations.organization_id
+            AND p.org_id = invitations.org_id
             AND p.role IN ('owner', 'admin')
             AND p.is_deleted = FALSE
         )
@@ -130,7 +130,7 @@ CREATE POLICY invitations_delete_policy ON invitations
         EXISTS (
             SELECT 1 FROM profiles p
             WHERE p.id = auth.uid()
-            AND p.org_id = invitations.organization_id
+            AND p.org_id = invitations.org_id
             AND p.role IN ('owner', 'admin')
             AND p.is_deleted = FALSE
         )
