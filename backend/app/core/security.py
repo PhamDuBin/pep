@@ -77,13 +77,60 @@ async def verify_token(
 
 async def get_current_user(
     credentials: HTTPAuthorizationCredentials = Security(security),
+    supabase: Client = Depends(get_supabase),
 ) -> dict:
     """
     Get current authenticated user.
 
-    This is a dependency that can be used in route handlers.
+    Enforces access restriction (Task 005): returns 403 if profile is
+    soft-deleted or organization is not active (suspended/pending/inactive).
     """
-    return await verify_token(credentials)
+    user = await verify_token(credentials)
+    user_id = user.get("id")
+    if not user_id:
+        raise HTTPException(
+            status_code=403,
+            detail="Forbidden / 権限がありません",
+        )
+    # Profile must exist and not be soft-deleted
+    profile_result = (
+        supabase.table("profiles")
+        .select("id, is_deleted, org_id")
+        .eq("id", user_id)
+        .execute()
+    )
+    profile_rows = profile_result.data or []
+    if not profile_rows:
+        raise HTTPException(
+            status_code=403,
+            detail="Forbidden / Profile not found or access restricted / プロフィールが見つからないかアクセスが制限されています",
+        )
+    profile = profile_rows[0]
+    if profile.get("is_deleted"):
+        raise HTTPException(
+            status_code=403,
+            detail="Forbidden / Account removed or suspended / アカウントは削除または停止されています",
+        )
+    org_id = profile.get("org_id")
+    if not org_id:
+        raise HTTPException(
+            status_code=403,
+            detail="Forbidden / No organization / 組織に所属していません",
+        )
+    # Organization must be active (not suspended/pending/inactive)
+    org_result = (
+        supabase.table("organizations")
+        .select("id, status")
+        .eq("id", org_id)
+        .execute()
+    )
+    org_rows = org_result.data or []
+    if not org_rows or org_rows[0].get("status") != "active":
+        raise HTTPException(
+            status_code=403,
+            detail="Forbidden / Organization is not active / 組織は停止中または未承認です",
+        )
+    return user
 
 
 async def get_optional_user(
@@ -102,15 +149,17 @@ async def get_optional_user(
 
 
 async def get_current_platform_admin(
-    current_user: dict = Depends(get_current_user),
+    credentials: HTTPAuthorizationCredentials = Security(security),
     supabase: Client = Depends(get_supabase),
 ) -> dict:
     """
     Require current user to be a Platform Admin.
 
-    Used by admin-only routes (e.g. application approval). Returns 403 if
-    the user has no profile or is_platform_admin is not True.
+    Used by admin-only routes (e.g. application approval, suspend/reactivate).
+    Does NOT enforce org status so platform admins can access admin APIs
+    even when their organization is suspended.
     """
+    current_user = await verify_token(credentials)
     if not current_user or not current_user.get("id"):
         raise HTTPException(
             status_code=403,
