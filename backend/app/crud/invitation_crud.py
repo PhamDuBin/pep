@@ -104,16 +104,18 @@ class InvitationCRUD:
 
     async def delete_invitation(self, invitation_id: str, org_id: str) -> bool:
         """
-        Delete an invitation only if it belongs to the organization.
+        Soft-delete (cancel) an invitation only if it belongs to the organization.
+        Sets is_deleted = true; does not physically delete the row.
 
         Returns:
-            True if deleted, False if not found or org mismatch
+            True if a row was updated, False if not found or org mismatch or already deleted
         """
         result = (
             self.supabase.table("invitations")
-            .delete()
+            .update({"is_deleted": True})
             .eq("id", invitation_id)
             .eq("org_id", org_id)
+            .eq("is_deleted", False)
             .execute()
         )
         data = result.data or []

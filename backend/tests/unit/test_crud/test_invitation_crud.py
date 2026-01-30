@@ -110,26 +110,29 @@ async def test_call_accept_invitation_rpc_invokes_supabase(crud, mock_supabase):
 
 
 # ===========================================
-# delete_invitation Tests
+# delete_invitation (soft delete) Tests
 # ===========================================
 
 @pytest.mark.asyncio
-async def test_delete_invitation_returns_true_when_deleted(crud, mock_supabase):
-    """Delete invitation returns True when row deleted."""
-    mock_supabase.table.return_value.delete.return_value.eq.return_value.eq.return_value.execute.return_value = MagicMock(
-        data=[{"id": "inv-1"}]
+async def test_delete_invitation_returns_true_when_updated(crud, mock_supabase):
+    """Soft-delete invitation returns True when row was updated (is_deleted set)."""
+    chain = (
+        mock_supabase.table.return_value.update.return_value.eq.return_value.eq.return_value.eq.return_value
     )
+    chain.execute.return_value = MagicMock(data=[{"id": "inv-1"}])
     result = await crud.delete_invitation("inv-1", "org-1")
     assert result is True
     mock_supabase.table.assert_called_with("invitations")
+    mock_supabase.table.return_value.update.assert_called_once_with({"is_deleted": True})
 
 
 @pytest.mark.asyncio
 async def test_delete_invitation_returns_false_when_empty(crud, mock_supabase):
-    """Delete invitation returns False when no row deleted."""
-    mock_supabase.table.return_value.delete.return_value.eq.return_value.eq.return_value.execute.return_value = MagicMock(
-        data=[]
+    """Soft-delete invitation returns False when no row updated (not found or already deleted)."""
+    chain = (
+        mock_supabase.table.return_value.update.return_value.eq.return_value.eq.return_value.eq.return_value
     )
+    chain.execute.return_value = MagicMock(data=[])
     result = await crud.delete_invitation("inv-1", "org-1")
     assert result is False
 

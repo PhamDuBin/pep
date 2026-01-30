@@ -116,10 +116,11 @@ class InvitationService:
 
     async def cancel_invitation(self, invitation_id: str, org_id: str) -> None:
         """
-        Delete (cancel) an invitation. Only if it belongs to the organization.
+        Soft-delete (cancel) an invitation. Only if it belongs to the organization.
+        Sets is_deleted = true; does not physically delete the row.
 
         Raises:
-            HTTPException 404 if not found or org mismatch
+            HTTPException 404 if not found or org mismatch or already cancelled
         """
         deleted = await self.crud.delete_invitation(invitation_id, org_id)
         if not deleted:
