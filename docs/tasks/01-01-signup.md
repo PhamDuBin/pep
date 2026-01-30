@@ -1,15 +1,31 @@
-# [Task] Self-Signup / 新規登録機能
+# [Task 01-01] Self-Signup / 新規登録機能
 
-## 🔗 GitLab Issue
-- Link: https://gitlab.i-stech.net:9080/bbs/pep/-/issues/26
+## ⚠️ DEPRECATED / 非推奨
+
+**このタスクは [01-02 Backend Onboarding](./01-02-backend-onboarding.md) に統合されました。**
+
+01-02では、より堅牢な設計で以下を実装します：
+- `handle_new_user` トリガーによる自動 profiles 作成
+- メール確認フローの明確化
+- pending 状態でのログイン制限
+
+**実装時は 01-02 を参照してください。**
 
 ---
 
-## 📝 概要
+## 🔗 GitLab Issue
+- Link: https://gitlab.i-stech.net:9080/bbs/pep/-/issues/26
+- Status: Deprecated (01-02に統合)
 
-新規ユーザー（Buyer/Vendor）がメールアドレスで登録し、組織と申請を作成する機能。
+---
 
-登録完了時点では全て `pending` 状態。Platform Admin の承認後にサービス利用可能となる。
+## 📝 概要（旧設計 - 参考用）
+
+~~新規ユーザー（Buyer/Vendor）がメールアドレスで登録し、組織と申請を作成する機能。~~
+
+~~登録完了時点では全て `pending` 状態。Platform Admin の承認後にサービス利用可能となる。~~
+
+**注**: この設計は古く、`create_signup` RPCが `complete_onboarding` RPCと重複していました。現在は 01-02 の設計に統合されています。
 
 ---
 

@@ -29,13 +29,17 @@
 
 | # | Task | GitLab Issue | RPC | Status |
 |---|------|--------------|-----|--------|
-| 01-01 | [Self-Signup](./01-01-signup.md) | [#26](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/26) | ✅ create_signup | 🔲 Not Started |
+| ~~01-01~~ | ~~[Self-Signup](./01-01-signup.md)~~ | ~~[#26](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/26)~~ | ~~create_signup~~ | ⚠️ Deprecated (→01-02) |
 | 01-02 | [Backend Onboarding](./01-02-backend-onboarding.md) | [#44](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/44) | ✅ complete_onboarding | 🔲 Not Started |
 | 01-03 | [Application Approval](./01-03-application-approval.md) | [#27](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/27) | ✅ approve_application | 🔲 Not Started |
 | 01-04 | [Invitation](./01-04-invitation.md) | [#28](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/28) | ✅ accept_invitation | 🔲 Not Started |
 | 01-05 | [Role Change & Owner Transfer](./01-05-role-change.md) | [#29](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/29) | ✅ transfer_ownership | 🔲 Not Started |
 | 01-06 | [Account Suspension & Member Removal](./01-06-account-management.md) | [#30](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/30) | ❌ | 🔲 Not Started |
 | 01-07 | [Notifications](./01-07-notifications.md) | [#36](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/36) | ❌ | 🔲 Not Started |
+| 01-08 | [Login/Logout](./01-08-login-logout.md) | [#45](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/45) | ❌ | 🔲 Not Started |
+| 01-09 | [User Profile Update](./01-09-user-profile-update.md) | [#46](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/46) | ❌ | 🔲 Not Started |
+| 01-10 | [Organization Settings](./01-10-organization-settings.md) | [#47](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/47) | ❌ | 🔲 Not Started |
+| 01-11 | [Email Change](./01-11-email-change.md) | [#48](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/48) | ❌ | 🔲 Not Started |
 
 ### 02_Project / プロジェクト計画書まわり
 
@@ -59,6 +63,7 @@
 | 04-01 | [Subscription Management](./04-01-subscription.md) | [#37](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/37) | ❌ | 🔲 Not Started |
 | 04-02 | [Invoice Management](./04-02-invoice.md) | [#38](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/38) | ❌ | 🔲 Not Started |
 | 04-03 | [Stripe Webhook](./04-03-stripe-webhook.md) | [#39](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/39) | ✅ handle_stripe_webhook | 🔲 Not Started |
+| 04-04 | [Payment Methods](./04-04-payment-methods.md) | [#49](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/49) | ❌ | 🔲 Not Started |
 
 ---
 
@@ -67,25 +72,31 @@
 ### 01_User / ユーザー周り
 
 ```
-01-01 Self-Signup (テーブル作成)
+01-02 Backend Onboarding (Signup + オンボーディング)
   ↓
-01-02 Backend Onboarding (オンボーディング完了)
-  ↓
-01-03 Application Approval (ステータス更新)
-  ↓
-01-04 Invitation (招待機能)
-  ↓
-01-05 Role Change (ロール管理)
-  ↓
-01-06 Account Management (停止・削除)
-  ↓
-01-07 Notifications (通知機能)
+01-08 Login/Logout (ログイン・ログアウト) ←────────┐
+  ↓                                              │
+01-03 Application Approval (ステータス更新)        │
+  ↓                                              │
+01-09 User Profile Update (ユーザー情報更新) ───┬──┤
+  ↓                                            │  │
+01-11 Email Change (メールアドレス変更) ────────┘  │
+  ↓                                              │
+01-10 Organization Settings (組織情報更新) ────────┤
+  ↓                                              │
+01-04 Invitation (招待機能)                       │
+  ↓                                              │
+01-05 Role Change (ロール管理)                    │
+  ↓                                              │
+01-06 Account Management (停止・削除)             │
+  ↓                                              │
+01-07 Notifications (通知機能) ←──────────────────┘
 ```
 
 ### 02_Project / プロジェクト計画書まわり
 
 ```
-01-01 Self-Signup
+01-02 Backend Onboarding
   ↓
 02-01 Project Management ─────────────────┐
   ↓                                        ↓
@@ -109,6 +120,8 @@
 ```
 01-02 Backend Onboarding
   ↓
+04-04 Payment Methods (決済方法管理) ───┐
+  ↓                                    ↓
 04-01 Subscription Management (Stripe Checkout)
   ↓
 04-03 Stripe Webhook (契約確定・請求書同期)
@@ -122,8 +135,8 @@
 
 | Flow | auth.users | organizations | profiles | applications |
 |------|------------|---------------|----------|--------------|
-| **01-01 Self-Signup** | INSERT | - | INSERT (pending) | - |
-| **01-02 Backend Onboarding** | - | INSERT (active) | UPDATE (active) | INSERT (pending) |
+| **01-02 Backend Onboarding (Step 1: Signup)** | INSERT | - | INSERT (pending) | - |
+| **01-02 Backend Onboarding (Step 2: Onboard)** | - | INSERT (active) | UPDATE (active) | INSERT (pending) |
 | **01-03 Approval** | - | UPDATE (active) | UPDATE (active) | UPDATE (approved) |
 | **01-04 Invitation** | INSERT | - | INSERT (active) | - |
 
@@ -141,13 +154,17 @@
 ### 01_User / ユーザー周り
 | File | Description |
 |------|-------------|
-| [01-01-signup.md](./01-01-signup.md) | Self-Signup 指示書 |
+| ~~[01-01-signup.md](./01-01-signup.md)~~ | ~~Self-Signup 指示書~~ (Deprecated → 01-02) |
 | [01-02-backend-onboarding.md](./01-02-backend-onboarding.md) | Backend Onboarding 指示書 |
 | [01-03-application-approval.md](./01-03-application-approval.md) | Application Approval 指示書 |
 | [01-04-invitation.md](./01-04-invitation.md) | Invitation 指示書 |
 | [01-05-role-change.md](./01-05-role-change.md) | Role Change 指示書 |
 | [01-06-account-management.md](./01-06-account-management.md) | Account Management 指示書 |
 | [01-07-notifications.md](./01-07-notifications.md) | Notifications 指示書 |
+| [01-08-login-logout.md](./01-08-login-logout.md) | Login/Logout 指示書 |
+| [01-09-user-profile-update.md](./01-09-user-profile-update.md) | User Profile Update 指示書 |
+| [01-10-organization-settings.md](./01-10-organization-settings.md) | Organization Settings 指示書 |
+| [01-11-email-change.md](./01-11-email-change.md) | Email Change 指示書 |
 
 ### 02_Project / プロジェクト計画書まわり
 | File | Description |
@@ -168,6 +185,7 @@
 | [04-01-subscription.md](./04-01-subscription.md) | Subscription Management 指示書 |
 | [04-02-invoice.md](./04-02-invoice.md) | Invoice Management 指示書 |
 | [04-03-stripe-webhook.md](./04-03-stripe-webhook.md) | Stripe Webhook 指示書 |
+| [04-04-payment-methods.md](./04-04-payment-methods.md) | Payment Methods 指示書 |
 
 ---
 
