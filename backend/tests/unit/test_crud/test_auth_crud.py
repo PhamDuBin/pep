@@ -137,7 +137,7 @@ async def test_call_create_signup_rpc_failure(mock_supabase, auth_crud, buyer_si
 async def test_check_email_exists_true(mock_supabase, auth_crud):
     """Test email exists returns True / メール存在時Trueを返すテスト"""
     # Arrange
-    mock_supabase.table.return_value.select.return_value.eq.return_value.eq.return_value.not_.is_.return_value.limit.return_value.execute.return_value = MagicMock(
+    mock_supabase.table.return_value.select.return_value.eq.return_value.eq.return_value.limit.return_value.execute.return_value = MagicMock(
         data=[{"id": "user-uuid"}]
     )
 
@@ -153,7 +153,7 @@ async def test_check_email_exists_true(mock_supabase, auth_crud):
 async def test_check_email_exists_false(mock_supabase, auth_crud):
     """Test email not exists returns False / メール非存在時Falseを返すテスト"""
     # Arrange
-    mock_supabase.table.return_value.select.return_value.eq.return_value.eq.return_value.not_.is_.return_value.limit.return_value.execute.return_value = MagicMock(
+    mock_supabase.table.return_value.select.return_value.eq.return_value.eq.return_value.limit.return_value.execute.return_value = MagicMock(
         data=[]
     )
 
@@ -165,19 +165,24 @@ async def test_check_email_exists_false(mock_supabase, auth_crud):
 
 
 @pytest.mark.asyncio
-async def test_check_email_exists_ignores_pending_signup(mock_supabase, auth_crud):
-    """Test ignores profiles with org_id=null / org_id=nullのprofileは無視するテスト"""
-    # Arrange: Profile exists but org_id is null (signup incomplete)
-    # not_.is_("org_id", "null") filters out profiles without org_id
-    mock_supabase.table.return_value.select.return_value.eq.return_value.eq.return_value.not_.is_.return_value.limit.return_value.execute.return_value = MagicMock(
-        data=[]
+async def test_check_email_exists_profile_means_signup_complete(mock_supabase, auth_crud):
+    """Test profile existence means signup is complete / profileの存在=signup完了を確認するテスト
+
+    Profiles are created only within RPC (create_signup), so
+    if a profile exists, the signup process was completed.
+    profileはRPC内でのみ作成されるため、profileが存在すれば
+    signupは完了していることを意味する。
+    """
+    # Arrange: Profile exists = signup completed
+    mock_supabase.table.return_value.select.return_value.eq.return_value.eq.return_value.limit.return_value.execute.return_value = MagicMock(
+        data=[{"id": "user-uuid"}]
     )
 
     # Act
-    result = await auth_crud.check_email_exists("pending@example.com")
+    result = await auth_crud.check_email_exists("completed@example.com")
 
     # Assert
-    assert result is False
+    assert result is True
 
 
 # ===========================================

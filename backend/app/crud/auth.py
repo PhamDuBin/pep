@@ -80,26 +80,23 @@ class AuthCRUD:
 
     async def check_email_exists(self, email: str) -> bool:
         """
-        Check if email already exists in profiles with completed signup.
+        Check if email already exists in profiles.
 
-        Signup完了済み（org_idがnullでない）のprofilesに
-        メールアドレスが存在するか確認。
-
-        Note: handle_new_user triggerがprofileを自動作成するが、
-        その時点ではorg_id=nullのため、このチェックはスキップされる。
+        profilesテーブルにメールアドレスが存在するか確認。
+        profileはsignup RPC内でのみ作成されるため、
+        profileの存在 = signup完了を意味する。
 
         Args:
             email: Email address to check
 
         Returns:
-            True if email exists with completed signup
+            True if email exists in profiles
         """
         result = (
             self.supabase.table("profiles")
             .select("id")
             .eq("email", email)
             .eq("is_deleted", False)
-            .not_.is_("org_id", "null")
             .limit(1)
             .execute()
         )
