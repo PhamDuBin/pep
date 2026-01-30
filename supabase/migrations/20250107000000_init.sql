@@ -749,25 +749,25 @@ ALTER TABLE audit_logs ENABLE ROW LEVEL SECURITY;
 -- 基本的なRLSポリシー（詳細は各タスクで追加）
 -- ============================================
 
--- Profiles: Users can view and update their own profile
+-- Profiles: Users can view and update their own profile (exclude soft-deleted)
 CREATE POLICY "Users can view own profile"
     ON profiles FOR SELECT
-    USING (auth.uid() = id);
+    USING (auth.uid() = id AND is_deleted = FALSE);
 
 CREATE POLICY "Users can update own profile"
     ON profiles FOR UPDATE
-    USING (auth.uid() = id);
+    USING (auth.uid() = id AND is_deleted = FALSE);
 
--- Organizations: Members can view their organization
+-- Organizations: Members can view their organization (exclude soft-deleted profiles)
 CREATE POLICY "Members can view their organization"
     ON organizations FOR SELECT
     USING (
         id IN (
-            SELECT org_id FROM profiles WHERE id = auth.uid()
+            SELECT org_id FROM profiles WHERE id = auth.uid() AND is_deleted = FALSE
         )
     );
 
--- Platform admins can view all organizations
+-- Platform admins can view all organizations (exclude soft-deleted profiles)
 CREATE POLICY "Platform admins can view all organizations"
     ON organizations FOR SELECT
     USING (
@@ -775,16 +775,17 @@ CREATE POLICY "Platform admins can view all organizations"
             SELECT 1 FROM profiles p
             JOIN organizations o ON p.org_id = o.id
             WHERE p.id = auth.uid()
+            AND p.is_deleted = FALSE
             AND o.type = 'platform'
         )
     );
 
--- Projects: Buyer org members can view their projects
+-- Projects: Buyer org members can view their projects (exclude soft-deleted profiles)
 CREATE POLICY "Buyer members can view their projects"
     ON projects FOR SELECT
     USING (
         buyer_org_id IN (
-            SELECT org_id FROM profiles WHERE id = auth.uid()
+            SELECT org_id FROM profiles WHERE id = auth.uid() AND is_deleted = FALSE
         )
     );
 
@@ -798,16 +799,16 @@ CREATE POLICY "Users can update own notifications"
     USING (user_id = auth.uid())
     WITH CHECK (user_id = auth.uid());
 
--- Subscriptions: Organization members can view their subscription
+-- Subscriptions: Organization members can view their subscription (exclude soft-deleted profiles)
 CREATE POLICY "Organization members can view own subscription"
     ON subscriptions FOR SELECT
     USING (
         organization_id IN (
-            SELECT org_id FROM profiles WHERE id = auth.uid()
+            SELECT org_id FROM profiles WHERE id = auth.uid() AND is_deleted = FALSE
         )
     );
 
--- Platform admins can view all subscriptions
+-- Platform admins can view all subscriptions (exclude soft-deleted profiles)
 CREATE POLICY "Platform admins can view all subscriptions"
     ON subscriptions FOR SELECT
     USING (
@@ -815,20 +816,21 @@ CREATE POLICY "Platform admins can view all subscriptions"
             SELECT 1 FROM profiles p
             JOIN organizations o ON p.org_id = o.id
             WHERE p.id = auth.uid()
+            AND p.is_deleted = FALSE
             AND o.type = 'platform'
         )
     );
 
--- Invoices: Organization members can view their invoices
+-- Invoices: Organization members can view their invoices (exclude soft-deleted profiles)
 CREATE POLICY "Organization members can view own invoices"
     ON invoices FOR SELECT
     USING (
         organization_id IN (
-            SELECT org_id FROM profiles WHERE id = auth.uid()
+            SELECT org_id FROM profiles WHERE id = auth.uid() AND is_deleted = FALSE
         )
     );
 
--- Platform admins can view all invoices
+-- Platform admins can view all invoices (exclude soft-deleted profiles)
 CREATE POLICY "Platform admins can view all invoices"
     ON invoices FOR SELECT
     USING (
@@ -836,11 +838,12 @@ CREATE POLICY "Platform admins can view all invoices"
             SELECT 1 FROM profiles p
             JOIN organizations o ON p.org_id = o.id
             WHERE p.id = auth.uid()
+            AND p.is_deleted = FALSE
             AND o.type = 'platform'
         )
     );
 
--- Audit logs: Platform admins can view all
+-- Audit logs: Platform admins can view all (exclude soft-deleted profiles)
 CREATE POLICY "Platform admins can view all audit logs"
     ON audit_logs FOR SELECT
     USING (
@@ -848,17 +851,19 @@ CREATE POLICY "Platform admins can view all audit logs"
             SELECT 1 FROM profiles p
             JOIN organizations o ON p.org_id = o.id
             WHERE p.id = auth.uid()
+            AND p.is_deleted = FALSE
             AND o.type = 'platform'
         )
     );
 
--- Org admins can view their org's audit logs
+-- Org admins can view their org's audit logs (exclude soft-deleted profiles)
 CREATE POLICY "Org admins can view own org audit logs"
     ON audit_logs FOR SELECT
     USING (
         org_id IN (
             SELECT org_id FROM profiles
             WHERE id = auth.uid()
+            AND is_deleted = FALSE
             AND role IN ('owner', 'admin')
         )
     );
