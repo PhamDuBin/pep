@@ -114,7 +114,7 @@ class UserCRUD:
         self, profile_id: str, updated_by: str
     ) -> Optional[dict]:
         """
-        Soft-delete a profile (set is_deleted=true, deleted_at=now()).
+        Soft-delete a profile (set is_deleted=true, deleted_at and updated_at to UTC ISO).
 
         Args:
             profile_id: Profile UUID to soft-delete.
