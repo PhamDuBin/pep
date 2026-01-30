@@ -1,5 +1,7 @@
 """Admin organization suspend/reactivate endpoints."""
 
+from uuid import UUID
+
 from fastapi import APIRouter, Depends
 
 from app.core.supabase import get_supabase
@@ -23,7 +25,7 @@ def get_organization_service(supabase=Depends(get_supabase)) -> OrganizationServ
     response_model=OrganizationStatusResponse,
 )
 async def suspend_organization(
-    org_id: str,
+    org_id: UUID,
     body: SuspendOrganizationRequest | None = None,
     admin_user: dict = Depends(get_current_platform_admin),
     service: OrganizationService = Depends(get_organization_service),
@@ -36,7 +38,7 @@ async def suspend_organization(
     """
     reason = body.reason if body else None
     return await service.suspend_organization(
-        org_id=org_id,
+        org_id=str(org_id),
         admin_id=admin_user["id"],
         reason=reason,
     )
@@ -47,7 +49,7 @@ async def suspend_organization(
     response_model=OrganizationStatusResponse,
 )
 async def reactivate_organization(
-    org_id: str,
+    org_id: UUID,
     admin_user: dict = Depends(get_current_platform_admin),
     service: OrganizationService = Depends(get_organization_service),
 ) -> OrganizationStatusResponse:
@@ -58,6 +60,6 @@ async def reactivate_organization(
     組織を再開する。プラットフォーム管理者のみ。
     """
     return await service.reactivate_organization(
-        org_id=org_id,
+        org_id=str(org_id),
         admin_id=admin_user["id"],
     )

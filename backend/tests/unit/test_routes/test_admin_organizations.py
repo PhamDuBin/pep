@@ -11,6 +11,9 @@ from app.core.security import get_current_platform_admin
 from app.api.routes.admin.organizations import get_organization_service
 from app.schemas.organization import OrganizationStatusResponse
 
+# Valid UUID for path param (FastAPI validates UUID format; invalid UUID -> 422)
+_ORG_ID = "11111111-1111-1111-1111-111111111111"
+
 
 @pytest_asyncio.fixture
 async def admin_client():
@@ -32,12 +35,19 @@ def mock_organization_service():
     """Mock OrganizationService with suspend/reactivate returning success."""
     mock = MagicMock()
     mock.suspend_organization = AsyncMock(
-        return_value=OrganizationStatusResponse(id="org-1", status="suspended")
+        return_value=OrganizationStatusResponse(id=_ORG_ID, status="suspended")
     )
     mock.reactivate_organization = AsyncMock(
-        return_value=OrganizationStatusResponse(id="org-1", status="active")
+        return_value=OrganizationStatusResponse(id=_ORG_ID, status="active")
     )
     return mock
+
+
+@pytest.mark.asyncio
+async def test_suspend_organization_invalid_uuid_returns_422(admin_client):
+    """Invalid org_id (not UUID format) returns 422."""
+    response = await admin_client.put("/api/admin/organizations/not-a-uuid/suspend")
+    assert response.status_code == 422
 
 
 # --- Test Case 6: Platform Admin 以外からの停止 → 403 Forbidden ---
@@ -53,7 +63,7 @@ async def test_suspend_organization_non_admin_returns_403():
             transport=ASGITransport(app=app),
             base_url="http://test",
         ) as ac:
-            response = await ac.put("/api/admin/organizations/org-1/suspend")
+            response = await ac.put(f"/api/admin/organizations/{_ORG_ID}/suspend")
         assert response.status_code == 403
     finally:
         app.dependency_overrides.pop(get_current_platform_admin, None)
@@ -67,14 +77,14 @@ async def test_suspend_organization_returns_200_and_shape(admin_client, mock_org
 
     app.dependency_overrides[get_organization_service] = return_mock_service
     try:
-        response = await admin_client.put("/api/admin/organizations/org-1/suspend")
+        response = await admin_client.put(f"/api/admin/organizations/{_ORG_ID}/suspend")
         assert response.status_code == 200
         data = response.json()
-        assert data["id"] == "org-1"
+        assert data["id"] == _ORG_ID
         assert data["status"] == "suspended"
         mock_organization_service.suspend_organization.assert_called_once()
         call_kwargs = mock_organization_service.suspend_organization.call_args[1]
-        assert call_kwargs["org_id"] == "org-1"
+        assert call_kwargs["org_id"] == _ORG_ID
         assert call_kwargs["admin_id"] == "admin-user-id"
     finally:
         app.dependency_overrides.pop(get_organization_service, None)
@@ -88,10 +98,10 @@ async def test_reactivate_organization_returns_200_and_shape(admin_client, mock_
 
     app.dependency_overrides[get_organization_service] = return_mock_service
     try:
-        response = await admin_client.put("/api/admin/organizations/org-1/reactivate")
+        response = await admin_client.put(f"/api/admin/organizations/{_ORG_ID}/reactivate")
         assert response.status_code == 200
         data = response.json()
-        assert data["id"] == "org-1"
+        assert data["id"] == _ORG_ID
         assert data["status"] == "active"
         mock_organization_service.reactivate_organization.assert_called_once()
     finally:

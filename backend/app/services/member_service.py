@@ -67,12 +67,8 @@ class MemberService:
                 status_code=403,
                 detail="Forbidden / Only owner can remove admin / 管理者を削除できるのはオーナーのみです",
             )
-        updated = await self.crud.soft_delete_profile(profile_id, actor_id)
-        if not updated:
-            raise HTTPException(
-                status_code=500,
-                detail="Remove member failed / メンバー削除に失敗しました",
-            )
+        # Idempotent: already soft-deleted (e.g. race) -> treat as success (204)
+        await self.crud.soft_delete_profile(profile_id, actor_id)
 
     async def leave_organization(self, org_id: str, user_id: str) -> None:
         """
@@ -101,9 +97,5 @@ class MemberService:
                 status_code=403,
                 detail="Forbidden / Owner cannot leave / オーナーは退会できません",
             )
-        updated = await self.crud.soft_delete_profile(user_id, user_id)
-        if not updated:
-            raise HTTPException(
-                status_code=500,
-                detail="Leave organization failed / 退会処理に失敗しました",
-            )
+        # Idempotent: already soft-deleted (e.g. race) -> treat as success (204)
+        await self.crud.soft_delete_profile(user_id, user_id)
