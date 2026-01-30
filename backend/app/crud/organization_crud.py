@@ -1,5 +1,6 @@
 """Organization CRUD operations."""
 
+from datetime import datetime, timezone
 from typing import Optional
 from supabase import Client
 
@@ -48,7 +49,7 @@ class OrganizationCRUD:
                 {
                     "status": status,
                     "updated_by": updated_by,
-                    "updated_at": "now()",
+                    "updated_at": datetime.now(timezone.utc).isoformat(),
                 }
             )
             .eq("id", org_id)

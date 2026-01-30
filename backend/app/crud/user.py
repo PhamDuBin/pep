@@ -1,5 +1,6 @@
 """User CRUD operations."""
 
+from datetime import datetime, timezone
 from typing import Optional
 from supabase import Client
 
@@ -48,7 +49,7 @@ class UserCRUD:
         """
         update_data = data.model_dump(exclude_unset=True)
         update_data["updated_by"] = updated_by
-        update_data["updated_at"] = "now()"
+        update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
 
         result = (
             self.supabase.table("profiles")
@@ -75,7 +76,7 @@ class UserCRUD:
         """
         update_data = data.model_dump(exclude_unset=True)
         update_data["updated_by"] = updated_by
-        update_data["updated_at"] = "now()"
+        update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
 
         result = (
             self.supabase.table("profiles")
@@ -122,14 +123,15 @@ class UserCRUD:
         Returns:
             Updated profile dict or None if not found or already deleted.
         """
+        now_utc = datetime.now(timezone.utc).isoformat()
         result = (
             self.supabase.table("profiles")
             .update(
                 {
                     "is_deleted": True,
-                    "deleted_at": "now()",
+                    "deleted_at": now_utc,
                     "updated_by": updated_by,
-                    "updated_at": "now()",
+                    "updated_at": now_utc,
                 }
             )
             .eq("id", profile_id)

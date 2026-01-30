@@ -53,9 +53,10 @@ async def test_update_organization_status_returns_updated(crud, mock_supabase):
         "org-1", "suspended", "admin-user-id"
     )
     mock_supabase.table.assert_called_once_with("organizations")
-    mock_supabase.table.return_value.update.assert_called_once_with(
-        {"status": "suspended", "updated_by": "admin-user-id", "updated_at": "now()"}
-    )
+    call_args = mock_supabase.table.return_value.update.call_args[0][0]
+    assert call_args["status"] == "suspended"
+    assert call_args["updated_by"] == "admin-user-id"
+    assert isinstance(call_args["updated_at"], str) and "T" in call_args["updated_at"]
     mock_supabase.table.return_value.update.return_value.eq.assert_called_once_with(
         "id", "org-1"
     )

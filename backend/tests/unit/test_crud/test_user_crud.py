@@ -61,7 +61,8 @@ async def test_soft_delete_profile_returns_updated(crud, mock_supabase):
     mock_supabase.table.assert_called_once_with("profiles")
     call_args = mock_supabase.table.return_value.update.call_args[0][0]
     assert call_args["is_deleted"] is True
-    assert call_args["deleted_at"] == "now()"
+    assert isinstance(call_args["deleted_at"], str) and "T" in call_args["deleted_at"]
+    assert isinstance(call_args["updated_at"], str) and "T" in call_args["updated_at"]
     assert call_args["updated_by"] == "actor-id"
     assert result == updated_row
 
