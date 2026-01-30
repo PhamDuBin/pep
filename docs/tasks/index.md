@@ -25,84 +25,95 @@
 
 ## Task List / タスク一覧
 
-### Account Management / アカウント管理
+### 01_User / ユーザー周り
 
 | # | Task | GitLab Issue | RPC | Status |
 |---|------|--------------|-----|--------|
-| 001 | [Self-Signup](./001-signup.md) | [#26](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/26) | ✅ create_signup | 🔲 Not Started |
-| 002 | [Application Approval](./002-application-approval.md) | [#27](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/27) | ✅ approve_application | 🔲 Not Started |
-| 003 | [Invitation](./003-invitation.md) | [#28](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/28) | ✅ accept_invitation | 🔲 Not Started |
-| 004 | [Role Change & Owner Transfer](./004-role-change.md) | [#29](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/29) | ✅ transfer_ownership | 🔲 Not Started |
-| 005 | [Account Suspension & Member Removal](./005-account-management.md) | [#30](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/30) | ❌ | 🔲 Not Started |
+| 01-01 | [Self-Signup](./01-01-signup.md) | [#26](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/26) | ✅ create_signup | 🔲 Not Started |
+| 01-02 | [Backend Onboarding](./01-02-backend-onboarding.md) | TBD | ✅ complete_onboarding | 🔲 Not Started |
+| 01-03 | [Application Approval](./01-03-application-approval.md) | [#27](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/27) | ✅ approve_application | 🔲 Not Started |
+| 01-04 | [Invitation](./01-04-invitation.md) | [#28](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/28) | ✅ accept_invitation | 🔲 Not Started |
+| 01-05 | [Role Change & Owner Transfer](./01-05-role-change.md) | [#29](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/29) | ✅ transfer_ownership | 🔲 Not Started |
+| 01-06 | [Account Suspension & Member Removal](./01-06-account-management.md) | [#30](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/30) | ❌ | 🔲 Not Started |
+| 01-07 | [Notifications](./01-07-notifications.md) | [#36](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/36) | ❌ | 🔲 Not Started |
 
-### Project Management / プロジェクト管理
-
-| # | Task | GitLab Issue | RPC | Status |
-|---|------|--------------|-----|--------|
-| 006 | [Project Management](./006-project-management.md) | [#31](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/31) | ❌ | 🔲 Not Started |
-| 007 | [Project Plans](./007-project-plans.md) | [#32](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/32) | ❌ | 🔲 Not Started |
-| 008 | [Project Attachments](./008-project-attachments.md) | [#33](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/33) | ❌ | 🔲 Not Started |
-
-### AI / Chat
+### 02_Project / プロジェクト計画書まわり
 
 | # | Task | GitLab Issue | RPC | Status |
 |---|------|--------------|-----|--------|
-| 009 | [AI Chat Sessions](./009-ai-chat.md) | [#34](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/34) | ❌ | 🔲 Not Started |
-| 010 | [Buyer-Vendor Chat](./010-buyer-vendor-chat.md) | [#35](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/35) | ❌ | 🔲 Not Started |
-| 011 | [Notifications](./011-notifications.md) | [#36](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/36) | ❌ | 🔲 Not Started |
+| 02-01 | [Project Management](./02-01-project-management.md) | [#31](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/31) | ❌ | 🔲 Not Started |
+| 02-02 | [Project Plans](./02-02-project-plans.md) | [#32](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/32) | ❌ | 🔲 Not Started |
+| 02-03 | [Project Attachments](./02-03-project-attachments.md) | [#33](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/33) | ❌ | 🔲 Not Started |
 
-### Billing / 課金
+### 03_Chat / チャット周り
 
 | # | Task | GitLab Issue | RPC | Status |
 |---|------|--------------|-----|--------|
-| 012 | [Subscription Management](./012-subscription.md) | [#37](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/37) | ❌ | 🔲 Not Started |
-| 013 | [Invoice Management](./013-invoice.md) | [#38](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/38) | ❌ | 🔲 Not Started |
-| 014 | [Stripe Webhook](./014-stripe-webhook.md) | [#39](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/39) | ✅ handle_stripe_webhook | 🔲 Not Started |
+| 03-01 | [AI Chat Sessions](./03-01-ai-chat.md) | [#34](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/34) | ❌ | 🔲 Not Started |
+| 03-02 | [Buyer-Vendor Chat](./03-02-buyer-vendor-chat.md) | [#35](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/35) | ❌ | 🔲 Not Started |
+
+### 04_Billing / 決済まわり
+
+| # | Task | GitLab Issue | RPC | Status |
+|---|------|--------------|-----|--------|
+| 04-01 | [Subscription Management](./04-01-subscription.md) | [#37](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/37) | ❌ | 🔲 Not Started |
+| 04-02 | [Invoice Management](./04-02-invoice.md) | [#38](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/38) | ❌ | 🔲 Not Started |
+| 04-03 | [Stripe Webhook](./04-03-stripe-webhook.md) | [#39](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/39) | ✅ handle_stripe_webhook | 🔲 Not Started |
 
 ---
 
 ## Dependencies / 依存関係
 
-### Account Management
+### 01_User / ユーザー周り
 
 ```
-001 Self-Signup (テーブル作成)
+01-01 Self-Signup (テーブル作成)
   ↓
-002 Application Approval (ステータス更新)
+01-02 Backend Onboarding (オンボーディング完了)
   ↓
-003 Invitation (招待機能)
+01-03 Application Approval (ステータス更新)
   ↓
-004 Role Change (ロール管理)
+01-04 Invitation (招待機能)
   ↓
-005 Account Management (停止・削除)
+01-05 Role Change (ロール管理)
+  ↓
+01-06 Account Management (停止・削除)
+  ↓
+01-07 Notifications (通知機能)
 ```
 
-### Project / Chat
+### 02_Project / プロジェクト計画書まわり
 
 ```
-001 Self-Signup
+01-01 Self-Signup
   ↓
-006 Project Management ─────────────────┐
-  ↓                                     ↓
-007 Project Plans                  008 Project Attachments
-  ↓
-009 AI Chat Sessions
-  ↓
-010 Buyer-Vendor Chat
-  ↓
-011 Notifications (006, 010 と連携)
+02-01 Project Management ─────────────────┐
+  ↓                                        ↓
+02-02 Project Plans                  02-03 Project Attachments
 ```
 
-### Billing
+### 03_Chat / チャット周り
 
 ```
-001 Self-Signup
+02-01 Project Management
   ↓
-012 Subscription Management (Stripe Checkout)
+03-01 AI Chat Sessions
   ↓
-014 Stripe Webhook (契約確定・請求書同期)
+03-02 Buyer-Vendor Chat
   ↓
-013 Invoice Management (請求書一覧表示)
+01-07 Notifications (02-01, 03-02 と連携)
+```
+
+### 04_Billing / 決済まわり
+
+```
+01-02 Backend Onboarding
+  ↓
+04-01 Subscription Management (Stripe Checkout)
+  ↓
+04-03 Stripe Webhook (契約確定・請求書同期)
+  ↓
+04-02 Invoice Management (請求書一覧表示)
 ```
 
 ---
@@ -111,9 +122,10 @@
 
 | Flow | auth.users | organizations | profiles | applications |
 |------|------------|---------------|----------|--------------|
-| **001 Self-Signup** | INSERT | INSERT (pending) | INSERT (pending) | INSERT (pending) |
-| **002 Approval** | - | UPDATE (active) | UPDATE (active) | UPDATE (approved) |
-| **003 Invitation** | INSERT | - | INSERT (active) | - |
+| **01-01 Self-Signup** | INSERT | - | INSERT (pending) | - |
+| **01-02 Backend Onboarding** | - | INSERT (active) | UPDATE (active) | INSERT (pending) |
+| **01-03 Approval** | - | UPDATE (active) | UPDATE (active) | UPDATE (approved) |
+| **01-04 Invitation** | INSERT | - | INSERT (active) | - |
 
 詳細: [Account Workflow - Record Creation Overview](../workflows/account.md#record-creation-overview--レコード作成タイミング概要)
 
@@ -121,23 +133,41 @@
 
 ## Files / ファイル一覧
 
+### Templates / テンプレート
 | File | Description |
 |------|-------------|
 | [TEMPLATE.md](./TEMPLATE.md) | タスク作成用テンプレート |
-| [001-signup.md](./001-signup.md) | Self-Signup 指示書 |
-| [002-application-approval.md](./002-application-approval.md) | Application Approval 指示書 |
-| [003-invitation.md](./003-invitation.md) | Invitation 指示書 |
-| [004-role-change.md](./004-role-change.md) | Role Change 指示書 |
-| [005-account-management.md](./005-account-management.md) | Account Management 指示書 |
-| [006-project-management.md](./006-project-management.md) | Project Management 指示書 |
-| [007-project-plans.md](./007-project-plans.md) | Project Plans 指示書 |
-| [008-project-attachments.md](./008-project-attachments.md) | Project Attachments 指示書 |
-| [009-ai-chat.md](./009-ai-chat.md) | AI Chat Sessions 指示書 |
-| [010-buyer-vendor-chat.md](./010-buyer-vendor-chat.md) | Buyer-Vendor Chat 指示書 |
-| [011-notifications.md](./011-notifications.md) | Notifications 指示書 |
-| [012-subscription.md](./012-subscription.md) | Subscription Management 指示書 |
-| [013-invoice.md](./013-invoice.md) | Invoice Management 指示書 |
-| [014-stripe-webhook.md](./014-stripe-webhook.md) | Stripe Webhook 指示書 |
+
+### 01_User / ユーザー周り
+| File | Description |
+|------|-------------|
+| [01-01-signup.md](./01-01-signup.md) | Self-Signup 指示書 |
+| [01-02-backend-onboarding.md](./01-02-backend-onboarding.md) | Backend Onboarding 指示書 |
+| [01-03-application-approval.md](./01-03-application-approval.md) | Application Approval 指示書 |
+| [01-04-invitation.md](./01-04-invitation.md) | Invitation 指示書 |
+| [01-05-role-change.md](./01-05-role-change.md) | Role Change 指示書 |
+| [01-06-account-management.md](./01-06-account-management.md) | Account Management 指示書 |
+| [01-07-notifications.md](./01-07-notifications.md) | Notifications 指示書 |
+
+### 02_Project / プロジェクト計画書まわり
+| File | Description |
+|------|-------------|
+| [02-01-project-management.md](./02-01-project-management.md) | Project Management 指示書 |
+| [02-02-project-plans.md](./02-02-project-plans.md) | Project Plans 指示書 |
+| [02-03-project-attachments.md](./02-03-project-attachments.md) | Project Attachments 指示書 |
+
+### 03_Chat / チャット周り
+| File | Description |
+|------|-------------|
+| [03-01-ai-chat.md](./03-01-ai-chat.md) | AI Chat Sessions 指示書 |
+| [03-02-buyer-vendor-chat.md](./03-02-buyer-vendor-chat.md) | Buyer-Vendor Chat 指示書 |
+
+### 04_Billing / 決済まわり
+| File | Description |
+|------|-------------|
+| [04-01-subscription.md](./04-01-subscription.md) | Subscription Management 指示書 |
+| [04-02-invoice.md](./04-02-invoice.md) | Invoice Management 指示書 |
+| [04-03-stripe-webhook.md](./04-03-stripe-webhook.md) | Stripe Webhook 指示書 |
 
 ---
 
