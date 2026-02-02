@@ -8,6 +8,10 @@ from app.schemas.user import (
     EmailChangeRequest,
     AvatarColor,
 )
+from app.schemas.organization import (
+    SuspendOrganizationRequest,
+    OrganizationStatusResponse,
+)
 
 __all__ = [
     "UserProfile",
@@ -16,4 +20,6 @@ __all__ = [
     "PasswordChange",
     "EmailChangeRequest",
     "AvatarColor",
+    "SuspendOrganizationRequest",
+    "OrganizationStatusResponse",
 ]

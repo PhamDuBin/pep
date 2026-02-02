@@ -76,16 +76,27 @@ async def db_check() -> dict:
 
 
 # Include routers
-from app.api.routes import users, auth, invitations
+from app.api.routes import users, auth, invitations, members
 from app.api.routes.admin import applications as admin_applications
+from app.api.routes.admin import organizations as admin_organizations
 
 app.include_router(users.router, prefix="/api/users", tags=["Users"])
 app.include_router(auth.router, prefix="/api/auth", tags=["Auth"])
 app.include_router(invitations.router, prefix="/api/invitations", tags=["Invitations"])
 app.include_router(
+    members.router,
+    prefix="/api/organizations",
+    tags=["Members"],
+)
+app.include_router(
     admin_applications.router,
     prefix="/api/admin/applications",
     tags=["Admin - Applications"],
+)
+app.include_router(
+    admin_organizations.router,
+    prefix="/api/admin/organizations",
+    tags=["Admin - Organizations"],
 )
 
 # TODO: Add more routers

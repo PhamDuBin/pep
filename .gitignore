@@ -3,6 +3,7 @@
 /NUL
 desktop.ini
 .cursor
+.coverage
 
 # Supabase
 supabase/.temp/

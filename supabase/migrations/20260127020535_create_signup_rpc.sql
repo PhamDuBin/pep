@@ -50,7 +50,8 @@ BEGIN
     RETURNING id INTO v_org_id;
 
     -- 2. Update profile with org_id (profile is created by handle_new_user trigger)
-    -- If profile doesn't exist yet, create it
+    -- If profile doesn't exist yet, create it.
+    -- Set is_deleted = false so re-registration (previously soft-deleted account) works.
     UPDATE profiles
     SET
         org_id = v_org_id,
@@ -58,6 +59,7 @@ BEGIN
         email = p_contact_email,
         role = 'owner',
         status = 'pending',
+        is_deleted = FALSE,
         updated_at = NOW()
     WHERE id = p_user_id;
 
