@@ -30,7 +30,7 @@
 | # | Task | GitLab Issue | RPC | Status |
 |---|------|--------------|-----|--------|
 | ~~01-01~~ | ~~[Self-Signup](./01-01-signup.md)~~ | ~~[#26](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/26)~~ | ~~create_signup~~ | ⚠️ Deprecated (→01-02) |
-| 01-02 | [Backend Onboarding](./01-02-backend-onboarding.md) | [#44](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/44) | ✅ complete_onboarding | 🔲 Not Started |
+| 01-02 | [Backend Onboarding](./01-02-backend-onboarding.md) | [#44](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/44) | ✅ complete_buyer_onboarding<br/>✅ complete_vendor_onboarding | 🔲 Not Started |
 | 01-03 | [Application Approval](./01-03-application-approval.md) | [#27](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/27) | ✅ approve_application | 🔲 Not Started |
 | 01-04 | [Invitation](./01-04-invitation.md) | [#28](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/28) | ✅ accept_invitation | 🔲 Not Started |
 | 01-05 | [Role Change & Owner Transfer](./01-05-role-change.md) | [#29](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/29) | ✅ transfer_ownership | 🔲 Not Started |
