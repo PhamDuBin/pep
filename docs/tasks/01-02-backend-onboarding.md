@@ -22,6 +22,12 @@ User attributes (Buyer/Vendor) are determined by values passed from the Frontend
    - Buyer/Vendor distinction is carried through `emailRedirectTo` URL parameters
    - Buyer/Vendorの区別は、`emailRedirectTo`のURLパラメータで引き継ぐ
 
+4. **【変更】3-Layer Architecture / 3層構造:** *(CLAUDE.md準拠)*
+   - Follow `api/routes/` → `services/` → `crud/` call order
+   - `api/routes/` → `services/` → `crud/` の呼び出し順序に従う
+   - Service layer handles business logic and external APIs (Stripe), CRUD layer handles all Supabase operations
+   - Service層はビジネスロジックと外部API(Stripe)を担当、CRUD層は全Supabase操作を担当
+
 ## Architecture / アーキテクチャ
 
 ```mermaid
@@ -273,7 +279,55 @@ async def complete_vendor_onboarding(
         raise HTTPException(status_code=500, detail="Vendor onboarding failed")
 ```
 
-#### 2.3 Service Layer
+#### 2.3 CRUD Layer 【新規】
+
+**File:** `backend/app/crud/onboarding.py`
+
+```python
+"""CRUD layer for onboarding operations."""
+
+from fastapi import Depends
+from app.core.config import get_supabase_client
+
+
+class OnboardingCRUD:
+    """CRUD operations for user onboarding."""
+
+    def __init__(self, supabase=Depends(get_supabase_client)):
+        self.supabase = supabase
+
+    async def get_profile(self, user_id: str) -> dict | None:
+        """
+        Get profile by user_id for onboarding validation.
+        オンボーディングバリデーション用にprofileを取得。
+        """
+        result = (
+            self.supabase.table("profiles")
+            .select("org_id, status")
+            .eq("id", user_id)
+            .single()
+            .execute()
+        )
+        return result.data
+
+    async def call_complete_buyer_onboarding_rpc(self, params: dict) -> dict | None:
+        """
+        Call complete_buyer_onboarding RPC.
+        Buyerオンボーディング完了RPCを呼び出し。
+        """
+        result = self.supabase.rpc("complete_buyer_onboarding", params).execute()
+        return result.data
+
+    async def call_complete_vendor_onboarding_rpc(self, params: dict) -> dict | None:
+        """
+        Call complete_vendor_onboarding RPC.
+        Vendorオンボーディング完了RPCを呼び出し。
+        """
+        result = self.supabase.rpc("complete_vendor_onboarding", params).execute()
+        return result.data
+```
+
+#### 2.4 Service Layer 【変更: 3層構造対応】
 
 **File:** `backend/app/services/onboarding_service.py`
 
@@ -283,7 +337,8 @@ async def complete_vendor_onboarding(
 import stripe
 from fastapi import Depends
 
-from app.core.config import get_supabase_client, settings
+from app.core.config import settings
+from app.crud.onboarding import OnboardingCRUD
 from app.schemas.onboarding import (
     BuyerOnboardingRequest,
     VendorOnboardingRequest,
@@ -294,8 +349,8 @@ from app.schemas.onboarding import (
 class OnboardingService:
     """Service for user onboarding."""
 
-    def __init__(self, supabase=Depends(get_supabase_client)):
-        self.supabase = supabase
+    def __init__(self, crud: OnboardingCRUD = Depends()):
+        self.crud = crud
         stripe.api_key = settings.STRIPE_SECRET_KEY
 
     async def complete_buyer_onboarding(
@@ -308,9 +363,9 @@ class OnboardingService:
         Complete buyer onboarding in a transaction.
 
         Steps:
-        1. Verify user has no organization yet
-        2. Create Stripe Customer
-        3. Call complete_buyer_onboarding RPC:
+        1. Verify user has no organization yet (via CRUD)
+        2. Create Stripe Customer (external API)
+        3. Call complete_buyer_onboarding RPC (via CRUD):
            - Create organizations (type='buyer')
            - Update profiles (org_id, status='active', display_name)
            - Update auth.users metadata (org_type='buyer' for audit)
@@ -318,36 +373,33 @@ class OnboardingService:
         """
         await self._verify_no_organization(user_id)
 
-        # Create Stripe Customer
+        # Create Stripe Customer (external API = Service layer responsibility)
         stripe_customer = stripe.Customer.create(
             email=email,
             name=request.company_name,
             metadata={"user_id": user_id, "org_type": "buyer"},
         )
 
-        # Call RPC to handle transaction
-        result = self.supabase.rpc(
-            "complete_buyer_onboarding",
-            {
-                "p_user_id": user_id,
-                "p_company_name": request.company_name,
-                "p_contact_email": request.contact_email,
-                "p_display_name": request.display_name,
-                "p_stripe_customer_id": stripe_customer.id,
-                "p_industry": request.industry,
-                "p_employee_count": request.employee_count,
-                "p_purpose": request.purpose,
-            },
-        ).execute()
+        # Call RPC via CRUD layer
+        result = await self.crud.call_complete_buyer_onboarding_rpc({
+            "p_user_id": user_id,
+            "p_company_name": request.company_name,
+            "p_contact_email": request.contact_email,
+            "p_display_name": request.display_name,
+            "p_billing_customer_id": stripe_customer.id,
+            "p_industry": request.industry,
+            "p_employee_count": request.employee_count,
+            "p_purpose": request.purpose,
+        })
 
-        if result.data is None:
+        if result is None:
             raise ValueError("Buyer onboarding RPC failed")
 
         return OnboardingResponse(
-            organization_id=result.data["organization_id"],
-            profile_id=result.data["profile_id"],
-            application_id=result.data["application_id"],
-            status=result.data["status"],
+            organization_id=result["organization_id"],
+            profile_id=result["profile_id"],
+            application_id=result["application_id"],
+            status=result["status"],
         )
 
     async def complete_vendor_onboarding(
@@ -360,9 +412,9 @@ class OnboardingService:
         Complete vendor onboarding in a transaction.
 
         Steps:
-        1. Verify user has no organization yet
-        2. Create Stripe Customer
-        3. Call complete_vendor_onboarding RPC:
+        1. Verify user has no organization yet (via CRUD)
+        2. Create Stripe Customer (external API)
+        3. Call complete_vendor_onboarding RPC (via CRUD):
            - Create organizations (type='vendor')
            - Update profiles (org_id, status='active', display_name)
            - Update auth.users metadata (org_type='vendor' for audit)
@@ -370,58 +422,49 @@ class OnboardingService:
         """
         await self._verify_no_organization(user_id)
 
-        # Create Stripe Customer
+        # Create Stripe Customer (external API = Service layer responsibility)
         stripe_customer = stripe.Customer.create(
             email=email,
             name=request.company_name,
             metadata={"user_id": user_id, "org_type": "vendor"},
         )
 
-        # Call RPC to handle transaction
-        result = self.supabase.rpc(
-            "complete_vendor_onboarding",
-            {
-                "p_user_id": user_id,
-                "p_company_name": request.company_name,
-                "p_contact_email": request.contact_email,
-                "p_display_name": request.display_name,
-                "p_stripe_customer_id": stripe_customer.id,
-                "p_industry": request.industry,
-                "p_employee_count": request.employee_count,
-                "p_business_description": request.business_description,
-                "p_service_description": request.service_description,
-                "p_website_url": str(request.website_url),
-            },
-        ).execute()
+        # Call RPC via CRUD layer
+        result = await self.crud.call_complete_vendor_onboarding_rpc({
+            "p_user_id": user_id,
+            "p_company_name": request.company_name,
+            "p_contact_email": request.contact_email,
+            "p_display_name": request.display_name,
+            "p_billing_customer_id": stripe_customer.id,
+            "p_industry": request.industry,
+            "p_employee_count": request.employee_count,
+            "p_business_description": request.business_description,
+            "p_service_description": request.service_description,
+            "p_website_url": str(request.website_url),
+        })
 
-        if result.data is None:
+        if result is None:
             raise ValueError("Vendor onboarding RPC failed")
 
         return OnboardingResponse(
-            organization_id=result.data["organization_id"],
-            profile_id=result.data["profile_id"],
-            application_id=result.data["application_id"],
-            status=result.data["status"],
+            organization_id=result["organization_id"],
+            profile_id=result["profile_id"],
+            application_id=result["application_id"],
+            status=result["status"],
         )
 
     async def _verify_no_organization(self, user_id: str) -> None:
-        """Verify user has no organization yet."""
-        profile = (
-            self.supabase.table("profiles")
-            .select("org_id, status")
-            .eq("id", user_id)
-            .single()
-            .execute()
-        )
+        """Verify user has no organization yet (via CRUD)."""
+        profile = await self.crud.get_profile(user_id)
 
-        if not profile.data:
+        if not profile:
             raise ValueError("Profile not found. Please contact support.")
 
-        if profile.data["org_id"] is not None:
+        if profile["org_id"] is not None:
             raise ValueError("User already has an organization.")
 ```
 
-#### 2.4 RPC Functions
+#### 2.5 RPC Functions 【変更: billing_customer_id修正】
 
 **File:** `supabase/migrations/20260130000001_complete_onboarding_rpc.sql`
 
@@ -437,7 +480,7 @@ CREATE OR REPLACE FUNCTION complete_buyer_onboarding(
     p_company_name TEXT,
     p_contact_email TEXT,
     p_display_name TEXT,
-    p_stripe_customer_id TEXT,
+    p_billing_customer_id TEXT,
     p_industry TEXT,
     p_employee_count TEXT,
     p_purpose TEXT
@@ -460,14 +503,14 @@ BEGIN
         name,
         type,
         status,
-        stripe_customer_id,
+        billing_customer_id,
         created_at,
         updated_at
     ) VALUES (
         p_company_name,
         'buyer',
         'active',
-        p_stripe_customer_id,
+        p_billing_customer_id,
         NOW(),
         NOW()
     )
@@ -545,7 +588,7 @@ CREATE OR REPLACE FUNCTION complete_vendor_onboarding(
     p_company_name TEXT,
     p_contact_email TEXT,
     p_display_name TEXT,
-    p_stripe_customer_id TEXT,
+    p_billing_customer_id TEXT,
     p_industry TEXT,
     p_employee_count TEXT,
     p_business_description TEXT,
@@ -570,14 +613,14 @@ BEGIN
         name,
         type,
         status,
-        stripe_customer_id,
+        billing_customer_id,
         created_at,
         updated_at
     ) VALUES (
         p_company_name,
         'vendor',
         'active',
-        p_stripe_customer_id,
+        p_billing_customer_id,
         NOW(),
         NOW()
     )
@@ -666,6 +709,8 @@ Vendorオンボーディング完了: 組織作成(type=vendor)、プロフィ�
 
 ### 3. Testing / テスト
 
+**Test execution order / テスト実行順序:** CRUD → Service → Routes
+
 #### 3.1 Trigger Test
 
 **File:** `backend/tests/integration/test_handle_new_user_trigger.py`
@@ -715,38 +760,91 @@ def test_handle_new_user_creates_pending_profile():
         supabase.auth.admin.delete_user(user_id)
 ```
 
-#### 3.2 Service Test
+#### 3.2 CRUD Layer Test 【新規】
 
-**File:** `backend/tests/unit/test_services/test_onboarding_service.py`
+**File:** `backend/tests/unit/test_crud/test_onboarding_crud.py`
 
 ```python
-"""Unit tests for onboarding service."""
+"""CRUD layer tests for Onboarding / Onboarding CRUD層テスト"""
 
 import pytest
-from unittest.mock import MagicMock, AsyncMock, patch
-from app.services.onboarding_service import OnboardingService
-from app.schemas.onboarding import BuyerOnboardingRequest, VendorOnboardingRequest
+from unittest.mock import MagicMock
+from app.crud.onboarding import OnboardingCRUD
 
 
 @pytest.fixture
 def mock_supabase():
-    """Mock Supabase client."""
+    """Mock Supabase client / Supabaseクライアントのモック"""
     mock = MagicMock()
-    mock.table.return_value = mock
-    mock.select.return_value = mock
-    mock.eq.return_value = mock
-    mock.single.return_value = mock
-    mock.rpc.return_value = mock
     return mock
 
 
+@pytest.fixture
+def onboarding_crud(mock_supabase):
+    """OnboardingCRUD instance with mock."""
+    return OnboardingCRUD(supabase=mock_supabase)
+
+
+# ===========================================
+# get_profile Tests / profile取得テスト
+# ===========================================
+
 @pytest.mark.asyncio
-async def test_complete_buyer_onboarding_success(mock_supabase):
-    """Test successful buyer onboarding completion."""
+async def test_get_profile_pending(mock_supabase, onboarding_crud):
+    """Test get pending profile / pending状態のprofile取得テスト"""
     # Arrange
-    mock_supabase.execute.return_value = MagicMock(
+    mock_supabase.table.return_value.select.return_value.eq.return_value.single.return_value.execute.return_value = MagicMock(
         data={"org_id": None, "status": "pending"}
     )
+
+    # Act
+    result = await onboarding_crud.get_profile("user-uuid")
+
+    # Assert
+    assert result["org_id"] is None
+    assert result["status"] == "pending"
+    mock_supabase.table.assert_called_with("profiles")
+
+
+@pytest.mark.asyncio
+async def test_get_profile_with_org(mock_supabase, onboarding_crud):
+    """Test get profile that already has org / 組織所属済みprofile取得テスト"""
+    # Arrange
+    mock_supabase.table.return_value.select.return_value.eq.return_value.single.return_value.execute.return_value = MagicMock(
+        data={"org_id": "org-uuid", "status": "active"}
+    )
+
+    # Act
+    result = await onboarding_crud.get_profile("user-uuid")
+
+    # Assert
+    assert result["org_id"] == "org-uuid"
+    assert result["status"] == "active"
+
+
+@pytest.mark.asyncio
+async def test_get_profile_not_found(mock_supabase, onboarding_crud):
+    """Test get profile when not found / profile未存在時テスト"""
+    # Arrange
+    mock_supabase.table.return_value.select.return_value.eq.return_value.single.return_value.execute.return_value = MagicMock(
+        data=None
+    )
+
+    # Act
+    result = await onboarding_crud.get_profile("nonexistent-uuid")
+
+    # Assert
+    assert result is None
+
+
+# ===========================================
+# call_complete_buyer_onboarding_rpc Tests
+# ===========================================
+
+@pytest.mark.asyncio
+async def test_call_complete_buyer_onboarding_rpc_success(mock_supabase, onboarding_crud):
+    """Test buyer onboarding RPC call / Buyer RPC呼び出しテスト"""
+    # Arrange
     mock_supabase.rpc.return_value.execute.return_value = MagicMock(
         data={
             "organization_id": "org-uuid",
@@ -756,7 +854,107 @@ async def test_complete_buyer_onboarding_success(mock_supabase):
         }
     )
 
-    service = OnboardingService(supabase=mock_supabase)
+    # Act
+    result = await onboarding_crud.call_complete_buyer_onboarding_rpc({
+        "p_user_id": "user-uuid",
+        "p_company_name": "Test Corp",
+        "p_contact_email": "test@example.com",
+        "p_display_name": "Test User",
+        "p_billing_customer_id": "cus_123",
+        "p_industry": "IT",
+        "p_employee_count": "50-100",
+        "p_purpose": "RFI management",
+    })
+
+    # Assert
+    assert result["organization_id"] == "org-uuid"
+    assert result["status"] == "active"
+    mock_supabase.rpc.assert_called_once_with("complete_buyer_onboarding", {
+        "p_user_id": "user-uuid",
+        "p_company_name": "Test Corp",
+        "p_contact_email": "test@example.com",
+        "p_display_name": "Test User",
+        "p_billing_customer_id": "cus_123",
+        "p_industry": "IT",
+        "p_employee_count": "50-100",
+        "p_purpose": "RFI management",
+    })
+
+
+@pytest.mark.asyncio
+async def test_call_complete_buyer_onboarding_rpc_failure(mock_supabase, onboarding_crud):
+    """Test buyer RPC failure / Buyer RPC失敗テスト"""
+    # Arrange
+    mock_supabase.rpc.return_value.execute.side_effect = Exception("RPC failed")
+
+    # Act & Assert
+    with pytest.raises(Exception, match="RPC failed"):
+        await onboarding_crud.call_complete_buyer_onboarding_rpc({"p_user_id": "user-uuid"})
+
+
+# ===========================================
+# call_complete_vendor_onboarding_rpc Tests
+# ===========================================
+
+@pytest.mark.asyncio
+async def test_call_complete_vendor_onboarding_rpc_success(mock_supabase, onboarding_crud):
+    """Test vendor onboarding RPC call / Vendor RPC呼び出しテスト"""
+    # Arrange
+    mock_supabase.rpc.return_value.execute.return_value = MagicMock(
+        data={
+            "organization_id": "org-uuid",
+            "profile_id": "user-uuid",
+            "application_id": "app-uuid",
+            "status": "active",
+        }
+    )
+
+    # Act
+    result = await onboarding_crud.call_complete_vendor_onboarding_rpc({
+        "p_user_id": "user-uuid",
+        "p_company_name": "Vendor Corp",
+    })
+
+    # Assert
+    assert result["organization_id"] == "org-uuid"
+    mock_supabase.rpc.assert_called_once_with("complete_vendor_onboarding", {
+        "p_user_id": "user-uuid",
+        "p_company_name": "Vendor Corp",
+    })
+```
+
+#### 3.3 Service Test 【変更: CRUDモック方式】
+
+**File:** `backend/tests/unit/test_services/test_onboarding_service.py`
+
+```python
+"""Unit tests for onboarding service."""
+
+import pytest
+from unittest.mock import AsyncMock, MagicMock, patch
+from app.services.onboarding_service import OnboardingService
+from app.schemas.onboarding import BuyerOnboardingRequest, VendorOnboardingRequest
+
+
+@pytest.fixture
+def mock_onboarding_crud():
+    """Mock OnboardingCRUD / OnboardingCRUDのモック"""
+    return AsyncMock()
+
+
+@pytest.mark.asyncio
+async def test_complete_buyer_onboarding_success(mock_onboarding_crud):
+    """Test successful buyer onboarding completion."""
+    # Arrange - Mock CRUD responses
+    mock_onboarding_crud.get_profile.return_value = {"org_id": None, "status": "pending"}
+    mock_onboarding_crud.call_complete_buyer_onboarding_rpc.return_value = {
+        "organization_id": "org-uuid",
+        "profile_id": "user-uuid",
+        "application_id": "app-uuid",
+        "status": "active",
+    }
+
+    service = OnboardingService(crud=mock_onboarding_crud)
     request = BuyerOnboardingRequest(
         company_name="Test Corp",
         display_name="Test User",
@@ -780,38 +978,32 @@ async def test_complete_buyer_onboarding_success(mock_supabase):
         assert result.organization_id == "org-uuid"
         assert result.status == "active"
         mock_stripe.assert_called_once()
-        mock_supabase.rpc.assert_called_with(
-            "complete_buyer_onboarding",
-            {
-                "p_user_id": "user-uuid",
-                "p_company_name": "Test Corp",
-                "p_contact_email": "test@example.com",
-                "p_display_name": "Test User",
-                "p_stripe_customer_id": "cus_123",
-                "p_industry": "IT",
-                "p_employee_count": "50-100",
-                "p_purpose": "RFI management",
-            },
-        )
+        mock_onboarding_crud.get_profile.assert_called_once_with("user-uuid")
+        mock_onboarding_crud.call_complete_buyer_onboarding_rpc.assert_called_once_with({
+            "p_user_id": "user-uuid",
+            "p_company_name": "Test Corp",
+            "p_contact_email": "test@example.com",
+            "p_display_name": "Test User",
+            "p_billing_customer_id": "cus_123",
+            "p_industry": "IT",
+            "p_employee_count": "50-100",
+            "p_purpose": "RFI management",
+        })
 
 
 @pytest.mark.asyncio
-async def test_complete_vendor_onboarding_success(mock_supabase):
+async def test_complete_vendor_onboarding_success(mock_onboarding_crud):
     """Test successful vendor onboarding completion."""
-    # Arrange
-    mock_supabase.execute.return_value = MagicMock(
-        data={"org_id": None, "status": "pending"}
-    )
-    mock_supabase.rpc.return_value.execute.return_value = MagicMock(
-        data={
-            "organization_id": "org-uuid",
-            "profile_id": "user-uuid",
-            "application_id": "app-uuid",
-            "status": "active",
-        }
-    )
+    # Arrange - Mock CRUD responses
+    mock_onboarding_crud.get_profile.return_value = {"org_id": None, "status": "pending"}
+    mock_onboarding_crud.call_complete_vendor_onboarding_rpc.return_value = {
+        "organization_id": "org-uuid",
+        "profile_id": "user-uuid",
+        "application_id": "app-uuid",
+        "status": "active",
+    }
 
-    service = OnboardingService(supabase=mock_supabase)
+    service = OnboardingService(crud=mock_onboarding_crud)
     request = VendorOnboardingRequest(
         company_name="Vendor Corp",
         display_name="Vendor User",
@@ -837,32 +1029,16 @@ async def test_complete_vendor_onboarding_success(mock_supabase):
         assert result.organization_id == "org-uuid"
         assert result.status == "active"
         mock_stripe.assert_called_once()
-        mock_supabase.rpc.assert_called_with(
-            "complete_vendor_onboarding",
-            {
-                "p_user_id": "user-uuid",
-                "p_company_name": "Vendor Corp",
-                "p_contact_email": "vendor@example.com",
-                "p_display_name": "Vendor User",
-                "p_stripe_customer_id": "cus_456",
-                "p_industry": "IT",
-                "p_employee_count": "10-50",
-                "p_business_description": "Software development company",
-                "p_service_description": "Web application development",
-                "p_website_url": "https://vendor.example.com",
-            },
-        )
+        mock_onboarding_crud.call_complete_vendor_onboarding_rpc.assert_called_once()
 
 
 @pytest.mark.asyncio
-async def test_complete_onboarding_already_has_org(mock_supabase):
+async def test_complete_onboarding_already_has_org(mock_onboarding_crud):
     """Test onboarding fails if user already has organization."""
     # Arrange
-    mock_supabase.execute.return_value = MagicMock(
-        data={"org_id": "existing-org", "status": "active"}
-    )
+    mock_onboarding_crud.get_profile.return_value = {"org_id": "existing-org", "status": "active"}
 
-    service = OnboardingService(supabase=mock_supabase)
+    service = OnboardingService(crud=mock_onboarding_crud)
     request = BuyerOnboardingRequest(
         company_name="Test Corp",
         display_name="Test User",
@@ -879,9 +1055,34 @@ async def test_complete_onboarding_already_has_org(mock_supabase):
             email="test@example.com",
             request=request,
         )
+
+
+@pytest.mark.asyncio
+async def test_complete_onboarding_profile_not_found(mock_onboarding_crud):
+    """Test onboarding fails if profile not found."""
+    # Arrange
+    mock_onboarding_crud.get_profile.return_value = None
+
+    service = OnboardingService(crud=mock_onboarding_crud)
+    request = BuyerOnboardingRequest(
+        company_name="Test Corp",
+        display_name="Test User",
+        contact_email="test@example.com",
+        industry="IT",
+        employee_count="50-100",
+        purpose="RFI management",
+    )
+
+    # Act & Assert
+    with pytest.raises(ValueError, match="Profile not found"):
+        await service.complete_buyer_onboarding(
+            user_id="user-uuid",
+            email="test@example.com",
+            request=request,
+        )
 ```
 
-#### 3.3 API Route Test
+#### 3.4 API Route Test *(was 3.3)*
 
 **File:** `backend/tests/unit/test_routes/test_onboarding_routes.py`
 
@@ -892,6 +1093,12 @@ import pytest
 from unittest.mock import AsyncMock, MagicMock
 from httpx import AsyncClient, ASGITransport
 from app.main import app
+
+
+@pytest.fixture
+def mock_current_user():
+    """Mock authenticated user / 認証済みユーザーのモック"""
+    return {"id": "user-uuid", "email": "test@example.com"}
 
 
 @pytest.fixture
@@ -1030,7 +1237,7 @@ async def test_buyer_onboarding_missing_required_field():
 - [ ] `complete_vendor_onboarding` RPC exists and works correctly
 - [ ] Migration includes rollback instructions
 
-### API
+### API 【変更: CRUD層追加】
 - [ ] `POST /api/v1/auth/onboarding/buyer` endpoint exists
 - [ ] `POST /api/v1/auth/onboarding/vendor` endpoint exists
 - [ ] Both endpoints require JWT authentication
@@ -1039,14 +1246,18 @@ async def test_buyer_onboarding_missing_required_field():
 - [ ] Stripe Customer is created before transaction
 - [ ] RPCs handle transactions atomically (all-or-nothing)
 - [ ] Error handling returns appropriate HTTP status codes
+- [ ] **3-Layer architecture is followed: routes/ → services/ → crud/**
+- [ ] **CRUD layer handles all Supabase operations (RPC calls, table queries)**
 
-### Testing
+### Testing 【変更: CRUD層テスト追加】
 - [ ] Trigger integration test passes
-- [ ] Buyer onboarding service unit tests pass (with mocked Supabase and Stripe)
-- [ ] Vendor onboarding service unit tests pass (with mocked Supabase and Stripe)
+- [ ] **CRUD layer unit tests pass (with mocked Supabase)**
+- [ ] Buyer onboarding service unit tests pass (with mocked CRUD and Stripe)
+- [ ] Vendor onboarding service unit tests pass (with mocked CRUD and Stripe)
 - [ ] API route unit tests pass for both buyer and vendor endpoints
 - [ ] Validation error tests pass (missing required fields)
 - [ ] Coverage >= 80% on service layer
+- [ ] **Test execution order: CRUD → Service → Routes**
 
 ### Completion State
 - [ ] After signup, `profiles` (pending) exists in DB
@@ -1067,7 +1278,7 @@ async def test_buyer_onboarding_missing_required_field():
 - [ ] `complete_vendor_onboarding` RPCが存在し、正しく動作する
 - [ ] マイグレーションにロールバック手順が含まれている
 
-### API
+### API 【変更: CRUD層追加】
 - [ ] `POST /api/v1/auth/onboarding/buyer`エンドポイントが存在する
 - [ ] `POST /api/v1/auth/onboarding/vendor`エンドポイントが存在する
 - [ ] 両エンドポイントがJWT認証を要求する
@@ -1076,14 +1287,18 @@ async def test_buyer_onboarding_missing_required_field():
 - [ ] トランザクション前にStripe Customerが作成される
 - [ ] RPCがトランザクションをアトミックに処理する（all-or-nothing）
 - [ ] エラーハンドリングが適切なHTTPステータスコードを返す
+- [ ] **3層構造に従う: routes/ → services/ → crud/**
+- [ ] **CRUD層が全Supabase操作を担当する（RPC呼び出し、テーブルクエリ）**
 
-### テスト
+### テスト 【変更: CRUD層テスト追加】
 - [ ] トリガーの結合テストが通る
-- [ ] Buyerオンボーディングのサービス層ユニットテストが通る（SupabaseとStripeをモック）
-- [ ] Vendorオンボーディングのサービス層ユニットテストが通る（SupabaseとStripeをモック）
+- [ ] **CRUD層のユニットテストが通る（Supabaseをモック）**
+- [ ] Buyerオンボーディングのサービス層ユニットテストが通る（CRUDとStripeをモック）
+- [ ] Vendorオンボーディングのサービス層ユニットテストが通る（CRUDとStripeをモック）
 - [ ] APIルートのユニットテストが両エンドポイントで通る
 - [ ] バリデーションエラーのテストが通る（必須フィールド欠落）
 - [ ] サービス層のカバレッジが80%以上
+- [ ] **テスト実行順序: CRUD → Service → Routes**
 
 ### 完了状態
 - [ ] サインアップ後、DBに`profiles` (pending) が存在する
@@ -1133,23 +1348,38 @@ async def test_buyer_onboarding_missing_required_field():
 
 **重要**: 今回の Onboarding 実装では、Service層をこの将来の分離に備えて構造化すること。
 
-#### Service Layer Structure / Service層の構造
+#### Service Layer Structure / Service層の構造 【変更: CRUD層追加】
 
 ```python
 # 現在 (01-02 Onboarding)
+class OnboardingCRUD:
+    async def get_profile(...)                          # DB: profile取得
+    async def call_complete_buyer_onboarding_rpc(...)   # DB: Buyer RPC呼び出し
+    async def call_complete_vendor_onboarding_rpc(...)  # DB: Vendor RPC呼び出し
+
 class OnboardingService:
-    async def complete_buyer_onboarding(...)   # 新規作成: 一括処理
-    async def complete_vendor_onboarding(...)  # 新規作成: 一括処理
-    async def _verify_no_organization(...)     # 共通ヘルパー
+    def __init__(self, crud: OnboardingCRUD):            # CRUDをDI
+    async def complete_buyer_onboarding(...)             # ビジネスロジック: バリデーション + Stripe + CRUD
+    async def complete_vendor_onboarding(...)            # ビジネスロジック: バリデーション + Stripe + CRUD
+    async def _verify_no_organization(...)               # ビジネスルール: 組織未所属チェック
 
 # 将来 (01-09, 01-10, 将来タスク)
-# → 専用サービスに分離
+# → 専用サービス + 専用CRUDに分離
+class ProfileCRUD:
+    async def update_profile(...)              # DB: profiles のみ更新
+
 class ProfileService:
-    async def update_profile(...)              # profiles のみ更新
+    def __init__(self, crud: ProfileCRUD):
+    async def update_profile(...)              # ビジネスロジック + CRUD呼び出し
+
+class OrganizationCRUD:
+    async def update_organization(...)         # DB: organizations のみ更新
+    async def update_org_details(...)          # DB: buyer_org_details / vendor_org_details のみ更新
 
 class OrganizationService:
-    async def update_organization(...)         # organizations のみ更新
-    async def update_org_details(...)          # buyer_org_details / vendor_org_details のみ更新
+    def __init__(self, crud: OrganizationCRUD):
+    async def update_organization(...)         # ビジネスロジック + CRUD呼び出し
+    async def update_org_details(...)          # ビジネスロジック + CRUD呼び出し
 ```
 
 この設計により、責務が明確になり、将来の拡張や保守が容易になる。

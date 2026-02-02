@@ -81,6 +81,7 @@ COMMENT ON FUNCTION accept_invitation(TEXT, UUID) IS
 ALTER TABLE invitations ENABLE ROW LEVEL SECURITY;
 
 -- Select: user must be owner or admin of the organization
+DROP POLICY IF EXISTS invitations_select_policy ON invitations;
 CREATE POLICY invitations_select_policy ON invitations
     FOR SELECT
     TO authenticated
@@ -95,6 +96,7 @@ CREATE POLICY invitations_select_policy ON invitations
     );
 
 -- Insert: user must be owner or admin of the organization
+DROP POLICY IF EXISTS invitations_insert_policy ON invitations;
 CREATE POLICY invitations_insert_policy ON invitations
     FOR INSERT
     TO authenticated
@@ -109,6 +111,7 @@ CREATE POLICY invitations_insert_policy ON invitations
     );
 
 -- Update: same as select (for cancel / status update by owner/admin)
+DROP POLICY IF EXISTS invitations_update_policy ON invitations;
 CREATE POLICY invitations_update_policy ON invitations
     FOR UPDATE
     TO authenticated
@@ -123,6 +126,7 @@ CREATE POLICY invitations_update_policy ON invitations
     );
 
 -- Delete: same as select
+DROP POLICY IF EXISTS invitations_delete_policy ON invitations;
 CREATE POLICY invitations_delete_policy ON invitations
     FOR DELETE
     TO authenticated

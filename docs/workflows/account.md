@@ -12,7 +12,7 @@
 
 | Flow | auth.users | organizations | profiles | applications |
 |------|------------|---------------|----------|--------------|
-| **Self-Signup** | ① ユーザー登録時 | ② RPC内（pending） | ② RPC内（pending） | ② RPC内（pending） |
+| **Self-Signup & Onboarding** | ① ユーザー登録時 | ③ Onboarding RPC内（active） | ① Trigger（pending）→ ③ UPDATE（active） | ③ Onboarding RPC内（pending） |
 | **Application Approval** | 作成済み | UPDATE→active | UPDATE→active | UPDATE→approved |
 | **Invitation Accept** | ① 招待承諾時 | 作成しない（既存） | ② RPC内（active） | 作成しない |
 
@@ -20,10 +20,11 @@
 
 ```mermaid
 flowchart LR
-    subgraph "Self-Signup Flow"
-        SS1[auth.users] -->|create_signup RPC| SS2[organizations<br/>status=pending]
-        SS1 -->|create_signup RPC| SS3[profiles<br/>status=pending]
-        SS1 -->|create_signup RPC| SS4[applications<br/>status=pending]
+    subgraph "Self-Signup & Onboarding Flow"
+        SS1[auth.users] -->|handle_new_user trigger| SS2[profiles<br/>status=pending, org_id=NULL]
+        SS2 -->|Onboarding RPC| SS3[organizations<br/>status=active]
+        SS2 -->|Onboarding RPC| SS4[profiles<br/>UPDATE: status=active, org_id=set]
+        SS2 -->|Onboarding RPC| SS5[applications<br/>status=pending]
     end
 
     subgraph "Application Approval Flow"
@@ -40,15 +41,18 @@ flowchart LR
 
 ### Key Points / 重要ポイント
 
-1. **Self-Signup時点では全て `pending`**
-   - ユーザーはまだサービス利用不可
-   - Platform Admin の承認待ち
+1. **Self-Signup & Onboarding は3ステップ**
+   - ① signUp（auth.users作成 → triggerでprofile(pending)作成）
+   - ② メール確認
+   - ③ Onboarding API（org作成(active) + profile更新(active) + application作成(pending) + Stripe Customer作成）
 
-2. **Application Approvalで `active` に更新**
-   - 新しいレコードは作成しない
-   - 既存レコードのステータスを更新するのみ
+2. **Onboarding完了後、org/profileは即座に `active`**
+   - application のみ `pending`（Platform Admin承認待ち）
 
-3. **auth.users の作成場所**
+3. **Application Approvalでapplicationが `approved` に更新**
+   - org/profile は既に active
+
+4. **auth.users の作成場所**
    - Self-Signup: Frontend → Supabase Auth 直接
    - Invitation: 招待承諾時に Frontend → Supabase Auth
 
@@ -218,63 +222,87 @@ sequenceDiagram
 
 ---
 
-## 1.3 Self-Signup Process / 新規登録フロー
+## 1.3 Self-Signup & Onboarding Process / 新規登録・オンボーディングフロー
 
-新規Buyer/Vendorが自己登録する際の処理フロー。複数テーブルを作成するため **RPC** でトランザクション管理。
+新規Buyer/Vendorが自己登録し、オンボーディングを完了するまでの処理フロー。
+3ステップ: signUp → メール確認 → Onboarding API。
 
-**POST /auth/signup**
+### 1.3.1 Design Principles / 設計方針
 
-### 1.3.1 Signup Sequence / 登録シーケンス
+1. **No Metadata in Signup**: signUp時に `options.data` は送らない（Frontendをシンプルに保つ）
+2. **Maintain Trigger**: `handle_new_user` トリガーで `profiles` (status='pending') を即座に作成
+3. **URL Parameters**: Buyer/Vendorの区別は `emailRedirectTo` のURLパラメータで引き継ぐ
+4. **Stripe Customer**: Onboarding時にStripe Customerを作成し、`billing_customer_id` を保存
+
+### 1.3.2 Onboarding Sequence / オンボーディングシーケンス
 
 ```mermaid
 sequenceDiagram
     participant User as New User
     participant FE as Frontend
     participant Auth as Supabase Auth
-    participant API as FastAPI
-    participant RPC as Supabase RPC
+    participant Trigger as handle_new_user<br/>trigger
+    participant API as FastAPI<br/>/api/v1/auth/onboarding/*
+    participant Stripe as Stripe API
     participant DB as Database
 
-    User->>FE: Fill signup form<br/>登録フォーム入力
-    FE->>Auth: signUp(email, password)
-    Auth-->>FE: user_id (email not confirmed)
+    Note over User,FE: Step 1: Signup (No metadata)
+    User->>FE: Fill signup form (email, password)
+    FE->>Auth: signUp(email, password)<br/>emailRedirectTo=/onboarding?type=vendor
+    Auth->>DB: INSERT auth.users
+    DB->>Trigger: Trigger fires
+    Trigger->>DB: INSERT profiles<br/>(status='pending', org_id=NULL, role='owner')
+    Auth-->>FE: Email sent (with ?type=vendor in link)
 
-    FE->>API: POST /auth/signup<br/>{ user_id, org_type, company_name, ... }
-    API->>RPC: call create_signup(user_id, org_type, ...)
+    Note over User,FE: Step 2: Email confirmation
+    User->>FE: Click email confirmation link
+    FE->>Auth: Verify email
+    Auth-->>FE: Redirect to /onboarding?type=vendor
 
+    Note over FE,DB: Step 3: Onboarding API (JWT required)
+    FE->>API: POST /api/v1/auth/onboarding/vendor<br/>{company_name, business_description, ...}
+    API->>API: Verify JWT + profile exists
+    API->>Stripe: Create Customer
+    Stripe-->>API: customer_id (cus_xxx)
+
+    API->>DB: CALL complete_vendor_onboarding RPC
     rect rgb(240, 248, 255)
-        Note over RPC,DB: Transaction Start / トランザクション開始
-        RPC->>DB: 1. INSERT organizations (status: 'pending')
-        RPC->>DB: 2. INSERT profiles (status: 'pending', role: 'owner')
-        RPC->>DB: 3. INSERT buyer_applications or vendor_applications (status: 'pending')
-        Note over RPC,DB: Transaction Commit / トランザクション完了
+        Note over DB: BEGIN TRANSACTION
+        DB->>DB: INSERT organizations (status='active', billing_customer_id)
+        DB->>DB: UPDATE profiles (org_id=set, status='active')
+        DB->>DB: UPDATE auth.users.raw_user_meta_data (org_type)
+        DB->>DB: INSERT vendor_applications (status='pending')
+        Note over DB: COMMIT
     end
 
-    RPC-->>API: { org_id, profile_id, application_id }
-    API-->>FE: 201 Created
-    FE-->>User: Registration complete<br/>登録完了（承認待ち）
-
-    Note over User: Email confirmation required<br/>メール確認が必要
-    Note over User: Wait for Platform Admin approval<br/>管理者承認を待つ
+    DB-->>API: {org_id, profile_id, application_id, status}
+    API-->>FE: 200 OK
+    FE->>FE: Redirect to /vendor/dashboard
 ```
 
-### 1.3.2 Created Records / 作成されるレコード
+### 1.3.3 Endpoints / エンドポイント
 
-| Table | Key Fields | Status | Notes |
-|-------|------------|--------|-------|
-| `auth.users` | id, email | - | Created by Supabase Auth |
-| `organizations` | id, name, type | `pending` | type = 'buyer' or 'vendor' |
-| `profiles` | id (= auth.users.id), org_id | `pending` | role = 'owner' |
-| `buyer_applications` | org_id, company_name, ... | `pending` | Only if type = 'buyer' |
-| `vendor_applications` | org_id, company_name, ... | `pending` | Only if type = 'vendor' |
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| POST | `/api/v1/auth/onboarding/buyer` | JWT required | Buyer onboarding |
+| POST | `/api/v1/auth/onboarding/vendor` | JWT required | Vendor onboarding |
 
-### 1.3.3 Request Body / リクエストボディ
+### 1.3.4 Created/Updated Records / 作成・更新されるレコード
 
-**Buyer Signup:**
+| Timing | Table | Action | Status | Notes |
+|--------|-------|--------|--------|-------|
+| Step 1 | `auth.users` | INSERT | - | Supabase Authが作成 |
+| Step 1 | `profiles` | INSERT (trigger) | `pending` | org_id=NULL, role='owner' |
+| Step 3 | `organizations` | INSERT (RPC) | `active` | billing_customer_id付き |
+| Step 3 | `profiles` | UPDATE (RPC) | `active` | org_id設定、display_name更新 |
+| Step 3 | `auth.users` | UPDATE (RPC) | - | raw_user_meta_dataにorg_type追加 |
+| Step 3 | `buyer/vendor_applications` | INSERT (RPC) | `pending` | Platform Admin承認待ち |
+
+### 1.3.5 Request Body / リクエストボディ
+
+**Buyer Onboarding (POST /api/v1/auth/onboarding/buyer):**
 ```json
 {
-  "user_id": "uuid",
-  "org_type": "buyer",
   "company_name": "株式会社サンプル",
   "contact_email": "contact@example.com",
   "display_name": "山田太郎",
@@ -284,11 +312,9 @@ sequenceDiagram
 }
 ```
 
-**Vendor Signup:**
+**Vendor Onboarding (POST /api/v1/auth/onboarding/vendor):**
 ```json
 {
-  "user_id": "uuid",
-  "org_type": "vendor",
   "company_name": "株式会社ベンダー",
   "contact_email": "contact@vendor.com",
   "display_name": "鈴木花子",
@@ -300,52 +326,68 @@ sequenceDiagram
 }
 ```
 
-### 1.3.4 Post-Signup Flow / 登録後のフロー
+### 1.3.6 Post-Onboarding Flow / オンボーディング後のフロー
 
 ```mermaid
 stateDiagram-v2
-    [*] --> EmailUnconfirmed: Signup completed / 登録完了
+    [*] --> SignupPending: Step 1: signUp<br/>auth.users + profile(pending)
 
-    EmailUnconfirmed --> PendingApproval: Email confirmed / メール確認済み
+    SignupPending --> EmailConfirmed: Step 2: Email confirmed<br/>メール確認済み
 
-    PendingApproval --> Active: Admin approves / 管理者承認
-    PendingApproval --> Rejected: Admin rejects / 管理者却下
+    EmailConfirmed --> OnboardingComplete: Step 3: Onboarding API<br/>org(active) + profile(active) + application(pending)
 
-    Rejected --> PendingApproval: Re-apply / 再申請
+    OnboardingComplete --> ApplicationApproved: Admin approves application<br/>管理者がapplication承認
 
-    Active --> [*]
+    OnboardingComplete --> ApplicationRejected: Admin rejects application<br/>管理者がapplication却下
 
-    note right of EmailUnconfirmed
-        auth.users created
-        Waiting for email verification
+    ApplicationRejected --> OnboardingComplete: Re-apply / 再申請
+
+    ApplicationApproved --> [*]
+
+    note right of SignupPending
+        profiles.status = 'pending'
+        profiles.org_id = NULL
         メール認証待ち
     end note
 
-    note right of PendingApproval
-        All records in 'pending' status
-        Platform Admin review required
-        管理者審査待ち
-    end note
-
-    note right of Active
+    note right of OnboardingComplete
         org.status = 'active'
         profile.status = 'active'
+        application.status = 'pending'
+        サービス基本利用可能
+        application承認待ち
+    end note
+
+    note right of ApplicationApproved
         application.status = 'approved'
-        サービス利用可能
+        全機能利用可能
     end note
 ```
 
-### 1.3.5 Error Handling / エラーハンドリング
+### 1.3.7 Error Handling / エラーハンドリング
 
-| Error | Handling | Notes |
-|-------|----------|-------|
-| Email already exists | Return 409 Conflict | Supabase Auth handles this |
-| Auth user created but RPC fails | Rollback: Delete auth.users | API must handle cleanup |
-| Duplicate company name | Allow (not unique constraint) | Same company can have multiple applications |
+| Error | HTTP Status | Handling | Notes |
+|-------|-------------|----------|-------|
+| Email already exists | - | Supabase Auth が拒否 | Frontend側で処理 |
+| Profile not found | 400 | Trigger未発火の場合 | サポートへ連絡 |
+| Already has organization | 400 | 二重オンボーディング防止 | RPC内でもチェック |
+| Stripe Customer creation fails | 500 | RPC呼び出し前に失敗 | トランザクション外 |
+| RPC fails after Stripe | 500 | Stripe Customerは残る | 手動クリーンアップ必要 |
+| Duplicate company name | - | 許可（unique制約なし） | 同じ会社名で複数申請可能 |
 
-**Important:** If the RPC transaction fails after auth.users is created, the API must delete the auth.users record to maintain consistency.
+### 1.3.8 Authentication for Onboarding / オンボーディングの認証
 
-RPCトランザクションが失敗した場合、APIは auth.users レコードを削除して整合性を保つ必要がある。
+Onboarding APIは `get_current_user_for_onboarding` で認証（通常の `get_current_user` ではない）。
+
+| Check | `get_current_user` | `get_current_user_for_onboarding` |
+|-------|-------------------|----------------------------------|
+| JWT valid | ✅ | ✅ |
+| Profile exists | ✅ | ✅ |
+| is_deleted = false | ✅ | ✅ |
+| org_id is not NULL | ✅ | ❌ (skip) |
+| org.status = 'active' | ✅ | ❌ (skip) |
+
+理由: オンボーディングユーザーは `org_id=NULL` のため、通常の認証では403になる。
 
 ---
 
@@ -550,10 +592,7 @@ sequenceDiagram
 
 ```mermaid
 stateDiagram-v2
-    [*] --> pending: Self-signup / 新規登録
-
-    pending --> active: Application approved<br/>申請承認
-    pending --> pending: Application rejected + re-apply<br/>却下 + 再申請
+    [*] --> active: Self-signup + Onboarding<br/>新規登録 + オンボーディング完了
 
     active --> suspended: Platform Admin suspends<br/>管理者が停止
     active --> inactive: Owner deactivates<br/>オーナーが非アクティブ化
@@ -562,11 +601,9 @@ stateDiagram-v2
 
     inactive --> active: Owner reactivates<br/>オーナーが再開
 
-    note right of pending
-        Awaiting approval
-        承認待ち
-        Login blocked
-        ログイン不可
+    note left of active
+        Onboarding完了時にactiveで作成
+        Created as active on onboarding
     end note
 
     note right of active

@@ -133,6 +133,50 @@ async def get_current_user(
     return user
 
 
+async def get_current_user_for_onboarding(
+    credentials: HTTPAuthorizationCredentials = Security(security),
+    supabase: Client = Depends(get_supabase),
+) -> dict:
+    """
+    Get current authenticated user for onboarding endpoints.
+
+    Unlike get_current_user, this does NOT check org_id or org status,
+    because onboarding users have org_id=NULL until onboarding completes.
+    Only verifies JWT and that profile exists and is not soft-deleted.
+
+    オンボーディングエンドポイント用の認証。
+    get_current_userと異なり、org_id/org statusはチェックしない。
+    オンボーディングユーザーはorg_id=NULLのため。
+    """
+    user = await verify_token(credentials)
+    user_id = user.get("id")
+    if not user_id:
+        raise HTTPException(
+            status_code=403,
+            detail="Forbidden / 権限がありません",
+        )
+    # Profile must exist and not be soft-deleted
+    profile_result = (
+        supabase.table("profiles")
+        .select("id, is_deleted")
+        .eq("id", user_id)
+        .execute()
+    )
+    profile_rows = profile_result.data or []
+    if not profile_rows:
+        raise HTTPException(
+            status_code=403,
+            detail="Forbidden / Profile not found / プロフィールが見つかりません",
+        )
+    profile = profile_rows[0]
+    if profile.get("is_deleted"):
+        raise HTTPException(
+            status_code=403,
+            detail="Forbidden / Account removed or suspended / アカウントは削除または停止されています",
+        )
+    return user
+
+
 async def get_optional_user(
     credentials: Optional[HTTPAuthorizationCredentials] = Security(
         HTTPBearer(auto_error=False)
