@@ -2,6 +2,7 @@
 /.claude
 /NUL
 desktop.ini
+.cursor
 
 # Supabase
 supabase/.temp/

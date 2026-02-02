@@ -130,3 +130,52 @@ async def get_current_platform_admin(
             detail="Forbidden / Platform Admin only / プラットフォーム管理者のみ利用可能",
         )
     return current_user
+
+
+async def get_current_org_owner_or_admin(
+    current_user: dict = Depends(get_current_user),
+    supabase: Client = Depends(get_supabase),
+) -> dict:
+    """
+    Require current user to be owner or admin of their organization.
+
+    Used by invitation routes (create / list / cancel). Returns 403 if
+    the user has no profile or role is not owner/admin.
+    Returns dict with user id, org_id, role for use in routes.
+    """
+    if not current_user or not current_user.get("id"):
+        raise HTTPException(
+            status_code=403,
+            detail="Forbidden / 権限がありません",
+        )
+    result = (
+        supabase.table("profiles")
+        .select("org_id, role")
+        .eq("id", current_user["id"])
+        .eq("is_deleted", False)
+        .execute()
+    )
+    rows = result.data or []
+    if not rows:
+        raise HTTPException(
+            status_code=403,
+            detail="Forbidden / Profile not found / プロフィールが見つかりません",
+        )
+    row = rows[0]
+    role = row.get("role")
+    org_id = row.get("org_id")
+    if role not in ("owner", "admin"):
+        raise HTTPException(
+            status_code=403,
+            detail="Forbidden / Owner or Admin only / オーナーまたは管理者のみ利用可能",
+        )
+    if not org_id:
+        raise HTTPException(
+            status_code=403,
+            detail="Forbidden / No organization / 組織に所属していません",
+        )
+    return {
+        "id": current_user["id"],
+        "org_id": str(org_id),
+        "role": role,
+    }
