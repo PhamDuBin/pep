@@ -1,10 +1,12 @@
 """Invitation service (create / list / accept / cancel business logic)."""
 
+import logging
 from typing import Optional
 
 from fastapi import HTTPException
 from supabase import Client
 
+from app.core.config import get_settings
 from app.crud.invitation_crud import InvitationCRUD
 from app.schemas.invitation import (
     AcceptInvitationResponse,
@@ -12,6 +14,8 @@ from app.schemas.invitation import (
     InvitationListItem,
     InvitationListResponse,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class InvitationService:
@@ -24,6 +28,27 @@ class InvitationService:
     def __init__(self, supabase: Client):
         self.crud = InvitationCRUD(supabase)
         self.supabase = supabase
+
+    def _send_invitation_email(self, email: str, token: str) -> None:
+        """
+        Send invitation email via Supabase Auth (invite_user_by_email).
+        Redirect URL includes our invitation token so the user lands on accept page.
+        """
+        settings = get_settings()
+        base = (settings.frontend_url or "").rstrip("/")
+        redirect_to = f"{base}/invitations/accept?token={token}"
+        try:
+            self.supabase.auth.admin.invite_user_by_email(
+                email,
+                options={"redirect_to": redirect_to},
+            )
+            logger.info("Invitation email sent to %s (redirect_to=%s)", email, redirect_to)
+        except Exception as e:
+            logger.exception("Failed to send invitation email to %s: %s", email, e)
+            raise HTTPException(
+                status_code=502,
+                detail="Failed to send invitation email / 招待メールの送信に失敗しました",
+            ) from e
 
     async def create_invitation(
         self,
@@ -56,6 +81,7 @@ class InvitationService:
                 status_code=500,
                 detail="Failed to create invitation / 招待の作成に失敗しました",
             )
+        self._send_invitation_email(email, result["token"])
         return InvitationCreateResponse(
             invitation_id=result["id"],
             token=result["token"],
@@ -149,6 +175,9 @@ class InvitationService:
                 status_code=500,
                 detail="Failed to resend invitation / 招待の再送に失敗しました",
             )
+        invitee_email = invitation.get("email") or ""
+        if invitee_email:
+            self._send_invitation_email(invitee_email, result["token"])
         return InvitationCreateResponse(
             invitation_id=str(result["id"]),
             token=result["token"],
