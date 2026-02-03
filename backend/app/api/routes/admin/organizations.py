@@ -1,5 +1,6 @@
 """Admin organization suspend/reactivate endpoints."""
 
+from typing import Optional
 from uuid import UUID
 
 from fastapi import APIRouter, Depends
@@ -26,7 +27,7 @@ def get_organization_service(supabase=Depends(get_supabase)) -> OrganizationServ
 )
 async def suspend_organization(
     org_id: UUID,
-    body: SuspendOrganizationRequest | None = None,
+    body: Optional[SuspendOrganizationRequest] = None,
     admin_user: dict = Depends(get_current_platform_admin),
     service: OrganizationService = Depends(get_organization_service),
 ) -> OrganizationStatusResponse:
