@@ -1,7 +1,7 @@
 # [Task] Buyer-Vendor Chat / Buyer-Vendorチャット
 
 ## 🔗 GitLab Issue
-- Link: (後で作成)
+- Link: [#35](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/35)
 
 ---
 
@@ -254,7 +254,7 @@ Supabase Realtime で新着メッセージを購読:
 ## 🔗 関連タスク
 
 - 前提: [02-01-project-management.md](./02-01-project-management.md)
-- 関連: [01-07-notifications.md](./01-07-notifications.md) (新着通知)
+- 関連: [05-01-notifications.md](./05-01-notifications.md) (新着通知)
 
 ---
 

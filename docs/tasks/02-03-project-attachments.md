@@ -1,7 +1,7 @@
 # [Task] Project Attachments / プロジェクト添付ファイル
 
 ## 🔗 GitLab Issue
-- Link: (後で作成)
+- Link: [#33](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/33)
 
 ---
 
@@ -9,6 +9,8 @@
 
 プロジェクトに手動で添付するファイル（参考資料、仕様書等）を管理する機能。
 AIが生成した計画書とは別に、Buyerが任意のファイルをアップロードできる。
+
+**Vendor側対応**: In Discussion後、Vendorはプロジェクトに紐づく添付ファイルを閲覧可能（project_vendors経由）。
 
 ---
 
@@ -129,6 +131,8 @@ AIが生成した計画書とは別に、Buyerが任意のファイルをアッ�
 GET /api/projects/{id}/attachments
 - Response: { items: Attachment[] }
 - Filter by project_id, is_deleted=false
+- **Buyerの場合**: 全添付ファイルを返却
+- **Vendorの場合**: In Discussion後、project_vendorsに含まれる場合のみ閲覧可能
 
 POST /api/projects/{id}/attachments
 - Request: multipart/form-data (file)

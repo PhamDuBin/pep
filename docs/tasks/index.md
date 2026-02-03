@@ -35,7 +35,6 @@
 | 01-04 | [Invitation](./01-04-invitation.md) | [#28](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/28) | ✅ accept_invitation | 🔲 Not Started |
 | 01-05 | [Role Change & Owner Transfer](./01-05-role-change.md) | [#29](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/29) | ✅ transfer_ownership | 🔲 Not Started |
 | 01-06 | [Account Suspension & Member Removal](./01-06-account-management.md) | [#30](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/30) | ❌ | 🔲 Not Started |
-| 01-07 | [Notifications](./01-07-notifications.md) | [#36](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/36) | ❌ | 🔲 Not Started |
 | 01-08 | [Login/Logout](./01-08-login-logout.md) | [#45](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/45) | ❌ | 🔲 Not Started |
 | 01-09 | [User Profile Update](./01-09-user-profile-update.md) | [#46](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/46) | ❌ | 🔲 Not Started |
 | 01-10 | [Organization Settings](./01-10-organization-settings.md) | [#47](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/47) | ❌ | 🔲 Not Started |
@@ -65,6 +64,12 @@
 | 04-03 | [Stripe Webhook](./04-03-stripe-webhook.md) | [#39](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/39) | ✅ handle_stripe_webhook | 🔲 Not Started |
 | 04-04 | [Payment Methods](./04-04-payment-methods.md) | [#49](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/49) | ❌ | 🔲 Not Started |
 
+### 05_Common / 共通機能
+
+| # | Task | GitLab Issue | RPC | Status |
+|---|------|--------------|-----|--------|
+| 05-01 | [Notifications](./05-01-notifications.md) | [#36](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/36) | ❌ | 🔲 Not Started |
+
 ---
 
 ## Dependencies / 依存関係
@@ -82,15 +87,13 @@
   ↓                                            │  │
 01-11 Email Change (メールアドレス変更) ────────┘  │
   ↓                                              │
-01-10 Organization Settings (組織情報更新) ────────┤
+01-10 Organization Settings (組織情報更新) ───────┤
   ↓                                              │
-01-04 Invitation (招待機能)                       │
-  ↓                                              │
-01-05 Role Change (ロール管理)                    │
-  ↓                                              │
-01-06 Account Management (停止・削除)             │
-  ↓                                              │
-01-07 Notifications (通知機能) ←──────────────────┘
+01-04 Invitation (招待機能)
+  ↓
+01-05 Role Change (ロール管理)
+  ↓
+01-06 Account Management (停止・削除)
 ```
 
 ### 02_Project / プロジェクト計画書まわり
@@ -106,13 +109,14 @@
 ### 03_Chat / チャット周り
 
 ```
-02-01 Project Management
-  ↓
-03-01 AI Chat Sessions
-  ↓
-03-02 Buyer-Vendor Chat
-  ↓
-01-07 Notifications (02-01, 03-02 と連携)
+                    02-01 Project Management
+                      ↓                ↓
+            03-01 AI Chat Sessions   03-02 Buyer-Vendor Chat
+                      ↓                ↓
+                  02-02 Project Plans  05-01 Notifications
+                  (計画書生成連携)       (新着通知)
+
+※ 03-01 と 03-02 は独立した機能（両方とも 02-01 に依存）
 ```
 
 ### 04_Billing / 決済まわり
@@ -127,6 +131,17 @@
 04-03 Stripe Webhook (契約確定・請求書同期)
   ↓
 04-02 Invoice Management (請求書一覧表示)
+```
+
+### 05_Common / 共通機能
+
+```
+02-01 Project Management ──┐
+                           ↓
+03-02 Buyer-Vendor Chat ──→ 05-01 Notifications
+                           ↑
+04-01 Subscription ────────┘
+(各機能から通知をトリガー)
 ```
 
 ---
@@ -160,7 +175,6 @@
 | [01-04-invitation.md](./01-04-invitation.md) | Invitation 指示書 |
 | [01-05-role-change.md](./01-05-role-change.md) | Role Change 指示書 |
 | [01-06-account-management.md](./01-06-account-management.md) | Account Management 指示書 |
-| [01-07-notifications.md](./01-07-notifications.md) | Notifications 指示書 |
 | [01-08-login-logout.md](./01-08-login-logout.md) | Login/Logout 指示書 |
 | [01-09-user-profile-update.md](./01-09-user-profile-update.md) | User Profile Update 指示書 |
 | [01-10-organization-settings.md](./01-10-organization-settings.md) | Organization Settings 指示書 |
@@ -186,6 +200,11 @@
 | [04-02-invoice.md](./04-02-invoice.md) | Invoice Management 指示書 |
 | [04-03-stripe-webhook.md](./04-03-stripe-webhook.md) | Stripe Webhook 指示書 |
 | [04-04-payment-methods.md](./04-04-payment-methods.md) | Payment Methods 指示書 |
+
+### 05_Common / 共通機能
+| File | Description |
+|------|-------------|
+| [05-01-notifications.md](./05-01-notifications.md) | Notifications 指示書 |
 
 ---
 

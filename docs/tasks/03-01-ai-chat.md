@@ -1,7 +1,7 @@
 # [Task] AI Chat Sessions / AIチャットセッション
 
 ## 🔗 GitLab Issue
-- Link: (後で作成)
+- Link: [#34](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/34)
 
 ---
 
@@ -234,7 +234,7 @@ POST /api/ai/sessions/{id}/generate-plan
 
 ## 🔗 関連タスク
 
-- 前提: [01-01-signup.md](./01-01-signup.md) (profiles)
+- 前提: [01-02-backend-onboarding.md](./01-02-backend-onboarding.md) (profiles, organizations)
 - 前提: [02-01-project-management.md](./02-01-project-management.md) (projects)
 - 後続: [02-02-project-plans.md](./02-02-project-plans.md) (計画書生成連携)
 
