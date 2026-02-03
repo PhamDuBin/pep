@@ -120,10 +120,13 @@ async def test_delete_invitation_returns_true_when_updated(crud, mock_supabase):
         mock_supabase.table.return_value.update.return_value.eq.return_value.eq.return_value.eq.return_value
     )
     chain.execute.return_value = MagicMock(data=[{"id": "inv-1"}])
-    result = await crud.delete_invitation("inv-1", "org-1")
+    result = await crud.delete_invitation("inv-1", "org-1", "actor-1")
     assert result is True
     mock_supabase.table.assert_called_with("invitations")
-    mock_supabase.table.return_value.update.assert_called_once_with({"is_deleted": True})
+    call_args = mock_supabase.table.return_value.update.call_args[0][0]
+    assert call_args["is_deleted"] is True
+    assert call_args["updated_by"] == "actor-1"
+    assert "updated_at" in call_args
 
 
 @pytest.mark.asyncio
@@ -133,7 +136,7 @@ async def test_delete_invitation_returns_false_when_empty(crud, mock_supabase):
         mock_supabase.table.return_value.update.return_value.eq.return_value.eq.return_value.eq.return_value
     )
     chain.execute.return_value = MagicMock(data=[])
-    result = await crud.delete_invitation("inv-1", "org-1")
+    result = await crud.delete_invitation("inv-1", "org-1", "actor-1")
     assert result is False
 
 

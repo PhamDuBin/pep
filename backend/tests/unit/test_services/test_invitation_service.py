@@ -191,12 +191,14 @@ async def test_resend_invitation_success(service):
     service.crud.reset_expiration = AsyncMock(
         return_value={"id": "inv-1", "token": "new-token-xyz"}
     )
-    result = await service.resend_invitation(invitation_id="inv-1", org_id="org-1")
+    result = await service.resend_invitation(
+        invitation_id="inv-1", org_id="org-1", actor_id="actor-1"
+    )
     assert isinstance(result, InvitationCreateResponse)
     assert result.invitation_id == "inv-1"
     assert result.token == "new-token-xyz"
     service.crud.get_by_id.assert_called_once_with("inv-1")
-    service.crud.reset_expiration.assert_called_once_with("inv-1")
+    service.crud.reset_expiration.assert_called_once_with("inv-1", updated_by="actor-1")
 
 
 @pytest.mark.asyncio
@@ -205,7 +207,9 @@ async def test_resend_invitation_not_found_returns_404(service):
     service.crud.get_by_id = AsyncMock(return_value=None)
     service.crud.reset_expiration = AsyncMock()
     with pytest.raises(HTTPException) as exc_info:
-        await service.resend_invitation(invitation_id="inv-1", org_id="org-1")
+        await service.resend_invitation(
+            invitation_id="inv-1", org_id="org-1", actor_id="actor-1"
+        )
     assert exc_info.value.status_code == 404
     service.crud.reset_expiration.assert_not_called()
 
@@ -218,7 +222,9 @@ async def test_resend_invitation_org_mismatch_returns_404(service):
     )
     service.crud.reset_expiration = AsyncMock()
     with pytest.raises(HTTPException) as exc_info:
-        await service.resend_invitation(invitation_id="inv-1", org_id="org-1")
+        await service.resend_invitation(
+            invitation_id="inv-1", org_id="org-1", actor_id="actor-1"
+        )
     assert exc_info.value.status_code == 404
     service.crud.reset_expiration.assert_not_called()
 
@@ -231,7 +237,9 @@ async def test_resend_invitation_not_pending_returns_409(service):
     )
     service.crud.reset_expiration = AsyncMock()
     with pytest.raises(HTTPException) as exc_info:
-        await service.resend_invitation(invitation_id="inv-1", org_id="org-1")
+        await service.resend_invitation(
+            invitation_id="inv-1", org_id="org-1", actor_id="actor-1"
+        )
     assert exc_info.value.status_code == 409
     service.crud.reset_expiration.assert_not_called()
 
@@ -244,7 +252,9 @@ async def test_resend_invitation_reset_fails_returns_500(service):
     )
     service.crud.reset_expiration = AsyncMock(return_value=None)
     with pytest.raises(HTTPException) as exc_info:
-        await service.resend_invitation(invitation_id="inv-1", org_id="org-1")
+        await service.resend_invitation(
+            invitation_id="inv-1", org_id="org-1", actor_id="actor-1"
+        )
     assert exc_info.value.status_code == 500
 
 
@@ -256,8 +266,12 @@ async def test_resend_invitation_reset_fails_returns_500(service):
 async def test_cancel_invitation_success(service):
     """Test cancel invitation success / 招待取消成功."""
     service.crud.delete_invitation = AsyncMock(return_value=True)
-    await service.cancel_invitation(invitation_id="inv-1", org_id="org-1")
-    service.crud.delete_invitation.assert_called_once_with("inv-1", "org-1")
+    await service.cancel_invitation(
+        invitation_id="inv-1", org_id="org-1", actor_id="actor-1"
+    )
+    service.crud.delete_invitation.assert_called_once_with(
+        "inv-1", "org-1", updated_by="actor-1"
+    )
 
 
 @pytest.mark.asyncio
@@ -265,5 +279,7 @@ async def test_cancel_invitation_not_found_returns_404(service):
     """Test cancel returns 404 when invitation not found."""
     service.crud.delete_invitation = AsyncMock(return_value=False)
     with pytest.raises(HTTPException) as exc_info:
-        await service.cancel_invitation(invitation_id="inv-1", org_id="org-1")
+        await service.cancel_invitation(
+            invitation_id="inv-1", org_id="org-1", actor_id="actor-1"
+        )
     assert exc_info.value.status_code == 404

@@ -115,7 +115,7 @@ class InvitationService:
         )
 
     async def resend_invitation(
-        self, invitation_id: str, org_id: str
+        self, invitation_id: str, org_id: str, actor_id: str
     ) -> InvitationCreateResponse:
         """
         Resend an invitation: extend expiration and return token for link.
@@ -143,7 +143,7 @@ class InvitationService:
                 status_code=409,
                 detail="Can only resend pending invitations / 再送できるのはpendingの招待のみです",
             )
-        result = await self.crud.reset_expiration(invitation_id)
+        result = await self.crud.reset_expiration(invitation_id, updated_by=actor_id)
         if not result:
             raise HTTPException(
                 status_code=500,
@@ -154,15 +154,19 @@ class InvitationService:
             token=result["token"],
         )
 
-    async def cancel_invitation(self, invitation_id: str, org_id: str) -> None:
+    async def cancel_invitation(
+        self, invitation_id: str, org_id: str, actor_id: str
+    ) -> None:
         """
         Soft-delete (cancel) an invitation. Only if it belongs to the organization.
-        Sets is_deleted = true; does not physically delete the row.
+        Sets is_deleted = true, updated_by; does not physically delete the row.
 
         Raises:
             HTTPException 404 if not found or org mismatch or already cancelled
         """
-        deleted = await self.crud.delete_invitation(invitation_id, org_id)
+        deleted = await self.crud.delete_invitation(
+            invitation_id, org_id, updated_by=actor_id
+        )
         if not deleted:
             raise HTTPException(
                 status_code=404,

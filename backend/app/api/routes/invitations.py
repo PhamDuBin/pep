@@ -80,6 +80,7 @@ async def resend_invitation(
     return await service.resend_invitation(
         invitation_id=invitation_id,
         org_id=current["org_id"],
+        actor_id=current["id"],
     )
 
 
@@ -114,4 +115,8 @@ async def cancel_invitation(
 
     招待を取消。オーナーまたは管理者のみ。
     """
-    await service.cancel_invitation(invitation_id=invitation_id, org_id=current["org_id"])
+    await service.cancel_invitation(
+        invitation_id=invitation_id,
+        org_id=current["org_id"],
+        actor_id=current["id"],
+    )

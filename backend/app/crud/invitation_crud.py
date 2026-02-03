@@ -47,6 +47,7 @@ class InvitationCRUD:
                     "role": role,
                     "token": token,
                     "created_by": invited_by,
+                    "updated_by": invited_by,
                     "expires_at": expires_at,
                 }
             )
@@ -102,17 +103,20 @@ class InvitationCRUD:
         ).execute()
         return result.data
 
-    async def delete_invitation(self, invitation_id: str, org_id: str) -> bool:
+    async def delete_invitation(
+        self, invitation_id: str, org_id: str, updated_by: str
+    ) -> bool:
         """
         Soft-delete (cancel) an invitation only if it belongs to the organization.
-        Sets is_deleted = true; does not physically delete the row.
+        Sets is_deleted = true, updated_by; does not physically delete the row.
 
         Returns:
             True if a row was updated, False if not found or org mismatch or already deleted
         """
+        updated_at = datetime.now(timezone.utc).isoformat()
         result = (
             self.supabase.table("invitations")
-            .update({"is_deleted": True})
+            .update({"is_deleted": True, "updated_by": updated_by, "updated_at": updated_at})
             .eq("id", invitation_id)
             .eq("org_id", org_id)
             .eq("is_deleted", False)
@@ -139,7 +143,9 @@ class InvitationCRUD:
         rows = result.data or []
         return rows[0] if rows else None
 
-    async def reset_expiration(self, invitation_id: str) -> Optional[dict]:
+    async def reset_expiration(
+        self, invitation_id: str, updated_by: str
+    ) -> Optional[dict]:
         """
         Reset expiration for a pending invitation (extend by 7 days).
         Only updates if status is pending and not soft-deleted.
@@ -151,7 +157,11 @@ class InvitationCRUD:
         updated_at = datetime.now(timezone.utc).isoformat()
         result = (
             self.supabase.table("invitations")
-            .update({"expires_at": expires_at, "updated_at": updated_at})
+            .update({
+                "expires_at": expires_at,
+                "updated_at": updated_at,
+                "updated_by": updated_by,
+            })
             .eq("id", invitation_id)
             .eq("status", "pending")
             .eq("is_deleted", False)
