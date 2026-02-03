@@ -55,6 +55,75 @@ async def test_get_current_user_info_returns_user_info_when_active(auth_service,
 
 
 @pytest.mark.asyncio
+async def test_get_current_user_info_raises_when_profile_not_found(auth_service, mock_crud):
+    """get_current_user_info raises 403 when profile is None."""
+    mock_crud.get_user_profile_with_org.return_value = None
+    with pytest.raises(HTTPException) as exc_info:
+        await auth_service.get_current_user_info("user-uuid")
+    assert exc_info.value.status_code == 403
+
+
+@pytest.mark.asyncio
+async def test_get_current_user_info_raises_on_inactive(auth_service, mock_crud):
+    """get_current_user_info raises 403 ACCOUNT_INACTIVE when profile.status is inactive."""
+    mock_crud.get_user_profile_with_org.return_value = {
+        "id": "user-uuid",
+        "email": "u@example.com",
+        "display_name": "User",
+        "role": "member",
+        "status": "inactive",
+        "org_id": None,
+        "org_name": None,
+        "org_type": None,
+        "org_status": None,
+    }
+    with pytest.raises(HTTPException) as exc_info:
+        await auth_service.get_current_user_info("user-uuid")
+    assert exc_info.value.status_code == 403
+    assert exc_info.value.detail == "ACCOUNT_INACTIVE"
+
+
+@pytest.mark.asyncio
+async def test_get_current_user_info_raises_on_profile_suspended(auth_service, mock_crud):
+    """get_current_user_info raises 403 ACCOUNT_SUSPENDED when profile.status is suspended."""
+    mock_crud.get_user_profile_with_org.return_value = {
+        "id": "user-uuid",
+        "email": "u@example.com",
+        "display_name": "User",
+        "role": "member",
+        "status": "suspended",
+        "org_id": "org-uuid",
+        "org_name": "Org",
+        "org_type": "buyer",
+        "org_status": "active",
+    }
+    with pytest.raises(HTTPException) as exc_info:
+        await auth_service.get_current_user_info("user-uuid")
+    assert exc_info.value.status_code == 403
+    assert exc_info.value.detail == "ACCOUNT_SUSPENDED"
+
+
+@pytest.mark.asyncio
+async def test_get_current_user_info_raises_on_org_suspended(auth_service, mock_crud):
+    """get_current_user_info raises 403 ACCOUNT_SUSPENDED when org_status is suspended."""
+    mock_crud.get_user_profile_with_org.return_value = {
+        "id": "user-uuid",
+        "email": "u@example.com",
+        "display_name": "User",
+        "role": "member",
+        "status": "active",
+        "org_id": "org-uuid",
+        "org_name": "Org",
+        "org_type": "buyer",
+        "org_status": "suspended",
+    }
+    with pytest.raises(HTTPException) as exc_info:
+        await auth_service.get_current_user_info("user-uuid")
+    assert exc_info.value.status_code == 403
+    assert exc_info.value.detail == "ACCOUNT_SUSPENDED"
+
+
+@pytest.mark.asyncio
 async def test_get_current_user_info_raises_on_pending(auth_service, mock_crud):
     """get_current_user_info raises 403 ONBOARDING_INCOMPLETE when profile.status is pending."""
     mock_crud.get_user_profile_with_org.return_value = {

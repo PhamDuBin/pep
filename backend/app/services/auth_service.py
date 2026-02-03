@@ -67,6 +67,11 @@ class AuthService:
                 status_code=403,
                 detail=ACCOUNT_INACTIVE,
             )
+        if status == "suspended":
+            raise HTTPException(
+                status_code=403,
+                detail=ACCOUNT_SUSPENDED,
+            )
         if org_status == "suspended":
             raise HTTPException(
                 status_code=403,

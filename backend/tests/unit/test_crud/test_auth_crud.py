@@ -42,3 +42,12 @@ def test_get_user_profile_with_org_returns_profile_and_org(mock_supabase):
     assert result["email"] == "u@example.com"
     assert result["org_name"] == "Org Name"
     assert result["org_type"] == "buyer"
+    assert result["org_status"] == "active"
+
+
+def test_get_user_profile_with_org_returns_none_when_no_profile(mock_supabase):
+    """get_user_profile_with_org returns None when profile not found."""
+    mock_supabase.execute.return_value = MagicMock(data=[])
+    crud = AuthCRUD(mock_supabase)
+    result = crud.get_user_profile_with_org("unknown-uuid")
+    assert result is None
