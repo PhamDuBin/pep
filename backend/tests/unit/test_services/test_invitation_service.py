@@ -106,6 +106,7 @@ async def test_create_invitation_returns_500_when_crud_returns_none(service):
 
 
 @pytest.mark.asyncio
+@pytest.mark.skip(reason="Invitation email sending is commented out; re-enable when email is re-enabled.")
 async def test_create_invitation_returns_502_when_send_email_fails(service):
     """Test create returns 502 when Supabase Auth invite_user_by_email fails."""
     service.crud.get_pending_by_org_and_email = AsyncMock(return_value=None)

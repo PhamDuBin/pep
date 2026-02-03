@@ -33,6 +33,10 @@ class InvitationService:
         """
         Send invitation email via Supabase Auth (invite_user_by_email).
         Redirect URL includes our invitation token so the user lands on accept page.
+
+        Currently not called; invitation email sending is commented out until
+        alignment with frontend on who sends the email. 招待メール送信はフロントと
+        方針確定までコメントアウト。
         """
         settings = get_settings()
         base = (settings.frontend_url or "").rstrip("/")
@@ -87,7 +91,8 @@ class InvitationService:
                 status_code=500,
                 detail="Failed to create invitation / 招待の作成に失敗しました",
             )
-        self._send_invitation_email(email, result["token"])
+        # TODO: Re-enable after alignment with frontend on who sends invitation email.
+        # self._send_invitation_email(email, result["token"])
         return InvitationCreateResponse(
             invitation_id=result["id"],
             token=result["token"],
@@ -181,9 +186,10 @@ class InvitationService:
                 status_code=500,
                 detail="Failed to resend invitation / 招待の再送に失敗しました",
             )
-        invitee_email = invitation.get("email") or ""
-        if invitee_email:
-            self._send_invitation_email(invitee_email, result["token"])
+        # TODO: Re-enable after alignment with frontend on who sends invitation email.
+        # invitee_email = invitation.get("email") or ""
+        # if invitee_email:
+        #     self._send_invitation_email(invitee_email, result["token"])
         return InvitationCreateResponse(
             invitation_id=str(result["id"]),
             token=result["token"],
