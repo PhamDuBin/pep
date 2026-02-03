@@ -32,9 +32,10 @@ Buyerがプロジェクトを作成・編集・管理する機能。
 ## 📊 処理フロー概要
 
 ```
-1. プロジェクト作成 (Draft)
+1. プロジェクト作成 (Draft) + AIセッション自動作成
    POST /api/projects
    └─→ projects INSERT (status='draft')
+   └─→ ai_chat_sessions INSERT (project_id=new project)
 
 2. プロジェクト編集
    PUT /api/projects/{id}
@@ -109,7 +110,7 @@ Buyerがプロジェクトを作成・編集・管理する機能。
 
 | # | Test Case | Layer | Expected |
 |---|-----------|-------|----------|
-| 1 | プロジェクト作成成功 | Service | status = draft |
+| 1 | プロジェクト作成成功 | Service | status = draft, AIセッション作成 |
 | 2 | draft → in_discussion 遷移 | Service | 成功、started_at設定、チャットルーム作成 |
 | 3 | in_discussion → closed 遷移 | Service | 成功、closed_at設定 |
 | 4 | draft以外からの編集 | Service | Error |
@@ -177,7 +178,8 @@ GET /api/projects
 
 POST /api/projects
 - Request: { title, description? }
-- Response: Project
+- Response: { project: Project, ai_session: AiChatSession }
+- **プロジェクト作成と同時にAIチャットセッションを自動作成**
 - buyer_org_id from JWT
 
 GET /api/projects/{id}
@@ -253,6 +255,7 @@ POST /api/projects/{id}/close
 - 前提: [01-02-backend-onboarding.md](./01-02-backend-onboarding.md) (organizations, profiles テーブル)
 - 後続: [02-02-project-plans.md](./02-02-project-plans.md)
 - 後続: [02-03-project-attachments.md](./02-03-project-attachments.md)
+- 連携: [03-01-ai-chat.md](./03-01-ai-chat.md) (プロジェクト作成時にAIセッション自動作成)
 - 連携: [03-02-buyer-vendor-chat.md](./03-02-buyer-vendor-chat.md) (start-discussionでチャットルーム作成)
 - 連携: [05-01-notifications.md](./05-01-notifications.md) (Vendor通知)
 
@@ -260,6 +263,7 @@ POST /api/projects/{id}/close
 
 ## 📝 メモ
 
+- **ChatGPT風UX**: プロジェクト作成と同時にAIチャットセッションを自動作成。ユーザーはすぐにAIとのチャットを開始できる
 - **Vendor一覧API**: Vendor選択時に利用。statusがactiveのVendor組織のみ返却
 - **Vendor側プロジェクト一覧**: project_vendors 経由で自組織が招待されたプロジェクトを取得
 - **start-discussion 処理**:

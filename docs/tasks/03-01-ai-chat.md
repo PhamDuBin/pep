@@ -27,8 +27,9 @@ OpenAI APIを利用し、チャット履歴をDBに保存。生成物はproject_
 ## 📊 処理フロー概要
 
 ```
-1. セッション作成
-   POST /api/ai/sessions
+1. セッション作成（プロジェクト作成時に自動 or 単独作成）
+   POST /api/projects  ← プロジェクト作成時に自動作成（推奨）
+   POST /api/ai/sessions  ← 単独でセッション作成する場合
    └─→ ai_chat_sessions INSERT
 
 2. メッセージ送信 & AI応答
@@ -97,7 +98,7 @@ OpenAI APIを利用し、チャット履歴をDBに保存。生成物はproject_
 |---|-----------|-------|----------|
 | 1 | セッション作成成功 | Service | session_id 返却 |
 | 2 | メッセージ送信成功（OpenAI mock） | Service | user/assistant両方返却 |
-| 3 | 他ユーザーのセッションアクセス | Service | Error |
+| 3 | 他組織のセッションアクセス | Service | Error |
 | 4 | 計画書生成成功 | Service | plan_id 返却 |
 | 5 | OpenAI APIエラー時 | Service | 適切なエラーハンドリング |
 
@@ -129,11 +130,11 @@ CREATE EXTENSION IF NOT EXISTS vector;
 
 `ai_chat_sessions` テーブル:
 - id (UUID, PK)
-- user_id (UUID, FK → profiles.id) - セッションオーナー
+- org_id (UUID, FK → organizations.id) - セッション所有組織
 - project_id (UUID, FK → projects.id, nullable)
 - title (TEXT, nullable)
 - is_presentation_mode (BOOLEAN, default false) - スライド生成モード
-- created_by (UUID, FK → profiles.id)
+- created_by (UUID, FK → profiles.id) - 作成者
 - created_at, updated_at, updated_by, is_deleted
 
 `ai_chat_messages` テーブル:
@@ -151,11 +152,12 @@ CREATE EXTENSION IF NOT EXISTS vector;
 GET /api/ai/sessions
 - Query: project_id?, page, limit
 - Response: { items: Session[], total }
-- Filter by user_id from JWT
+- Filter by org_id from JWT（組織内の全セッションを取得）
 
 POST /api/ai/sessions
 - Request: { project_id?, title?, is_presentation_mode? }
 - Response: Session
+- **Note**: プロジェクト作成時にはPOST /api/projectsで自動作成される
 
 GET /api/ai/sessions/{id}
 - Response: Session
@@ -198,11 +200,11 @@ POST /api/ai/sessions/{id}/generate-plan
 - schemas/ai.py (Pydantic models)
 
 ### 5. RLSポリシー
-- ai_chat_sessions: user_id = 自分
-- ai_chat_messages: session.user_id = 自分
+- ai_chat_sessions: org_id = 自組織
+- ai_chat_messages: session.org_id = 自組織
 
 ## 制約
-- セッションは作成者のみアクセス可能
+- セッションは同一組織のメンバーのみアクセス可能
 - OpenAI APIキーは環境変数から取得
 - レート制限考慮
 - 型ヒント必須
@@ -235,13 +237,15 @@ POST /api/ai/sessions/{id}/generate-plan
 ## 🔗 関連タスク
 
 - 前提: [01-02-backend-onboarding.md](./01-02-backend-onboarding.md) (profiles, organizations)
-- 前提: [02-01-project-management.md](./02-01-project-management.md) (projects)
+- 連携: [02-01-project-management.md](./02-01-project-management.md) (プロジェクト作成時にAIセッション自動作成)
 - 後続: [02-02-project-plans.md](./02-02-project-plans.md) (計画書生成連携)
 
 ---
 
 ## 📝 メモ
 
+- **組織所有**: AIセッションは組織に紐づく。同一組織のメンバーはセッションを共有可能
+- **ChatGPT風UX**: プロジェクト作成時にAIセッションを自動作成（02-01連携）。ユーザーはプロジェクト作成後すぐにAIチャットを開始可能
 - embedding は検索機能の拡張時に使用
 - is_presentation_mode でスライド生成用のプロンプトを切り替え
 - OpenAI API エラー時の適切なハンドリング必須
