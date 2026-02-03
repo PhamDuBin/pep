@@ -66,6 +66,23 @@ async def list_invitations(
     )
 
 
+@router.post("/{invitation_id}/resend", response_model=InvitationCreateResponse)
+async def resend_invitation(
+    invitation_id: str,
+    current: dict = Depends(get_current_org_owner_or_admin),
+    service: InvitationService = Depends(get_invitation_service),
+) -> InvitationCreateResponse:
+    """
+    Resend an invitation: extend expiration and return token (Owner/Admin only).
+
+    招待を再送。有効期限を延長しトークンを返す。オーナーまたは管理者のみ。
+    """
+    return await service.resend_invitation(
+        invitation_id=invitation_id,
+        org_id=current["org_id"],
+    )
+
+
 @router.post("/{token}/accept", response_model=AcceptInvitationResponse)
 async def accept_invitation(
     token: str,

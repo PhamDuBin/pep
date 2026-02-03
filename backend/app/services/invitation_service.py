@@ -114,6 +114,46 @@ class InvitationService:
             organization_id=str(result.get("organization_id", "")),
         )
 
+    async def resend_invitation(
+        self, invitation_id: str, org_id: str
+    ) -> InvitationCreateResponse:
+        """
+        Resend an invitation: extend expiration and return token for link.
+
+        Only pending invitations belonging to the org can be resent.
+
+        Raises:
+            HTTPException 404 if not found or org mismatch.
+            HTTPException 409 if not pending (already accepted/expired/cancelled).
+        """
+        invitation = await self.crud.get_by_id(invitation_id)
+        if not invitation:
+            raise HTTPException(
+                status_code=404,
+                detail="Invitation not found / 招待が見つかりません",
+            )
+        inv_org_id = str(invitation.get("org_id", ""))
+        if inv_org_id != str(org_id):
+            raise HTTPException(
+                status_code=404,
+                detail="Invitation not found / 招待が見つかりません",
+            )
+        if invitation.get("status") != "pending":
+            raise HTTPException(
+                status_code=409,
+                detail="Can only resend pending invitations / 再送できるのはpendingの招待のみです",
+            )
+        result = await self.crud.reset_expiration(invitation_id)
+        if not result:
+            raise HTTPException(
+                status_code=500,
+                detail="Failed to resend invitation / 招待の再送に失敗しました",
+            )
+        return InvitationCreateResponse(
+            invitation_id=str(result["id"]),
+            token=result["token"],
+        )
+
     async def cancel_invitation(self, invitation_id: str, org_id: str) -> None:
         """
         Soft-delete (cancel) an invitation. Only if it belongs to the organization.

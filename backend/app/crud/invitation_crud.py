@@ -121,6 +121,45 @@ class InvitationCRUD:
         data = result.data or []
         return len(data) > 0
 
+    async def get_by_id(self, invitation_id: str) -> Optional[dict]:
+        """
+        Get an invitation by id (exclude soft-deleted).
+
+        Returns:
+            Row dict or None if not found.
+        """
+        result = (
+            self.supabase.table("invitations")
+            .select("id,org_id,email,role,status,token,expires_at,created_by,created_at")
+            .eq("id", invitation_id)
+            .eq("is_deleted", False)
+            .limit(1)
+            .execute()
+        )
+        rows = result.data or []
+        return rows[0] if rows else None
+
+    async def reset_expiration(self, invitation_id: str) -> Optional[dict]:
+        """
+        Reset expiration for a pending invitation (extend by 7 days).
+        Only updates if status is pending and not soft-deleted.
+
+        Returns:
+            Updated row dict (id, token, expires_at, ...) or None if not found/not pending.
+        """
+        expires_at = (datetime.now(timezone.utc) + timedelta(days=7)).isoformat()
+        updated_at = datetime.now(timezone.utc).isoformat()
+        result = (
+            self.supabase.table("invitations")
+            .update({"expires_at": expires_at, "updated_at": updated_at})
+            .eq("id", invitation_id)
+            .eq("status", "pending")
+            .eq("is_deleted", False)
+            .execute()
+        )
+        data = result.data or []
+        return data[0] if data else None
+
     async def get_pending_by_org_and_email(
         self,
         org_id: str,

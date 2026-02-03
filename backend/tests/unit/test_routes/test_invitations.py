@@ -51,6 +51,12 @@ def mock_invitation_service():
         )
     )
     mock.cancel_invitation = AsyncMock(return_value=None)
+    mock.resend_invitation = AsyncMock(
+        return_value=InvitationCreateResponse(
+            invitation_id="inv-uuid-1",
+            token="resend-token-xyz",
+        )
+    )
     return mock
 
 
@@ -164,6 +170,44 @@ async def test_accept_invitation_returns_403_when_user_id_mismatch(mock_invitati
     finally:
         app.dependency_overrides.pop(get_current_user, None)
         app.dependency_overrides.pop(get_invitation_service, None)
+
+
+# --- POST /api/invitations/{invitation_id}/resend: 200 + response shape ---
+@pytest.mark.asyncio
+async def test_resend_invitation_returns_200_and_shape(owner_client, mock_invitation_service):
+    """Resend invitation returns 200 and InvitationCreateResponse shape."""
+    app.dependency_overrides[get_invitation_service] = lambda: mock_invitation_service
+    try:
+        response = await owner_client.post("/api/invitations/inv-uuid-1/resend")
+        assert response.status_code == 200
+        data = response.json()
+        assert "invitation_id" in data
+        assert "token" in data
+        assert data["invitation_id"] == "inv-uuid-1"
+        assert data["token"] == "resend-token-xyz"
+    finally:
+        app.dependency_overrides.pop(get_invitation_service, None)
+
+
+@pytest.mark.asyncio
+async def test_resend_invitation_non_owner_returns_403():
+    """Resend invitation: non Owner/Admin returns 403."""
+    async def override_owner_403():
+        raise HTTPException(
+            status_code=403,
+            detail="Forbidden / Owner or Admin only",
+        )
+
+    app.dependency_overrides[get_current_org_owner_or_admin] = override_owner_403
+    try:
+        async with AsyncClient(
+            transport=ASGITransport(app=app),
+            base_url="http://test",
+        ) as ac:
+            response = await ac.post("/api/invitations/inv-uuid-1/resend")
+        assert response.status_code == 403
+    finally:
+        app.dependency_overrides.pop(get_current_org_owner_or_admin, None)
 
 
 # --- DELETE /api/invitations/{id}: 204 ---

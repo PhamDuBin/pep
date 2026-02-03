@@ -171,6 +171,84 @@ async def test_accept_invitation_returns_500_when_rpc_returns_none(service):
 
 
 # ===========================================
+# resend_invitation Tests
+# ===========================================
+
+@pytest.mark.asyncio
+async def test_resend_invitation_success(service):
+    """Test resend invitation success / 招待再送成功."""
+    service.crud.get_by_id = AsyncMock(
+        return_value={
+            "id": "inv-1",
+            "org_id": "org-1",
+            "email": "a@b.com",
+            "role": "member",
+            "status": "pending",
+            "token": "old-token",
+            "expires_at": "2025-01-01T00:00:00Z",
+        }
+    )
+    service.crud.reset_expiration = AsyncMock(
+        return_value={"id": "inv-1", "token": "new-token-xyz"}
+    )
+    result = await service.resend_invitation(invitation_id="inv-1", org_id="org-1")
+    assert isinstance(result, InvitationCreateResponse)
+    assert result.invitation_id == "inv-1"
+    assert result.token == "new-token-xyz"
+    service.crud.get_by_id.assert_called_once_with("inv-1")
+    service.crud.reset_expiration.assert_called_once_with("inv-1")
+
+
+@pytest.mark.asyncio
+async def test_resend_invitation_not_found_returns_404(service):
+    """Test resend returns 404 when invitation not found."""
+    service.crud.get_by_id = AsyncMock(return_value=None)
+    service.crud.reset_expiration = AsyncMock()
+    with pytest.raises(HTTPException) as exc_info:
+        await service.resend_invitation(invitation_id="inv-1", org_id="org-1")
+    assert exc_info.value.status_code == 404
+    service.crud.reset_expiration.assert_not_called()
+
+
+@pytest.mark.asyncio
+async def test_resend_invitation_org_mismatch_returns_404(service):
+    """Test resend returns 404 when invitation belongs to another org."""
+    service.crud.get_by_id = AsyncMock(
+        return_value={"id": "inv-1", "org_id": "other-org", "status": "pending"}
+    )
+    service.crud.reset_expiration = AsyncMock()
+    with pytest.raises(HTTPException) as exc_info:
+        await service.resend_invitation(invitation_id="inv-1", org_id="org-1")
+    assert exc_info.value.status_code == 404
+    service.crud.reset_expiration.assert_not_called()
+
+
+@pytest.mark.asyncio
+async def test_resend_invitation_not_pending_returns_409(service):
+    """Test resend returns 409 when invitation is not pending."""
+    service.crud.get_by_id = AsyncMock(
+        return_value={"id": "inv-1", "org_id": "org-1", "status": "accepted"}
+    )
+    service.crud.reset_expiration = AsyncMock()
+    with pytest.raises(HTTPException) as exc_info:
+        await service.resend_invitation(invitation_id="inv-1", org_id="org-1")
+    assert exc_info.value.status_code == 409
+    service.crud.reset_expiration.assert_not_called()
+
+
+@pytest.mark.asyncio
+async def test_resend_invitation_reset_fails_returns_500(service):
+    """Test resend returns 500 when reset_expiration returns None."""
+    service.crud.get_by_id = AsyncMock(
+        return_value={"id": "inv-1", "org_id": "org-1", "status": "pending"}
+    )
+    service.crud.reset_expiration = AsyncMock(return_value=None)
+    with pytest.raises(HTTPException) as exc_info:
+        await service.resend_invitation(invitation_id="inv-1", org_id="org-1")
+    assert exc_info.value.status_code == 500
+
+
+# ===========================================
 # cancel_invitation Tests
 # ===========================================
 
