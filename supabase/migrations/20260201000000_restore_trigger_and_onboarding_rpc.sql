@@ -9,6 +9,14 @@
 -- 背景: 前回マイグレーション(20260130000000)でトリガーを削除しcreate_signup RPCを
 -- 簡略化した。本マイグレーションでトリガーベースのフローを復元し、
 -- buyer/vendor別のオンボーディングRPCを作成する。
+--
+-- Rollback / ロールバック手順:
+--   1. DROP FUNCTION IF EXISTS complete_buyer_onboarding(UUID,TEXT,TEXT,TEXT,TEXT,TEXT,TEXT,TEXT);
+--   2. DROP FUNCTION IF EXISTS complete_vendor_onboarding(UUID,TEXT,TEXT,TEXT,TEXT,TEXT,TEXT,TEXT,TEXT,TEXT);
+--   3. DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+--   4. DROP FUNCTION IF EXISTS public.handle_new_user();
+--   5. DROP INDEX IF EXISTS idx_profiles_pending_no_org;
+--   6. Restore create_signup RPC from 20260130000000 if needed.
 -- =============================================================================
 
 -- 1. Revert soft-deleted orphan profiles from previous migration
