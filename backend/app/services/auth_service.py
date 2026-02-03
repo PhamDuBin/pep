@@ -140,6 +140,7 @@ class AuthService:
         }
         redirect_to = f"{settings.frontend_url.rstrip('/')}/auth/reset-password"
         body = {"email": email, "redirect_to": redirect_to}
+        logger.info("Password reset redirect_to: %s", redirect_to)
         try:
             async with httpx.AsyncClient() as client:
                 await client.post(url, json=body, headers=headers)
