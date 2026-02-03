@@ -49,7 +49,14 @@ async def health_check() -> dict:
 
 @app.get("/api/me")
 async def get_me(user: dict = Depends(get_current_user)) -> dict:
-    """Get current authenticated user information."""
+    """
+    Get current authenticated user (minimal).
+
+    Requires: JWT + profile not deleted + org active (get_current_user).
+    Returns: id, email, created_at from JWT only.
+    For full user info (display_name, role, org_name, org_type, status) and
+    login-flow status codes (ONBOARDING_INCOMPLETE, etc.), use GET /api/v1/auth/me.
+    """
     return {
         "id": user.get("id"),
         "email": user.get("email"),
@@ -76,11 +83,12 @@ async def db_check() -> dict:
 
 
 # Include routers
-from app.api.routes import users, onboarding, invitations, members
+from app.api.routes import users, onboarding, invitations, members, auth
 from app.api.routes.admin import applications as admin_applications
 from app.api.routes.admin import organizations as admin_organizations
 
 app.include_router(users.router, prefix="/api/users", tags=["Users"])
+app.include_router(auth.router, prefix="/api/v1/auth", tags=["Auth"])
 app.include_router(onboarding.router, prefix="/api/v1/auth", tags=["Onboarding"])
 app.include_router(invitations.router, prefix="/api/invitations", tags=["Invitations"])
 app.include_router(
