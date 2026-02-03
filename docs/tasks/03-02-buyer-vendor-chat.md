@@ -253,8 +253,8 @@ Supabase Realtime で新着メッセージを購読:
 
 ## 🔗 関連タスク
 
-- 前提: [006-project-management.md](./006-project-management.md)
-- 関連: [011-notifications.md](./011-notifications.md) (新着通知)
+- 前提: [02-01-project-management.md](./02-01-project-management.md)
+- 関連: [01-07-notifications.md](./01-07-notifications.md) (新着通知)
 
 ---
 

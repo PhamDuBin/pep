@@ -473,6 +473,36 @@ class InvitationCRUD:
         )
         return result.data[0] if result.data else None
 
+    async def get_by_id(self, invitation_id: UUID) -> dict | None:
+        """
+        Get invitation by ID.
+        IDで招待を取得。
+        """
+        result = (
+            self.supabase.table("invitations")
+            .select("*")
+            .eq("id", str(invitation_id))
+            .single()
+            .execute()
+        )
+        return result.data
+
+    async def reset_expiration(self, invitation_id: UUID) -> dict | None:
+        """
+        Reset invitation expiration to 7 days from now.
+        招待の有効期限を7日後にリセット。
+        """
+        result = (
+            self.supabase.table("invitations")
+            .update({
+                "expires_at": "now() + interval '7 days'",
+                "updated_at": "now()"
+            })
+            .eq("id", str(invitation_id))
+            .execute()
+        )
+        return result.data[0] if result.data else None
+
     async def delete(self, invitation_id: UUID) -> bool:
         """
         Delete an invitation.
@@ -634,6 +664,43 @@ class InvitationService:
         result = await self.crud.update_status(invitation_id, "cancelled")
         return result is not None
 
+    async def resend_invitation(
+        self,
+        invitation_id: UUID,
+        org_id: UUID,
+    ) -> InvitationResponse:
+        """
+        Resend an invitation.
+
+        Steps:
+        1. Get invitation and verify it belongs to org (via CRUD)
+        2. Verify invitation is still pending
+        3. Reset expiration date (via CRUD)
+        4. Resend invitation email
+
+        招待を再送する。
+        1. 招待を取得し、組織に属していることを確認
+        2. 招待がまだpendingであることを確認
+        3. 有効期限をリセット
+        4. 招待メールを再送
+        """
+        invitation = await self.crud.get_by_id(invitation_id)
+        if not invitation or invitation["organization_id"] != str(org_id):
+            raise ValueError("Invitation not found")
+
+        if invitation["status"] != "pending":
+            raise ValueError("Can only resend pending invitations")
+
+        # Reset expiration and resend
+        result = await self.crud.reset_expiration(invitation_id)
+        if not result:
+            raise ValueError("Failed to resend invitation")
+
+        # TODO: Resend invitation email
+        # await self.email_service.send_invitation_email(...)
+
+        return InvitationResponse(**result)
+
     async def delete_invitation(
         self,
         invitation_id: UUID,
@@ -744,6 +811,32 @@ async def accept_invitation(
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail="Failed to accept invitation")
+
+
+@router.post("/{invitation_id}/resend", response_model=InvitationResponse)
+async def resend_invitation(
+    invitation_id: UUID,
+    current_user: dict = Depends(require_role(["owner", "admin"])),
+    service: InvitationService = Depends(),
+) -> InvitationResponse:
+    """
+    Resend an invitation.
+
+    招待を再送する（Owner/Admin のみ）。
+
+    - Resets expiration date to 7 days from now
+    - Resends invitation email
+    """
+    try:
+        result = await service.resend_invitation(
+            invitation_id=invitation_id,
+            org_id=current_user["org_id"],
+        )
+        return result
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Failed to resend invitation")
 
 
 @router.delete("/{invitation_id}", status_code=204)
@@ -1333,6 +1426,7 @@ async def test_create_invitation_invalid_role():
 - [ ] `POST /api/v1/invitations` エンドポイント（Owner/Admin only）
 - [ ] `GET /api/v1/invitations` エンドポイント（Owner/Admin only）
 - [ ] `POST /api/v1/invitations/{token}/accept` エンドポイント
+- [ ] `POST /api/v1/invitations/{id}/resend` エンドポイント（Owner/Admin only）【追加】
 - [ ] `DELETE /api/v1/invitations/{id}` エンドポイント（Owner/Admin only）
 - [ ] リクエストバリデーションが動作する
 - [ ] **3層構造に従う: routes/ → services/ → crud/**
@@ -1354,6 +1448,8 @@ async def test_create_invitation_invalid_role():
 - [ ] 有効期限切れ招待の承諾がエラーになる
 - [ ] 同じメールアドレスへの重複招待がエラーになる
 - [ ] Member ロールからの招待作成が 403 Forbidden
+- [ ] 招待再送で有効期限がリセットされる【追加】
+- [ ] 承諾済み招待の再送がエラーになる【追加】
 
 ---
 

@@ -247,8 +247,8 @@ STRIPE_VENDOR_PRICE_ID=price_... # Vendor年額プラン
 
 ## 🔗 関連タスク
 
-- 前提: [001-signup](./001-signup.md) - ユーザー・組織が存在すること
-- 後続: [014-stripe-webhook](./014-stripe-webhook.md) - 決済完了処理
+- 前提: [01-01-signup](./01-01-signup.md) - ユーザー・組織が存在すること
+- 後続: [04-03-stripe-webhook](./04-03-stripe-webhook.md) - 決済完了処理
 
 ---
 

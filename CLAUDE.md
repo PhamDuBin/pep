@@ -533,6 +533,13 @@ async def test_create_checkout_session():
    - 理由: トランザクションの一貫性と冪等性を担保するため
    - Example: Stripe Webhook processing → Use `handle_stripe_webhook()` RPC
    - 例: Stripe Webhook処理 → `handle_stripe_webhook()` RPC を使用
+6. **Schema Documentation / スキーマドキュメント**:
+   - When creating migrations, also update `docs/architecture/database.md`
+   - マイグレーション作成時は `docs/architecture/database.md` も同時に更新すること
+   - Add new columns/tables to the Mermaid ER diagram
+   - 新規カラム・テーブルをMermaid ER図に追加
+   - Commit migration SQL and database.md together
+   - マイグレーションSQLとdatabase.mdを同じコミットに含める
 
 ## Environment Variables / 環境変数
 

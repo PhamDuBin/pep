@@ -221,9 +221,9 @@ GET /api/projects/{id}/plans/{plan_id}/vendors
 
 ## 🔗 関連タスク
 
-- 前提: [006-project-management.md](./006-project-management.md)
-- 前提: [009-ai-chat.md](./009-ai-chat.md) (ai_session_id)
-- 関連: [011-notifications.md](./011-notifications.md) (送信通知)
+- 前提: [02-01-project-management.md](./02-01-project-management.md)
+- 前提: [03-01-ai-chat.md](./03-01-ai-chat.md) (ai_session_id)
+- 関連: [01-07-notifications.md](./01-07-notifications.md) (送信通知)
 
 ---
 

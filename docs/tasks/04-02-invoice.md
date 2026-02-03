@@ -230,8 +230,8 @@ CREATE POLICY "Organization members can view own invoices"
 
 ## 🔗 関連タスク
 
-- 前提: [012-subscription](./012-subscription.md) - サブスクリプション契約
-- 前提: [014-stripe-webhook](./014-stripe-webhook.md) - Webhookで請求書データ同期
+- 前提: [04-01-subscription](./04-01-subscription.md) - サブスクリプション契約
+- 前提: [04-03-stripe-webhook](./04-03-stripe-webhook.md) - Webhookで請求書データ同期
 - 後続: なし
 
 ---

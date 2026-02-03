@@ -233,8 +233,8 @@ async def send_message(room_id: UUID, content: str):
 
 ## 🔗 関連タスク
 
-- 前提: [006-project-management.md](./006-project-management.md) (start-discussion trigger)
-- 前提: [010-buyer-vendor-chat.md](./010-buyer-vendor-chat.md) (chat notification)
+- 前提: [02-01 Project Management](./02-01-project-management.md) (start-discussion trigger)
+- 前提: [03-02 Buyer-Vendor Chat](./03-02-buyer-vendor-chat.md) (chat notification)
 
 ---
 

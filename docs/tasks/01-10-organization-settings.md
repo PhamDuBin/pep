@@ -42,10 +42,12 @@ Backend → Frontend: Updated organization
 ### Backend (FastAPI)
 
 - [ ] `GET /api/v1/organizations/{org_id}` - 組織情報取得
-- [ ] `PATCH /api/v1/organizations/{org_id}` - 組織情報更新
-- [ ] Pydantic schemas (`OrganizationUpdateRequest`, `OrganizationResponse`)
-- [ ] Service層（`OrganizationService.update_organization()`）
-- [ ] CRUD層（`OrganizationCRUD.update_by_id()`）
+- [ ] `PATCH /api/v1/organizations/{org_id}` - 組織基本情報更新
+- [ ] `GET /api/v1/organizations/{org_id}/details` - 組織詳細情報取得【追加】
+- [ ] `PATCH /api/v1/organizations/{org_id}/details` - 組織詳細情報更新【追加】
+- [ ] Pydantic schemas (`OrganizationUpdateRequest`, `OrganizationResponse`, `OrgDetailsUpdateRequest`, `OrgDetailsResponse`)
+- [ ] Service層（`OrganizationService.update_organization()`, `update_org_details()`）
+- [ ] CRUD層（`OrganizationCRUD.update_by_id()`, `update_details()`）
 
 ### Frontend (Next.js)
 
@@ -71,12 +73,16 @@ Backend → Frontend: Updated organization
 
 | # | Test Case | Layer | Expected |
 |---|-----------|-------|----------|
-| 1 | owner による更新 | Service | Updated organization |
-| 2 | admin による更新 | Service | Updated organization |
-| 3 | member による更新 | Service | PermissionError |
+| 1 | owner による基本情報更新 | Service | Updated organization |
+| 2 | admin による基本情報更新 | Service | Updated organization |
+| 3 | member による基本情報更新 | Service | PermissionError |
 | 4 | 他組織の情報更新 | Service | PermissionError |
 | 5 | 不正なemail形式 | Routes | 422 ValidationError |
 | 6 | 空の組織名 | Routes | 422 ValidationError |
+| 7 | Buyer詳細情報取得 | Service | purpose 等を返却 |
+| 8 | Vendor詳細情報取得 | Service | business_description 等を返却 |
+| 9 | owner による詳細情報更新 | Service | Updated details |
+| 10 | member による詳細情報更新 | Service | PermissionError |
 
 ---
 
@@ -141,6 +147,50 @@ Backend → Frontend: Updated organization
   "updated_at": "2026-01-30T10:00:00Z"
 }
 ```
+
+#### GET /api/v1/organizations/{org_id}/details【追加】
+組織詳細情報を取得（Buyer: purpose / Vendor: business_description等）
+
+**Response (Buyer):**
+```json
+{
+  "org_id": "org-uuid",
+  "purpose": "RFI管理の効率化",
+  "updated_at": "2026-01-30T10:00:00Z"
+}
+```
+
+**Response (Vendor):**
+```json
+{
+  "org_id": "org-uuid",
+  "business_description": "ソフトウェア開発事業",
+  "service_description": "Webアプリケーション開発",
+  "website_url": "https://example.com",
+  "updated_at": "2026-01-30T10:00:00Z"
+}
+```
+
+#### PATCH /api/v1/organizations/{org_id}/details【追加】
+組織詳細情報を更新（owner/admin のみ）
+
+**Request (Buyer):**
+```json
+{
+  "purpose": "RFI管理の効率化（更新）"
+}
+```
+
+**Request (Vendor):**
+```json
+{
+  "business_description": "ソフトウェア開発事業",
+  "service_description": "Webアプリケーション開発",
+  "website_url": "https://example.com"
+}
+```
+
+**Response:** 更新後の詳細情報
 
 ### 2. レイヤー構成
 
@@ -219,9 +269,11 @@ frontend/
 ### Backend
 - [ ] `GET /api/v1/organizations/{org_id}` エンドポイント実装
 - [ ] `PATCH /api/v1/organizations/{org_id}` エンドポイント実装
-- [ ] Pydantic schemas作成（`OrganizationUpdateRequest`, `OrganizationResponse`）
+- [ ] `GET /api/v1/organizations/{org_id}/details` エンドポイント実装【追加】
+- [ ] `PATCH /api/v1/organizations/{org_id}/details` エンドポイント実装【追加】
+- [ ] Pydantic schemas作成（`OrganizationUpdateRequest`, `OrganizationResponse`, `OrgDetailsUpdateRequest`, `OrgDetailsResponse`）
 - [ ] Service層実装（権限チェック含む）
-- [ ] CRUD層実装（organizations更新）
+- [ ] CRUD層実装（organizations, buyer_org_details/vendor_org_details更新）
 - [ ] ユニットテスト作成（Routes/Services/CRUD）
 - [ ] `pytest tests/unit/test_routes/test_organizations.py` がパス
 - [ ] Service層カバレッジ 80%以上
@@ -233,9 +285,11 @@ frontend/
 - [ ] フォームバリデーション実装
 
 ### Integration
-- [ ] owner/adminによる更新 → DB更新 → 画面反映の流れが動作
+- [ ] owner/adminによる基本情報更新 → DB更新 → 画面反映の流れが動作
 - [ ] memberによるアクセス → 403 Forbiddenの流れが動作
 - [ ] 他組織の情報へのアクセス → 403 Forbiddenの流れが動作
+- [ ] Buyer詳細情報（purpose）の取得・更新が動作【追加】
+- [ ] Vendor詳細情報（business_description等）の取得・更新が動作【追加】
 
 ---
 
@@ -254,3 +308,9 @@ frontend/
 - `type`（buyer/vendor）は更新不可（組織の種類は変更できない）
 - `status`は管理者承認機能（01-03）でのみ変更可能
 - billing_emailは決済関連の通知先として使用される
+
+### 組織詳細情報について【追加】
+- Buyer: `buyer_org_details` テーブル（purpose 等）
+- Vendor: `vendor_org_details` テーブル（business_description, service_description, website_url 等）
+- 詳細情報は申請承認時に `buyer_applications` / `vendor_applications` からコピーされる
+- 詳細情報の更新は基本情報とは別APIで行う（責務の分離）

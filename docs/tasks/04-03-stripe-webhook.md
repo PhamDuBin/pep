@@ -392,8 +392,8 @@ STRIPE_WEBHOOK_SECRET=whsec_...
 
 ## 🔗 関連タスク
 
-- 前提: [012-subscription](./012-subscription.md) - Checkout Session作成
-- 後続: [013-invoice](./013-invoice.md) - 請求書一覧表示
+- 前提: [04-01-subscription](./04-01-subscription.md) - Checkout Session作成
+- 後続: [04-02-invoice](./04-02-invoice.md) - 請求書一覧表示
 
 ---
 

@@ -184,7 +184,7 @@ DELETE /api/projects/{id}/attachments/{attachment_id}
 
 ## 🔗 関連タスク
 
-- 前提: [006-project-management.md](./006-project-management.md)
+- 前提: [02-01-project-management.md](./02-01-project-management.md)
 
 ---
 

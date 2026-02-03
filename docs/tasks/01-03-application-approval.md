@@ -173,8 +173,8 @@ Platform Admin が利用申請を承認/却下する機能。承認時は **既�
 
 ## 🔗 関連タスク
 
-- 前提: [001-signup.md](./001-signup.md)
-- 後続: [003-invitation.md](./003-invitation.md)
+- 前提: [01-01 Signup](./01-01-signup.md)
+- 後続: [01-04 Invitation](./01-04-invitation.md)
 
 ---
 

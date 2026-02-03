@@ -222,10 +222,10 @@ POST /api/projects/{id}/close
 
 ## 🔗 関連タスク
 
-- 前提: [001-signup.md](./001-signup.md) (organizations, profiles テーブル)
-- 後続: [007-project-plans.md](./007-project-plans.md)
-- 後続: [008-project-attachments.md](./008-project-attachments.md)
-- 後続: [011-notifications.md](./011-notifications.md)
+- 前提: [01-01-signup.md](./01-01-signup.md) (organizations, profiles テーブル)
+- 後続: [02-02-project-plans.md](./02-02-project-plans.md)
+- 後続: [02-03-project-attachments.md](./02-03-project-attachments.md)
+- 後続: [01-07-notifications.md](./01-07-notifications.md)
 
 ---
 

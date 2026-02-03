@@ -109,11 +109,13 @@ erDiagram
         string avatar_color "nullable, アバター背景色"
         enum role "owner | admin | member"
         enum status "active | inactive | pending"
+        boolean is_platform_admin "default false, Platform Admin flag"
         uuid created_by FK "profiles.id, nullable for self-signup"
         timestamp created_at
         uuid updated_by FK "profiles.id, nullable"
         timestamp updated_at
         boolean is_deleted "default false"
+        timestamp deleted_at "nullable, soft delete timestamp"
     }
 
     organizations {
@@ -165,6 +167,7 @@ erDiagram
         string token UK "for email link"
         enum status "pending | accepted | expired"
         timestamp expires_at
+        timestamp accepted_at "nullable, when invitation was accepted"
         uuid created_by FK "profiles.id (= invited_by)"
         timestamp created_at
         uuid updated_by FK "profiles.id, nullable"

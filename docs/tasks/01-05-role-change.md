@@ -51,9 +51,10 @@ member (一般権限) - 複数可
 
 ### Backend (FastAPI)
 
-- [ ] `PUT /api/organizations/{org_id}/members/{profile_id}/role`
-- [ ] `POST /api/organizations/{org_id}/transfer-ownership`
-- [ ] Pydantic schemas
+- [ ] `GET /api/v1/organizations/{org_id}/members` - メンバー一覧取得【追加】
+- [ ] `PUT /api/v1/organizations/{org_id}/members/{profile_id}/role` - ロール変更
+- [ ] `POST /api/v1/organizations/{org_id}/transfer-ownership` - オーナー移譲
+- [ ] Pydantic schemas (`MemberResponse`, `MemberListResponse`, `RoleUpdateRequest`)
 - [ ] Service層・CRUD層
 
 ### Tests
@@ -74,11 +75,14 @@ member (一般権限) - 複数可
 
 | # | Test Case | Layer | Expected |
 |---|-----------|-------|----------|
-| 1 | Owner→Adminへのロール変更 | Service | Error (Ownerは変更不可) |
-| 2 | Admin→Memberへのロール変更（Ownerが実行） | Service | 成功 |
-| 3 | Admin→Memberへのロール変更（Adminが実行） | Service | Error |
-| 4 | Owner移譲成功 | Service | 元Owner=admin, 新Owner=owner |
-| 5 | pending ユーザーへのOwner移譲 | Service | Error |
+| 1 | メンバー一覧取得成功 | Service | members list + total_count |
+| 2 | ステータスフィルター | Service | filtered members |
+| 3 | 他組織のメンバー一覧取得 | Service | PermissionError |
+| 4 | Owner→Adminへのロール変更 | Service | Error (Ownerは変更不可) |
+| 5 | Admin→Memberへのロール変更（Ownerが実行） | Service | 成功 |
+| 6 | Admin→Memberへのロール変更（Adminが実行） | Service | Error |
+| 7 | Owner移譲成功 | Service | 元Owner=admin, 新Owner=owner |
+| 8 | pending ユーザーへのOwner移譲 | Service | Error |
 
 ---
 
@@ -117,12 +121,17 @@ member (一般権限) - 複数可
 
 ### 2. FastAPI Endpoints
 
-- PUT /api/organizations/{org_id}/members/{profile_id}/role
+- GET /api/v1/organizations/{org_id}/members - メンバー一覧取得【追加】
+  - Query params: ?status=active, ?role=admin
+  - Response: { members: [...], total_count: int }
+  - 組織メンバーのみアクセス可能
+
+- PUT /api/v1/organizations/{org_id}/members/{profile_id}/role
   - Request: { role: 'admin' | 'member' }
   - 権限チェック実装
   - Owner への変更は不可
 
-- POST /api/organizations/{org_id}/transfer-ownership
+- POST /api/v1/organizations/{org_id}/transfer-ownership
   - Request: { new_owner_profile_id }
   - Ownerのみ実行可能
 
@@ -148,6 +157,8 @@ member (一般権限) - 複数可
 
 ## ✅ 完了条件
 
+- [ ] `GET /api/v1/organizations/{org_id}/members` が動作する【追加】
+- [ ] メンバー一覧にステータス/ロールフィルター機能がある【追加】
 - [ ] `transfer_ownership` RPCが正常動作
 - [ ] ロール変更APIが権限マトリックス通りに動作
 - [ ] Owner移譲後、元Ownerがadminになる
@@ -160,9 +171,9 @@ member (一般権限) - 複数可
 
 ## 🔗 関連タスク
 
-- 前提: [001-signup.md](./001-signup.md)
-- 前提: [002-application-approval.md](./002-application-approval.md)
-- 後続: [005-account-management.md](./005-account-management.md)
+- 前提: [01-01 Signup](./01-01-signup.md)
+- 前提: [01-03 Application Approval](./01-03-application-approval.md)
+- 後続: [01-06 Account Management](./01-06-account-management.md)
 
 ---
 

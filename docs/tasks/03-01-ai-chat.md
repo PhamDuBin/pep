@@ -234,9 +234,9 @@ POST /api/ai/sessions/{id}/generate-plan
 
 ## 🔗 関連タスク
 
-- 前提: [001-signup.md](./001-signup.md) (profiles)
-- 前提: [006-project-management.md](./006-project-management.md) (projects)
-- 後続: [007-project-plans.md](./007-project-plans.md) (計画書生成連携)
+- 前提: [01-01-signup.md](./01-01-signup.md) (profiles)
+- 前提: [02-01-project-management.md](./02-01-project-management.md) (projects)
+- 後続: [02-02-project-plans.md](./02-02-project-plans.md) (計画書生成連携)
 
 ---
 

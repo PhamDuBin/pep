@@ -173,8 +173,8 @@ profilesテーブルに追加:
 
 ## 🔗 関連タスク
 
-- 前提: [001-signup.md](./001-signup.md)
-- 前提: [004-role-change.md](./004-role-change.md)
+- 前提: [01-01 Signup](./01-01-signup.md)
+- 前提: [01-05 Role Change](./01-05-role-change.md)
 
 ---
 

@@ -234,7 +234,7 @@
 ## 🔗 関連タスク
 
 - 依存なし（最初に実装）
-- 後続: [002-application-approval.md](./002-application-approval.md)
+- 後続: [01-03 Application Approval](./01-03-application-approval.md)
 
 ---
 

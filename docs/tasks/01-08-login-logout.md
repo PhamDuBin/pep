@@ -65,7 +65,9 @@ Frontend → Redirect: Navigate to login page
 
 - [ ] `GET /api/v1/auth/me` - 現在のユーザー情報取得
 - [ ] `POST /api/v1/auth/refresh` - JWTトークン更新
-- [ ] Pydantic schemas (`UserInfo`, `LoginResponse`)
+- [ ] `POST /api/v1/auth/password-reset-request` - パスワードリセットリクエスト【追加】
+- [ ] `POST /api/v1/auth/password-reset-confirm` - パスワードリセット確認【追加】
+- [ ] Pydantic schemas (`UserInfo`, `LoginResponse`, `PasswordResetRequest`, `PasswordResetConfirm`)
 - [ ] Service層（`AuthService`）
 - [ ] CRUD層（`AuthCRUD`）
 
@@ -104,6 +106,11 @@ Frontend → Redirect: Navigate to login page
 | 7 | JWT検証成功 | Routes | User info returned |
 | 8 | 期限切れJWT | Routes | 401 Unauthorized |
 | 9 | ログアウト成功 | Frontend | Token cleared |
+| 10 | パスワードリセットリクエスト成功 | Service | Reset email sent |
+| 11 | 存在しないメールでリセットリクエスト | Service | Success (セキュリティ上) |
+| 12 | パスワードリセット確認成功 | Service | Password updated |
+| 13 | 無効なリセットトークン | Service | InvalidTokenError |
+| 14 | 期限切れリセットトークン | Service | TokenExpiredError |
 
 ---
 
@@ -157,6 +164,41 @@ JWTトークンをリフレッシュ
   "access_token": "...",
   "refresh_token": "...",
   "expires_in": 3600
+}
+```
+
+#### POST /api/v1/auth/password-reset-request【追加】
+パスワードリセットをリクエスト（未認証でも可）
+
+**Request:**
+```json
+{
+  "email": "user@example.com"
+}
+```
+
+**Response:**
+```json
+{
+  "message": "パスワードリセットメールを送信しました。"
+}
+```
+
+#### POST /api/v1/auth/password-reset-confirm【追加】
+パスワードをリセット（トークン検証後）
+
+**Request:**
+```json
+{
+  "token": "reset-token-xxx",
+  "new_password": "newPassword123"
+}
+```
+
+**Response:**
+```json
+{
+  "message": "パスワードをリセットしました。"
 }
 ```
 
@@ -217,8 +259,10 @@ frontend/
 ### Backend
 - [ ] `GET /api/v1/auth/me` エンドポイント実装
 - [ ] `POST /api/v1/auth/refresh` エンドポイント実装
+- [ ] `POST /api/v1/auth/password-reset-request` エンドポイント実装【追加】
+- [ ] `POST /api/v1/auth/password-reset-confirm` エンドポイント実装【追加】
 - [ ] JWT検証ミドルウェア実装
-- [ ] Pydantic schemas作成（`UserInfo`, `LoginResponse`）
+- [ ] Pydantic schemas作成（`UserInfo`, `LoginResponse`, `PasswordResetRequest`, `PasswordResetConfirm`）
 - [ ] ユニットテスト作成（Routes/Services/CRUD）
 - [ ] `pytest tests/unit/test_routes/test_auth_routes.py` がパス
 - [ ] Service層カバレッジ 80%以上
@@ -234,6 +278,8 @@ frontend/
 - [ ] ログイン → トークン取得 → API呼び出し → プロフィール表示の一連の流れが動作
 - [ ] ログアウト → トークン削除 → 認証エラーの流れが動作
 - [ ] トークン期限切れ時の自動リフレッシュが動作
+- [ ] パスワードリセットリクエスト → メール送信の流れが動作【追加】
+- [ ] リセットトークン確認 → パスワード更新 → 新パスワードでログイン成功【追加】
 
 ---
 
@@ -252,3 +298,9 @@ frontend/
 - セッションの有効期限は3600秒（1時間）、リフレッシュトークンは7日間
 - **重要**: `profile.status`が`pending`の場合、ログインを拒否し、メール確認リンクからのオンボーディング完了を促す
 - `pending`状態のユーザーは、メール内の確認リンク（tokenパラメータ付き）からのみ`/onboarding`ページにアクセス可能
+
+### パスワードリセット【追加】
+- Supabase Authの`resetPasswordForEmail()`を使用
+- リセットメールURL: `{FRONTEND_URL}/auth/reset-password?token=xxx`
+- リセットトークンの有効期限は1時間
+- セキュリティ上、存在しないメールでもエラーを返さない（メール送信成功メッセージを返す）
