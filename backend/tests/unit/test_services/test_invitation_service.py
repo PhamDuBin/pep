@@ -32,6 +32,7 @@ def service(mock_supabase):
 async def test_create_invitation_success(service):
     """Test invitation creation success / 招待作成成功."""
     service.crud.get_pending_by_org_and_email = AsyncMock(return_value=None)
+    service.crud.get_profile_by_email = MagicMock(return_value=None)
     service.crud.create_invitation = AsyncMock(
         return_value={"id": "inv-uuid-1", "token": "token-abc"}
     )
@@ -71,9 +72,28 @@ async def test_create_invitation_duplicate_returns_409(service):
 
 
 @pytest.mark.asyncio
+async def test_create_invitation_already_registered_returns_409(service):
+    """Test create returns 409 when invitee email already has a profile / 既登録で409."""
+    service.crud.get_pending_by_org_and_email = AsyncMock(return_value=None)
+    service.crud.get_profile_by_email = MagicMock(return_value={"id": "profile-existing"})
+    service.crud.create_invitation = AsyncMock()
+    with pytest.raises(HTTPException) as exc_info:
+        await service.create_invitation(
+            org_id="org-1",
+            invited_by="profile-1",
+            email="existing@example.com",
+            role="member",
+        )
+    assert exc_info.value.status_code == 409
+    assert "already registered" in exc_info.value.detail.lower() or "既に登録" in exc_info.value.detail
+    service.crud.create_invitation.assert_not_called()
+
+
+@pytest.mark.asyncio
 async def test_create_invitation_returns_500_when_crud_returns_none(service):
     """Test create returns 500 when CRUD returns None."""
     service.crud.get_pending_by_org_and_email = AsyncMock(return_value=None)
+    service.crud.get_profile_by_email = MagicMock(return_value=None)
     service.crud.create_invitation = AsyncMock(return_value=None)
     with pytest.raises(HTTPException) as exc_info:
         await service.create_invitation(
@@ -89,6 +109,7 @@ async def test_create_invitation_returns_500_when_crud_returns_none(service):
 async def test_create_invitation_returns_502_when_send_email_fails(service):
     """Test create returns 502 when Supabase Auth invite_user_by_email fails."""
     service.crud.get_pending_by_org_and_email = AsyncMock(return_value=None)
+    service.crud.get_profile_by_email = MagicMock(return_value=None)
     service.crud.create_invitation = AsyncMock(
         return_value={"id": "inv-1", "token": "t"}
     )

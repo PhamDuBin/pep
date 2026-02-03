@@ -75,6 +75,12 @@ class InvitationService:
                 status_code=409,
                 detail="Duplicate invitation / 同一組織・同一メールの招待が既に存在します",
             )
+        existing_profile = self.crud.get_profile_by_email(email)
+        if existing_profile:
+            raise HTTPException(
+                status_code=409,
+                detail="User already registered / このメールは既に登録されています",
+            )
         result = await self.crud.create_invitation(org_id, email, role, invited_by)
         if not result:
             raise HTTPException(
