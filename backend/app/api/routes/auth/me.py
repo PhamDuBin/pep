@@ -65,5 +65,10 @@ async def password_reset_confirm(
     body: PasswordResetConfirm,
     service: AuthService = Depends(get_auth_service),
 ) -> PasswordResetMessage:
-    """Confirm password reset with token from email link and new password."""
+    """
+    Confirm password reset with JWT from redirect URL and new password.
+
+    Body.token must be the JWT from #access_token= after clicking the email link,
+    not the short token from the link query. No Authorization header required.
+    """
     return await service.password_reset_confirm(body.token, body.new_password)

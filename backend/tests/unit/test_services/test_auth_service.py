@@ -196,6 +196,8 @@ async def test_password_reset_request_returns_message(auth_service):
 @pytest.mark.asyncio
 async def test_password_reset_confirm_returns_message(auth_service):
     """password_reset_confirm returns message when Supabase returns 200."""
+    # Token must be JWT-shaped (eyJ... with 3 segments) for Supabase Bearer
+    jwt_token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIn0.x"
     mock_resp = MagicMock()
     mock_resp.status_code = 200
     mock_client = MagicMock()
@@ -203,14 +205,24 @@ async def test_password_reset_confirm_returns_message(auth_service):
     mock_client.__aenter__ = AsyncMock(return_value=mock_client)
     mock_client.__aexit__ = AsyncMock(return_value=None)
     with patch("app.services.auth_service.httpx.AsyncClient", return_value=mock_client):
-        result = await auth_service.password_reset_confirm("recovery-token", "newPass123")
+        result = await auth_service.password_reset_confirm(jwt_token, "newPass123")
     assert isinstance(result, PasswordResetMessage)
     assert "リセット" in result.message
 
 
 @pytest.mark.asyncio
+async def test_password_reset_confirm_raises_400_on_non_jwt_token(auth_service):
+    """password_reset_confirm raises 400 when token is not JWT (e.g. short token from link)."""
+    with pytest.raises(HTTPException) as exc_info:
+        await auth_service.password_reset_confirm("short-token-from-email-link", "newPass123")
+    assert exc_info.value.status_code == 400
+    assert "JWT" in exc_info.value.detail or "redirect" in exc_info.value.detail.lower()
+
+
+@pytest.mark.asyncio
 async def test_password_reset_confirm_raises_400_on_invalid_token(auth_service):
-    """password_reset_confirm raises 400 when token invalid."""
+    """password_reset_confirm raises 400 when Supabase rejects JWT (expired/invalid)."""
+    jwt_token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIn0.x"
     mock_resp = MagicMock()
     mock_resp.status_code = 400
     mock_client = MagicMock()
@@ -219,5 +231,5 @@ async def test_password_reset_confirm_raises_400_on_invalid_token(auth_service):
     mock_client.__aexit__ = AsyncMock(return_value=None)
     with patch("app.services.auth_service.httpx.AsyncClient", return_value=mock_client):
         with pytest.raises(HTTPException) as exc_info:
-            await auth_service.password_reset_confirm("bad-token", "newPass123")
+            await auth_service.password_reset_confirm(jwt_token, "newPass123")
     assert exc_info.value.status_code == 400

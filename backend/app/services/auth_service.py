@@ -154,11 +154,20 @@ class AuthService:
         self, access_token: str, new_password: str
     ) -> PasswordResetMessage:
         """
-        Update user password using recovery access_token (from reset link).
+        Update user password using recovery JWT (from redirect URL after clicking email link).
+
+        Supabase PUT /auth/v1/user requires Bearer JWT. The token must be the JWT from
+        redirect URL (#access_token=eyJ...), not the short token from the link query.
 
         Raises:
-            HTTPException 400 if token invalid or update fails
+            HTTPException 400 if token invalid (e.g. not a JWT) or update fails
         """
+        # Supabase expects a JWT (3 segments). Reject non-JWT early with a clear message.
+        if not access_token.strip().startswith("eyJ") or access_token.count(".") != 2:
+            raise HTTPException(
+                status_code=400,
+                detail="Token must be the JWT from redirect URL (#access_token=) after clicking the email link, not the short token from the link.",
+            )
         settings = get_settings()
         url = f"{settings.supabase_url}/auth/v1/user"
         headers = {

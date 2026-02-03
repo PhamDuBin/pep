@@ -40,7 +40,11 @@ class PasswordResetRequest(BaseModel):
 class PasswordResetConfirm(BaseModel):
     """Request body for POST /api/v1/auth/password-reset-confirm."""
 
-    token: str = Field(..., description="Reset token from email link")
+    token: str = Field(
+        ...,
+        description="JWT from redirect URL after clicking email link (#access_token=eyJ...). "
+        "Required: use the JWT in the redirect URL, not the short token from the link query.",
+    )
     new_password: str = Field(..., min_length=8, max_length=72, description="New password")
 
 
