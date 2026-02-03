@@ -1,11 +1,11 @@
-"""Unit tests for AuthService (mock AuthCRUD)."""
+"""Unit tests for AuthService (mock AuthCRUD, mock httpx for refresh/password-reset)."""
 
 import pytest
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, AsyncMock, patch
 from fastapi import HTTPException
 
 from app.services.auth_service import AuthService
-from app.schemas.auth import UserInfo
+from app.schemas.auth import UserInfo, LoginResponse, PasswordResetMessage
 
 
 @pytest.fixture
@@ -72,3 +72,83 @@ async def test_get_current_user_info_raises_on_pending(auth_service, mock_crud):
         await auth_service.get_current_user_info("user-uuid")
     assert exc_info.value.status_code == 403
     assert exc_info.value.detail == "ONBOARDING_INCOMPLETE"
+
+
+@pytest.mark.asyncio
+async def test_refresh_tokens_returns_login_response(auth_service):
+    """refresh_tokens returns LoginResponse when Supabase returns 200."""
+    mock_resp = MagicMock()
+    mock_resp.status_code = 200
+    mock_resp.json.return_value = {
+        "access_token": "new-access",
+        "refresh_token": "new-refresh",
+        "expires_in": 3600,
+    }
+    mock_client = MagicMock()
+    mock_client.post = AsyncMock(return_value=mock_resp)
+    mock_client.__aenter__ = AsyncMock(return_value=mock_client)
+    mock_client.__aexit__ = AsyncMock(return_value=None)
+    with patch("app.services.auth_service.httpx.AsyncClient", return_value=mock_client):
+        result = await auth_service.refresh_tokens("dummy-refresh-token")
+    assert isinstance(result, LoginResponse)
+    assert result.access_token == "new-access"
+    assert result.refresh_token == "new-refresh"
+    assert result.expires_in == 3600
+
+
+@pytest.mark.asyncio
+async def test_refresh_tokens_raises_401_on_reject(auth_service):
+    """refresh_tokens raises 401 when Supabase rejects refresh."""
+    mock_resp = MagicMock()
+    mock_resp.status_code = 400
+    mock_client = MagicMock()
+    mock_client.post = AsyncMock(return_value=mock_resp)
+    mock_client.__aenter__ = AsyncMock(return_value=mock_client)
+    mock_client.__aexit__ = AsyncMock(return_value=None)
+    with patch("app.services.auth_service.httpx.AsyncClient", return_value=mock_client):
+        with pytest.raises(HTTPException) as exc_info:
+            await auth_service.refresh_tokens("invalid-token")
+    assert exc_info.value.status_code == 401
+
+
+@pytest.mark.asyncio
+async def test_password_reset_request_returns_message(auth_service):
+    """password_reset_request always returns success message (security)."""
+    mock_client = MagicMock()
+    mock_client.post = AsyncMock(return_value=MagicMock(status_code=200))
+    mock_client.__aenter__ = AsyncMock(return_value=mock_client)
+    mock_client.__aexit__ = AsyncMock(return_value=None)
+    with patch("app.services.auth_service.httpx.AsyncClient", return_value=mock_client):
+        result = await auth_service.password_reset_request("user@example.com")
+    assert isinstance(result, PasswordResetMessage)
+    assert "パスワード" in result.message
+
+
+@pytest.mark.asyncio
+async def test_password_reset_confirm_returns_message(auth_service):
+    """password_reset_confirm returns message when Supabase returns 200."""
+    mock_resp = MagicMock()
+    mock_resp.status_code = 200
+    mock_client = MagicMock()
+    mock_client.put = AsyncMock(return_value=mock_resp)
+    mock_client.__aenter__ = AsyncMock(return_value=mock_client)
+    mock_client.__aexit__ = AsyncMock(return_value=None)
+    with patch("app.services.auth_service.httpx.AsyncClient", return_value=mock_client):
+        result = await auth_service.password_reset_confirm("recovery-token", "newPass123")
+    assert isinstance(result, PasswordResetMessage)
+    assert "リセット" in result.message
+
+
+@pytest.mark.asyncio
+async def test_password_reset_confirm_raises_400_on_invalid_token(auth_service):
+    """password_reset_confirm raises 400 when token invalid."""
+    mock_resp = MagicMock()
+    mock_resp.status_code = 400
+    mock_client = MagicMock()
+    mock_client.put = AsyncMock(return_value=mock_resp)
+    mock_client.__aenter__ = AsyncMock(return_value=mock_client)
+    mock_client.__aexit__ = AsyncMock(return_value=None)
+    with patch("app.services.auth_service.httpx.AsyncClient", return_value=mock_client):
+        with pytest.raises(HTTPException) as exc_info:
+            await auth_service.password_reset_confirm("bad-token", "newPass123")
+    assert exc_info.value.status_code == 400
