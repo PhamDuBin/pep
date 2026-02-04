@@ -86,6 +86,7 @@ async def db_check() -> dict:
 from app.api.routes import users, onboarding, invitations, members, auth
 from app.api.routes.admin import applications as admin_applications
 from app.api.routes.admin import organizations as admin_organizations
+from app.api.routes import organizations as org_settings
 
 app.include_router(users.router, prefix="/api/users", tags=["Users"])
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["Auth"])
@@ -95,6 +96,11 @@ app.include_router(
     members.router,
     prefix="/api/organizations",
     tags=["Members"],
+)
+app.include_router(
+    org_settings.router,
+    prefix="/api/v1/organizations",
+    tags=["Organizations"],
 )
 app.include_router(
     admin_applications.router,
