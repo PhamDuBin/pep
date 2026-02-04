@@ -1,7 +1,7 @@
 # [Task] Project Plans / プロジェクト計画書管理
 
 ## 🔗 GitLab Issue
-- Link: (後で作成)
+- Link: [#32](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/32)
 
 ---
 
@@ -9,6 +9,8 @@
 
 AIとのチャットで生成されたプロジェクト計画書（PDF等）を管理する機能。
 計画書はSupabase Storageに保存され、選択したVendorに送信できる。
+
+**Vendor側対応**: Vendorは送信された計画書（project_plan_vendors経由）のみ閲覧可能。
 
 ---
 
@@ -153,6 +155,8 @@ UNIQUE制約: (plan_id, vendor_org_id)
 GET /api/projects/{id}/plans
 - Response: { items: Plan[] }
 - Filter by project_id, is_deleted=false
+- **Buyerの場合**: 全計画書を返却
+- **Vendorの場合**: project_plan_vendors経由で送信された計画書のみ
 
 POST /api/projects/{id}/plans
 - Request: multipart/form-data (file, title, ai_session_id?)
@@ -223,7 +227,7 @@ GET /api/projects/{id}/plans/{plan_id}/vendors
 
 - 前提: [02-01-project-management.md](./02-01-project-management.md)
 - 前提: [03-01-ai-chat.md](./03-01-ai-chat.md) (ai_session_id)
-- 関連: [01-07-notifications.md](./01-07-notifications.md) (送信通知)
+- 関連: [05-01-notifications.md](./05-01-notifications.md) (送信通知)
 
 ---
 
@@ -231,4 +235,4 @@ GET /api/projects/{id}/plans/{plan_id}/vendors
 
 - AIセッションから生成された場合は ai_session_id を設定
 - 手動アップロードの場合は ai_session_id = null
-- 送信時にVendorとのチャットルームが作成される（010で実装）
+- チャットルームは計画書送信ではなく、プロジェクト送信開始時（start-discussion）に作成（02-01, 03-02連携）

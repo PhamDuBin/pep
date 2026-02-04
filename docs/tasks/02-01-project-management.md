@@ -1,7 +1,7 @@
 # [Task] Project Management / プロジェクト管理
 
 ## 🔗 GitLab Issue
-- Link: (後で作成)
+- Link: [#31](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/31)
 
 ---
 
@@ -9,6 +9,8 @@
 
 Buyerがプロジェクトを作成・編集・管理する機能。
 プロジェクトのステータス遷移（Draft → In Discussion → Closed）と、対象Vendorの紐付けを含む。
+
+**Vendor側対応**: Vendorは招待されたプロジェクトの閲覧・チャット参加が可能。
 
 ---
 
@@ -18,6 +20,7 @@ Buyerがプロジェクトを作成・編集・管理する機能。
 |----------|---------|
 | [UC06](../UC/UC6.md) | プロジェクト計画書草案作成 |
 | [UC07](../UC/UC7.md) | プロジェクト計画書編集・送信開始 |
+| [UC08](../UC/UC8.md) | Vendor通知（チャットルーム作成） |
 | [UC10](../UC/UC10.md) | プロジェクト完了 |
 | [UC11](../UC/UC11.md) | プロジェクト一覧・検索 |
 | [Database Design](../architecture/database.md) | テーブル定義 |
@@ -29,30 +32,37 @@ Buyerがプロジェクトを作成・編集・管理する機能。
 ## 📊 処理フロー概要
 
 ```
-1. プロジェクト作成 (Draft)
+1. プロジェクト作成 (Draft) + AIセッション自動作成
    POST /api/projects
    └─→ projects INSERT (status='draft')
+   └─→ ai_chat_sessions INSERT (project_id=new project)
 
 2. プロジェクト編集
    PUT /api/projects/{id}
    └─→ projects UPDATE (title, description)
 
-3. Vendor選択・紐付け
+3. Vendor一覧取得（選択用）
+   GET /api/vendors?search=xxx
+   └─→ organizations SELECT (type='vendor', status='active')
+
+4. Vendor選択・紐付け
    POST /api/projects/{id}/vendors
    └─→ project_vendors INSERT
 
-4. 送信開始 (Draft → In Discussion)
+5. 送信開始 (Draft → In Discussion)
    POST /api/projects/{id}/start-discussion
-   └─→ projects UPDATE (status='in_discussion')
-   └─→ Vendor通知処理（UC08）
+   └─→ projects UPDATE (status='in_discussion', started_at=now)
+   └─→ 各Vendor用チャットルーム作成 (chat_rooms INSERT)
+   └─→ Vendor通知処理（UC08 → 01-07連携）
 
-5. プロジェクト完了 (In Discussion → Closed)
+6. プロジェクト完了 (In Discussion → Closed)
    POST /api/projects/{id}/close
    └─→ projects UPDATE (status='closed', closed_at=now)
 
-6. プロジェクト一覧
+7. プロジェクト一覧
    GET /api/projects?status=xxx
-   └─→ projects SELECT with filters
+   └─→ Buyer: buyer_org_id = 自組織
+   └─→ Vendor: project_vendors に自組織が含まれる
 ```
 
 ---
@@ -63,18 +73,20 @@ Buyerがプロジェクトを作成・編集・管理する機能。
 
 - [ ] `projects` テーブル作成
 - [ ] `project_vendors` テーブル作成
-- [ ] RLSポリシー設定（Buyer組織単位）
+- [ ] RLSポリシー設定（Buyer/Vendor両対応）
 - [ ] インデックス作成（buyer_org_id, status）
+- [ ] ※ `chat_rooms`, `chat_room_members` は 03-02 で作成（start-discussion時に利用）
 
 ### Backend (FastAPI)
 
-- [ ] `GET /api/projects` - 一覧取得
+- [ ] `GET /api/vendors` - Vendor一覧取得（選択用）
+- [ ] `GET /api/projects` - 一覧取得（Buyer/Vendor両対応）
 - [ ] `POST /api/projects` - 新規作成
 - [ ] `GET /api/projects/{id}` - 詳細取得
 - [ ] `PUT /api/projects/{id}` - 更新
 - [ ] `POST /api/projects/{id}/vendors` - Vendor紐付け
 - [ ] `DELETE /api/projects/{id}/vendors/{vendor_id}` - Vendor削除
-- [ ] `POST /api/projects/{id}/start-discussion` - 送信開始
+- [ ] `POST /api/projects/{id}/start-discussion` - 送信開始（チャットルーム作成含む）
 - [ ] `POST /api/projects/{id}/close` - 完了
 - [ ] Pydantic schemas
 - [ ] Service層 (`project_service.py`)
@@ -98,12 +110,14 @@ Buyerがプロジェクトを作成・編集・管理する機能。
 
 | # | Test Case | Layer | Expected |
 |---|-----------|-------|----------|
-| 1 | プロジェクト作成成功 | Service | status = draft |
-| 2 | draft → in_discussion 遷移 | Service | 成功、started_at設定 |
+| 1 | プロジェクト作成成功 | Service | status = draft, AIセッション作成 |
+| 2 | draft → in_discussion 遷移 | Service | 成功、started_at設定、チャットルーム作成 |
 | 3 | in_discussion → closed 遷移 | Service | 成功、closed_at設定 |
 | 4 | draft以外からの編集 | Service | Error |
 | 5 | 不正なステータス遷移（draft → closed） | Service | Error |
 | 6 | 他組織のプロジェクトアクセス | Routes | 403/404 |
+| 7 | Vendor一覧取得（検索） | Service | activeなVendorのみ返却 |
+| 8 | Vendor側プロジェクト一覧 | Service | 招待されたプロジェクトのみ |
 
 ---
 
@@ -149,22 +163,33 @@ UNIQUE制約: (project_id, vendor_org_id)
 
 ### 2. FastAPI Endpoints
 
+#### Vendor一覧（選択用）
+GET /api/vendors
+- Query: search?, industry?, page, limit
+- Response: { items: Vendor[], total, page, limit }
+- Filter: type='vendor', status='active'
+
+#### プロジェクト一覧（Buyer/Vendor両対応）
 GET /api/projects
 - Query: status, search, page, limit
 - Response: { items: Project[], total, page, limit }
-- Filter by buyer_org_id from JWT
+- **Buyerの場合**: buyer_org_id = 自組織
+- **Vendorの場合**: project_vendors に自組織が含まれる
 
 POST /api/projects
 - Request: { title, description? }
-- Response: Project
+- Response: { project: Project, ai_session: AiChatSession }
+- **プロジェクト作成と同時にAIチャットセッションを自動作成**
 - buyer_org_id from JWT
 
 GET /api/projects/{id}
 - Response: Project with vendors
+- **Vendorもアクセス可能**（project_vendorsに含まれる場合）
 
 PUT /api/projects/{id}
 - Request: { title?, description? }
 - Only if status='draft'
+- **Buyerのみ**
 
 POST /api/projects/{id}/vendors
 - Request: { vendor_org_ids: UUID[] }
@@ -176,7 +201,8 @@ DELETE /api/projects/{id}/vendors/{vendor_org_id}
 POST /api/projects/{id}/start-discussion
 - Transition: draft → in_discussion
 - Set started_at
-- Trigger vendor notifications (Task 011)
+- **各Vendor用チャットルーム作成** (chat_rooms INSERT for each vendor)
+- Trigger vendor notifications (01-07連携)
 
 POST /api/projects/{id}/close
 - Transition: in_discussion → closed
@@ -189,8 +215,9 @@ POST /api/projects/{id}/close
 - schemas/project.py (Pydantic models)
 
 ### 4. RLSポリシー
-- projects: buyer_org_id = 自組織 OR vendor_org_id in project_vendors
-- project_vendors: project_id経由で自組織のプロジェクトのみ
+- **projects (SELECT)**: buyer_org_id = 自組織 OR 自組織がproject_vendorsに存在
+- **projects (INSERT/UPDATE/DELETE)**: buyer_org_id = 自組織
+- **project_vendors**: project.buyer_org_id = 自組織 OR vendor_org_id = 自組織
 
 ## 制約
 - ステータス遷移は draft → in_discussion → closed の順のみ
@@ -212,8 +239,11 @@ POST /api/projects/{id}/close
 
 - [ ] マイグレーションファイルが `supabase/migrations/` に存在
 - [ ] 全APIエンドポイントが正常に動作
+- [ ] **Vendor一覧API**が正常に動作
 - [ ] ステータス遷移が正しく機能（draft → in_discussion → closed）
-- [ ] RLSポリシーが正しく機能
+- [ ] **start-discussionでチャットルームが作成される**
+- [ ] **Vendor側からプロジェクト閲覧が可能**
+- [ ] RLSポリシーが正しく機能（Buyer/Vendor両方）
 - [ ] ユニットテスト作成（Routes/Services/CRUD）
 - [ ] `pytest tests/unit/` がパス
 - [ ] Service層カバレッジ 80%以上
@@ -222,15 +252,23 @@ POST /api/projects/{id}/close
 
 ## 🔗 関連タスク
 
-- 前提: [01-01-signup.md](./01-01-signup.md) (organizations, profiles テーブル)
+- 前提: [01-02-backend-onboarding.md](./01-02-backend-onboarding.md) (organizations, profiles テーブル)
 - 後続: [02-02-project-plans.md](./02-02-project-plans.md)
 - 後続: [02-03-project-attachments.md](./02-03-project-attachments.md)
-- 後続: [01-07-notifications.md](./01-07-notifications.md)
+- 連携: [03-01-ai-chat.md](./03-01-ai-chat.md) (プロジェクト作成時にAIセッション自動作成)
+- 連携: [03-02-buyer-vendor-chat.md](./03-02-buyer-vendor-chat.md) (start-discussionでチャットルーム作成)
+- 連携: [05-01-notifications.md](./05-01-notifications.md) (Vendor通知)
 
 ---
 
 ## 📝 メモ
 
-- Vendorから見たプロジェクト一覧は project_vendors 経由で取得
-- start-discussion 実行時に通知処理（011）をトリガー
+- **ChatGPT風UX**: プロジェクト作成と同時にAIチャットセッションを自動作成。ユーザーはすぐにAIとのチャットを開始できる
+- **Vendor一覧API**: Vendor選択時に利用。statusがactiveのVendor組織のみ返却
+- **Vendor側プロジェクト一覧**: project_vendors 経由で自組織が招待されたプロジェクトを取得
+- **start-discussion 処理**:
+  1. ステータス更新 (draft → in_discussion)
+  2. 各Vendor用チャットルーム作成 (chat_rooms, chat_room_members)
+  3. 通知処理トリガー (01-07連携)
 - ステータス遷移の検証をService層で実装
+- Vendorはプロジェクト閲覧のみ可能（編集不可）

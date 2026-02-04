@@ -1,7 +1,7 @@
 # [Task] Notifications / 通知機能
 
 ## 🔗 GitLab Issue
-- Link: (後で作成)
+- Link: [#36](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/36)
 
 ---
 
