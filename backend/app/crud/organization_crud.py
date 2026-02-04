@@ -107,6 +107,21 @@ class OrganizationCRUD:
         )
         return result.data[0] if result.data else None
 
+    async def update_details(
+        self, org_id: str, org_type: str, payload: dict[str, Any], updated_by: str
+    ) -> dict:
+        """
+        Insert or update organization details (buyer or vendor).
+
+        Dispatches to upsert_buyer_details or upsert_vendor_details per org_type.
+        Document: CRUD layer update_details().
+        """
+        if org_type == "buyer":
+            return await self.upsert_buyer_details(org_id, payload, updated_by)
+        if org_type == "vendor":
+            return await self.upsert_vendor_details(org_id, payload, updated_by)
+        raise ValueError(f"Unknown org_type for details: {org_type}")
+
     async def upsert_buyer_details(
         self, org_id: str, payload: dict[str, Any], updated_by: str
     ) -> dict:

@@ -45,12 +45,12 @@ def mock_service():
     mock.get_organization = AsyncMock(return_value=OrganizationResponse(
         id=_ORG_ID, name="Acme", type="buyer", status="active",
         industry="IT", employee_count="50-100", billing_email="b@example.com",
-        billing_customer_id=None, created_at="2026-01-01T00:00:00Z", updated_at="2026-01-30T10:00:00Z",
+        stripe_customer_id=None, created_at="2026-01-01T00:00:00Z", updated_at="2026-01-30T10:00:00Z",
     ))
     mock.update_organization = AsyncMock(return_value=OrganizationResponse(
         id=_ORG_ID, name="Updated", type="buyer", status="active",
         industry="IT", employee_count="100-500", billing_email="b@example.com",
-        billing_customer_id=None, created_at="2026-01-01T00:00:00Z", updated_at="2026-01-30T10:00:00Z",
+        stripe_customer_id=None, created_at="2026-01-01T00:00:00Z", updated_at="2026-01-30T10:00:00Z",
     ))
     mock.get_org_details = AsyncMock(return_value=OrgDetailsResponse(
         org_id=_ORG_ID, purpose="RFI management", updated_at="2026-01-30T10:00:00Z",

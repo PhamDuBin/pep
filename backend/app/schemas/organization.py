@@ -31,7 +31,7 @@ EmployeeCountLiteral = Literal["1-10", "10-50", "50-100", "100-500", "500+"]
 
 
 class OrganizationResponse(BaseModel):
-    """Response for GET /api/v1/organizations/{org_id}."""
+    """Response for GET /api/v1/organizations/{org_id}. Document: stripe_customer_id."""
 
     id: str
     name: str
@@ -40,12 +40,13 @@ class OrganizationResponse(BaseModel):
     industry: Optional[str] = None
     employee_count: Optional[str] = None
     billing_email: Optional[str] = None
-    billing_customer_id: Optional[str] = None
+    stripe_customer_id: Optional[str] = Field(
+        None, alias="billing_customer_id", description="Stripe Customer ID (from DB billing_customer_id)"
+    )
     created_at: datetime
     updated_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True, "populate_by_name": True}
 
 
 class OrganizationUpdateRequest(BaseModel):

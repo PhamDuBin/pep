@@ -95,6 +95,26 @@ class OrganizationService:
 
     # --- Organization settings (Task 01-10) ---
 
+    def check_permission(
+        self, user_role: str, user_org_id: str, org_id: str
+    ) -> None:
+        """
+        Ensure user is owner/admin and targets own organization. Document: check_permission().
+
+        Raises:
+            HTTPException: 403 if not owner/admin or org mismatch.
+        """
+        if user_role not in ("owner", "admin"):
+            raise HTTPException(
+                status_code=403,
+                detail="Forbidden / Owner or admin only / オーナーまたは管理者のみ",
+            )
+        if org_id != user_org_id:
+            raise HTTPException(
+                status_code=403,
+                detail="Forbidden / Organization mismatch / 組織が一致しません",
+            )
+
     async def get_organization(
         self, org_id: str, user_org_id: str
     ) -> OrganizationResponse:
@@ -168,16 +188,7 @@ class OrganizationService:
         Raises:
             HTTPException: 403 if not owner/admin or org mismatch, 404 if not found.
         """
-        if user_role not in ("owner", "admin"):
-            raise HTTPException(
-                status_code=403,
-                detail="Forbidden / Owner or admin only / オーナーまたは管理者のみ",
-            )
-        if org_id != user_org_id:
-            raise HTTPException(
-                status_code=403,
-                detail="Forbidden / Organization mismatch / 組織が一致しません",
-            )
+        self.check_permission(user_role, user_org_id, org_id)
         org = await self.crud.get_by_id(org_id)
         if not org:
             raise HTTPException(
@@ -200,11 +211,8 @@ class OrganizationService:
         if body.employee_count is not None:
             details_payload["employee_count"] = body.employee_count
 
-        if details_payload:
-            if org_type == "buyer":
-                await self.crud.upsert_buyer_details(org_id, details_payload, user_id)
-            elif org_type == "vendor":
-                await self.crud.upsert_vendor_details(org_id, details_payload, user_id)
+        if details_payload and org_type in ("buyer", "vendor"):
+            await self.crud.update_details(org_id, org_type, details_payload, user_id)
 
         return await self.get_organization(org_id, user_org_id)
 
@@ -294,16 +302,7 @@ class OrganizationService:
         Raises:
             HTTPException: 403 if not owner/admin or org mismatch, 404 if not found.
         """
-        if user_role not in ("owner", "admin"):
-            raise HTTPException(
-                status_code=403,
-                detail="Forbidden / Owner or admin only / オーナーまたは管理者のみ",
-            )
-        if org_id != user_org_id:
-            raise HTTPException(
-                status_code=403,
-                detail="Forbidden / Organization mismatch / 組織が一致しません",
-            )
+        self.check_permission(user_role, user_org_id, org_id)
         org = await self.crud.get_by_id(org_id)
         if not org:
             raise HTTPException(
@@ -316,9 +315,7 @@ class OrganizationService:
             k: v for k, v in body.model_dump(exclude_unset=True).items() if v is not None
         }
 
-        if org_type == "buyer":
-            await self.crud.upsert_buyer_details(org_id, payload, user_id)
-        elif org_type == "vendor":
-            await self.crud.upsert_vendor_details(org_id, payload, user_id)
+        if payload and org_type in ("buyer", "vendor"):
+            await self.crud.update_details(org_id, org_type, payload, user_id)
 
         return await self.get_org_details(org_id, user_org_id)
