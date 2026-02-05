@@ -192,3 +192,20 @@ class InvitationCRUD:
         )
         rows = result.data or []
         return rows[0] if rows else None
+
+    def get_profile_by_email(self, email: str) -> Optional[dict]:
+        """
+        Find a profile with this email (any role, not deleted).
+
+        Used to reject inviting already-registered users.
+        """
+        result = (
+            self.supabase.table("profiles")
+            .select("id")
+            .eq("email", email)
+            .eq("is_deleted", False)
+            .limit(1)
+            .execute()
+        )
+        rows = result.data or []
+        return rows[0] if rows else None
