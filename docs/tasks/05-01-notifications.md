@@ -8,7 +8,12 @@
 ## 📝 概要
 
 プロジェクト計画書通知、チャット新着通知などをメール・WebPush・アプリ内で配信する機能。
-SendGridを使用したメール送信、Supabase Realtimeを使用したリアルタイム通知を実装。
+
+**メール送信の役割分担**:
+- **認証系メール**: Supabase Auth（サインアップ確認、パスワードリセット等）
+- **トランザクション系メール**: Resend（申請承認/却下、招待、通知等）
+
+Supabase Realtimeを使用したリアルタイム通知も実装。
 
 ---
 
@@ -45,12 +50,32 @@ SendGridを使用したメール送信、Supabase Realtimeを使用したリア�
 
 ## 📋 スコープ
 
+### メール一覧
+
+| 種別 | 送信元 | トリガー | 宛先 |
+|------|--------|---------|------|
+| サインアップ確認 | Supabase Auth | サインアップ時 | ユーザー |
+| パスワードリセット | Supabase Auth | リセット要求時 | ユーザー |
+| マジックリンク | Supabase Auth | ログイン要求時 | ユーザー |
+| **申請承認** | Resend | 管理者承認時 | 申請者 |
+| **申請却下** | Resend | 管理者却下時 | 申請者（理由付き） |
+| **メンバー招待** | Resend | 招待作成時 | 招待先 |
+| **計画書送信** | Resend | Vendor送信時 | Vendor管理者 |
+| チャット新着（オプション） | Resend | メッセージ受信時 | 相手方 |
+
+**太字**: 本タスクで実装
+
 ### Backend (FastAPI)
 
-- [ ] SendGrid統合（メール送信）
+- [ ] Resend統合（トランザクション系メール送信）
+- [ ] メールサービス (`email_service.py`)
 - [ ] 通知サービス (`notification_service.py`)
-- [ ] プロジェクト計画書通知テンプレート
-- [ ] チャット通知テンプレート
+- [ ] メールテンプレート作成
+  - [ ] 申請承認通知
+  - [ ] 申請却下通知
+  - [ ] メンバー招待
+  - [ ] プロジェクト計画書通知
+  - [ ] チャット通知（オプション）
 - [ ] Webhook/イベントハンドラ
 
 ### Frontend (Optional - Phase 2)
@@ -65,20 +90,22 @@ SendGridを使用したメール送信、Supabase Realtimeを使用したリア�
 
 | Layer | Test File | Mock Target |
 |-------|-----------|-------------|
-| Services | `tests/unit/test_services/test_notification_service.py` | SendGrid API |
-| Services | `tests/unit/test_services/test_email_service.py` | SendGrid API |
+| Services | `tests/unit/test_services/test_notification_service.py` | Email Service |
+| Services | `tests/unit/test_services/test_email_service.py` | Resend API |
 
 - [ ] Service層テスト（通知ロジック検証）
-- [ ] メール送信テスト（SendGrid mock）
+- [ ] メール送信テスト（Resend mock）
 
 #### Test Cases / テストケース
 
 | # | Test Case | Layer | Expected |
 |---|-----------|-------|----------|
-| 1 | プロジェクト計画書通知成功 | Service | メール送信呼出, チャットルーム作成 |
-| 2 | チャット通知成功 | Service | 通知送信呼出 |
-| 3 | SendGridエラー時 | Service | エラーログ記録, 処理継続 |
-| 4 | 通知頻度制限 | Service | 連続通知抑制 |
+| 1 | 申請承認通知成功 | Service | メール送信呼出 |
+| 2 | 申請却下通知成功 | Service | メール送信（理由付き） |
+| 3 | メンバー招待メール成功 | Service | 招待リンク含むメール |
+| 4 | プロジェクト計画書通知成功 | Service | Vendorへメール送信 |
+| 5 | Resendエラー時 | Service | エラーログ記録, 処理継続 |
+| 6 | 通知頻度制限 | Service | 連続通知抑制 |
 
 ---
 
@@ -97,12 +124,16 @@ SendGridを使用したメール送信、Supabase Realtimeを使用したリア�
 
 ## 実装内容
 
-### 1. SendGrid Integration
+### 1. Resend Integration
 
 環境変数:
-- SENDGRID_API_KEY
-- SENDGRID_FROM_EMAIL
+- RESEND_API_KEY
+- RESEND_FROM_EMAIL (例: noreply@pep.example.com)
 - FRONTEND_URL (メール内リンク用)
+
+```bash
+pip install resend
+```
 
 ### 2. Notification Service
 
@@ -200,19 +231,19 @@ async def send_message(room_id: UUID, content: str):
 
 ### 5. レイヤー構成
 - services/notification_service.py (Notification Logic)
-- services/email_service.py (SendGrid wrapper)
+- services/email_service.py (Resend wrapper)
 - templates/email/ (HTML templates)
 
 ## 制約
 - メール送信は非同期（バックグラウンドタスク）
-- SendGridエラー時はログに記録、処理は継続
+- Resendエラー時はログに記録、処理は継続
 - 通知頻度制限（同一ユーザーへの連続通知抑制）
 - 型ヒント必須
 
 ## テスト要件
 - Service層のユニットテストを作成
 - Service層は80%以上のカバレッジを目標
-- SendGrid APIはモック使用（実API呼び出し不要）
+- Resend APIはモック使用（実API呼び出し不要）
 
 --------------------------------------------------
 
@@ -220,11 +251,12 @@ async def send_message(room_id: UUID, content: str):
 
 ## ✅ 完了条件
 
-- [ ] SendGrid統合が動作
+- [ ] Resend統合が動作
+- [ ] 申請承認通知メールが送信される
+- [ ] 申請却下通知メールが送信される（理由付き）
+- [ ] メンバー招待メールが送信される
 - [ ] プロジェクト計画書通知メールが送信される
-- [ ] チャットルームが自動作成される
-- [ ] 初回システムメッセージが投稿される
-- [ ] エラーハンドリングが適切
+- [ ] エラーハンドリングが適切（送信失敗時もビジネス処理は継続）
 - [ ] ユニットテスト作成（notification_service, email_service）
 - [ ] `pytest tests/unit/` がパス
 - [ ] Service層カバレッジ 80%以上
@@ -240,7 +272,9 @@ async def send_message(room_id: UUID, content: str):
 
 ## 📝 メモ
 
+- **認証系メールはSupabase Auth**: サインアップ確認、パスワードリセット、マジックリンク等は自動送信
+- **トランザクション系メールはResend**: 申請承認/却下、招待、通知等をFastAPIから送信
 - WebPush は Phase 2 で実装
 - ダイジェストメール（1日1回の未読まとめ）は将来検討
 - 通知設定（オン/オフ）UIは将来検討
-- SendGrid の Dynamic Templates 使用推奨
+- Resend + React Email でテンプレート管理推奨

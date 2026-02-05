@@ -23,6 +23,7 @@ PEP (Project Enhancement Platform) は、AI技術を活用してRFI（情報提�
 | Storage | Supabase Storage | File Storage / ファイル保存 |
 | AI | OpenAI API | RFI Draft Generation & Chat / RFI草案生成・チャット |
 | Payment | Stripe | Subscription Billing / サブスクリプション決済 |
+| Email | Resend + Supabase Auth | Transactional (Resend) + Auth emails (Supabase) / トランザクション系 + 認証系 |
 
 ### System Architecture / システム構成
 
@@ -36,7 +37,8 @@ Next.js (Cloud Run or Vercel) [UI/BFF only]
             ├── Supabase DB (PostgreSQL)
             ├── Supabase Storage
             ├── OpenAI API
-            └── Stripe API
+            ├── Stripe API
+            └── Resend API (Email)
 ```
 
 ## Prerequisites / 前提条件
@@ -558,6 +560,7 @@ SUPABASE_JWT_SECRET=your-jwt-secret
 OPENAI_API_KEY=sk-...
 STRIPE_SECRET_KEY=sk_...
 STRIPE_WEBHOOK_SECRET=whsec_...
+RESEND_API_KEY=re_...
 FRONTEND_URL=http://localhost:3000
 ```
 
