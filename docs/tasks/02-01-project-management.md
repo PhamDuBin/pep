@@ -182,7 +182,7 @@ UNIQUE制約: (project_id, vendor_org_id)
 #### GET /api/projects - プロジェクト一覧（Buyer/Vendor両対応）
 - Query: status?, search?, page?, limit?
 - Response: { items: Project[], total, page, limit }
-- 各Projectに `chat_unread_count`（チャット未読数）を含む
+- 各Projectに `has_chat_unread` (boolean)（チャット未読有無）を含む
 - **status パラメータ**:
   - 未指定: draft, in_discussion のみ（closedは除外＝アーカイブ）
   - `draft`: draftのみ
@@ -298,4 +298,4 @@ UNIQUE制約: (project_id, vendor_org_id)
 - **Vendor側プロジェクト一覧**: project_vendors 経由で自組織が招待されたプロジェクトを取得（in_discussion以降のみ）
 - **VendorはAIチャット不可**: Vendorはプロジェクトと計画書の閲覧、Buyer-Vendorチャットのみ可能
 - **send処理のトランザクション**: 複数テーブル操作のためRPC推奨
-- **chat_unread_count**: プロジェクト一覧で各プロジェクトのチャット未読数を返却。POST /read後はフロントエンドでローカル管理（再取得不要）
+- **has_chat_unread**: プロジェクト一覧で各プロジェクトのチャット未読有無を返却（boolean）。画面では未読プロジェクト名を太字表示
