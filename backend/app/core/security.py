@@ -15,6 +15,40 @@ from app.core.supabase import get_supabase
 logger = logging.getLogger(__name__)
 security = HTTPBearer()
 
+# -----------------------------------------------------------------------------
+# Internal: load profile and enforce not soft-deleted (single place for 403 msg)
+# -----------------------------------------------------------------------------
+
+
+def _load_profile_not_deleted(
+    supabase: Client, user_id: str, columns: str = "id,is_deleted,org_id"
+) -> dict:
+    """
+    Load profile by user_id; raise 403 if not found or soft-deleted.
+
+    Returns profile row dict. Used by get_current_user, get_current_user_for_onboarding,
+    get_current_platform_admin, get_current_org_owner_or_admin.
+    """
+    result = (
+        supabase.table("profiles")
+        .select(columns)
+        .eq("id", user_id)
+        .execute()
+    )
+    rows = result.data or []
+    if not rows:
+        raise HTTPException(
+            status_code=403,
+            detail="Forbidden / Profile not found or access restricted / プロフィールが見つからないかアクセスが制限されています",
+        )
+    profile = rows[0]
+    if profile.get("is_deleted"):
+        raise HTTPException(
+            status_code=403,
+            detail="Forbidden / Account removed or suspended / アカウントは削除または停止されています",
+        )
+    return profile
+
 
 async def verify_token(
     credentials: HTTPAuthorizationCredentials = Security(security),
@@ -92,32 +126,13 @@ async def get_current_user(
             status_code=403,
             detail="Forbidden / 権限がありません",
         )
-    # Profile must exist and not be soft-deleted
-    profile_result = (
-        supabase.table("profiles")
-        .select("id, is_deleted, org_id")
-        .eq("id", user_id)
-        .execute()
-    )
-    profile_rows = profile_result.data or []
-    if not profile_rows:
-        raise HTTPException(
-            status_code=403,
-            detail="Forbidden / Profile not found or access restricted / プロフィールが見つからないかアクセスが制限されています",
-        )
-    profile = profile_rows[0]
-    if profile.get("is_deleted"):
-        raise HTTPException(
-            status_code=403,
-            detail="Forbidden / Account removed or suspended / アカウントは削除または停止されています",
-        )
+    profile = _load_profile_not_deleted(supabase, user_id, "id,is_deleted,org_id")
     org_id = profile.get("org_id")
     if not org_id:
         raise HTTPException(
             status_code=403,
             detail="Forbidden / No organization / 組織に所属していません",
         )
-    # Organization must be active (not suspended/pending/inactive)
     org_result = (
         supabase.table("organizations")
         .select("id, status")
@@ -155,25 +170,7 @@ async def get_current_user_for_onboarding(
             status_code=403,
             detail="Forbidden / 権限がありません",
         )
-    # Profile must exist and not be soft-deleted
-    profile_result = (
-        supabase.table("profiles")
-        .select("id, is_deleted")
-        .eq("id", user_id)
-        .execute()
-    )
-    profile_rows = profile_result.data or []
-    if not profile_rows:
-        raise HTTPException(
-            status_code=403,
-            detail="Forbidden / Profile not found / プロフィールが見つかりません",
-        )
-    profile = profile_rows[0]
-    if profile.get("is_deleted"):
-        raise HTTPException(
-            status_code=403,
-            detail="Forbidden / Account removed or suspended / アカウントは削除または停止されています",
-        )
+    _load_profile_not_deleted(supabase, user_id, "id,is_deleted")
     return user
 
 
@@ -181,15 +178,28 @@ async def get_optional_user(
     credentials: Optional[HTTPAuthorizationCredentials] = Security(
         HTTPBearer(auto_error=False)
     ),
+    supabase: Client = Depends(get_supabase),
 ) -> Optional[dict]:
     """
-    Get current user if authenticated, None otherwise.
+    Get current user if authenticated and profile not soft-deleted, None otherwise.
 
-    This is useful for endpoints that work with or without authentication.
+    Returns None when no token, invalid token, or profile is soft-deleted.
+    Useful for endpoints that work with or without valid authentication.
     """
     if credentials is None:
         return None
-    return await verify_token(credentials)
+    try:
+        user = await verify_token(credentials)
+    except HTTPException:
+        return None
+    user_id = user.get("id")
+    if not user_id:
+        return None
+    try:
+        _load_profile_not_deleted(supabase, user_id, "id,is_deleted")
+    except HTTPException:
+        return None
+    return user
 
 
 async def get_current_platform_admin(
@@ -203,26 +213,21 @@ async def get_current_platform_admin(
     Does NOT enforce org status so platform admins can access admin APIs
     even when their organization is suspended.
     """
-    current_user = await verify_token(credentials)
-    if not current_user or not current_user.get("id"):
+    user = await verify_token(credentials)
+    if not user or not user.get("id"):
         raise HTTPException(
             status_code=403,
             detail="Forbidden / 権限がありません",
         )
-    result = (
-        supabase.table("profiles")
-        .select("is_platform_admin")
-        .eq("id", current_user["id"])
-        .eq("is_deleted", False)
-        .execute()
+    profile = _load_profile_not_deleted(
+        supabase, user["id"], "id,is_deleted,is_platform_admin"
     )
-    rows = result.data or []
-    if not rows or not rows[0].get("is_platform_admin"):
+    if not profile.get("is_platform_admin"):
         raise HTTPException(
             status_code=403,
             detail="Forbidden / Platform Admin only / プラットフォーム管理者のみ利用可能",
         )
-    return current_user
+    return user
 
 
 async def get_current_org_owner_or_admin(
@@ -241,22 +246,11 @@ async def get_current_org_owner_or_admin(
             status_code=403,
             detail="Forbidden / 権限がありません",
         )
-    result = (
-        supabase.table("profiles")
-        .select("org_id, role")
-        .eq("id", current_user["id"])
-        .eq("is_deleted", False)
-        .execute()
+    profile = _load_profile_not_deleted(
+        supabase, current_user["id"], "id,is_deleted,org_id,role"
     )
-    rows = result.data or []
-    if not rows:
-        raise HTTPException(
-            status_code=403,
-            detail="Forbidden / Profile not found / プロフィールが見つかりません",
-        )
-    row = rows[0]
-    role = row.get("role")
-    org_id = row.get("org_id")
+    role = profile.get("role")
+    org_id = profile.get("org_id")
     if role not in ("owner", "admin"):
         raise HTTPException(
             status_code=403,
