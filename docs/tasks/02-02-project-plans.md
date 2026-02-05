@@ -7,10 +7,12 @@
 
 ## 📝 概要
 
-AIとのチャットで生成されたプロジェクト計画書（PDF等）を管理する機能。
-計画書はSupabase Storageに保存され、選択したVendorに送信できる。
+AIとのチャットで生成されたプロジェクト計画書を管理する機能。
+計画書はSupabase Storageに保存され、`POST /api/projects/{id}/send`（02-01）で選択したVendorに送信される。
 
-**Vendor側対応**: Vendorは送信された計画書（project_plan_vendors経由）のみ閲覧可能。
+**計画書単位のVendor管理**: 各計画書バージョンをどのVendorに送信したかを`project_plan_vendors`で管理。計画書v1はVendor A,B、v2はVendor A,Cのような運用が可能。
+
+**Vendor側対応**: Vendorは`project_plan_vendors`経由で送信された計画書のみ閲覧可能。
 
 ---
 
@@ -29,26 +31,28 @@ AIとのチャットで生成されたプロジェクト計画書（PDF等）を
 ## 📊 処理フロー概要
 
 ```
-1. 計画書生成（AIチャットから）
-   POST /api/projects/{id}/plans
-   └─→ Generate PDF/Document
-   └─→ Upload to Supabase Storage
+1. 計画書送信（02-01から呼び出し）
+   POST /api/projects/{id}/send
+   └─→ Markdown content → Supabase Storage に保存
    └─→ project_plans INSERT
+   └─→ project_plan_vendors INSERT（各Vendor）
 
-2. 計画書一覧
+2. 計画書一覧取得
    GET /api/projects/{id}/plans
    └─→ project_plans SELECT
+   └─→ Buyer: プロジェクトの全計画書
+   └─→ Vendor: project_plan_vendors経由で送信された計画書のみ
 
-3. 計画書ダウンロード
+3. 計画書詳細取得
+   GET /api/projects/{id}/plans/{plan_id}
+   └─→ project_plans SELECT
+   └─→ 送信先Vendor一覧も含む（Buyerのみ）
+
+4. 計画書ダウンロード
    GET /api/projects/{id}/plans/{plan_id}/download
-   └─→ Supabase Storage signed URL
+   └─→ Supabase Storage signed URL 発行
 
-4. Vendorへ計画書送信
-   POST /api/projects/{id}/plans/{plan_id}/send
-   └─→ project_plan_vendors INSERT
-   └─→ Vendor通知処理
-
-5. 計画書削除
+5. 計画書削除（Buyerのみ、未送信の場合のみ）
    DELETE /api/projects/{id}/plans/{plan_id}
    └─→ project_plans soft delete
 ```
@@ -62,20 +66,19 @@ AIとのチャットで生成されたプロジェクト計画書（PDF等）を
 - [ ] `project_plans` テーブル作成
 - [ ] `project_plan_vendors` テーブル作成
 - [ ] RLSポリシー設定
-- [ ] Supabase Storage バケット設定
+- [ ] Supabase Storage バケット設定 (`project-plans`)
 
 ### Backend (FastAPI)
 
 - [ ] `GET /api/projects/{id}/plans` - 一覧取得
-- [ ] `POST /api/projects/{id}/plans` - 新規作成（アップロード）
 - [ ] `GET /api/projects/{id}/plans/{plan_id}` - 詳細取得
 - [ ] `GET /api/projects/{id}/plans/{plan_id}/download` - ダウンロードURL取得
-- [ ] `DELETE /api/projects/{id}/plans/{plan_id}` - 削除
-- [ ] `POST /api/projects/{id}/plans/{plan_id}/send` - Vendorへ送信
-- [ ] `GET /api/projects/{id}/plans/{plan_id}/vendors` - 送信済みVendor一覧
+- [ ] `DELETE /api/projects/{id}/plans/{plan_id}` - 削除（未送信のみ）
 - [ ] Pydantic schemas
 - [ ] Service層 (`plan_service.py`)
 - [ ] CRUD層 (`plan_crud.py`)
+
+**Note**: 計画書作成・Vendor送信は `POST /api/projects/{id}/send`（02-01）で実行
 
 ### Tests
 
@@ -88,18 +91,21 @@ AIとのチャットで生成されたプロジェクト計画書（PDF等）を
 | CRUD | `tests/unit/test_crud/test_plan_crud.py` | Supabase client |
 
 - [ ] Routes層テスト（リクエスト/レスポンス検証）
-- [ ] Service層テスト（アップロード/送信ロジック検証）
+- [ ] Service層テスト（アクセス制御ロジック検証）
 - [ ] CRUD層テスト（DB操作検証）
 
 #### Test Cases / テストケース
 
 | # | Test Case | Layer | Expected |
 |---|-----------|-------|----------|
-| 1 | ファイルアップロード成功 | Service | plan_id 返却 |
-| 2 | サイズ超過ファイル | Service | Error (10MB超過) |
-| 3 | 非対応形式 | Service | Error |
-| 4 | Vendor送信成功 | Service | sent_count 返却 |
-| 5 | ダウンロードURL取得 | Service | Signed URL 返却 |
+| 1 | 計画書一覧取得（Buyer） | Service | 全計画書返却 |
+| 2 | 計画書一覧取得（Vendor） | Service | 送信された計画書のみ返却 |
+| 3 | 計画書詳細取得（Buyer） | Service | 送信先Vendor一覧含む |
+| 4 | 計画書詳細取得（Vendor） | Service | 送信先情報なし |
+| 5 | 未送信計画書へのVendorアクセス | Service | 403/404 Error |
+| 6 | ダウンロードURL取得 | Service | Signed URL返却 |
+| 7 | 計画書削除（未送信） | Service | 成功 |
+| 8 | 計画書削除（送信済み） | Service | 409 Error |
 
 ---
 
@@ -109,7 +115,7 @@ AIとのチャットで生成されたプロジェクト計画書（PDF等）を
 
 --------------------------------------------------
 
-`docs/tasks/007-project-plans.md` に基づき Project Plans（プロジェクト計画書管理）機能を実装してください。
+`docs/tasks/02-02-project-plans.md` に基づき Project Plans（プロジェクト計画書管理）機能を実装してください。
 
 ## 参照ドキュメント
 - UC: docs/UC/UC6.md, UC7.md
@@ -147,40 +153,31 @@ UNIQUE制約: (plan_id, vendor_org_id)
 
 バケット: `project-plans`
 - Private bucket
+- Path format: `{project_id}/{plan_id}.md`
 - RLS: Buyer組織のユーザーのみアップロード可能
-- Signed URLs for download
 
 ### 3. FastAPI Endpoints
 
-GET /api/projects/{id}/plans
+#### GET /api/projects/{id}/plans - 計画書一覧
 - Response: { items: Plan[] }
-- Filter by project_id, is_deleted=false
-- **Buyerの場合**: 全計画書を返却
+- **Buyerの場合**: プロジェクトの全計画書
 - **Vendorの場合**: project_plan_vendors経由で送信された計画書のみ
 
-POST /api/projects/{id}/plans
-- Request: multipart/form-data (file, title, ai_session_id?)
-- Upload to Supabase Storage
-- Insert to project_plans
+#### GET /api/projects/{id}/plans/{plan_id} - 計画書詳細
 - Response: Plan
+- **Buyerの場合**: 送信先Vendor一覧（vendors）を含む
+- **Vendorの場合**: 送信先情報なし
 
-GET /api/projects/{id}/plans/{plan_id}
-- Response: Plan with sent_vendors
+#### GET /api/projects/{id}/plans/{plan_id}/download - ダウンロードURL
+- Response: { download_url: string }
+- Signed URL (有効期限: 1時間)
 
-GET /api/projects/{id}/plans/{plan_id}/download
-- Response: { download_url: string } - Signed URL (expires in 1 hour)
-
-DELETE /api/projects/{id}/plans/{plan_id}
+#### DELETE /api/projects/{id}/plans/{plan_id} - 削除
+- project_plan_vendorsにレコードがない場合のみ削除可能
 - Soft delete (is_deleted=true)
+- **Buyerのみ**
 
-POST /api/projects/{id}/plans/{plan_id}/send
-- Request: { vendor_org_ids: UUID[] }
-- Insert to project_plan_vendors for each vendor
-- Trigger notification (Task 011)
-- Response: { sent_count: number }
-
-GET /api/projects/{id}/plans/{plan_id}/vendors
-- Response: { vendors: VendorOrg[] }
+**Note**: 計画書作成・Vendor送信は `POST /api/projects/{id}/send`（02-01）で実行
 
 ### 4. レイヤー構成
 - api/routes/plans.py (Controller)
@@ -189,13 +186,20 @@ GET /api/projects/{id}/plans/{plan_id}/vendors
 - schemas/plan.py (Pydantic models)
 
 ### 5. RLSポリシー
-- project_plans: project.buyer_org_id = 自組織 OR plan_id in sent plans
-- project_plan_vendors: vendor_org_id = 自組織
+
+**project_plans:**
+- SELECT (Buyer): project.buyer_org_id = 自組織
+- SELECT (Vendor): plan_id が project_plan_vendors 経由で自組織に送信済み
+- INSERT/UPDATE/DELETE: project.buyer_org_id = 自組織
+
+**project_plan_vendors:**
+- SELECT (Buyer): plan.project.buyer_org_id = 自組織
+- SELECT (Vendor): vendor_org_id = 自組織
+- INSERT/DELETE: plan.project.buyer_org_id = 自組織
 
 ## 制約
-- ファイルサイズ上限: 10MB
-- 対応形式: PDF, DOCX, PPTX
 - Vendorは送信された計画書のみ閲覧可能
+- 送信済み計画書は削除不可
 - 型ヒント必須
 - Pydanticでリクエスト/レスポンス定義
 
@@ -213,10 +217,11 @@ GET /api/projects/{id}/plans/{plan_id}/vendors
 
 - [ ] マイグレーションファイルが存在
 - [ ] Supabase Storage バケットが設定済み
-- [ ] ファイルアップロードが動作
+- [ ] 計画書一覧取得が動作（Buyer/Vendor両対応）
 - [ ] ダウンロードURL取得が動作
-- [ ] Vendor送信が動作
-- [ ] RLSが正しく機能
+- [ ] 未送信計画書の削除が動作
+- [ ] 送信済み計画書の削除が拒否される
+- [ ] RLSが正しく機能（Buyer: 全計画書 / Vendor: 送信分のみ）
 - [ ] ユニットテスト作成（Routes/Services/CRUD）
 - [ ] `pytest tests/unit/` がパス
 - [ ] Service層カバレッジ 80%以上
@@ -225,7 +230,7 @@ GET /api/projects/{id}/plans/{plan_id}/vendors
 
 ## 🔗 関連タスク
 
-- 前提: [02-01-project-management.md](./02-01-project-management.md)
+- 前提: [02-01-project-management.md](./02-01-project-management.md) (計画書作成・送信はこちらで実行)
 - 前提: [03-01-ai-chat.md](./03-01-ai-chat.md) (ai_session_id)
 - 関連: [05-01-notifications.md](./05-01-notifications.md) (送信通知)
 
@@ -233,6 +238,10 @@ GET /api/projects/{id}/plans/{plan_id}/vendors
 
 ## 📝 メモ
 
-- AIセッションから生成された場合は ai_session_id を設定
-- 手動アップロードの場合は ai_session_id = null
-- チャットルームは計画書送信ではなく、プロジェクト送信開始時（start-discussion）に作成（02-01, 03-02連携）
+- **計画書作成は02-01のsend APIで実行**: 本タスクはテーブル・Storage設定と閲覧系APIのみ
+- **計画書単位のVendor管理**: `project_plan_vendors`で各バージョンの送信先を管理
+  - 計画書v1 → Vendor A, B
+  - 計画書v2 → Vendor A, C
+  - Vendor Aはv1,v2両方閲覧可、Vendor Bはv1のみ、Vendor Cはv2のみ
+- **AIセッション連携**: ai_session_id で生成元セッションを追跡（手動作成の場合はnull）
+- **Markdown形式**: 計画書はMarkdown形式で保存、フロントエンドでレンダリング

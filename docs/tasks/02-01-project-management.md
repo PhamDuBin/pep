@@ -8,9 +8,9 @@
 ## 📝 概要
 
 Buyerがプロジェクトを作成・編集・管理する機能。
-プロジェクトのステータス遷移（Draft → In Discussion → Closed）と、対象Vendorの紐付けを含む。
+プロジェクトのステータス遷移（Draft → In Discussion → Closed）と、計画書のVendor送信を含む。
 
-**Vendor側対応**: Vendorは招待されたプロジェクトの閲覧・チャット参加が可能。
+**Vendor側対応**: Vendorは招待されたプロジェクトの閲覧・チャット参加が可能。ただしAIチャットセッションにはアクセス不可。
 
 ---
 
@@ -37,25 +37,30 @@ Buyerがプロジェクトを作成・編集・管理する機能。
    └─→ projects INSERT (status='draft')
    └─→ ai_chat_sessions INSERT (project_id=new project)
 
-2. プロジェクト編集
+2. プロジェクト編集（draftのみ）
    PUT /api/projects/{id}
    └─→ projects UPDATE (title, description)
 
-3. Vendor一覧取得（選択用）
+3. プロジェクト削除（draftのみ）
+   DELETE /api/projects/{id}
+   └─→ projects UPDATE (is_deleted=true)
+   └─→ ai_chat_sessions UPDATE (is_deleted=true)
+
+4. Vendor一覧取得（選択用）
    GET /api/vendors?search=xxx
    └─→ organizations SELECT (type='vendor', status='active')
 
-4. Vendor選択・紐付け
-   POST /api/projects/{id}/vendors
-   └─→ project_vendors INSERT
+5. 計画書送信（Draft → In Discussion）
+   POST /api/projects/{id}/send
+   └─→ 計画書をSupabase Storageに保存
+   └─→ project_plans INSERT
+   └─→ IF status='draft': projects UPDATE (status='in_discussion', started_at=now)
+   └─→ project_vendors INSERT（新規Vendorのみ）
+   └─→ project_plan_vendors INSERT（今回の計画書×Vendor）
+   └─→ chat_rooms INSERT（新規Vendorのみ）
+   └─→ Vendor通知処理（UC08 → 05-01連携）
 
-5. 送信開始 (Draft → In Discussion)
-   POST /api/projects/{id}/start-discussion
-   └─→ projects UPDATE (status='in_discussion', started_at=now)
-   └─→ 各Vendor用チャットルーム作成 (chat_rooms INSERT)
-   └─→ Vendor通知処理（UC08 → 01-07連携）
-
-6. プロジェクト完了 (In Discussion → Closed)
+6. プロジェクトクローズ (In Discussion → Closed) = アーカイブ
    POST /api/projects/{id}/close
    └─→ projects UPDATE (status='closed', closed_at=now)
 
@@ -63,6 +68,7 @@ Buyerがプロジェクトを作成・編集・管理する機能。
    GET /api/projects?status=xxx
    └─→ Buyer: buyer_org_id = 自組織
    └─→ Vendor: project_vendors に自組織が含まれる
+   └─→ デフォルト: closed除外（アーカイブ扱い）
 ```
 
 ---
@@ -75,19 +81,19 @@ Buyerがプロジェクトを作成・編集・管理する機能。
 - [ ] `project_vendors` テーブル作成
 - [ ] RLSポリシー設定（Buyer/Vendor両対応）
 - [ ] インデックス作成（buyer_org_id, status）
-- [ ] ※ `chat_rooms`, `chat_room_members` は 03-02 で作成（start-discussion時に利用）
+- [ ] ※ `chat_rooms`, `chat_room_members` は 03-02 で作成（send時に利用）
+- [ ] ※ `project_plans`, `project_plan_vendors` は 02-02 で作成（send時に利用）
 
 ### Backend (FastAPI)
 
 - [ ] `GET /api/vendors` - Vendor一覧取得（選択用）
 - [ ] `GET /api/projects` - 一覧取得（Buyer/Vendor両対応）
-- [ ] `POST /api/projects` - 新規作成
+- [ ] `POST /api/projects` - 新規作成（AIセッション自動作成含む）
 - [ ] `GET /api/projects/{id}` - 詳細取得
-- [ ] `PUT /api/projects/{id}` - 更新
-- [ ] `POST /api/projects/{id}/vendors` - Vendor紐付け
-- [ ] `DELETE /api/projects/{id}/vendors/{vendor_id}` - Vendor削除
-- [ ] `POST /api/projects/{id}/start-discussion` - 送信開始（チャットルーム作成含む）
-- [ ] `POST /api/projects/{id}/close` - 完了
+- [ ] `PUT /api/projects/{id}` - 更新（draftのみ）
+- [ ] `DELETE /api/projects/{id}` - 削除（draftのみ）
+- [ ] `POST /api/projects/{id}/send` - 計画書送信（Vendor選択・ステータス遷移・チャットルーム作成）
+- [ ] `POST /api/projects/{id}/close` - クローズ（アーカイブ）
 - [ ] Pydantic schemas
 - [ ] Service層 (`project_service.py`)
 - [ ] CRUD層 (`project_crud.py`)
@@ -111,13 +117,18 @@ Buyerがプロジェクトを作成・編集・管理する機能。
 | # | Test Case | Layer | Expected |
 |---|-----------|-------|----------|
 | 1 | プロジェクト作成成功 | Service | status = draft, AIセッション作成 |
-| 2 | draft → in_discussion 遷移 | Service | 成功、started_at設定、チャットルーム作成 |
-| 3 | in_discussion → closed 遷移 | Service | 成功、closed_at設定 |
-| 4 | draft以外からの編集 | Service | Error |
-| 5 | 不正なステータス遷移（draft → closed） | Service | Error |
-| 6 | 他組織のプロジェクトアクセス | Routes | 403/404 |
-| 7 | Vendor一覧取得（検索） | Service | activeなVendorのみ返却 |
-| 8 | Vendor側プロジェクト一覧 | Service | 招待されたプロジェクトのみ |
+| 2 | プロジェクト削除（draft） | Service | is_deleted=true, AIセッションも削除 |
+| 3 | プロジェクト削除（in_discussion） | Service | 409 Error |
+| 4 | 計画書送信（初回：draft → in_discussion） | Service | ステータス遷移、計画書・Vendor・チャットルーム作成 |
+| 5 | 計画書送信（2回目：追加Vendor） | Service | 新規Vendorのみ追加、既存は維持 |
+| 6 | in_discussion → closed 遷移 | Service | 成功、closed_at設定 |
+| 7 | draft以外からの編集 | Service | 409 Error |
+| 8 | 不正なステータス遷移（draft → closed） | Service | Error |
+| 9 | 他組織のプロジェクトアクセス | Routes | 403/404 |
+| 10 | Vendor一覧取得（検索） | Service | activeなVendorのみ返却 |
+| 11 | Vendor側プロジェクト一覧 | Service | 招待されたプロジェクトのみ（in_discussion以降） |
+| 12 | プロジェクト一覧（デフォルト） | Service | closed除外 |
+| 13 | プロジェクト一覧（status=closed） | Service | closedのみ（アーカイブ一覧） |
 
 ---
 
@@ -127,7 +138,7 @@ Buyerがプロジェクトを作成・編集・管理する機能。
 
 --------------------------------------------------
 
-`docs/tasks/006-project-management.md` に基づき Project Management（プロジェクト管理）機能を実装してください。
+`docs/tasks/02-01-project-management.md` に基づき Project Management（プロジェクト管理）機能を実装してください。
 
 ## 参照ドキュメント
 - UC: docs/UC/UC6.md, UC7.md, UC10.md, UC11.md
@@ -163,53 +174,68 @@ UNIQUE制約: (project_id, vendor_org_id)
 
 ### 2. FastAPI Endpoints
 
-#### Vendor一覧（選択用）
-GET /api/vendors
+#### GET /api/vendors - Vendor一覧（選択用）
 - Query: search?, industry?, page, limit
 - Response: { items: Vendor[], total, page, limit }
 - Filter: type='vendor', status='active'
 
-#### プロジェクト一覧（Buyer/Vendor両対応）
-GET /api/projects
-- Query: status, search, page, limit
+#### GET /api/projects - プロジェクト一覧（Buyer/Vendor両対応）
+- Query: status?, search?, page?, limit?
 - Response: { items: Project[], total, page, limit }
+- 各Projectに `chat_unread_count`（チャット未読数）を含む
+- **status パラメータ**:
+  - 未指定: draft, in_discussion のみ（closedは除外＝アーカイブ）
+  - `draft`: draftのみ
+  - `in_discussion`: in_discussionのみ
+  - `closed`: closedのみ（アーカイブ一覧）
+  - `all`: 全ステータス
 - **Buyerの場合**: buyer_org_id = 自組織
-- **Vendorの場合**: project_vendors に自組織が含まれる
+- **Vendorの場合**: project_vendors に自組織が含まれる（in_discussion以降）
 
-POST /api/projects
+#### POST /api/projects - 新規作成
 - Request: { title, description? }
 - Response: { project: Project, ai_session: AiChatSession }
 - **プロジェクト作成と同時にAIチャットセッションを自動作成**
 - buyer_org_id from JWT
+- **Buyerのみ**
 
-GET /api/projects/{id}
+#### GET /api/projects/{id} - 詳細取得
 - Response: Project with vendors
-- **Vendorもアクセス可能**（project_vendorsに含まれる場合）
+- **Vendor**: project_vendorsに含まれ、かつin_discussion以降の場合のみアクセス可能
 
-PUT /api/projects/{id}
+#### PUT /api/projects/{id} - 更新
 - Request: { title?, description? }
 - Only if status='draft'
 - **Buyerのみ**
 
-POST /api/projects/{id}/vendors
-- Request: { vendor_org_ids: UUID[] }
+#### DELETE /api/projects/{id} - 削除
 - Only if status='draft'
+- 論理削除（is_deleted=true）
+- 紐づくai_chat_sessionsも論理削除
+- **Buyerのみ**
 
-DELETE /api/projects/{id}/vendors/{vendor_org_id}
-- Only if status='draft'
+#### POST /api/projects/{id}/send - 計画書送信
+- Request: { vendor_org_ids: UUID[], plan: { title, content } }
+- Response: { project: Project, plan: Plan, vendors: Vendor[] }
+- **処理フロー（RPC推奨）**:
+  1. 計画書をSupabase Storageに保存
+  2. project_plans INSERT
+  3. IF status='draft': projects UPDATE (status='in_discussion', started_at=now)
+  4. 新規Vendorを project_vendors INSERT（既存は除く）
+  5. project_plan_vendors INSERT（今回の計画書×全対象Vendor）
+  6. 新規Vendorの chat_rooms INSERT
+- **Buyerのみ**
+- 2回目以降の送信でも同じAPIを使用（追加の計画書バージョン送信）
 
-POST /api/projects/{id}/start-discussion
-- Transition: draft → in_discussion
-- Set started_at
-- **各Vendor用チャットルーム作成** (chat_rooms INSERT for each vendor)
-- Trigger vendor notifications (01-07連携)
-
-POST /api/projects/{id}/close
+#### POST /api/projects/{id}/close - クローズ
 - Transition: in_discussion → closed
 - Set closed_at
+- **Buyerのみ**
+- クローズ後は一覧からデフォルト除外（アーカイブ扱い）
 
 ### 3. レイヤー構成
 - api/routes/projects.py (Controller)
+- api/routes/vendors.py (Controller) - Vendor一覧用
 - services/project_service.py (Business Logic)
 - crud/project_crud.py (Data Access)
 - schemas/project.py (Pydantic models)
@@ -217,11 +243,13 @@ POST /api/projects/{id}/close
 ### 4. RLSポリシー
 - **projects (SELECT)**: buyer_org_id = 自組織 OR 自組織がproject_vendorsに存在
 - **projects (INSERT/UPDATE/DELETE)**: buyer_org_id = 自組織
-- **project_vendors**: project.buyer_org_id = 自組織 OR vendor_org_id = 自組織
+- **project_vendors (SELECT)**: project.buyer_org_id = 自組織 OR vendor_org_id = 自組織
+- **project_vendors (INSERT/UPDATE/DELETE)**: project.buyer_org_id = 自組織
 
 ## 制約
 - ステータス遷移は draft → in_discussion → closed の順のみ
-- draft以外は編集不可
+- draft以外は編集・削除不可
+- VendorはAIチャットセッションにアクセス不可（プロジェクトと計画書のみ閲覧可）
 - 型ヒント必須
 - Pydanticでリクエスト/レスポンス定義
 - soft delete (is_deleted=true)
@@ -241,8 +269,9 @@ POST /api/projects/{id}/close
 - [ ] 全APIエンドポイントが正常に動作
 - [ ] **Vendor一覧API**が正常に動作
 - [ ] ステータス遷移が正しく機能（draft → in_discussion → closed）
-- [ ] **start-discussionでチャットルームが作成される**
-- [ ] **Vendor側からプロジェクト閲覧が可能**
+- [ ] **sendで計画書保存・Vendor紐付け・チャットルーム作成が動作**
+- [ ] **Vendor側からプロジェクト・計画書閲覧が可能**
+- [ ] **プロジェクト一覧でclosedがデフォルト除外**
 - [ ] RLSポリシーが正しく機能（Buyer/Vendor両方）
 - [ ] ユニットテスト作成（Routes/Services/CRUD）
 - [ ] `pytest tests/unit/` がパス
@@ -253,10 +282,9 @@ POST /api/projects/{id}/close
 ## 🔗 関連タスク
 
 - 前提: [01-02-backend-onboarding.md](./01-02-backend-onboarding.md) (organizations, profiles テーブル)
-- 後続: [02-02-project-plans.md](./02-02-project-plans.md)
-- 後続: [02-03-project-attachments.md](./02-03-project-attachments.md)
+- 連携: [02-02-project-plans.md](./02-02-project-plans.md) (計画書テーブル・Storage)
 - 連携: [03-01-ai-chat.md](./03-01-ai-chat.md) (プロジェクト作成時にAIセッション自動作成)
-- 連携: [03-02-buyer-vendor-chat.md](./03-02-buyer-vendor-chat.md) (start-discussionでチャットルーム作成)
+- 連携: [03-02-buyer-vendor-chat.md](./03-02-buyer-vendor-chat.md) (sendでチャットルーム作成)
 - 連携: [05-01-notifications.md](./05-01-notifications.md) (Vendor通知)
 
 ---
@@ -264,11 +292,10 @@ POST /api/projects/{id}/close
 ## 📝 メモ
 
 - **ChatGPT風UX**: プロジェクト作成と同時にAIチャットセッションを自動作成。ユーザーはすぐにAIとのチャットを開始できる
+- **計画書単位のVendor管理**: `project_plan_vendors` で各計画書バージョンをどのVendorに送信したかを管理。計画書v1はVendor A,B、v2はVendor A,Cのような運用が可能
+- **close = アーカイブ**: クローズしたプロジェクトは一覧からデフォルト除外。status=closedで明示的に取得可能
 - **Vendor一覧API**: Vendor選択時に利用。statusがactiveのVendor組織のみ返却
-- **Vendor側プロジェクト一覧**: project_vendors 経由で自組織が招待されたプロジェクトを取得
-- **start-discussion 処理**:
-  1. ステータス更新 (draft → in_discussion)
-  2. 各Vendor用チャットルーム作成 (chat_rooms, chat_room_members)
-  3. 通知処理トリガー (01-07連携)
-- ステータス遷移の検証をService層で実装
-- Vendorはプロジェクト閲覧のみ可能（編集不可）
+- **Vendor側プロジェクト一覧**: project_vendors 経由で自組織が招待されたプロジェクトを取得（in_discussion以降のみ）
+- **VendorはAIチャット不可**: Vendorはプロジェクトと計画書の閲覧、Buyer-Vendorチャットのみ可能
+- **send処理のトランザクション**: 複数テーブル操作のためRPC推奨
+- **chat_unread_count**: プロジェクト一覧で各プロジェクトのチャット未読数を返却。POST /read後はフロントエンドでローカル管理（再取得不要）

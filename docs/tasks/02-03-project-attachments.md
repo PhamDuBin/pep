@@ -1,5 +1,7 @@
 # [Task] Project Attachments / プロジェクト添付ファイル
 
+> **[保留] この機能は現時点で実装対象外です / This feature is currently out of scope.**
+
 ## 🔗 GitLab Issue
 - Link: [#33](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/33)
 

@@ -8,7 +8,9 @@
 ## 📝 概要
 
 プロジェクトごとにBuyerとVendor間でチャットを行う機能。
-チャットルームはプロジェクト × Vendor組織の組み合わせで作成され、未読管理も行う。
+チャットルームはプロジェクト × Vendor組織の組み合わせで、`POST /api/projects/{id}/send`（02-01）実行時に自動作成される。
+
+**Realtime対応**: Supabase Realtimeで新着メッセージをリアルタイム受信。
 
 ---
 
@@ -27,27 +29,29 @@
 ## 📊 処理フロー概要
 
 ```
-1. チャットルーム作成（プロジェクト送信開始時）
-   POST /api/projects/{id}/chat-rooms
-   └─→ chat_rooms INSERT
-   └─→ chat_room_members INSERT (Buyer/Vendor users)
+1. チャットルーム作成（02-01 send時に自動）
+   POST /api/projects/{id}/send
+   └─→ chat_rooms INSERT（新規Vendorのみ）
 
-2. メッセージ送信
-   POST /api/chat-rooms/{id}/messages
-   └─→ chat_messages INSERT
-   └─→ 相手側の未読更新
+2. チャットルーム一覧取得
+   GET /api/projects/{id}/chat-rooms
+   └─→ chat_rooms SELECT（unread_count含む）
 
 3. メッセージ一覧取得
    GET /api/chat-rooms/{id}/messages
    └─→ chat_messages SELECT
 
-4. 既読更新
+4. メッセージ送信
+   POST /api/chat-rooms/{id}/messages
+   └─→ chat_messages INSERT
+
+5. メッセージ受信（Realtime）
+   Supabase Realtime 購読
+   └─→ 新メッセージをリアルタイム受信
+
+6. 既読更新
    POST /api/chat-rooms/{id}/read
    └─→ chat_read_status UPSERT (last_read_at=now)
-
-5. 未読サマリ取得
-   GET /api/chat/unread-summary
-   └─→ 各ルームの未読件数集計
 ```
 
 ---
@@ -57,24 +61,23 @@
 ### Database (Supabase)
 
 - [ ] `chat_rooms` テーブル作成
-- [ ] `chat_room_members` テーブル作成
 - [ ] `chat_messages` テーブル作成
 - [ ] `chat_read_status` テーブル作成
 - [ ] RLSポリシー設定
-- [ ] Supabase Realtime設定
+- [ ] Supabase Realtime有効化（chat_messages）
 
 ### Backend (FastAPI)
 
 - [ ] `GET /api/projects/{id}/chat-rooms` - プロジェクトのチャットルーム一覧
-- [ ] `POST /api/projects/{id}/chat-rooms` - ルーム作成
 - [ ] `GET /api/chat-rooms/{id}` - ルーム詳細
 - [ ] `GET /api/chat-rooms/{id}/messages` - メッセージ一覧
 - [ ] `POST /api/chat-rooms/{id}/messages` - メッセージ送信
 - [ ] `POST /api/chat-rooms/{id}/read` - 既読更新
-- [ ] `GET /api/chat/unread-summary` - 未読サマリ
 - [ ] Pydantic schemas
 - [ ] Service層 (`chat_service.py`)
 - [ ] CRUD層 (`chat_crud.py`)
+
+**Note**: チャットルーム作成は `POST /api/projects/{id}/send`（02-01）で自動実行
 
 ### Tests
 
@@ -94,12 +97,13 @@
 
 | # | Test Case | Layer | Expected |
 |---|-----------|-------|----------|
-| 1 | チャットルーム作成成功 | Service | room_id 返却 |
-| 2 | メッセージ送信成功 | Service | message_id 返却 |
-| 3 | 既読更新成功 | Service | last_read_at 更新 |
-| 4 | 未読カウント計算 | Service | 正確な未読数 |
-| 5 | 他組織のルームアクセス | Service | Error |
-| 6 | LINE風既読数計算 | Service | 正確な既読数 |
+| 1 | ルーム一覧取得（Buyer） | Service | 全ルーム + unread_count |
+| 2 | ルーム一覧取得（Vendor） | Service | 自組織ルームのみ |
+| 3 | メッセージ送信成功 | Service | message_id 返却 |
+| 4 | 既読更新成功 | Service | last_read_at 更新 |
+| 5 | 未読カウント計算 | Service | 正確な未読数 |
+| 6 | 他組織のルームアクセス | Service | 403/404 Error |
+| 7 | LINE風既読数計算 | Service | 正確な既読数 |
 
 ---
 
@@ -109,7 +113,7 @@
 
 --------------------------------------------------
 
-`docs/tasks/010-buyer-vendor-chat.md` に基づき Buyer-Vendor Chat 機能を実装してください。
+`docs/tasks/03-02-buyer-vendor-chat.md` に基づき Buyer-Vendor Chat 機能を実装してください。
 
 ## 参照ドキュメント
 - UC: docs/UC/UC9.md, UC12.md
@@ -131,15 +135,6 @@
 
 UNIQUE制約: (project_id, vendor_org_id)
 
-`chat_room_members` テーブル:
-- id (UUID, PK)
-- room_id (UUID, FK → chat_rooms.id)
-- user_id (UUID, FK → profiles.id)
-- created_by (UUID, FK → profiles.id)
-- created_at, updated_at, updated_by, is_deleted
-
-UNIQUE制約: (room_id, user_id)
-
 `chat_messages` テーブル:
 - id (UUID, PK)
 - room_id (UUID, FK → chat_rooms.id)
@@ -160,68 +155,71 @@ UNIQUE制約: (room_id, user_id)
 
 UNIQUE制約: (room_id, user_id)
 
-### 2. FastAPI Endpoints
+### 2. Supabase Realtime設定
 
-GET /api/projects/{id}/chat-rooms
+```sql
+-- chat_messagesテーブルのRealtime有効化
+ALTER PUBLICATION supabase_realtime ADD TABLE chat_messages;
+```
+
+### 3. FastAPI Endpoints
+
+#### GET /api/projects/{id}/chat-rooms - ルーム一覧
 - Response: { rooms: ChatRoom[] }
-- Include unread_count for each room
+- 各ルームに `unread_count` を含む
+- **Buyer**: プロジェクトの全ルーム
+- **Vendor**: 自組織のルームのみ
 
-POST /api/projects/{id}/chat-rooms
-- Request: { vendor_org_id: UUID }
-- Create room + add members (Buyer org users + Vendor org users)
-- Response: ChatRoom
+#### GET /api/chat-rooms/{id} - ルーム詳細
+- Response: ChatRoom with project info
 
-GET /api/chat-rooms/{id}
-- Response: ChatRoom with members
-
-GET /api/chat-rooms/{id}/messages
-- Query: before?, limit (default 50)
+#### GET /api/chat-rooms/{id}/messages - メッセージ一覧
+- Query: before? (datetime), limit (default 50)
 - Response: { messages: Message[], has_more: boolean }
-- Order by created_at DESC (newest first)
-- Include read_count for each message (LINE-style)
+- Order by created_at DESC（最新から）
+- 各メッセージに `read_count`（LINE風既読数）を含む
 
-POST /api/chat-rooms/{id}/messages
-- Request: { content: string, message_type?: string, file_url?: string }
+#### POST /api/chat-rooms/{id}/messages - メッセージ送信
+- Request: { content, message_type?, file_url? }
 - Response: Message
 
-POST /api/chat-rooms/{id}/read
+#### POST /api/chat-rooms/{id}/read - 既読更新
 - Update last_read_at to now()
-- Response: { success: true }
+- Response: { success: true, last_read_at }
 
-GET /api/chat/unread-summary
-- Response: { total_unread: number, rooms: [{ room_id, unread_count }] }
-- Calculate: count of messages where created_at > last_read_at
+### 4. 未読カウント計算
 
-### 3. 既読カウント計算（LINE風）
-
-各メッセージの既読数を計算:
 ```sql
+-- ユーザーの未読件数
+SELECT COUNT(*) FROM chat_messages
+WHERE room_id = :room_id
+  AND created_at > COALESCE(:last_read_at, '1970-01-01')
+  AND sender_id != :user_id
+```
+
+### 5. 既読カウント計算（LINE風）
+
+```sql
+-- このメッセージを既読にしたユーザー数（送信者除く）
 SELECT COUNT(*) FROM chat_read_status
 WHERE room_id = :room_id
   AND last_read_at >= :message_created_at
   AND user_id != :sender_id
 ```
 
-### 4. Realtime (Optional - Phase 2)
-
-Supabase Realtime で新着メッセージを購読:
-- Channel: `chat_room:{room_id}`
-- Event: INSERT on chat_messages
-
-### 5. レイヤー構成
+### 6. レイヤー構成
 - api/routes/chat.py (Controller)
 - services/chat_service.py (Business Logic)
 - crud/chat_crud.py (Data Access)
 - schemas/chat.py (Pydantic models)
 
-### 6. RLSポリシー
+### 7. RLSポリシー
 - chat_rooms: buyer_org_id = 自組織 OR vendor_org_id = 自組織
-- chat_room_members: room経由で自組織のルームのみ
 - chat_messages: room経由で自組織のルームのみ
 - chat_read_status: user_id = 自分
 
 ## 制約
-- メンバーは Buyer組織全員 + Vendor組織全員
+- チャットルームは02-01のsend時に自動作成
 - メッセージは削除不可（soft delete のみ）
 - ファイル送信時は file_url に Storage URL を設定
 - 型ヒント必須
@@ -239,7 +237,8 @@ Supabase Realtime で新着メッセージを購読:
 ## ✅ 完了条件
 
 - [ ] マイグレーションファイルが存在
-- [ ] チャットルーム作成が動作
+- [ ] **Supabase Realtimeが有効化されている**
+- [ ] チャットルーム一覧取得が動作（unread_count含む）
 - [ ] メッセージ送信・取得が動作
 - [ ] 既読更新が動作
 - [ ] 未読カウントが正しく計算される
@@ -253,14 +252,17 @@ Supabase Realtime で新着メッセージを購読:
 
 ## 🔗 関連タスク
 
-- 前提: [02-01-project-management.md](./02-01-project-management.md)
-- 関連: [05-01-notifications.md](./05-01-notifications.md) (新着通知)
+- 前提: [02-01-project-management.md](./02-01-project-management.md)（send時にチャットルーム作成）
+- 関連: [05-01-notifications.md](./05-01-notifications.md)（新着通知）
 
 ---
 
 ## 📝 メモ
 
-- チャットルームはプロジェクト送信開始時に自動作成
-- メンバーは組織に所属するアクティブユーザー全員
-- 新メンバー追加時はchat_room_membersに追加必要
-- Realtime機能はPhase 2で実装
+- **チャットルーム自動作成**: 02-01の`POST /api/projects/{id}/send`実行時に自動作成
+- **Realtime対応**: Supabase Realtimeで新着メッセージをリアルタイム受信（フロントエンド実装）
+- **未読管理**:
+  - プロジェクト単位: `GET /api/projects` の `chat_unread_count`（02-01）
+  - ルーム単位: `GET /api/projects/{id}/chat-rooms` の `unread_count`
+- **LINE風既読**: 各メッセージに `read_count`（何人が既読か）
+- **before パラメータ**: 無限スクロール用。指定日時より前のメッセージを取得
