@@ -70,3 +70,113 @@ async def test_update_organization_status_returns_none_when_no_row(crud, mock_su
     mock_supabase.table.return_value.update.return_value.eq.return_value.execute.return_value.data = []
     result = await crud.update_organization_status("org-none", "active", "admin-id")
     assert result is None
+
+
+# --- Organization settings tests (Task 01-10) ---
+
+
+@pytest.mark.asyncio
+async def test_update_by_id_returns_updated(crud, mock_supabase):
+    """update_by_id: updates name/billing_email and returns updated row."""
+    updated_row = {"id": "org-1", "name": "New Name", "billing_email": "b@example.com"}
+    mock_supabase.table.return_value.update.return_value.eq.return_value.execute.return_value.data = [
+        updated_row
+    ]
+    result = await crud.update_by_id(
+        "org-1", {"name": "New Name", "billing_email": "b@example.com"}, "user-1"
+    )
+    assert result == updated_row
+    call_args = mock_supabase.table.return_value.update.call_args[0][0]
+    assert call_args["name"] == "New Name"
+    assert call_args["billing_email"] == "b@example.com"
+    assert call_args["updated_by"] == "user-1"
+
+
+@pytest.mark.asyncio
+async def test_get_buyer_details_returns_row(crud, mock_supabase):
+    """get_buyer_details: returns row when found."""
+    row = {"org_id": "org-1", "industry": "IT", "purpose": "RFI"}
+    mock_supabase.table.return_value.select.return_value.eq.return_value.execute.return_value.data = [row]
+    result = await crud.get_buyer_details("org-1")
+    assert result == row
+    mock_supabase.table.assert_called_with("buyer_org_details")
+
+
+@pytest.mark.asyncio
+async def test_get_buyer_details_returns_none(crud, mock_supabase):
+    """get_buyer_details: returns None when not found."""
+    mock_supabase.table.return_value.select.return_value.eq.return_value.execute.return_value.data = []
+    result = await crud.get_buyer_details("org-1")
+    assert result is None
+
+
+@pytest.mark.asyncio
+async def test_get_vendor_details_returns_row(crud, mock_supabase):
+    """get_vendor_details: returns row when found."""
+    row = {"org_id": "org-1", "business_description": "Dev"}
+    mock_supabase.table.return_value.select.return_value.eq.return_value.execute.return_value.data = [row]
+    result = await crud.get_vendor_details("org-1")
+    assert result == row
+    mock_supabase.table.assert_called_with("vendor_org_details")
+
+
+@pytest.mark.asyncio
+async def test_update_details_buyer_calls_upsert_buyer(crud, mock_supabase):
+    """update_details: buyer delegates to upsert_buyer_details."""
+    updated = {"org_id": "org-1", "purpose": "new"}
+    mock_supabase.table.return_value.select.return_value.eq.return_value.execute.return_value.data = [{"org_id": "org-1"}]
+    mock_supabase.table.return_value.update.return_value.eq.return_value.execute.return_value.data = [updated]
+    result = await crud.update_details("org-1", "buyer", {"purpose": "new"}, "user-1")
+    assert result["purpose"] == "new"
+    mock_supabase.table.assert_any_call("buyer_org_details")
+
+
+@pytest.mark.asyncio
+async def test_update_details_vendor_calls_upsert_vendor(crud, mock_supabase):
+    """update_details: vendor delegates to upsert_vendor_details."""
+    updated = {"org_id": "org-1", "business_description": "new"}
+    mock_supabase.table.return_value.select.return_value.eq.return_value.execute.return_value.data = [{"org_id": "org-1"}]
+    mock_supabase.table.return_value.update.return_value.eq.return_value.execute.return_value.data = [updated]
+    result = await crud.update_details("org-1", "vendor", {"business_description": "new"}, "user-1")
+    assert result["business_description"] == "new"
+    mock_supabase.table.assert_any_call("vendor_org_details")
+
+
+@pytest.mark.asyncio
+async def test_update_details_unknown_type_raises(crud):
+    """update_details: unknown org_type raises ValueError."""
+    with pytest.raises(ValueError, match="Unknown org_type"):
+        await crud.update_details("org-1", "platform", {}, "user-1")
+
+
+@pytest.mark.asyncio
+async def test_upsert_buyer_details_update_existing(crud, mock_supabase):
+    """upsert_buyer_details: updates when row exists."""
+    existing = {"org_id": "org-1", "purpose": "old"}
+    updated = {"org_id": "org-1", "purpose": "new"}
+    mock_supabase.table.return_value.select.return_value.eq.return_value.execute.return_value.data = [existing]
+    mock_supabase.table.return_value.update.return_value.eq.return_value.execute.return_value.data = [updated]
+    result = await crud.upsert_buyer_details("org-1", {"purpose": "new"}, "user-1")
+    assert result["purpose"] == "new"
+
+
+@pytest.mark.asyncio
+async def test_upsert_buyer_details_insert_when_missing(crud, mock_supabase):
+    """upsert_buyer_details: inserts when no row."""
+    mock_supabase.table.return_value.select.return_value.eq.return_value.execute.return_value.data = []
+    inserted = {"org_id": "org-1", "purpose": "new"}
+    mock_supabase.table.return_value.insert.return_value.execute.return_value.data = [inserted]
+    result = await crud.upsert_buyer_details("org-1", {"purpose": "new"}, "user-1")
+    mock_supabase.table.return_value.insert.assert_called_once()
+    assert result["purpose"] == "new"
+
+
+@pytest.mark.asyncio
+async def test_upsert_vendor_details_update_existing(crud, mock_supabase):
+    """upsert_vendor_details: updates when row exists."""
+    existing = {"org_id": "org-1", "business_description": "old"}
+    updated = {"org_id": "org-1", "business_description": "new"}
+    mock_supabase.table.return_value.select.return_value.eq.return_value.execute.return_value.data = [existing]
+    mock_supabase.table.return_value.update.return_value.eq.return_value.execute.return_value.data = [updated]
+    result = await crud.upsert_vendor_details("org-1", {"business_description": "new"}, "user-1")
+    assert result["business_description"] == "new"
