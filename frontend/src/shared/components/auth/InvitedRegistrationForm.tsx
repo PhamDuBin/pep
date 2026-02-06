@@ -1,19 +1,32 @@
 "use client";
 
+// =============================================================================
+// INVITED REGISTRATION FORM COMPONENT
+// =============================================================================
+// Registration form for invited users (with name fields)
+// Design matches Figma 100%
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-// import { authService } from '@/shared/services'; // TODO: Enable when ready
 import type { UserType } from "@/shared/types/auth";
 
-interface RegistrationFormProps {
+interface InvitedRegistrationFormProps {
   userType: UserType;
+  invitedEmail?: string; // Pre-filled email from invitation
 }
 
-export function RegistrationForm({ userType }: RegistrationFormProps) {
+export function InvitedRegistrationForm({
+  userType,
+  invitedEmail = "",
+}: InvitedRegistrationFormProps) {
   const router = useRouter();
   const [formData, setFormData] = useState({
-    email: "",
+    email: invitedEmail,
+    lastName: "",
+    firstName: "",
+    lastNameKana: "",
+    firstNameKana: "",
     password: "",
     passwordConfirm: "",
     acceptTerms: false,
@@ -29,8 +42,8 @@ export function RegistrationForm({ userType }: RegistrationFormProps) {
   const loginPath = userType === "buyer" ? "/buyer/login" : "/vendor/login";
   const confirmPath =
     userType === "buyer"
-      ? "/registration/buyer/confirm"
-      : "/registration/vendor/confirm";
+      ? "/buyer/register-confirm"
+      : "/vendor/register-confirm";
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -46,6 +59,10 @@ export function RegistrationForm({ userType }: RegistrationFormProps) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email))
       return "有効なメールアドレスを入力してください";
+    if (!formData.lastName) return "姓を入力してください";
+    if (!formData.firstName) return "名を入力してください";
+    if (!formData.lastNameKana) return "姓（フリガナ）を入力してください";
+    if (!formData.firstNameKana) return "名（フリガナ）を入力してください";
     if (!formData.password) return "パスワードを入力してください";
     if (formData.password.length < 8)
       return "パスワードは8文字以上である必要があります";
@@ -68,9 +85,7 @@ export function RegistrationForm({ userType }: RegistrationFormProps) {
     setIsLoading(true);
     setError(null);
     try {
-      // TODO: Integrate with Supabase Auth later
-      // await authService.signUp(formData, userType);
-
+      // TODO: Integrate with backend API
       // Mock: Simulate API call delay
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
@@ -138,8 +153,72 @@ export function RegistrationForm({ userType }: RegistrationFormProps) {
                     className="w-full font-normal text-[#333] text-[16px] bg-transparent border-none outline-none placeholder:text-[#b9b9b9]"
                     value={formData.email}
                     onChange={handleChange}
-                    disabled={isLoading}
+                    disabled={isLoading || !!invitedEmail}
                   />
+                </div>
+              </div>
+
+              {/* Name Fields (Kanji) */}
+              <div className="flex flex-col gap-[10px] items-start justify-center w-full">
+                <div className="flex items-center w-[200px]">
+                  <p className="font-normal text-[#333] text-[16px]">氏名</p>
+                </div>
+                <div className="flex gap-[10px] items-start w-full">
+                  <div className="bg-white flex flex-1 items-center p-[10px] rounded">
+                    <input
+                      type="text"
+                      name="lastName"
+                      placeholder="姓"
+                      className="w-full font-normal text-[#333] text-[16px] bg-transparent border-none outline-none placeholder:text-[#b9b9b9]"
+                      value={formData.lastName}
+                      onChange={handleChange}
+                      disabled={isLoading}
+                    />
+                  </div>
+                  <div className="bg-white flex flex-1 items-center p-[10px] rounded">
+                    <input
+                      type="text"
+                      name="firstName"
+                      placeholder="名"
+                      className="w-full font-normal text-[#333] text-[16px] bg-transparent border-none outline-none placeholder:text-[#b9b9b9]"
+                      value={formData.firstName}
+                      onChange={handleChange}
+                      disabled={isLoading}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Name Fields (Furigana) */}
+              <div className="flex flex-col gap-[10px] items-start justify-center w-full">
+                <div className="flex items-center w-[200px]">
+                  <p className="font-normal text-[#333] text-[16px]">
+                    氏名（フリガナ）
+                  </p>
+                </div>
+                <div className="flex gap-[10px] items-start w-full">
+                  <div className="bg-white flex flex-1 items-center p-[10px] rounded">
+                    <input
+                      type="text"
+                      name="lastNameKana"
+                      placeholder="姓（フリガナ）"
+                      className="w-full font-normal text-[#333] text-[16px] bg-transparent border-none outline-none placeholder:text-[#b9b9b9]"
+                      value={formData.lastNameKana}
+                      onChange={handleChange}
+                      disabled={isLoading}
+                    />
+                  </div>
+                  <div className="bg-white flex flex-1 items-center p-[10px] rounded">
+                    <input
+                      type="text"
+                      name="firstNameKana"
+                      placeholder="名（フリガナ）"
+                      className="w-full font-normal text-[#333] text-[16px] bg-transparent border-none outline-none placeholder:text-[#b9b9b9]"
+                      value={formData.firstNameKana}
+                      onChange={handleChange}
+                      disabled={isLoading}
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -233,12 +312,13 @@ export function RegistrationForm({ userType }: RegistrationFormProps) {
                   <span className="text-[#066a9e] underline decoration-solid">
                     利用規約・プライバシーポリシー
                   </span>
-                  <span style={{ lineHeight: "normal" }}>に同意する</span>
+                  <span>に同意する</span>
                 </p>
               </div>
 
               {/* Submit Button */}
               <button
+                type="submit"
                 className="!bg-[#066a9e] flex items-center px-[15px] py-[10px] rounded-xl modal-btn-primary"
                 disabled={isLoading}
               >
@@ -256,9 +336,7 @@ export function RegistrationForm({ userType }: RegistrationFormProps) {
             {/* Login Link */}
             <div className="border-t flex items-center justify-center pt-[15px] w-full">
               <p className="font-normal text-[#333] text-[16px]">
-                <span style={{ lineHeight: "normal" }}>
-                  既にアカウントをお持ちの方は
-                </span>
+                <span>既にアカウントをお持ちの方は</span>
                 <a href={loginPath} className="font-bold text-[#066a9e]">
                   こちら
                 </a>

@@ -5,3 +5,4 @@
 
 export { RegistrationForm } from './RegistrationForm';
 export { RegistrationConfirmation } from './RegistrationConfirmation';
+export { InvitedRegistrationForm } from './InvitedRegistrationForm';
