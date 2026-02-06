@@ -32,3 +32,16 @@ export interface AuthError {
   code?: string;
   status?: number;
 }
+
+export interface PaymentsFormData {
+  cardNumber: string;
+  expirationDate: string;
+  securityCode: string;
+  cardholderName: string;
+  country: string;
+  postalCode: string;
+  prefecture: string;
+  city: string;
+  streetAddress: string;
+  buildingName: string;
+}

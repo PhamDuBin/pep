@@ -5,6 +5,8 @@
 export { Header } from "./Header";
 export { Pagination } from "./Pagination";
 export { PageTransition } from "./PageTransition";
+export { FooterRegister } from "./FooterRegister";
+export { LayoutRegister } from "./LayoutRegister";
 
 // =============================================================================
 // RE-EXPORTS FOR BACKWARD COMPATIBILITY
