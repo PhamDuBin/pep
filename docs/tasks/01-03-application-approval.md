@@ -1,5 +1,11 @@
 # [Task] Application Approval / 利用申請承認
 
+> **⚠️ 廃止予定 / DEPRECATED**
+>
+> このタスクは [06-01-admin-application-approval.md](./06-01-admin-application-approval.md) に統合されました。
+> 既存の実装は06-01の移行タスクとして管理者専用認証に移行します。
+> 新規開発は06-01を参照してください。
+
 ## 🔗 GitLab Issue
 - Link: https://gitlab.i-stech.net:9080/bbs/pep/-/issues/27
 

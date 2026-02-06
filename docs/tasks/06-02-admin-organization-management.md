@@ -1,7 +1,7 @@
 # [Task] Admin Organization Management / 管理者：組織管理
 
 ## 🔗 GitLab Issue
-- Link: TBD
+- Link: [#54](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/54)
 
 ---
 

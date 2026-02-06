@@ -4,7 +4,7 @@
 > Phase 3 として将来的に検討
 
 ## 🔗 GitLab Issue
-- Link: TBD
+- Link: [#58](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/58)
 
 ---
 

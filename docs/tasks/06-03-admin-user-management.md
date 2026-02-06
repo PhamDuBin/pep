@@ -3,7 +3,7 @@
 > **[Phase 2]** MVP後に実装予定
 
 ## 🔗 GitLab Issue
-- Link: TBD
+- Link: [#55](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/55)
 
 ---
 

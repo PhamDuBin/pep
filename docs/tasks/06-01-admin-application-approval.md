@@ -1,7 +1,7 @@
 # [Task] Admin Application Approval / 管理者：申請承認
 
 ## 🔗 GitLab Issue
-- Link: TBD
+- Link: [#53](https://gitlab.i-stech.net:9080/bbs/pep/-/issues/53)
 
 ---
 
@@ -54,6 +54,17 @@
 ---
 
 ## 📋 スコープ
+
+### 移行タスク（01-03からの統合）
+
+> **Note**: 01-03-application-approval.md の実装を本タスクに統合する
+
+- [ ] 既存の `api/routes/admin/applications.py` を管理者専用認証に変更
+- [ ] 既存の `services/application_service.py` を `admin_application_service.py` にリネーム/移行
+- [ ] 既存の `crud/application_crud.py` を `admin_crud.py` に統合
+- [ ] `is_platform_admin` 判定を `admin_users` テーブル認証に置き換え
+- [ ] 既存のテストを新しい認証方式に対応
+- [ ] 01-03-application-approval.md を廃止（本タスクに統合済みの旨を記載）
 
 ### Database (Supabase)
 
@@ -201,13 +212,14 @@
 
 ## 🔗 関連タスク
 
-- 連携: [01-03-application-approval.md](./01-03-application-approval.md)（ユーザー側の申請）
+- **統合元**: [01-03-application-approval.md](./01-03-application-approval.md)（既存実装を本タスクに移行）
 - 連携: [05-01-notifications.md](./05-01-notifications.md)（承認/却下通知）
 
 ---
 
 ## 📝 メモ
 
+- **01-03からの移行**: 既存の承認機能（`is_platform_admin`ベース）を管理者専用認証に移行
 - **専用ログイン**: 管理者はメインシステムとは別の認証
 - **admin_users**: Supabase Authは使用せず、独自テーブルで管理
 - **JWT分離**: 管理者JWTと一般ユーザーJWTは異なるsecretを使用
