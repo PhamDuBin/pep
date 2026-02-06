@@ -29,8 +29,8 @@ export function RegistrationForm({ userType }: RegistrationFormProps) {
   const loginPath = userType === "buyer" ? "/buyer/login" : "/vendor/login";
   const confirmPath =
     userType === "buyer"
-      ? "/registration/buyer/confirm"
-      : "/registration/vendor/confirm";
+      ? "/buyer/register/send-email"
+      : "/vendor/register/send-email";
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
