@@ -7,6 +7,7 @@ export { Pagination } from "./Pagination";
 export { PageTransition } from "./PageTransition";
 export { FooterRegister } from "./FooterRegister";
 export { LayoutRegister } from "./LayoutRegister";
+export { TrialBanner } from "./TrialBanner";
 
 // =============================================================================
 // RE-EXPORTS FOR BACKWARD COMPATIBILITY

@@ -36,7 +36,7 @@ export default function BuyerSignInPage() {
    * Handle forgot password click
    */
   const handleForgotPassword = () => {
-    router.push("/buyer/signin/forgot-password");
+    router.push("/buyer/forgot-password");
   };
 
   return (

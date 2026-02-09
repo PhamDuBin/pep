@@ -8,3 +8,4 @@ export * from "./project.model";
 export * from "./tab.model";
 export * from "./payment.model";
 export * from "./auth.model";
+export * from "./subscription.model";

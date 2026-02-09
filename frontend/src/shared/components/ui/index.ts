@@ -4,13 +4,13 @@
 // Central export for shared UI components.
 // Note: Feature-specific components have been moved to their respective features.
 
-export { Modal } from "./Modal";
-export type { ModalProps, ModalSize } from "./Modal";
-export { EmailChangeModal } from "./Modal";
-export { AvatarChangeModal } from "./Modal";
-export { InviteMemberModal } from "./Modal";
-export { DeleteConfirmModal } from "./Modal";
-export { AddPaymentMethodModal } from "./Modal";
+export { Modal } from "./Modal/Modal";
+export type { ModalProps, ModalSize } from "./Modal/Modal";
+export { EmailChangeModal } from "./Modal/EmailChangeModal";
+export { AvatarChangeModal } from "./Modal/AvatarChangeModal";
+export { InviteMemberModal } from "./Modal/InviteMemberModal";
+export { DeleteConfirmModal } from "./Modal/DeleteConfirmModal";
+export { AddPaymentMethodModal } from "./Modal/AddPaymentMethodModal";
 // Note: InfoModal moved to vendor/shared/components (only used by vendor)
 
 // Loading (used by multiple features)

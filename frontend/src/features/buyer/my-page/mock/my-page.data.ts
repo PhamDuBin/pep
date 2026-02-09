@@ -16,7 +16,12 @@ export const ADMIN_USER_MOCK: UserProfile = {
   email: "i-tanaka@a.co.jp",
   avatarColor: "#8ec5d0",
   role: "admin",
+  subscriptionPlan: "pro",
 };
+
+// Calculate trial end date (5 days from now for testing)
+const trialEndDate = new Date();
+trialEndDate.setDate(trialEndDate.getDate() + 5);
 
 export const MEMBER_USER_MOCK: UserProfile = {
   id: "user-member-1",
@@ -25,6 +30,8 @@ export const MEMBER_USER_MOCK: UserProfile = {
   email: "z-azuma@b.co.jp",
   avatarColor: "#8ec5d0",
   role: "member",
+  subscriptionPlan: "trial",
+  trialEndDate: trialEndDate.toISOString(),
 };
 
 export const PAYMENT_INFO_MOCK: PaymentInfo = {

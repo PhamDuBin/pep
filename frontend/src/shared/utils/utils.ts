@@ -20,7 +20,7 @@ export function createTimeout(ms: number): Promise<never> {
  */
 export function formatDate(
   input: Date | string | number | null | undefined,
-  format: DateFormat = "YYYY/MM/DD HH:MM"
+  format: DateFormat = "YYYY/MM/DD HH:MM",
 ): string {
   if (input === null || input === undefined) {
     return "";
@@ -47,4 +47,21 @@ export function formatDate(
     default:
       return `${year}/${month}/${day} ${hours}:${minutes}`;
   }
+}
+
+/**
+ * Calculate remaining days for trial period
+ * @param trialEndDate ISO date string
+ * @returns Number of days remaining (0 or negative if expired)
+ */
+export function calculateTrialDaysRemaining(trialEndDate: string): number {
+  const endDate = new Date(trialEndDate);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  endDate.setHours(0, 0, 0, 0);
+
+  const diffTime = endDate.getTime() - today.getTime();
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+  return diffDays;
 }

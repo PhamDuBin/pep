@@ -3,6 +3,7 @@
 // =============================================================================
 
 import { UserRole } from "../types";
+import { SubscriptionPlan } from "../../../../shared/types/subcription";
 
 export interface UserProfile {
   id: string;
@@ -11,6 +12,8 @@ export interface UserProfile {
   email: string;
   avatarColor: string;
   role: UserRole;
+  subscriptionPlan?: SubscriptionPlan;
+  trialEndDate?: string; // ISO date string for trial users
 }
 
 export interface AvatarColorOption {

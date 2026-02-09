@@ -36,7 +36,7 @@ export default function VendorSignInPage() {
    * Handle forgot password click
    */
   const handleForgotPassword = () => {
-    router.push("/vendor/signin/forgot-password");
+    router.push("/vendor/forgot-password");
   };
 
   return (

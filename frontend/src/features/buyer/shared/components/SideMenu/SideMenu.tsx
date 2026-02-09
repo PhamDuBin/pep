@@ -6,7 +6,9 @@ import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSideMenu, useProjects } from "@/shared/contexts";
 import { Project } from "@/shared/models";
+import { SUBSCRIPTION_LABELS } from "@/shared/constants/subcription";
 import { ContextMenu, ContextMenuItem } from "@/shared/components";
+import { MEMBER_USER_MOCK } from "@/features/buyer/my-page/mock";
 
 // Animation variants - width values must match _tokens.scss
 const SIDEBAR_WIDTH = 200; // $sidebar-width in _tokens.scss
@@ -124,7 +126,7 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
 
   const handleContextMenuClick = (
     event: React.MouseEvent<HTMLButtonElement>,
-    projectId: string
+    projectId: string,
   ) => {
     event.stopPropagation();
     const buttonRect = event.currentTarget.getBoundingClientRect();
@@ -139,7 +141,11 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
   };
 
   const handleCloseContextMenu = () => {
-    setContextMenuState({ isOpen: false, projectId: null, position: { x: 0, y: 0 } });
+    setContextMenuState({
+      isOpen: false,
+      projectId: null,
+      position: { x: 0, y: 0 },
+    });
   };
 
   const handleArchiveProject = (projectId: string) => {
@@ -185,7 +191,9 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
       {/* Top Section (Frame 14) */}
       <div className="flex flex-col items-start gap-[25px] self-stretch overflow-hidden">
         {/* Menu Toggle */}
-        <div className={`flex flex-col gap-[3px] w-full items-end px-[10px] ${isCollapsed ? "items-center" : ""}`}>
+        <div
+          className={`flex flex-col gap-[3px] w-full items-end px-[10px] ${isCollapsed ? "items-center" : ""}`}
+        >
           <motion.button
             className="bg-transparent border-none p-0 cursor-pointer transition-opacity duration-200 hover:opacity-70"
             onClick={handleToggleMenu}
@@ -216,7 +224,12 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
             whileTap={{ scale: 0.98 }}
           >
             <div className="w-[20px] h-[20px] bg-[#066a9e] rounded-full flex items-center justify-center flex-shrink-0">
-              <Image src="/assets/icons/plus.svg" alt="Plus" width={10} height={10} />
+              <Image
+                src="/assets/icons/plus.svg"
+                alt="Plus"
+                width={10}
+                height={10}
+              />
             </div>
             <AnimatePresence mode="wait">
               {!isCollapsed && (
@@ -234,9 +247,10 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
           </motion.button>
         </div>
 
-
         {/* RFP Section */}
-        <div className={`flex flex-col gap-[3px] w-full ${isCollapsed ? "items-center" : ""}`}>
+        <div
+          className={`flex flex-col gap-[3px] w-full ${isCollapsed ? "items-center" : ""}`}
+        >
           <AnimatePresence mode="wait">
             {!isCollapsed && (
               <motion.div
@@ -245,12 +259,15 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
                 animate="visible"
                 exit="hidden"
               >
-                <span className="text-[14px] text-[#808080] p-[0_10px]">プロジェクト計画書</span>
+                <span className="text-[14px] text-[#808080] p-[0_10px]">
+                  プロジェクト計画書
+                </span>
               </motion.div>
             )}
           </AnimatePresence>
           <motion.div
-            className={`flex items-center gap-[7px] p-[5px_10px] cursor-pointer rounded-[4px] transition-colors duration-200 ${isCollapsed
+            className={`flex items-center gap-[7px] p-[5px_10px] cursor-pointer rounded-[4px] transition-colors duration-200 ${
+              isCollapsed
                 ? "justify-center m-0 w-full p-[5px]"
                 : "m-[0_0px] w-full"
             } ${isArchiveActive ? "bg-[#f5f5f5]" : "hover:bg-[#f9fafb]"}`}
@@ -281,7 +298,9 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
         </div>
 
         {/* PROJECT Section */}
-        <div className={`flex flex-col gap-[5px] ${isCollapsed ? "items-center w-full" : ""}`}>
+        <div
+          className={`flex flex-col gap-[5px] ${isCollapsed ? "items-center w-full" : ""}`}
+        >
           <AnimatePresence mode="wait">
             {!isCollapsed && (
               <motion.div
@@ -297,8 +316,9 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
 
           {/* Search */}
           <motion.div
-            className={`flex items-center gap-[7px] p-[7px_10px] cursor-pointer rounded-[4px] transition-colors duration-200 hover:bg-[#f9fafb] ${isCollapsed ? "justify-center m-0 p-[7px_10px] w-full" :""
-              }`}
+            className={`flex items-center gap-[7px] p-[7px_10px] cursor-pointer rounded-[4px] transition-colors duration-200 hover:bg-[#f9fafb] ${
+              isCollapsed ? "justify-center m-0 p-[7px_10px] w-full" : ""
+            }`}
             whileHover={{ scale: 1.02, x: isCollapsed ? 0 : 3 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -336,10 +356,9 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
                 {projects.map((project, index) => (
                   <motion.div
                     key={project.id}
-                    className={`group flex items-center gap-[3px] p-[5px_10px] rounded-[4px] cursor-pointer transition-colors duration-200 ${project.isSelected
-                        ? "bg-[#e6f3f5]"
-                        : "hover:bg-[#f9fafb]"
-                      }`}
+                    className={`group flex items-center gap-[3px] p-[5px_10px] rounded-[4px] cursor-pointer transition-colors duration-200 ${
+                      project.isSelected ? "bg-[#e6f3f5]" : "hover:bg-[#f9fafb]"
+                    }`}
                     onClick={() => handleSelectProject(project)}
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -359,8 +378,9 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
                       className="flex-shrink-0"
                     />
                     <span
-                      className={`text-[14px] flex-1 overflow-hidden text-ellipsis whitespace-nowrap font-normal ${project.isSelected ? "text-[#066a9e]" : "text-[#333333]"
-                        }`}
+                      className={`text-[14px] flex-1 overflow-hidden text-ellipsis whitespace-nowrap font-normal ${
+                        project.isSelected ? "text-[#066a9e]" : "text-[#333333]"
+                      }`}
                     >
                       {project.name}
                     </span>
@@ -386,12 +406,13 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
       </div>
 
       {/* Bottom Section (Frame 15) */}
-      <div className={`flex flex-col justify-center gap-[5px] w-full self-stretch ${isCollapsed ? "items-center" : ""}`}>
+      <div
+        className={`flex flex-col justify-center gap-[5px] w-full self-stretch ${isCollapsed ? "items-center" : ""}`}
+      >
         {/* User List */}
         <motion.div
-          className={`flex items-center p-[7px_10px] cursor-pointer rounded-[4px] transition-colors duration-200 gap-[7px] ${isCollapsed
-              ? "justify-center m-0 w-full p-[7px_5px]"
-              : ""
+          className={`flex items-center p-[7px_10px] cursor-pointer rounded-[4px] transition-colors duration-200 gap-[7px] ${
+            isCollapsed ? "justify-center m-0 w-full p-[7px_5px]" : ""
           } ${isUserListActive ? "bg-[#f5f5f5]" : "hover:bg-[#f5f5f5]"}`}
           onClick={handleUserListClick}
           whileHover={{ scale: 1.02, x: isCollapsed ? 0 : 3 }}
@@ -428,9 +449,8 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
 
         {/* User Profile */}
         <motion.div
-          className={`flex items-center p-[5px_10px] cursor-pointer rounded-[4px] transition-colors duration-200 gap-[7px] ${isCollapsed
-              ? "justify-center m-0 w-full p-[5px]"
-              : ""
+          className={`flex items-center p-[5px_10px] cursor-pointer rounded-[4px] transition-colors duration-200 gap-[7px] ${
+            isCollapsed ? "justify-center m-0 w-full p-[5px]" : ""
           } ${isMyPageActive ? "bg-[#f5f5f5]" : "hover:bg-[#f9fafb]"}`}
           onClick={handleMyPageClick}
           whileHover={{ scale: 1.02, x: isCollapsed ? 0 : 3 }}
@@ -440,19 +460,30 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
             className="w-[30px] h-[30px] bg-[#8ec5d0] rounded-full flex items-center justify-center flex-shrink-0"
             whileHover={{ scale: 1.1 }}
           >
-            <span className="text-[13px] text-[#ffffff]">TY</span>
+            <span className="text-[13px] text-[#ffffff]">
+              {MEMBER_USER_MOCK.initials}
+            </span>
           </motion.div>
           <AnimatePresence mode="wait">
             {!isCollapsed && (
-              <motion.span
-                className={`text-[13px] ${isMyPageActive ? "text-[#333333]" : "text-[#333333]"}`}
-                variants={textVariants}
+              <motion.div
+                className="flex flex-col items-start"
                 initial="hidden"
                 animate="visible"
                 exit="hidden"
               >
-                山田 太郎
-              </motion.span>
+                <span className="text-[13px] text-[#333333]">
+                  {MEMBER_USER_MOCK.name}
+                </span>
+                {MEMBER_USER_MOCK.subscriptionPlan && (
+                  <span
+                    className={`text-[14px] font-normal text-[#066a9e] 
+                    }`}
+                  >
+                    {SUBSCRIPTION_LABELS[MEMBER_USER_MOCK.subscriptionPlan]}
+                  </span>
+                )}
+              </motion.div>
             )}
           </AnimatePresence>
         </motion.div>
