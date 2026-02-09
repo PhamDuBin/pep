@@ -6,3 +6,6 @@
 export { RegistrationForm } from './RegistrationForm';
 export { RegistrationConfirmation } from './RegistrationConfirmation';
 export { InvitedRegistrationForm } from './InvitedRegistrationForm';
+
+export { SignInForm } from "./SignInForm";
+export { ForgotPasswordForm } from "./ForgotPasswordForm";
