@@ -1,10 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSideMenu, useProjects } from "@/shared/contexts";
 import { Project } from "@/shared/models";
+import { ContextMenu, ContextMenuItem } from "@/shared/components";
 
 // Animation variants - width values must match _tokens.scss
 const SIDEBAR_WIDTH = 200; // $sidebar-width in _tokens.scss
@@ -85,6 +87,11 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
   const pathname = usePathname();
   const { isCollapsed, toggle } = useSideMenu();
   const { projects, selectProject } = useProjects();
+  const [contextMenuState, setContextMenuState] = useState<{
+    isOpen: boolean;
+    projectId: string | null;
+    position: { x: number; y: number };
+  }>({ isOpen: false, projectId: null, position: { x: 0, y: 0 } });
 
   const isArchiveActive = pathname.includes("/buyer/archive");
   const isMyPageActive = pathname.includes("/buyer/my-page");
@@ -114,6 +121,59 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
   const handleUserListClick = () => {
     router.push("/buyer/user-list");
   };
+
+  const handleContextMenuClick = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    projectId: string
+  ) => {
+    event.stopPropagation();
+    const buttonRect = event.currentTarget.getBoundingClientRect();
+    setContextMenuState({
+      isOpen: true,
+      projectId,
+      position: {
+        x: buttonRect.right + 8,
+        y: buttonRect.top,
+      },
+    });
+  };
+
+  const handleCloseContextMenu = () => {
+    setContextMenuState({ isOpen: false, projectId: null, position: { x: 0, y: 0 } });
+  };
+
+  const handleArchiveProject = (projectId: string) => {
+    console.log("Archive project:", projectId);
+    // TODO: Implement archive functionality
+  };
+
+  const handleRenameProject = (projectId: string) => {
+    console.log("Rename project:", projectId);
+    // TODO: Implement rename functionality
+  };
+
+  const handleDeleteProject = (projectId: string) => {
+    console.log("Delete project:", projectId);
+    // TODO: Implement delete functionality
+  };
+
+  const getContextMenuItems = (projectId: string): ContextMenuItem[] => [
+    {
+      label: "アーカイブへ追加",
+      icon: "/assets/icons/folder.svg",
+      onClick: () => handleArchiveProject(projectId),
+    },
+    {
+      label: "名前を変更",
+      icon: "/assets/icons/pen.svg",
+      onClick: () => handleRenameProject(projectId),
+    },
+    {
+      label: "削除する",
+      icon: "/assets/icons/trash.svg",
+      onClick: () => handleDeleteProject(projectId),
+    },
+  ];
 
   return (
     <motion.aside
@@ -276,7 +336,7 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
                 {projects.map((project, index) => (
                   <motion.div
                     key={project.id}
-                    className={`flex items-center gap-[3px] p-[5px_10px] rounded-[4px] cursor-pointer transition-colors duration-200 ${project.isSelected
+                    className={`group flex items-center gap-[3px] p-[5px_10px] rounded-[4px] cursor-pointer transition-colors duration-200 ${project.isSelected
                         ? "bg-[#e6f3f5]"
                         : "hover:bg-[#f9fafb]"
                       }`}
@@ -304,15 +364,19 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
                     >
                       {project.name}
                     </span>
-                    {project.isSelected && (
+                    <motion.button
+                      className="flex-shrink-0 bg-transparent border-none p-0 cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:opacity-70"
+                      onClick={(e) => handleContextMenuClick(e, project.id)}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
                       <Image
                         src="/assets/icons/more-dots.svg"
                         alt="More"
                         width={16}
                         height={16}
-                        className="flex-shrink-0 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
                       />
-                    )}
+                    </motion.button>
                   </motion.div>
                 ))}
               </motion.div>
@@ -393,6 +457,16 @@ export function SideMenu({ onProjectSelected }: SideMenuProps) {
           </AnimatePresence>
         </motion.div>
       </div>
+
+      {/* Context Menu */}
+      {contextMenuState.projectId && (
+        <ContextMenu
+          isOpen={contextMenuState.isOpen}
+          onClose={handleCloseContextMenu}
+          items={getContextMenuItems(contextMenuState.projectId)}
+          position={contextMenuState.position}
+        />
+      )}
     </motion.aside>
   );
 }
