@@ -6,6 +6,7 @@
 // For models (interfaces), import from @/shared/models directly.
 
 export * from "./api";
+export * from "./auth";
 export * from "./modal";
 export * from "./loading";
 export * from "./my-page";

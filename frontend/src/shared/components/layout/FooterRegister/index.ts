@@ -1,0 +1,1 @@
+export { FooterRegister } from "./FooterRegister";
