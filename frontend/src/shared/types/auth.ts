@@ -53,3 +53,10 @@ export interface AuthError {
     code?: string;
     details?: Record<string, unknown>;
 }
+
+// =============================================================================
+// AUTH TYPES
+// =============================================================================
+// TypeScript types for authentication
+
+export type UserType = "buyer" | "vendor";

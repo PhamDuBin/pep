@@ -35,7 +35,7 @@
 
 2. チャットルーム一覧取得
    GET /api/projects/{id}/chat-rooms
-   └─→ chat_rooms SELECT（unread_count含む）
+   └─→ chat_rooms SELECT（has_unread含む）
 
 3. メッセージ一覧取得
    GET /api/chat-rooms/{id}/messages
@@ -44,6 +44,7 @@
 4. メッセージ送信
    POST /api/chat-rooms/{id}/messages
    └─→ chat_messages INSERT
+   └─→ ※ルームがclosedの場合は送信不可
 
 5. メッセージ受信（Realtime）
    Supabase Realtime 購読
@@ -52,6 +53,11 @@
 6. 既読更新
    POST /api/chat-rooms/{id}/read
    └─→ chat_read_status UPSERT (last_read_at=now)
+
+7. チャットルームクローズ（Buyerのみ）
+   POST /api/chat-rooms/{id}/close
+   └─→ chat_rooms UPDATE (status='closed', close_reason)
+   └─→ クローズ後はメッセージ送信不可
 ```
 
 ---
@@ -73,6 +79,7 @@
 - [ ] `GET /api/chat-rooms/{id}/messages` - メッセージ一覧
 - [ ] `POST /api/chat-rooms/{id}/messages` - メッセージ送信
 - [ ] `POST /api/chat-rooms/{id}/read` - 既読更新
+- [ ] `POST /api/chat-rooms/{id}/close` - ルームクローズ（Buyerのみ）
 - [ ] Pydantic schemas
 - [ ] Service層 (`chat_service.py`)
 - [ ] CRUD層 (`chat_crud.py`)
@@ -97,13 +104,16 @@
 
 | # | Test Case | Layer | Expected |
 |---|-----------|-------|----------|
-| 1 | ルーム一覧取得（Buyer） | Service | 全ルーム + unread_count |
+| 1 | ルーム一覧取得（Buyer） | Service | 全ルーム + has_unread |
 | 2 | ルーム一覧取得（Vendor） | Service | 自組織ルームのみ |
 | 3 | メッセージ送信成功 | Service | message_id 返却 |
 | 4 | 既読更新成功 | Service | last_read_at 更新 |
-| 5 | 未読カウント計算 | Service | 正確な未読数 |
+| 5 | 未読判定 | Service | 正確な未読有無 |
 | 6 | 他組織のルームアクセス | Service | 403/404 Error |
 | 7 | LINE風既読数計算 | Service | 正確な既読数 |
+| 8 | ルームクローズ成功（Buyer） | Service | status='closed' |
+| 9 | ルームクローズ（Vendor） | Service | 403 Error |
+| 10 | クローズ後のメッセージ送信 | Service | 400 Error |
 
 ---
 
@@ -130,6 +140,10 @@
 - project_id (UUID, FK → projects.id)
 - buyer_org_id (UUID, FK → organizations.id)
 - vendor_org_id (UUID, FK → organizations.id)
+- status (TEXT: 'active' | 'closed', default 'active')
+- close_reason (TEXT, nullable) - クローズ理由
+- closed_at (TIMESTAMP, nullable) - クローズ日時
+- closed_by (UUID, FK → profiles.id, nullable) - クローズした人
 - created_by (UUID, FK → profiles.id)
 - created_at, updated_at, updated_by, is_deleted
 
@@ -166,12 +180,12 @@ ALTER PUBLICATION supabase_realtime ADD TABLE chat_messages;
 
 #### GET /api/projects/{id}/chat-rooms - ルーム一覧
 - Response: { rooms: ChatRoom[] }
-- 各ルームに `unread_count` を含む
+- 各ルームに `has_unread` (boolean) を含む
 - **Buyer**: プロジェクトの全ルーム
 - **Vendor**: 自組織のルームのみ
 
 #### GET /api/chat-rooms/{id} - ルーム詳細
-- Response: ChatRoom with project info
+- Response: ChatRoom with project info, status, close_reason
 
 #### GET /api/chat-rooms/{id}/messages - メッセージ一覧
 - Query: before? (datetime), limit (default 50)
@@ -182,10 +196,18 @@ ALTER PUBLICATION supabase_realtime ADD TABLE chat_messages;
 #### POST /api/chat-rooms/{id}/messages - メッセージ送信
 - Request: { content, message_type?, file_url? }
 - Response: Message
+- **status='closed' の場合は 400 Error**
 
 #### POST /api/chat-rooms/{id}/read - 既読更新
 - Update last_read_at to now()
 - Response: { success: true, last_read_at }
+
+#### POST /api/chat-rooms/{id}/close - ルームクローズ
+- Request: { close_reason: string }
+- Response: { success: true, closed_at }
+- **Buyerのみ**
+- クローズ後はメッセージ送信不可
+- close_reason は選択式（フロントエンドで選択肢を提供）
 
 ### 4. 未読カウント計算
 
@@ -222,6 +244,7 @@ WHERE room_id = :room_id
 - チャットルームは02-01のsend時に自動作成
 - メッセージは削除不可（soft delete のみ）
 - ファイル送信時は file_url に Storage URL を設定
+- **クローズ後はメッセージ送信不可**（フロントエンドでテキストフィールド非活性）
 - 型ヒント必須
 - Pydanticでリクエスト/レスポンス定義
 
@@ -238,11 +261,13 @@ WHERE room_id = :room_id
 
 - [ ] マイグレーションファイルが存在
 - [ ] **Supabase Realtimeが有効化されている**
-- [ ] チャットルーム一覧取得が動作（unread_count含む）
+- [ ] チャットルーム一覧取得が動作（has_unread含む）
 - [ ] メッセージ送信・取得が動作
 - [ ] 既読更新が動作
-- [ ] 未読カウントが正しく計算される
+- [ ] 未読有無が正しく判定される
 - [ ] LINE風既読カウントが動作
+- [ ] **チャットルームクローズが動作**
+- [ ] **クローズ後のメッセージ送信が拒否される**
 - [ ] RLSが正しく機能
 - [ ] ユニットテスト作成（Routes/Services/CRUD）
 - [ ] `pytest tests/unit/` がパス
@@ -261,8 +286,15 @@ WHERE room_id = :room_id
 
 - **チャットルーム自動作成**: 02-01の`POST /api/projects/{id}/send`実行時に自動作成
 - **Realtime対応**: Supabase Realtimeで新着メッセージをリアルタイム受信（フロントエンド実装）
-- **未読管理**:
-  - プロジェクト単位: `GET /api/projects` の `chat_unread_count`（02-01）
-  - ルーム単位: `GET /api/projects/{id}/chat-rooms` の `unread_count`
+- **未読表示**（フロントエンド）:
+  - 数値は表示しない
+  - プロジェクト名: 未読があれば**太字**
+  - チャットルーム: 未読があれば**ドット表示**
+  - バックエンドは `has_unread` (boolean) を返却
 - **LINE風既読**: 各メッセージに `read_count`（何人が既読か）
 - **before パラメータ**: 無限スクロール用。指定日時より前のメッセージを取得
+- **チャットルームクローズ**:
+  - Buyerのみ実行可能
+  - クローズ理由は選択式（例: 「選定完了」「交渉終了」「その他」）
+  - クローズ後はメッセージ送信不可（テキストフィールド非活性）
+  - クローズ後もメッセージ履歴は閲覧可能

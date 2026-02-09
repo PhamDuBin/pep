@@ -1,27 +1,12 @@
 import type { Config } from "tailwindcss";
 
-interface DaisyUIConfig {
-  themes?: string[];
-  darkTheme?: string;
-  base?: boolean;
-  styled?: boolean;
-  utils?: boolean;
-  prefix?: string;
-  logs?: boolean;
-  themeRoot?: string;
-}
-
-type ConfigWithDaisyUI = Config & {
-  daisyui?: DaisyUIConfig;
-};
-
-const config: ConfigWithDaisyUI = {
-  important: true,
+const config: Config = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/features/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/shared/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/lib/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/providers/**/*.{js,ts,jsx,tsx,mdx}",
   ],
@@ -95,9 +80,6 @@ const config: ConfigWithDaisyUI = {
     },
   },
   plugins: [require("daisyui")],
-  daisyui: {
-    themes: ["light"],
-  },
 };
 
 export default config;

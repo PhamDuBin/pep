@@ -126,7 +126,7 @@ async def get_current_user(
             status_code=403,
             detail="Forbidden / 権限がありません",
         )
-    profile = _load_profile_not_deleted(supabase, user_id, "id,is_deleted,org_id")
+    profile = _load_profile_not_deleted(supabase, user_id, "id,is_deleted,org_id,role")
     org_id = profile.get("org_id")
     if not org_id:
         raise HTTPException(
@@ -145,7 +145,11 @@ async def get_current_user(
             status_code=403,
             detail="Forbidden / Organization is not active / 組織は停止中または未承認です",
         )
-    return user
+    return {
+        **user,
+        "org_id": str(org_id),
+        "role": profile.get("role") or "member",
+    }
 
 
 async def get_current_user_for_onboarding(
