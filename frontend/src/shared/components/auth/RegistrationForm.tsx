@@ -26,11 +26,11 @@ export function RegistrationForm({ userType }: RegistrationFormProps) {
   // Get localized title based on user type
   const title =
     userType === "buyer" ? "バイヤーアカウント作成" : "ベンダーアカウント作成";
-  const loginPath = userType === "buyer" ? "/buyer/login" : "/vendor/login";
+  const loginPath = userType === "buyer" ? "/buyer/signin" : "/vendor/signin";
   const confirmPath =
     userType === "buyer"
-      ? "/buyer/register/send-email"
-      : "/vendor/register/send-email";
+      ? "/buyer/signup/email-sent"
+      : "/vendor/signup/email-sent";
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;

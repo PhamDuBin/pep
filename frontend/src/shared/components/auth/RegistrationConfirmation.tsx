@@ -14,9 +14,7 @@ export function RegistrationConfirmation({
   const title =
     userType === "buyer" ? "バイヤーアカウント作成" : "ベンダーアカウント作成";
   const registerPath =
-    userType === "buyer"
-      ? "/buyer/register/create-account"
-      : "/vendor/register/create-account";
+    userType === "buyer" ? "/buyer/signup/account" : "/vendor/signup/account";
 
   return (
     <div className="bg-white relative w-full h-screen">
